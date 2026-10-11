@@ -4,7 +4,7 @@ from kivy.metrics import dp
 
 from cooking_planner.ui.dialogs import confirm_popup, styled_popup
 from cooking_planner.shopping.draft import item_key
-from cooking_planner.ui.theme import BG, GOLD, GREEN, MUTED, PANEL, WHITE, box, button, field, label, scroll_view
+from cooking_planner.ui.theme import BG, GOLD, GREEN, MUTED, PANEL, PANEL_LIGHT, WHITE, box, button, field, label, scroll_view
 from cooking_planner.ui.strings import t
 from cooking_planner.ui.clipboard import get_clipboard
 
@@ -50,6 +50,8 @@ class ShoppingPanel:
         self.root.add_widget(summary)
         scroll = scroll_view(do_scroll_x=False)
         self.scroll = scroll
+        self.compact_list = False
+        scroll.bind(height=self._resize_items)
         self.rows = box(spacing=5, size_hint_y=None)
         self.rows.bind(minimum_height=self.rows.setter('height'))
         scroll.add_widget(self.rows)
@@ -64,9 +66,66 @@ class ShoppingPanel:
         self.actions.height = dp(90 if expanded else 45)
         self.more_button.text = t(self.locale, 'less_actions' if expanded else 'more_actions')
 
+    def _resize_items(self, _, height):
+        compact = height < dp(150)
+        if compact != self.compact_list:
+            self.compact_list = compact
+            self._render()
+
     @staticmethod
     def _amount(item):
         return format(Decimal(str(item['amount'])).normalize(), 'f')
+
+    def _section(self, title, count):
+        heading = box(False, spacing=6, size_hint_y=None, height=dp(30))
+        heading.add_widget(label(title, 15, GOLD, 30, True))
+        total = label(str(count), 13, MUTED, 30, size_hint_x=None, width=dp(36))
+        total.halign = 'right'
+        heading.add_widget(total)
+        self.rows.add_widget(heading)
+
+    def _column_header(self):
+        heading = box(False, padding=5, spacing=5, size_hint_y=None, height=dp(25))
+        heading.add_widget(label('', 12, MUTED, 25, size_hint_x=None, width=dp(38)))
+        heading.add_widget(label(t(self.locale, 'shopping_item_label'), 12, MUTED, 25))
+        quantity = label(t(self.locale, 'manual_amount'), 12, MUTED, 25,
+                         size_hint_x=None, width=dp(82))
+        quantity.halign = 'right'
+        heading.add_widget(quantity)
+        heading.add_widget(label(t(self.locale, 'manual_unit'), 12, MUTED, 25,
+                                 size_hint_x=None, width=dp(70)))
+        heading.add_widget(label('', 12, MUTED, 25, size_hint_x=None, width=dp(38)))
+        self.rows.add_widget(heading)
+
+    def _item_row(self, item, checked):
+        key = item_key(item)
+        row = box(False, padding=5, spacing=5, color=(0.09, 0.18, 0.16, 1) if checked else PANEL_LIGHT,
+                  size_hint_y=None, height=dp(48))
+        check = button('[x]' if checked else '[ ]', lambda: self.toggle(key),
+                       height=38, size_hint_x=None, width=dp(38))
+        if checked:
+            check.background_color = GREEN
+            check.color = BG
+        row.add_widget(check)
+        name = button(item['name'], lambda: self.toggle(key), height=38)
+        name.background_color = (0, 0, 0, 0)
+        name.color = MUTED if checked else WHITE
+        name.halign = 'left'
+        name.valign = 'middle'
+        name.shorten = True
+        name.bind(size=lambda widget, _: setattr(widget, 'text_size',
+                                                (widget.width - dp(8), widget.height)))
+        row.add_widget(name)
+        amount = label(self._amount(item), 15, GREEN if checked else WHITE, 38, True,
+                       size_hint_x=None, width=dp(82))
+        amount.halign = 'right'
+        row.add_widget(amount)
+        unit = label(item['unit'], 13, MUTED, 38, size_hint_x=None, width=dp(70))
+        unit.shorten = True
+        row.add_widget(unit)
+        row.add_widget(button('×', lambda: self.remove(key), 'danger',
+                              height=38, size_hint_x=None, width=dp(38)))
+        return row
 
     def _render(self):
         self.items = self.draft.items(self.start, self.plans, self.recipes)
@@ -79,22 +138,22 @@ class ShoppingPanel:
         self.meal_summary.text = f"{selected} {t(self.locale, 'selected_meal' if selected == 1 else 'selected_meals')}"
         if not self.items:
             self.rows.add_widget(label(t(self.locale, 'empty_shopping_draft'), 17, MUTED, 80))
-        for item in self.items:
-            key = item_key(item)
-            line = f"{item['name']}    {self._amount(item)} {item['unit']}"
-            row = box(False, spacing=5, size_hint_y=None, height=dp(42))
-            entry = button(('[x]  ' if key in checked else '[ ]  ') + line,
-                           lambda selected_key=key: self.toggle(selected_key), height=42)
-            entry.halign = 'left'
-            entry.shorten = True
-            if key in checked:
-                entry.background_color = GREEN
-                entry.color = BG
-            entry.bind(size=lambda widget, _: setattr(widget, 'text_size', (widget.width - dp(24), widget.height)))
-            row.add_widget(entry)
-            row.add_widget(button('×', lambda selected_key=key: self.remove(selected_key), 'danger',
-                                  height=42, size_hint_x=None, width=dp(40)))
-            self.rows.add_widget(row)
+            return
+        pending = [item for item in self.items if item_key(item) not in checked]
+        completed = [item for item in self.items if item_key(item) in checked]
+        if pending:
+            if not self.compact_list:
+                self._section(t(self.locale, 'shopping_to_buy'), len(pending))
+                self._column_header()
+            for item in pending:
+                self.rows.add_widget(self._item_row(item, False))
+        if completed:
+            if not self.compact_list:
+                self._section(t(self.locale, 'shopping_completed'), len(completed))
+                if not pending:
+                    self._column_header()
+            for item in completed:
+                self.rows.add_widget(self._item_row(item, True))
 
     def _changed(self):
         self._render()

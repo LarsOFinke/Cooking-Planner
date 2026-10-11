@@ -186,6 +186,27 @@ class UiFlowTest(unittest.TestCase):
         self.assertEqual({'Milk', 'Eggs'}, {item['name'] for item in panel.items})
         self.assertEqual([True], dismissed)
 
+    def test_shopping_items_have_aligned_fields_and_completed_section(self):
+        draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
+        start = self.app.week_start.isoformat()
+        draft.add_custom(start, 'Rice', '100', 'g')
+        draft.add_custom(start, 'Olive oil', '2', 'l')
+        panel = ShoppingPanel([], [], draft, 'en', self.app.week_start, lambda _: None)
+        rice = panel.rows.children[0]
+        self.assertEqual(['[ ]', 'Rice', '100', 'g', '×'],
+                         [widget.text for widget in reversed(rice.children)])
+        self.assertEqual('To buy', panel.rows.children[-1].children[-1].text)
+        panel.toggle(item_key(next(item for item in panel.items if item['name'] == 'Rice')))
+        completed = panel.rows.children[0]
+        self.assertEqual(['[x]', 'Rice', '100', 'g', '×'],
+                         [widget.text for widget in reversed(completed.children)])
+        self.assertEqual('Completed', panel.rows.children[1].children[-1].text)
+        self.assertEqual('1 / 2 items to buy', panel.summary.text)
+        panel.scroll.height = dp(120)
+        self.assertTrue(panel.compact_list)
+        self.assertEqual(2, len(panel.rows.children))
+        self.assertEqual('[x]', panel.rows.children[0].children[-1].text)
+
     def test_meal_selection_closes_after_adding_to_shopping(self):
         draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
         start = self.app.week_start.isoformat()
