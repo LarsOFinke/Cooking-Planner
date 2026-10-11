@@ -50,6 +50,10 @@ The Week planner allocates each priced shopping ingredient to selected planned m
 | DELETE | `/api/plans/{id}` | Remove a planned meal |
 | GET | `/api/plans/shopping?from=YYYY-MM-DD&to=YYYY-MM-DD&locale=en` | Aggregated ingredients |
 | GET | `/api/ingredients?locale=en&q=name` | Search localized database ingredients and return translations |
+| GET | `/api/admin/ingredients?q=name` | Search ingredient IDs and localized names |
+| GET | `/api/admin/ingredients/{id}` | Read all saved translations for an ingredient |
+| PUT | `/api/admin/ingredients/{id}` | Create or update localized ingredient names |
+| DELETE | `/api/admin/ingredients/{id}` | Delete an unused ingredient |
 | GET | `/api/ingredients/prices?week=YYYY-MM-DD` | Weekly saved shopping prices |
 | PUT | `/api/ingredients/{id}/prices?week=YYYY-MM-DD&unit=g` | Set or clear a weekly item price |
 | DELETE | `/api/ingredients/prices?week=YYYY-MM-DD` | Clear a week's prices |

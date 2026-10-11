@@ -11,5 +11,6 @@ public interface IngredientTranslationJpaRepository extends JpaRepository<Ingred
     List<IngredientTranslationEntity> findByLocaleAndNameContainingIgnoreCaseOrderByNameAsc(
         String locale, String name, Pageable page);
     List<IngredientTranslationEntity> findByIngredientIdIn(List<String> ingredientIds);
+    List<IngredientTranslationEntity> findByIngredientId(String ingredientId);
     List<IngredientTranslationEntity> findByLocale(String locale);
 }

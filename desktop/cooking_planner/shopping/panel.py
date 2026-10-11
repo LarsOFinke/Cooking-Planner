@@ -1,10 +1,11 @@
 from decimal import Decimal, InvalidOperation
 
+from kivy.clock import Clock
 from kivy.metrics import dp
 
 from cooking_planner.ui.dialogs import confirm_popup, styled_popup
 from cooking_planner.shopping.draft import item_key, normalize_price
-from cooking_planner.ui.theme import BG, GOLD, GREEN, MUTED, PANEL, PANEL_LIGHT, RED, WHITE, box, button, field, label, scroll_view
+from cooking_planner.ui.theme import BG, GOLD, GREEN, MUTED, PANEL, PANEL_LIGHT, RED, WHITE, box, button, field, label, scroll_view, spinner
 from cooking_planner.ui.strings import t
 from cooking_planner.ui.clipboard import get_clipboard
 
@@ -13,7 +14,7 @@ Clipboard = get_clipboard()
 
 
 class ShoppingPanel:
-    def __init__(self, plans, recipes, draft, locale, week_start, on_status):
+    def __init__(self, plans, recipes, draft, locale, week_start, on_status, on_ingredient_search=None):
         self.root = box(spacing=7)
         self.plans = plans
         self.recipes = recipes
@@ -21,6 +22,7 @@ class ShoppingPanel:
         self.locale = locale
         self.start = week_start.isoformat()
         self.on_status = on_status
+        self.on_ingredient_search = on_ingredient_search
         self.items = []
         header = box(False, spacing=8, size_hint_y=None, height=dp(42))
         header.add_widget(label(t(locale, 'shopping'), 19, GOLD, 42, True))
@@ -41,6 +43,8 @@ class ShoppingPanel:
         secondary.add_widget(button(t(locale, 'clear_list'), self.confirm_clear, 'danger', height=40))
         actions.add_widget(secondary)
         self.root.add_widget(actions)
+        self.notice = label(t(locale, 'shopping_selection_help'), 13, MUTED, 30)
+        self.root.add_widget(self.notice)
         summary = box(False, padding=8, spacing=8, color=PANEL,
                       size_hint_y=None, height=dp(46))
         self.summary = label('', 15, WHITE, 30, True)
@@ -59,6 +63,9 @@ class ShoppingPanel:
         scroll.add_widget(self.rows)
         self.root.add_widget(scroll)
         self._render()
+
+    def set_status(self, message):
+        self.notice.text = str(message)
 
     def toggle_actions(self):
         expanded = self.more_row.height == 0
@@ -217,14 +224,19 @@ class ShoppingPanel:
     def add_all(self):
         self.draft.add_all(self.start, self.plans)
         self._changed()
+        self.notice.text = t(self.locale, 'shopping_all_meals_selected')
 
     def choose_meals(self):
         body = box(padding=12, spacing=8)
+        body.add_widget(label(t(self.locale, 'shopping_choose_help'), 14, MUTED, 38))
         rows = box(spacing=5, size_hint_y=None)
         rows.bind(minimum_height=rows.setter('height'))
         scroll = scroll_view(do_scroll_x=False)
         scroll.add_widget(rows)
         body.add_widget(scroll)
+        actions = box(False, size_hint_y=None, height=dp(42))
+        actions.add_widget(button(t(self.locale, 'close'), lambda: dialog.dismiss(), 'primary'))
+        body.add_widget(actions)
         dialog = styled_popup(t(self.locale, 'choose_meals'), body, 0.65, 0.75)
 
         def render_choices():
@@ -238,8 +250,9 @@ class ShoppingPanel:
 
         def choose(plan_id):
             self.draft.toggle_plan(self.start, plan_id)
-            dialog.dismiss()
             self._changed()
+            render_choices()
+            self.notice.text = t(self.locale, 'shopping_selection_updated')
 
         render_choices()
         dialog.open()
@@ -251,16 +264,57 @@ class ShoppingPanel:
         scroll = scroll_view(do_scroll_x=False)
         scroll.add_widget(form)
         body.add_widget(scroll)
+        form.add_widget(label(t(self.locale, 'shopping_item_label'), 13, MUTED, 24))
         name = field(t(self.locale, 'manual_name'))
+        form.add_widget(name)
+        suggestions = box(spacing=4, size_hint_y=None, height=0)
+        form.add_widget(suggestions)
+        selection = {'id': None, 'name': None, 'generation': 0, 'event': None}
+
+        def show_matches(matches, generation):
+            if generation != selection['generation']:
+                return
+            suggestions.clear_widgets()
+            for match in matches[:5]:
+                suggestions.add_widget(button(f"{match['name']} · {match['id']}",
+                                              lambda item=match: choose_ingredient(item), height=38))
+            suggestions.height = dp(42 * min(len(matches), 5))
+
+        def choose_ingredient(match):
+            selection['id'], selection['name'] = match['id'], match['name']
+            name.text = match['name']
+            suggestions.clear_widgets()
+            suggestions.height = 0
+            error.text = t(self.locale, 'shopping_saved_ingredient')
+
+        def search_name(*_):
+            if selection['name'] is not None and name.text != selection['name']:
+                selection['id'], selection['name'] = None, None
+            selection['generation'] += 1
+            if selection['event'] is not None:
+                selection['event'].cancel()
+            suggestions.clear_widgets()
+            suggestions.height = 0
+            query = name.text.strip()
+            if len(query) >= 2 and self.on_ingredient_search is not None and selection['id'] is None:
+                generation = selection['generation']
+                selection['event'] = Clock.schedule_once(
+                    lambda *_: self.on_ingredient_search(self.locale, query,
+                        lambda matches: show_matches(matches, generation)), 0.25)
+
+        name.bind(text=search_name)
+        form.add_widget(label(t(self.locale, 'shopping_quantity_unit'), 13, MUTED, 24))
         amount = field(t(self.locale, 'manual_amount'), text='1')
-        unit = field(t(self.locale, 'manual_unit'), text='pcs')
+        unit = spinner('pcs', ('pcs', 'g', 'kg', 'ml', 'l', 'pack'))
         price = field(t(self.locale, 'shopping_optional_price'))
         error = label('', 13, MUTED, 32)
         quantity = box(False, spacing=10, size_hint_y=None, height=dp(42))
         quantity.add_widget(amount)
         quantity.add_widget(unit)
-        for widget in (name, quantity, price, error):
-            form.add_widget(widget)
+        form.add_widget(quantity)
+        form.add_widget(label(t(self.locale, 'shopping_optional_price'), 13, MUTED, 24))
+        form.add_widget(price)
+        form.add_widget(error)
         actions = box(False, spacing=8, size_hint_y=None, height=dp(44))
         dialog = styled_popup(t(self.locale, 'add_item'), body, 0.72, 0.78)
         actions.add_widget(button(t(self.locale, 'cancel'), dialog.dismiss))
@@ -272,23 +326,25 @@ class ShoppingPanel:
                 error.text = t(self.locale, 'invalid_price')
                 return
             try:
-                self.draft.add_custom(self.start, name.text, amount.text, unit.text, price.text)
-            except (ValueError, InvalidOperation, RuntimeError):
-                error.text = t(self.locale, 'invalid_item')
+                self.draft.add_custom(self.start, name.text, amount.text, unit.text, price.text,
+                                      selection['id'])
+            except (ValueError, InvalidOperation, RuntimeError) as failure:
+                error.text = str(failure) if isinstance(failure, RuntimeError) else t(self.locale, 'invalid_item')
                 return
             if keep_open:
                 name.text = ''
                 amount.text = '1'
                 price.text = ''
+                selection['id'], selection['name'] = None, None
                 error.text = t(self.locale, 'item_added')
                 name.focus = True
             else:
                 name.focus = False
                 amount.focus = False
-                unit.focus = False
                 price.focus = False
                 dialog.dismiss()
             self._changed()
+            self.notice.text = t(self.locale, 'item_added')
 
         actions.add_widget(button(t(self.locale, 'add_another'), lambda: save(True)))
         actions.add_widget(button(t(self.locale, 'add_item'), save, 'primary'))
@@ -299,9 +355,11 @@ class ShoppingPanel:
         try:
             self.draft.remove_item(self.start, key)
         except RuntimeError as error:
+            self.set_status(str(error))
             self.on_status(str(error))
             return
         self._changed()
+        self.notice.text = t(self.locale, 'shopping_item_removed')
 
     def toggle(self, key):
         self.draft.toggle_checked(self.start, key)
@@ -310,6 +368,7 @@ class ShoppingPanel:
     def reset(self):
         self.draft.reset_checks(self.start)
         self._changed()
+        self.notice.text = t(self.locale, 'shopping_checks_reset')
 
     def confirm_clear(self):
         confirm_popup(t(self.locale, 'clear_question'), self.locale, self.clear,
@@ -319,9 +378,11 @@ class ShoppingPanel:
         try:
             self.draft.clear(self.start, self.plans)
         except RuntimeError as error:
+            self.set_status(str(error))
             self.on_status(str(error))
             return
         self._changed()
+        self.notice.text = t(self.locale, 'shopping_list_cleared')
 
     def copy(self):
         checked = set(self.draft.week(self.start)['checked'])
@@ -338,4 +399,5 @@ class ShoppingPanel:
             Clipboard.copy('\n'.join(lines))
             self.on_status(t(self.locale, 'copied'))
         except Exception as error:
+            self.set_status(str(error))
             self.on_status(str(error))

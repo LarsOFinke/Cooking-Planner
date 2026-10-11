@@ -70,6 +70,17 @@ class ApiClientTest(unittest.TestCase):
             self.assertEqual('http://127.0.0.1:8765/api/admin/recipes/options',
                              open_url.call_args.args[0].full_url)
 
+    def test_ingredient_admin_sends_localized_names(self):
+        with patch('cooking_planner.api.client.urlopen') as open_url:
+            open_url.return_value.__enter__.return_value.read.return_value = b'{"id":"rice"}'
+            self.client.save_admin_ingredient('rice', {'en': 'Rice', 'de': 'Reis'})
+            request = open_url.call_args.args[0]
+            self.assertEqual('PUT', request.get_method())
+            self.assertEqual({'translations': {'en': 'Rice', 'de': 'Reis'}}, json.loads(request.data))
+            open_url.return_value.__enter__.return_value.read.return_value = b'[]'
+            self.client.admin_ingredients('grün')
+            self.assertIn('q=gr%C3%BCn', open_url.call_args.args[0].full_url)
+
 
 if __name__ == '__main__':
     unittest.main()

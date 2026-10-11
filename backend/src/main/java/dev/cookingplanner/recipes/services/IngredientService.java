@@ -41,6 +41,8 @@ public class IngredientService implements ApplicationRunner {
     public record Match(String id, String name, Map<String, String> translations) {}
     public record PriceInput(String price) {}
     public record NewIngredient(String id, String locale, String name) {}
+    public record CatalogInput(Map<String, String> translations) {}
+    public record CatalogEntry(String id, Map<String, String> translations) {}
 
     private final IngredientJpaRepository ingredients;
     private final IngredientTranslationJpaRepository translations;
@@ -179,6 +181,105 @@ public class IngredientService implements ApplicationRunner {
         if (name.isEmpty())
             translations.save(new IngredientTranslationEntity(input.id(), input.locale(), input.name().trim()));
         return new Match(input.id(), input.name().trim(), Map.of(input.locale(), input.name().trim()));
+    }
+
+    public List<CatalogEntry> catalog(String query) {
+        String needle = query == null ? "" : query.trim().toLowerCase();
+        Map<String, Map<String, String>> names = new LinkedHashMap<>();
+        for (var ingredient : ingredients.findAll())
+            names.put(ingredient.getId(), new LinkedHashMap<>());
+        for (var translation : translations.findAll())
+            names.computeIfAbsent(translation.getIngredientId(), ignored -> new LinkedHashMap<>())
+                .put(translation.getLocale(), translation.getName());
+        return names.entrySet().stream()
+            .filter(entry -> needle.isEmpty() || entry.getKey().toLowerCase().contains(needle) ||
+                entry.getValue().values().stream().anyMatch(name -> name.toLowerCase().contains(needle)))
+            .sorted((left, right) -> left.getKey().compareTo(right.getKey()))
+            .limit(100)
+            .map(entry -> new CatalogEntry(entry.getKey(), Map.copyOf(entry.getValue()))).toList();
+    }
+
+    public CatalogEntry catalogEntry(String id) {
+        if (!ingredients.existsById(id))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingredient not found");
+        Map<String, String> names = new LinkedHashMap<>();
+        for (var translation : translations.findByIngredientId(id))
+            names.put(translation.getLocale(), translation.getName());
+        return new CatalogEntry(id, names);
+    }
+
+    @Transactional
+    public CatalogEntry saveCatalogEntry(String id, CatalogInput input) {
+        if (id == null || !id.matches("[a-z0-9]+(?:-[a-z0-9]+)*") || id.length() > 120 ||
+            input == null || input.translations() == null ||
+            !recipes.locales().containsAll(input.translations().keySet()) ||
+            input.translations().values().stream().noneMatch(name -> name != null && !name.isBlank()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingredient ID and a translated name are required");
+        Map<String, String> requested = new LinkedHashMap<>();
+        for (String locale : recipes.locales()) {
+            String name = input.translations().getOrDefault(locale, "");
+            if (name == null || name.trim().length() > 180)
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid ingredient name for " + locale);
+            requested.put(locale, name.trim());
+        }
+        for (String locale : recipes.locales())
+            if (requested.get(locale).isEmpty() && usedInRecipes(id, locale))
+                throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Translation is used by recipes in " + locale);
+        if (!ingredients.existsById(id)) ingredients.save(new IngredientEntity(id));
+        for (var existing : translations.findByIngredientId(id)) {
+            String name = requested.get(existing.getLocale());
+            if (name == null || name.isEmpty()) translations.delete(existing);
+            else {
+                existing.setName(name);
+                translations.save(existing);
+            }
+            requested.remove(existing.getLocale());
+        }
+        requested.forEach((locale, name) -> {
+            if (!name.isEmpty()) translations.save(new IngredientTranslationEntity(id, locale, name));
+        });
+        return catalogEntry(id);
+    }
+
+    @Transactional
+    public void deleteCatalogEntry(String id) {
+        if (!ingredients.existsById(id))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingredient not found");
+        if (recipes.locales().stream().anyMatch(locale -> usedInRecipes(id, locale)) ||
+            prices.existsByIngredientId(id) || usedInShoppingDraft(id))
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                "Ingredient is used by a recipe, shopping item, or saved price");
+        translations.deleteAll(translations.findByIngredientId(id));
+        ingredients.deleteById(id);
+    }
+
+    private boolean usedInRecipes(String id, String locale) {
+        for (JsonNode recipe : recipes.rawAll(locale))
+            for (JsonNode row : recipe.path("ingredients"))
+                if (id.equals(row.path("ingredient_id").asString())) return true;
+        return false;
+    }
+
+    private boolean usedInShoppingDraft(String id) {
+        Path file = dataDirectory.resolve("shopping.json");
+        if (!Files.isRegularFile(file)) return false;
+        try {
+            JsonNode root = json.readTree(Files.readAllBytes(file));
+            if (root.path("version").asInt(-1) != 1 || !root.path("weeks").isObject())
+                throw new IllegalStateException("Unsupported shopping draft");
+            for (var weeks = root.path("weeks").properties().iterator(); weeks.hasNext();) {
+                JsonNode week = weeks.next().getValue();
+                if (!week.isObject() || !week.path("custom").isArray())
+                    throw new IllegalStateException("Unsupported shopping draft");
+                for (JsonNode item : week.path("custom"))
+                    if (id.equals(item.path("ingredientId").asString())) return true;
+            }
+            return false;
+        } catch (IOException | RuntimeException error) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                "Shopping draft cannot be checked; ingredient was not deleted", error);
+        }
     }
 
     public Recipe localize(Recipe recipe) {

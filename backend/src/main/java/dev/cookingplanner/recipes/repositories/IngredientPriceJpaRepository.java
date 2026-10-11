@@ -10,4 +10,5 @@ public interface IngredientPriceJpaRepository extends JpaRepository<IngredientPr
     Optional<IngredientPriceEntity> findByIngredientIdAndWeekStartAndUnit(
         String ingredientId, String weekStart, String unit);
     void deleteByWeekStart(String weekStart);
+    boolean existsByIngredientId(String ingredientId);
 }

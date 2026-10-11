@@ -36,7 +36,8 @@ class ApiContractTest {
         try {
             Path directory = Files.createTempDirectory("cooking-planner-api-");
             Files.writeString(directory.resolve("shopping.json"),
-                "{\"version\":1,\"weeks\":{\"2026-10-05\":{\"prices\":{\"couscous:g\":\"2.50\"}}}}");
+                "{\"version\":1,\"weeks\":{\"2026-10-05\":{\"plans\":[],\"excluded\":[]," +
+                "\"custom\":[],\"checked\":[],\"prices\":{\"couscous:g\":\"2.50\"}}}}");
             return directory;
         }
         catch (IOException e) { throw new IllegalStateException(e); }
@@ -145,6 +146,35 @@ class ApiContractTest {
             .andExpect(status().isOk());
         assertEquals(0, jdbc.queryForObject(
             "SELECT count(*) FROM ingredient_price WHERE week_start='2026-10-05'", Integer.class));
+    }
+
+    @Test
+    void ingredientAdminEditsTranslationsAndProtectsUsedIngredients() throws Exception {
+        var mvc = MockMvcBuilders.webAppContextSetup(context).build();
+        mvc.perform(put("/api/admin/ingredients/test-admin-spice").contentType("application/json")
+            .content("{\"translations\":{\"en\":\"Spice blend\",\"de\":\"Gewürzmischung\"}}"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.translations.de").value("Gewürzmischung"));
+        mvc.perform(get("/api/admin/ingredients?q=test-admin-spice"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$[0].id").value("test-admin-spice"));
+        mvc.perform(put("/api/admin/ingredients/test-admin-spice").contentType("application/json")
+            .content("{\"translations\":{\"en\":\"New blend\",\"de\":\"\"}}"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.translations.en").value("New blend"))
+            .andExpect(jsonPath("$.translations.de").doesNotExist());
+        mvc.perform(get("/api/ingredients?locale=en&q=New blend"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$[0].id").value("test-admin-spice"));
+        mvc.perform(put("/api/admin/ingredients/karotte").contentType("application/json")
+            .content("{\"translations\":{\"en\":\"Carrot\",\"de\":\"\"}}"))
+            .andExpect(status().isConflict());
+        mvc.perform(delete("/api/admin/ingredients/karotte")).andExpect(status().isConflict());
+        mvc.perform(put("/api/ingredients/test-admin-spice/prices?week=2026-10-12&unit=g")
+            .contentType("application/json").content("{\"price\":\"1.25\"}"))
+            .andExpect(status().isOk());
+        mvc.perform(delete("/api/admin/ingredients/test-admin-spice")).andExpect(status().isConflict());
+        mvc.perform(put("/api/ingredients/test-admin-spice/prices?week=2026-10-12&unit=g")
+            .contentType("application/json").content("{\"price\":\"\"}"))
+            .andExpect(status().isOk());
+        mvc.perform(delete("/api/admin/ingredients/test-admin-spice")).andExpect(status().isOk());
+        mvc.perform(get("/api/admin/ingredients/test-admin-spice")).andExpect(status().isNotFound());
     }
 
     @AfterAll

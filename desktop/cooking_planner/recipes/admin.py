@@ -54,7 +54,7 @@ def translation_template(recipe):
 
 class AdminPanel:
     def __init__(self, records, locales, locale, on_select, on_save, on_delete, on_reload, on_status,
-                 options=None, status_message=None, on_ingredient_search=None):
+                 options=None, status_message=None, on_ingredient_search=None, on_ingredient_admin=None):
         self.records, self.locales, self.locale = records, tuple(locales), locale
         self.on_select, self.on_save = on_select, on_save
         self.on_delete, self.on_reload, self.on_status = on_delete, on_reload, on_status
@@ -69,6 +69,9 @@ class AdminPanel:
         header.add_widget(label(t(locale, 'admin'), 19, GOLD, 42, True))
         header.add_widget(button(t(locale, 'admin_new'), self.new, 'primary',
                                  size_hint_x=None, width=dp(130), height=40))
+        if on_ingredient_admin is not None:
+            header.add_widget(button(t(locale, 'ingredient_catalog'), on_ingredient_admin,
+                                     size_hint_x=None, width=dp(170), height=40))
         header.add_widget(button(t(locale, 'refresh'), on_reload,
                                  size_hint_x=None, width=dp(95), height=40))
         self.root.add_widget(header)

@@ -4,15 +4,21 @@ import webbrowser
 
 from kivy.clock import Clock
 from kivy.metrics import dp
+from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 
 from cooking_planner.recipes.images import attributions, image_file
 from cooking_planner.ui.dialogs import styled_popup
 from cooking_planner.ui.theme import (GOLD, MUTED, PANEL, PANEL_LIGHT, WHITE, box, button, field,
                                       label, scroll_view, set_tab_active, spinner, tab_button)
 from cooking_planner.ui.strings import t
+
+
+class RecipePhoto(ButtonBehavior, Image):
+    """An image that opens the recipe's gallery when clicked."""
 
 
 class RecipeBrowser:
@@ -265,9 +271,10 @@ class RecipeBrowser:
         if photos:
             self.image_index %= len(photos)
             reference, photo = photos[self.image_index]
-            summary.add_widget(Image(source=str(photo), size_hint=(None, None),
-                                     width=dp(92), height=dp(92),
-                                     allow_stretch=True, keep_ratio=True))
+            thumbnail = RecipePhoto(source=str(photo), size_hint=(None, None),
+                                    width=dp(92), height=dp(92), fit_mode='contain')
+            thumbnail.bind(on_release=lambda *_: self._open_image(recipe, photos, self.image_index))
+            summary.add_widget(thumbnail)
         facts = box(spacing=1)
         origin = " · ".join(item for item in (recipe["country"] or t(self.locale, "no_country"), recipe["region"], recipe["continent"]) if item)
         facts.add_widget(label(recipe['name'], 16, GOLD, 26, True))
@@ -299,6 +306,55 @@ class RecipeBrowser:
                 if credit.get('source_url'):
                     self.detail_body.add_widget(button(t(self.locale, 'image_source'),
                                                        lambda url=credit['source_url']: webbrowser.open(url), height=32))
+
+    def _open_image(self, recipe, photos, index):
+        gallery = box(padding=dp(12), spacing=dp(8), color=(0.035, 0.045, 0.055, 1))
+        header = box(False, spacing=8, size_hint_y=None, height=dp(44))
+        header.add_widget(label(recipe['name'], 17, WHITE, 42, True))
+        counter = label('', 14, MUTED, 42, size_hint_x=None, width=dp(90))
+        header.add_widget(counter)
+        close = button(t(self.locale, 'close'), lambda: popup.dismiss(),
+                       size_hint_x=None, width=dp(105), height=42)
+        header.add_widget(close)
+        gallery.add_widget(header)
+        viewer = box(False, spacing=8)
+        previous = button('‹', lambda: select(index_state['value'] - 1),
+                          size_hint_x=None, width=dp(52))
+        viewer.add_widget(previous)
+        image = Image(fit_mode='contain')
+        viewer.add_widget(image)
+        following = button('›', lambda: select(index_state['value'] + 1),
+                           size_hint_x=None, width=dp(52))
+        viewer.add_widget(following)
+        gallery.add_widget(viewer)
+        strip = scroll_view(do_scroll_y=False, size_hint_y=None, height=dp(96))
+        thumbnails = box(False, spacing=dp(8), size_hint_x=None)
+        thumbnails.width = max(dp(98) * len(photos), dp(98))
+        strip.add_widget(thumbnails)
+        gallery.add_widget(strip)
+        credit_text = label('', 12, MUTED, 32)
+        gallery.add_widget(credit_text)
+        popup = Popup(title='', content=gallery, size_hint=(1, 1), auto_dismiss=True,
+                      separator_height=0, title_size=0)
+        index_state = {'value': index}
+
+        def select(value):
+            index_state['value'] = value % len(photos)
+            reference, photo = photos[index_state['value']]
+            image.source = str(photo)
+            counter.text = f"{index_state['value'] + 1} / {len(photos)}"
+            credit = attributions().get(reference, {})
+            credit_text.text = (t(self.locale, 'rights_pending') if credit.get('rights_status') == 'pending'
+                                else f"{credit.get('author', '')} · {credit.get('license', '')}" if credit else '')
+
+        for number, (_, photo) in enumerate(photos):
+            thumb = RecipePhoto(source=str(photo), size_hint=(None, None),
+                                width=dp(90), height=dp(90), fit_mode='contain')
+            thumb.bind(on_release=lambda *_, chosen=number: select(chosen))
+            thumbnails.add_widget(thumb)
+        select(index)
+        popup.open()
+        return popup
 
     def _plan_selected(self) -> None:
         recipe = next((item for item in self.recipes if item["id"] == self.selected_id), None)

@@ -15,6 +15,7 @@ from cooking_planner.recipes.dialogs import notes_popup, picker_popup
 from cooking_planner.overview.panel import OverviewPanel
 from cooking_planner.recipes.browser import RecipeBrowser
 from cooking_planner.recipes.admin import AdminPanel
+from cooking_planner.recipes.ingredient_admin import IngredientAdminPanel
 from cooking_planner.shopping.draft import ShoppingDraft
 from cooking_planner.shopping.panel import ShoppingPanel
 from cooking_planner.ui.theme import BG, GOLD, MUTED, PANEL, box, button, label, spinner, tab_button
@@ -42,6 +43,8 @@ class CookingPlannerApp(App):
         self.info = {}
         self.admin_records = []
         self.admin_entry = None
+        self.admin_mode = 'recipes'
+        self.ingredient_admin_entry = None
         self.status_message = t(self.locale, 'ready')
         self.generation = 0
         self.selected_id = None
@@ -121,6 +124,11 @@ class CookingPlannerApp(App):
         if self.tab == 'admin' and hasattr(self, 'admin_panel'):
             self.admin_panel.set_status(self.status_message)
 
+    def _report_error(self, message):
+        self._status(message)
+        if self.tab == 'shopping' and hasattr(self, 'shopping_panel'):
+            self.shopping_panel.set_status(message)
+
     def _submit(self, work, success):
         self._status('…')
         future = self.worker.submit(work)
@@ -129,7 +137,7 @@ class CookingPlannerApp(App):
                 value = result.result()
             except Exception as error:
                 message = str(error)
-                Clock.schedule_once(lambda *_: self._status(message), 0)
+                Clock.schedule_once(lambda *_: self._report_error(message), 0)
                 return
             Clock.schedule_once(lambda *_: success(value), 0)
         future.add_done_callback(done)
@@ -189,11 +197,19 @@ class CookingPlannerApp(App):
                                 self.recipes, self.shopping_draft)
         elif self.tab == 'shopping':
             panel = ShoppingPanel(self.plans, self.recipes, self.shopping_draft, self.locale,
-                                  self.week_start, self._status)
+                                  self.week_start, self._status, self.search_ingredients)
+            self.shopping_panel = panel
+        elif self.admin_mode == 'ingredients':
+            panel = IngredientAdminPanel(self.locales, self.locale, self.show_recipe_admin,
+                                         self.list_admin_ingredients, self.save_admin_ingredient,
+                                         self.delete_admin_ingredient, self._status,
+                                         self.ingredient_admin_entry)
+            self.admin_panel = panel
         else:
             panel = AdminPanel(self.admin_records, self.locales, self.locale, self.select_admin_recipe,
                                self.save_admin_recipe, self.delete_admin_recipe, self.load_admin, self._status,
-                               getattr(self, 'admin_options', {}), self.status_message, self.search_ingredients)
+                               getattr(self, 'admin_options', {}), self.status_message, self.search_ingredients,
+                               self.show_ingredient_admin)
             self.admin_panel = panel
             if self.admin_entry:
                 panel.show_recipe(self.admin_entry)
@@ -219,10 +235,33 @@ class CookingPlannerApp(App):
                 matches = result.result()
             except Exception as error:
                 message = str(error)
-                Clock.schedule_once(lambda *_: self._status(message), 0)
+                Clock.schedule_once(lambda *_: self._report_error(message), 0)
                 return
             Clock.schedule_once(lambda *_: on_result(matches), 0)
         future.add_done_callback(done)
+
+    def show_ingredient_admin(self):
+        self.admin_mode = 'ingredients'
+        self._render_tab()
+
+    def show_recipe_admin(self):
+        self.admin_mode = 'recipes'
+        self._render_tab()
+
+    def list_admin_ingredients(self, query, on_result):
+        self._submit(lambda: self.client.admin_ingredients(query), on_result)
+
+    def save_admin_ingredient(self, ingredient_id, translations):
+        def saved(entry):
+            self.ingredient_admin_entry = entry
+            self.refresh()
+        self._submit(lambda: self.client.save_admin_ingredient(ingredient_id, translations), saved)
+
+    def delete_admin_ingredient(self, ingredient_id):
+        def deleted(_):
+            self.ingredient_admin_entry = None
+            self.refresh()
+        self._submit(lambda: self.client.delete_admin_ingredient(ingredient_id), deleted)
 
     def select_admin_recipe(self, recipe_id):
         def loaded(entry):

@@ -20,10 +20,12 @@ try:
     from kivy.metrics import dp
     from kivy.uix.button import Button
     from kivy.uix.textinput import TextInput
+    from kivy.uix.spinner import Spinner
     from cooking_planner.app import CookingPlannerApp
     from cooking_planner.overview.panel import OverviewPanel
     from cooking_planner.plans.week import WeekPlanner
     from cooking_planner.recipes.admin import AdminPanel
+    from cooking_planner.recipes.ingredient_admin import IngredientAdminPanel
     from cooking_planner.shopping.draft import ShoppingDraft, item_key
     from cooking_planner.shopping.panel import ShoppingPanel
 except ImportError:
@@ -106,6 +108,26 @@ class UiFlowTest(unittest.TestCase):
         self.assertEqual('Step 1', browser.detail_body.children[-2].children[-1].text)
         self.assertEqual('Step 2', browser.detail_body.children[-3].children[-1].text)
 
+    def test_recipe_photo_opens_window_sized_gallery(self):
+        self.app.show_tab('explore')
+        photo = Path(__file__).resolve().parents[2] / 'data' / 'recipe_images' / self.recipe['id'] / 'image_01.png'
+        self.assertTrue(photo.is_file())
+        popup = self.app.browser._open_image(self.recipe,
+                                              [(f"recipe_images/{self.recipe['id']}/image_01.png", photo)], 0)
+        self.assertEqual([1, 1], popup.size_hint)
+        self.assertIsNotNone(popup.parent)
+        popup.dismiss()
+
+    def test_admin_switches_between_recipe_and_ingredient_catalogs(self):
+        self.app.tab = 'admin'
+        self.app._render_tab()
+        with patch.object(self.app, 'list_admin_ingredients',
+                          side_effect=lambda query, done: done([])):
+            self.app.show_ingredient_admin()
+            self.assertIsInstance(self.app.admin_panel, IngredientAdminPanel)
+            self.app.show_recipe_admin()
+        self.assertIsInstance(self.app.admin_panel, AdminPanel)
+
     def test_saved_plan_opens_its_week_and_drives_shopping(self):
         day = self.app.week_start + timedelta(days=8)
         self.app.show_tab('explore')
@@ -186,7 +208,8 @@ class UiFlowTest(unittest.TestCase):
                   if isinstance(child, TextInput)]
         name = next(widget for widget in fields if widget.hint_text == 'Item name')
         amount = next(widget for widget in fields if widget.hint_text == 'Quantity')
-        unit = next(widget for widget in fields if widget.hint_text == 'Unit')
+        unit = next(child for widget in form.children for child in widget.children
+                    if isinstance(child, Spinner))
         price = next(widget for widget in fields if widget.hint_text == 'Price (€), optional')
         actions = next(widget for widget in body.children if any(isinstance(child, Button)
                                                                  for child in widget.children))
@@ -203,6 +226,31 @@ class UiFlowTest(unittest.TestCase):
         done.dispatch('on_release', None)
         self.assertEqual({'Milk', 'Eggs'}, {item['name'] for item in panel.items})
         self.assertEqual([True], dismissed)
+
+    def test_shopping_dialog_can_select_saved_ingredient(self):
+        draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
+        searches = []
+        panel = ShoppingPanel([], [], draft, 'en', self.app.week_start, lambda _: None,
+                              lambda locale, query, done:
+                                  (searches.append((locale, query)), done([{'id': 'karotte', 'name': 'Carrot'}])))
+        dialog = SimpleNamespace(open=lambda: None, dismiss=lambda: None)
+        with patch('cooking_planner.shopping.panel.styled_popup', return_value=dialog) as popup:
+            panel.add_item()
+        body = popup.call_args.args[1]
+        form = body.children[1].children[0]
+        name = next(widget for widget in form.children if isinstance(widget, TextInput)
+                    and widget.hint_text == 'Item name')
+        suggestions = next(widget for widget in form.children if widget.height == 0
+                           and hasattr(widget, 'children'))
+        with patch('cooking_planner.shopping.panel.Clock.schedule_once',
+                   side_effect=lambda callback, delay:
+                       (callback(), SimpleNamespace(cancel=lambda: None))[1]):
+            name.text = 'carr'
+        self.assertEqual([('en', 'carr')], searches)
+        suggestions.children[0].dispatch('on_release', None)
+        done = next(widget for widget in body.children[0].children if widget.text == 'Add item')
+        done.dispatch('on_release', None)
+        self.assertEqual('karotte', panel.items[0]['ingredientId'])
 
     def test_shopping_items_have_aligned_fields_and_completed_section(self):
         draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
@@ -256,7 +304,7 @@ class UiFlowTest(unittest.TestCase):
         self.assertIsNone(draft.price_for(start, item_key(rice)))
         self.assertEqual('0/2 priced · €0.00', panel.price_summary.text)
 
-    def test_meal_selection_closes_after_adding_to_shopping(self):
+    def test_meal_selection_stays_open_for_multiple_choices(self):
         draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
         start = self.app.week_start.isoformat()
         plan = {'id': 9, 'date': start, 'recipeId': self.recipe['id'],
@@ -270,12 +318,15 @@ class UiFlowTest(unittest.TestCase):
         with patch('cooking_planner.shopping.panel.styled_popup', return_value=dialog) as popup:
             panel.choose_meals()
         body = popup.call_args.args[1]
-        meal = body.children[0].children[0].children[0]
+        meal = body.children[1].children[0].children[0]
         meal.dispatch('on_release', None)
-        self.assertEqual([True], dismissed)
+        self.assertEqual([], dismissed)
         self.assertEqual({'9'}, draft.selected_plan_ids(start, [plan]))
         self.assertEqual('1 meal selected', panel.meal_summary.text)
         self.assertTrue(panel.items)
+        done = body.children[0].children[0]
+        done.dispatch('on_release', None)
+        self.assertEqual([True], dismissed)
 
     def test_admin_requires_a_choice_for_each_language(self):
         saved = []
@@ -301,6 +352,28 @@ class UiFlowTest(unittest.TestCase):
 
 @unittest.skipUnless(HAS_KIVY, 'Kivy and a desktop display are required')
 class AdminEditorTest(unittest.TestCase):
+    def test_ingredient_catalog_can_search_edit_and_reset_translations(self):
+        saved = []
+        searches = []
+        panel = IngredientAdminPanel(('en', 'de'), 'en', lambda: None,
+                                     lambda query, callback: searches.append((query, callback)),
+                                     lambda ingredient_id, names: saved.append((ingredient_id, names)),
+                                     lambda _: None, lambda _: None)
+        panel.search.text = 'carr'
+        panel._show_results([{'id': 'karotte', 'translations': {'en': 'Carrot', 'de': 'Karotte'}}],
+                            panel.generation)
+        panel.results.children[0].dispatch('on_release', None)
+        panel.names['en'].text = 'Garden carrot'
+        panel.save()
+        self.assertEqual(('karotte', {'en': 'Garden carrot', 'de': 'Karotte'}), saved[-1])
+        panel.reset()
+        self.assertEqual('Carrot', panel.names['en'].text)
+        panel.new()
+        panel.id_input.text = 'new-spice'
+        panel.names['de'].text = 'Gewürz'
+        panel.save()
+        self.assertEqual(('new-spice', {'en': '', 'de': 'Gewürz'}), saved[-1])
+
     def test_ingredient_search_fills_shared_id_and_localized_names(self):
         searches = []
         panel = AdminPanel([], ('en', 'de'), 'en', lambda _: None, lambda *args: None,

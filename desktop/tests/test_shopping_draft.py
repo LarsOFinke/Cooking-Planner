@@ -58,6 +58,18 @@ class ShoppingDraftTest(unittest.TestCase):
         self.assertEqual(1, len([item for item in draft.items(start, plans, recipes)
                                  if item['name'] == 'Eggs']))
 
+    def test_selected_catalog_ingredient_uses_stable_id_and_combines_quantity(self):
+        draft = ShoppingDraft()
+        start = '2026-10-05'
+        recipes = [{'id': 'dish', 'ingredients': [
+            {'ingredientId': 'karotte', 'name': 'Carrot', 'amount': 100, 'unit': 'g'}]}]
+        plans = [{'id': 1, 'recipeId': 'dish', 'servings': 1}]
+        draft.add_custom(start, 'Carrot', '50', 'g', ingredient_id='karotte')
+        draft.add_custom(start, 'Carrot', '25', 'g', ingredient_id='karotte')
+        items = draft.items(start, plans, recipes)
+        self.assertEqual(1, len(items))
+        self.assertEqual('175', str(items[0]['amount']))
+
     def test_legacy_selected_meals_migrate_without_losing_exclusions(self):
         start = '2026-10-05'
         with tempfile.TemporaryDirectory() as temporary:

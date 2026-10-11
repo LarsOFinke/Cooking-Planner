@@ -23,7 +23,7 @@ class ApiClient:
                     message = json.loads(error.read()).get('message')
                 except (ValueError, AttributeError):
                     message = None
-                raise RuntimeError(message or f"Recipe change failed ({error.code}).") from error
+                raise RuntimeError(message or f"Admin change failed ({error.code}).") from error
             raise RuntimeError(f"Request failed ({error.code}). Check the selected recipe and date.") from error
         except URLError as error:
             raise RuntimeError("Cannot reach the local backend. Restart the app and try again.") from error
@@ -83,3 +83,16 @@ class ApiClient:
 
     def delete_recipe(self, recipe_id: str) -> None:
         self.request("DELETE", "/api/admin/recipes/" + quote(recipe_id, safe=""))
+
+    def admin_ingredients(self, query: str = '') -> list[dict]:
+        return self.request("GET", "/api/admin/ingredients?" + urlencode({"q": query}))
+
+    def admin_ingredient(self, ingredient_id: str) -> dict:
+        return self.request("GET", "/api/admin/ingredients/" + quote(ingredient_id, safe=""))
+
+    def save_admin_ingredient(self, ingredient_id: str, translations: dict[str, str]) -> dict:
+        return self.request("PUT", "/api/admin/ingredients/" + quote(ingredient_id, safe=""),
+                            {"translations": translations})
+
+    def delete_admin_ingredient(self, ingredient_id: str) -> None:
+        self.request("DELETE", "/api/admin/ingredients/" + quote(ingredient_id, safe=""))

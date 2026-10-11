@@ -127,16 +127,17 @@ class ShoppingDraft:
             excluded.append(key)
         self.save()
 
-    def add_custom(self, start: str, name: str, amount: str, unit: str, price: str = '') -> None:
+    def add_custom(self, start: str, name: str, amount: str, unit: str, price: str = '',
+                   ingredient_id: str | None = None) -> None:
         quantity = Decimal(amount.strip().replace(',', '.'))
         if (not name.strip() or not unit.strip() or len(name.strip()) > 120 or len(unit.strip()) > 24
                 or not quantity.is_finite() or quantity <= 0 or quantity > 1_000_000):
             raise ValueError('Name, positive quantity, and unit are required')
         normalized = normalize_price(price)
-        item = {'ingredientId': 'custom-' + uuid4().hex,
+        item = {'ingredientId': ingredient_id or 'custom-' + uuid4().hex,
                 'name': name.strip(), 'amount': str(quantity), 'unit': unit.strip(), 'recipeCount': 0}
         state = self.week(start)
-        if self.ingredient_writer is not None:
+        if ingredient_id is None and self.ingredient_writer is not None:
             self.ingredient_writer(item['ingredientId'], item['name'])
         if normalized is not None and self.price_writer is not None:
             self.price_writer(start, item_key(item), normalized)
@@ -223,6 +224,10 @@ class ShoppingDraft:
                     combined[key] = {'ingredientId': ingredient['ingredientId'], 'name': ingredient['name'],
                                      'amount': amount, 'unit': ingredient['unit'], 'recipeCount': 1}
         for item in state['custom']:
-            combined[item_key(item)] = {**item, 'amount': Decimal(str(item['amount']))}
+            key = item_key(item)
+            if key in combined:
+                combined[key]['amount'] += Decimal(str(item['amount']))
+            else:
+                combined[key] = {**item, 'amount': Decimal(str(item['amount']))}
         return sorted((item for key, item in combined.items() if key not in state['excluded']),
                       key=lambda item: item['name'].casefold())
