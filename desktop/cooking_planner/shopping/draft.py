@@ -18,6 +18,9 @@ def valid_week(state: object) -> bool:
         return False
     if any(not isinstance(value, str) for key in ('plans', 'excluded', 'checked') for value in state[key]):
         return False
+    if 'excludedPlans' in state and (not isinstance(state['excludedPlans'], list) or
+                                     any(not isinstance(value, str) for value in state['excludedPlans'])):
+        return False
     for item in state['custom']:
         if (not isinstance(item, dict) or
                 any(not isinstance(item.get(key), str) for key in ('ingredientId', 'name', 'unit'))):
@@ -51,7 +54,20 @@ class ShoppingDraft:
                 self.recovery_notice = f'Shopping draft could not be read. Original saved to {backup}'
 
     def week(self, start: str) -> dict:
-        return self.weeks.setdefault(start, {'plans': [], 'excluded': [], 'custom': [], 'checked': []})
+        return self.weeks.setdefault(start, {'plans': [], 'excludedPlans': [], 'excluded': [],
+                                             'custom': [], 'checked': []})
+
+    def selected_plan_ids(self, start: str, plans: list[dict]) -> set[str]:
+        state = self.week(start)
+        if 'excludedPlans' not in state:
+            # Old drafts stored an explicit selection. Preserve a nonempty
+            # selection once, then include future plans automatically.
+            selected = set(state['plans'])
+            state['excludedPlans'] = ([str(plan['id']) for plan in plans
+                                       if str(plan['id']) not in selected] if selected else [])
+            self.save()
+        excluded = set(state['excludedPlans'])
+        return {str(plan['id']) for plan in plans if str(plan['id']) not in excluded}
 
     def save(self) -> None:
         if self.path is None:
@@ -63,18 +79,18 @@ class ShoppingDraft:
 
     def add_all(self, start: str, plans: list[dict]) -> None:
         state = self.week(start)
-        state['plans'] = [str(plan['id']) for plan in plans]
+        state['excludedPlans'] = []
         state['excluded'] = []
         state['checked'] = []
         self.save()
 
     def toggle_plan(self, start: str, plan_id: int) -> None:
-        selected = self.week(start)['plans']
+        excluded = self.week(start).setdefault('excludedPlans', [])
         key = str(plan_id)
-        if key in selected:
-            selected.remove(key)
+        if key in excluded:
+            excluded.remove(key)
         else:
-            selected.append(key)
+            excluded.append(key)
         self.save()
 
     def add_custom(self, start: str, name: str, amount: str, unit: str) -> None:
@@ -107,13 +123,14 @@ class ShoppingDraft:
         self.week(start)['checked'] = []
         self.save()
 
-    def clear(self, start: str) -> None:
-        self.weeks[start] = {'plans': [], 'excluded': [], 'custom': [], 'checked': []}
+    def clear(self, start: str, plans: list[dict] | None = None) -> None:
+        self.weeks[start] = {'plans': [], 'excludedPlans': [str(plan['id']) for plan in (plans or [])],
+                             'excluded': [], 'custom': [], 'checked': []}
         self.save()
 
     def items(self, start: str, plans: list[dict], recipes: list[dict]) -> list[dict]:
         state = self.week(start)
-        selected = set(state['plans'])
+        selected = self.selected_plan_ids(start, plans)
         by_id = {recipe['id']: recipe for recipe in recipes}
         combined = {}
         for plan in plans:

@@ -14,7 +14,7 @@ Clipboard = get_clipboard()
 
 
 class ShoppingPanel:
-    def __init__(self, plans, recipes, draft, locale, week_start, on_status, on_change):
+    def __init__(self, plans, recipes, draft, locale, week_start, on_status):
         self.root = box(spacing=10)
         self.plans = plans
         self.recipes = recipes
@@ -22,21 +22,22 @@ class ShoppingPanel:
         self.locale = locale
         self.start = week_start.isoformat()
         self.on_status = on_status
-        self.on_change = on_change
         self.items = []
         header = box(False, spacing=8, size_hint_y=None, height=dp(48))
         header.add_widget(label(t(locale, 'shopping'), 23, GOLD, 48, True))
         header.add_widget(button(t(locale, 'copy'), self.copy, size_hint_x=None, width=dp(150)))
         self.root.add_widget(header)
-        actions_scroll = ScrollView(size_hint_y=None, height=dp(48), do_scroll_y=False)
-        actions = box(False, spacing=8, size_hint_x=None, width=dp(850))
-        actions.add_widget(button(t(locale, 'add_week'), self.add_all, 'primary', size_hint_x=None, width=dp(210)))
-        actions.add_widget(button(t(locale, 'choose_meals'), self.choose_meals, size_hint_x=None, width=dp(160)))
-        actions.add_widget(button(t(locale, 'add_item'), self.add_item, size_hint_x=None, width=dp(170)))
-        actions.add_widget(button(t(locale, 'reset_checks'), self.reset, size_hint_x=None, width=dp(130)))
-        actions.add_widget(button(t(locale, 'clear_list'), self.confirm_clear, 'danger', size_hint_x=None, width=dp(140)))
-        actions_scroll.add_widget(actions)
-        self.root.add_widget(actions_scroll)
+        actions = box(spacing=6, size_hint_y=None, height=dp(94))
+        primary = box(False, spacing=7, size_hint_y=None, height=dp(44))
+        primary.add_widget(button(t(locale, 'add_week'), self.add_all, 'primary'))
+        primary.add_widget(button(t(locale, 'choose_meals'), self.choose_meals))
+        primary.add_widget(button(t(locale, 'add_item'), self.add_item))
+        actions.add_widget(primary)
+        secondary = box(False, spacing=7, size_hint_y=None, height=dp(44))
+        secondary.add_widget(button(t(locale, 'reset_checks'), self.reset))
+        secondary.add_widget(button(t(locale, 'clear_list'), self.confirm_clear, 'danger'))
+        actions.add_widget(secondary)
+        self.root.add_widget(actions)
         self.summary = label('', 15, MUTED, 36)
         self.root.add_widget(self.summary)
         scroll = ScrollView(do_scroll_x=False)
@@ -56,7 +57,7 @@ class ShoppingPanel:
         checked = set(state['checked'])
         self.rows.clear_widgets()
         remaining = sum(item_key(item) not in checked for item in self.items)
-        selected = sum(str(plan['id']) in state['plans'] for plan in self.plans)
+        selected = len(self.draft.selected_plan_ids(self.start, self.plans))
         self.summary.text = (f"{remaining} / {len(self.items)} {t(self.locale, 'shopping_items')}"
                              f" · {selected} {t(self.locale, 'selected_meals')}")
         if not self.items:
@@ -76,7 +77,6 @@ class ShoppingPanel:
 
     def _changed(self):
         self._render()
-        self.on_change()
 
     def add_all(self):
         self.draft.add_all(self.start, self.plans)
@@ -93,7 +93,7 @@ class ShoppingPanel:
 
         def render_choices():
             rows.clear_widgets()
-            selected = set(self.draft.week(self.start)['plans'])
+            selected = self.draft.selected_plan_ids(self.start, self.plans)
             for plan in self.plans:
                 title = f"{'✓' if str(plan['id']) in selected else '○'}  {plan['date']} · {plan['recipeTitle']} · {plan['servings']} {t(self.locale, 'servings').lower()}"
                 rows.add_widget(button(title, lambda plan_id=plan['id']: choose(plan_id), height=46))
@@ -112,23 +112,30 @@ class ShoppingPanel:
         body = box(padding=16, spacing=10)
         name = field(t(self.locale, 'manual_name'))
         amount = field(t(self.locale, 'manual_amount'), text='1')
-        unit = field(t(self.locale, 'manual_unit'))
+        unit = field(t(self.locale, 'manual_unit'), text='pcs')
         error = label('', 13, MUTED, 32)
         for widget in (name, amount, unit, error):
             body.add_widget(widget)
         actions = box(False, spacing=8, size_hint_y=None, height=dp(44))
-        dialog = styled_popup(t(self.locale, 'add_item'), body, 0.48, 0.48)
+        dialog = styled_popup(t(self.locale, 'add_item'), body, 0.72, 0.78)
         actions.add_widget(button(t(self.locale, 'cancel'), dialog.dismiss))
 
-        def save():
+        def save(keep_open=False):
             try:
                 self.draft.add_custom(self.start, name.text, amount.text, unit.text)
             except (ValueError, InvalidOperation):
                 error.text = t(self.locale, 'invalid_item')
                 return
-            dialog.dismiss()
             self._changed()
+            if keep_open:
+                name.text = ''
+                amount.text = '1'
+                error.text = t(self.locale, 'item_added')
+                name.focus = True
+            else:
+                dialog.dismiss()
 
+        actions.add_widget(button(t(self.locale, 'add_another'), lambda: save(True)))
         actions.add_widget(button(t(self.locale, 'add_item'), save, 'primary'))
         body.add_widget(actions)
         dialog.open()
@@ -150,7 +157,7 @@ class ShoppingPanel:
                       title=t(self.locale, 'clear_list'), confirm_label=t(self.locale, 'clear_list'))
 
     def clear(self):
-        self.draft.clear(self.start)
+        self.draft.clear(self.start, self.plans)
         self._changed()
 
     def copy(self):

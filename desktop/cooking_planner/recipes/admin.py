@@ -51,11 +51,12 @@ def translation_template(recipe):
 
 class AdminPanel:
     def __init__(self, records, locales, locale, on_select, on_save, on_delete, on_reload, on_status,
-                 options=None):
+                 options=None, status_message=None):
         self.records, self.locales, self.locale = records, tuple(locales), locale
         self.on_select, self.on_save = on_select, on_save
         self.on_delete, self.on_reload, self.on_status = on_delete, on_reload, on_status
         self.options = options or {}
+        self.status_message = status_message or t(locale, 'ready')
         self.entry, self.creating, self.page = None, False, 'details'
         self.root = box(spacing=8)
         header = box(False, spacing=8, size_hint_y=None, height=dp(46))
@@ -117,6 +118,11 @@ class AdminPanel:
     def reset(self):
         self._render_form()
 
+    def set_status(self, message):
+        self.status_message = message
+        if hasattr(self, 'status_text'):
+            self.status_text.text = message
+
     def _cell(self, parent, title, widget, height=72):
         cell = box(spacing=2, size_hint_y=None, height=dp(height))
         cell.add_widget(label(title, 13, MUTED, 24))
@@ -162,8 +168,22 @@ class AdminPanel:
         self.actions.clear_widgets()
         self.shared_inputs, self.locale_inputs, self.locale_choices = {}, {}, {}
         self.ingredient_rows = []
+        self.status_page = box(spacing=10, size_hint_y=None)
+        self.status_page.bind(minimum_height=self.status_page.setter('height'))
+        self._heading(self.status_page, 'admin_status')
+        self.status_page.add_widget(label(f"{len(self.records)} {t(self.locale, 'results')} · "
+                                          f"{len(self.locales)} {t(self.locale, 'admin_languages').lower()}",
+                                          16, WHITE, 48))
+        self.status_text = label(self.status_message, 15, MUTED, 66)
+        self.status_page.add_widget(self.status_text)
+        self.page_titles = {'status': 'admin_status'}
+        self.page_tabs = {'status': tab_button(t(self.locale, 'admin_status'),
+                                               lambda: self._show_page('status'), self.page == 'status')}
+        self.toolbar.add_widget(self.page_tabs['status'])
         if not self.creating and self.entry is None:
-            self.form.add_widget(label(t(self.locale, 'admin_select'), 16, MUTED, 80))
+            self.select_page = box(size_hint_y=None, height=dp(80))
+            self.select_page.add_widget(label(t(self.locale, 'admin_select'), 16, MUTED, 80))
+            self._show_page(self.page if self.page == 'status' else 'details')
             return
         recipe_id = '' if self.creating else self.entry['id']
         source = self.locale if self.locale in self.locales else self.locales[0]
@@ -183,10 +203,10 @@ class AdminPanel:
         self.toolbar.add_widget(label(t(self.locale, 'admin_edit_language'), 14, WHITE, 40,
                                       size_hint_x=None, width=dp(125)))
         self.toolbar.add_widget(self.language)
-        self.page_titles = {'details': 'admin_details_tab', 'ingredients': 'admin_ingredients',
-                            'recipe': 'admin_recipe_tab'}
-        self.page_tabs = {}
-        for page, title in self.page_titles.items():
+        self.page_titles.update({'details': 'admin_details_tab', 'ingredients': 'admin_ingredients',
+                                 'recipe': 'admin_recipe_tab'})
+        for page in ('details', 'ingredients', 'recipe'):
+            title = self.page_titles[page]
             control = tab_button(t(self.locale, title), lambda selected=page: self._show_page(selected),
                                  page == self.page)
             self.page_tabs[page] = control
@@ -274,11 +294,18 @@ class AdminPanel:
         self.page = page
         for name, control in self.page_tabs.items():
             set_tab_active(control, t(self.locale, self.page_titles[name]), name == page)
-        self.recipe_title.text = (self.locale_inputs[self.edit_locale]['name'].text.strip()
-                                  or t(self.locale, 'admin_unnamed_recipe'))
+        if hasattr(self, 'recipe_title') and self.locale_inputs:
+            self.recipe_title.text = (self.locale_inputs[self.edit_locale]['name'].text.strip()
+                                      or t(self.locale, 'admin_unnamed_recipe'))
         self.form.clear_widgets()
-        self.form.add_widget({'details': self.details, 'ingredients': self.ingredients_page,
-                              'recipe': self.recipe_page}[page])
+        pages = {'status': self.status_page}
+        if self.creating or self.entry is not None:
+            pages.update(details=self.details, ingredients=self.ingredients_page, recipe=self.recipe_page)
+        else:
+            pages['details'] = self.select_page
+        self.form.add_widget(pages[page])
+        self.actions.height = dp(44) if page != 'status' and (self.creating or self.entry) else 0
+        self.actions.opacity = 1 if self.actions.height else 0
 
     def _change_language(self, code):
         if code not in self.locales:

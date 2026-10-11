@@ -8,7 +8,8 @@ from kivy.uix.image import Image
 from kivy.uix.scrollview import ScrollView
 
 from cooking_planner.recipes.images import attributions, image_file
-from cooking_planner.ui.theme import GOLD, MUTED, PANEL, WHITE, box, button, field, label, spinner
+from cooking_planner.ui.theme import (GOLD, MUTED, PANEL, WHITE, box, button, field,
+                                      label, set_tab_active, spinner, tab_button)
 from cooking_planner.ui.strings import t
 
 
@@ -23,10 +24,12 @@ class RecipeBrowser:
         self.page = 0
         self.selected_id = recipes[0]["id"] if recipes else None
         self.image_index = 0
+        self.detail_tab = 'overview'
         self._search_event = None
         self.root = box(spacing=10)
         self.results_scroll = ScrollView(do_scroll_y=False)
-        self.columns = box(False, spacing=12, size_hint_x=None, width=dp(1050))
+        self.columns = box(False, spacing=8, size_hint_x=None)
+        self.results_scroll.bind(width=lambda _, width: setattr(self.columns, 'width', max(width, dp(760))))
         self.results_scroll.add_widget(self.columns)
         self._build_filters()
         self._build_results()
@@ -35,15 +38,15 @@ class RecipeBrowser:
         self.refresh()
 
     def _build_filters(self) -> None:
-        outer = box(padding=10, spacing=8, color=PANEL, size_hint_y=None, height=dp(150))
-        search_row = box(False, spacing=8, size_hint_y=None, height=dp(46))
-        self.search = field(t(self.locale, "search"), height=46)
+        outer = box(padding=8, spacing=6, color=PANEL, size_hint_y=None, height=dp(124))
+        search_row = box(False, spacing=8, size_hint_y=None, height=dp(40))
+        self.search = field(t(self.locale, "search"), height=40)
         self.search.bind(text=self._search_changed)
         search_row.add_widget(self.search)
         search_row.add_widget(button(t(self.locale, "surprise"), self.surprise, "primary",
-                                     size_hint_x=None, width=dp(160), height=46))
+                                     size_hint_x=None, width=dp(145), height=40))
         search_row.add_widget(button(t(self.locale, "clear"), self.clear_filters,
-                                     size_hint_x=None, width=dp(175), height=46))
+                                     size_hint_x=None, width=dp(150), height=40))
         outer.add_widget(search_row)
         scroll = ScrollView(do_scroll_y=False)
         row = box(False, spacing=10, size_hint_x=None, width=dp(960))
@@ -51,7 +54,7 @@ class RecipeBrowser:
         for key, property_name in (("category", "categoryLabel"), ("continent", "continent"),
                                    ("diet", "dietTypeLabel"), ("difficulty", "difficultyLabel")):
             group = box(spacing=4, size_hint_x=None, width=dp(150))
-            group.add_widget(label(t(self.locale, key), 13, MUTED, 26))
+            group.add_widget(label(t(self.locale, key), 12, MUTED, 20))
             values = sorted({recipe[property_name] for recipe in self.recipes if recipe[property_name]})
             widget = spinner(t(self.locale, "all"), (t(self.locale, "all"), *values))
             widget.bind(text=lambda *_: self._filter_changed())
@@ -59,14 +62,14 @@ class RecipeBrowser:
             group.add_widget(widget)
             row.add_widget(group)
         time_group = box(spacing=4, size_hint_x=None, width=dp(130))
-        time_group.add_widget(label(t(self.locale, "time"), 13, MUTED, 26))
+        time_group.add_widget(label(t(self.locale, "time"), 12, MUTED, 20))
         self.time_filter = spinner(t(self.locale, "all"),
                                    (t(self.locale, "all"), "≤ 30 min", "≤ 60 min", "≤ 120 min"))
         self.time_filter.bind(text=lambda *_: self._filter_changed())
         time_group.add_widget(self.time_filter)
         row.add_widget(time_group)
         sort_group = box(spacing=4, size_hint_x=None, width=dp(140))
-        sort_group.add_widget(label(t(self.locale, "sort"), 13, MUTED, 26))
+        sort_group.add_widget(label(t(self.locale, "sort"), 12, MUTED, 20))
         self.sort = spinner(t(self.locale, "name"),
                             (t(self.locale, "name"), t(self.locale, "shortest"), t(self.locale, "country")))
         self.sort.bind(text=lambda *_: self._filter_changed())
@@ -77,8 +80,8 @@ class RecipeBrowser:
         self.root.add_widget(outer)
 
     def _build_results(self) -> None:
-        center = box(padding=12, spacing=8, color=PANEL, size_hint_x=0.43)
-        self.result_count = label("", 17, WHITE, 38, True)
+        center = box(padding=9, spacing=6, color=PANEL, size_hint_x=0.39)
+        self.result_count = label("", 15, WHITE, 31, True)
         center.add_widget(self.result_count)
         scroll = ScrollView(do_scroll_x=False)
         self.rows = box(spacing=6, size_hint_y=None)
@@ -95,7 +98,18 @@ class RecipeBrowser:
         self.columns.add_widget(center)
 
     def _build_detail(self) -> None:
-        detail = box(padding=14, spacing=8, color=PANEL, size_hint_x=0.57)
+        detail = box(padding=10, spacing=6, color=PANEL, size_hint_x=0.61)
+        self.detail_title = label('', 18, GOLD, 34, True)
+        detail.add_widget(self.detail_title)
+        tabs = box(False, spacing=6, size_hint_y=None, height=dp(40))
+        self.detail_tabs = {}
+        for tab, key in (('overview', 'detail_overview'), ('ingredients', 'admin_ingredients'),
+                         ('recipe', 'admin_recipe_tab')):
+            control = tab_button(t(self.locale, key), lambda chosen=tab: self._show_detail_tab(chosen),
+                                 tab == self.detail_tab, height=40)
+            self.detail_tabs[tab] = control
+            tabs.add_widget(control)
+        detail.add_widget(tabs)
         scroll = ScrollView(do_scroll_x=False)
         self.detail_body = box(spacing=7, size_hint_y=None)
         self.detail_body.bind(minimum_height=self.detail_body.setter("height"))
@@ -103,6 +117,14 @@ class RecipeBrowser:
         detail.add_widget(scroll)
         detail.add_widget(button(t(self.locale, "plan_this"), self._plan_selected, "primary", height=50))
         self.columns.add_widget(detail)
+
+    def _show_detail_tab(self, tab):
+        self.detail_tab = tab
+        for name, control in self.detail_tabs.items():
+            key = {'overview': 'detail_overview', 'ingredients': 'admin_ingredients',
+                   'recipe': 'admin_recipe_tab'}[name]
+            set_tab_active(control, t(self.locale, key), name == tab)
+        self._render_detail()
 
     def _search_changed(self, *_args) -> None:
         if self._search_event is not None:
@@ -147,7 +169,7 @@ class RecipeBrowser:
             selected = recipe["id"] == self.selected_id
             text = f"{recipe['name']}\n{recipe['country'] or t(self.locale, 'no_country')}  ·  {recipe['categoryLabel']}  ·  {recipe['totalMinutes']} {t(self.locale, 'minutes')}"
             row = button(text, lambda item=recipe: self.select(item),
-                         "primary" if selected else "secondary", height=70)
+                         "primary" if selected else "secondary", height=58)
             row.halign = "left"
             row.valign = "middle"
             row.bind(size=lambda widget, _: setattr(widget, "text_size", (widget.width - dp(20), widget.height)))
@@ -160,6 +182,7 @@ class RecipeBrowser:
         if self.selected_id != recipe["id"]:
             self.image_index = 0
         self.selected_id = recipe["id"]
+        self._show_detail_tab('overview')
         if self.on_select:
             self.on_select(self.selected_id)
         self.refresh()
@@ -167,6 +190,7 @@ class RecipeBrowser:
     def select_id(self, recipe_id: str) -> None:
         self.clear_filters()
         self.selected_id = recipe_id
+        self._show_detail_tab('overview')
         filtered = self._filtered()
         index = next((i for i, recipe in enumerate(filtered) if recipe["id"] == recipe_id), 0)
         self.page = index // self.PAGE_SIZE
@@ -176,14 +200,26 @@ class RecipeBrowser:
         self.detail_body.clear_widgets()
         recipe = next((item for item in self.recipes if item["id"] == self.selected_id), None)
         if recipe is None:
+            self.detail_title.text = ''
             self.detail_body.add_widget(label(t(self.locale, "no_results"), 16, MUTED, 90))
+            return
+        self.detail_title.text = recipe['name']
+        if self.detail_tab == 'ingredients':
+            self.detail_body.add_widget(label(t(self.locale, 'ingredients'), 18, GOLD, 36, True))
+            for ingredient in recipe['ingredients']:
+                amount = f"{ingredient['amount']:g}" if isinstance(ingredient['amount'], float) else str(ingredient['amount'])
+                self.detail_body.add_widget(label(f"{ingredient['name']}    {amount} {ingredient['unit']}",
+                                                  14, WHITE, 30))
+            return
+        if self.detail_tab == 'recipe':
+            self.detail_body.add_widget(label(t(self.locale, 'no_instructions'), 15, MUTED, 85))
             return
         photos = [(reference, photo) for reference in recipe.get("images", [])
                   if (photo := image_file(recipe["id"], reference)) is not None]
         if photos:
             self.image_index %= len(photos)
             reference, photo = photos[self.image_index]
-            self.detail_body.add_widget(Image(source=str(photo), size_hint_y=None, height=dp(240),
+            self.detail_body.add_widget(Image(source=str(photo), size_hint_y=None, height=dp(170),
                                               allow_stretch=True, keep_ratio=True))
             if len(photos) > 1:
                 controls = box(False, size_hint_y=None, height=dp(38))
@@ -203,19 +239,12 @@ class RecipeBrowser:
                 if credit.get('source_url'):
                     self.detail_body.add_widget(button(t(self.locale, 'image_source'),
                                                        lambda url=credit['source_url']: webbrowser.open(url), height=38))
-        self.detail_body.add_widget(label(recipe["name"], 24, GOLD, 72, True))
         origin = " · ".join(item for item in (recipe["country"] or t(self.locale, "no_country"), recipe["region"], recipe["continent"]) if item)
-        self.detail_body.add_widget(label(origin, 14, MUTED, 36))
-        self.detail_body.add_widget(label(f"{recipe['categoryLabel']}   •   {recipe['dietTypeLabel']}   •   {recipe['difficultyLabel']}", 15, WHITE, 40))
+        self.detail_body.add_widget(label(origin, 13, MUTED, 30))
+        self.detail_body.add_widget(label(f"{recipe['categoryLabel']}   •   {recipe['dietTypeLabel']}   •   {recipe['difficultyLabel']}", 14, WHITE, 35))
         times = f"{t(self.locale, 'prep')} {recipe['prepMinutes']}  ·  {t(self.locale, 'cook')} {recipe['cookMinutes']}  ·  {t(self.locale, 'total')} {recipe['totalMinutes']} {t(self.locale, 'minutes')}"
-        self.detail_body.add_widget(label(times, 14, MUTED, 42))
-        self.detail_body.add_widget(label(t(self.locale, "ingredients"), 18, WHITE, 42, True))
-        for ingredient in recipe["ingredients"]:
-            amount = f"{ingredient['amount']:g}" if isinstance(ingredient["amount"], float) else str(ingredient["amount"])
-            self.detail_body.add_widget(label(f"  {ingredient['name']}    {amount} {ingredient['unit']}", 15, WHITE, 32))
-        self.detail_body.add_widget(label("", height=14))
-        self.detail_body.add_widget(label(t(self.locale, "no_instructions"), 14, MUTED, 75))
-        self.detail_body.add_widget(label(t(self.locale, "estimate") + " · " + recipe["dataSourceLabel"], 13, MUTED, 30))
+        self.detail_body.add_widget(label(times, 13, MUTED, 34))
+        self.detail_body.add_widget(label(t(self.locale, "estimate") + " · " + recipe["dataSourceLabel"], 12, MUTED, 30))
 
     def _plan_selected(self) -> None:
         recipe = next((item for item in self.recipes if item["id"] == self.selected_id), None)

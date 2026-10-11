@@ -3,6 +3,7 @@ import os
 import sys
 import tempfile
 import unittest
+from datetime import timedelta
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -16,6 +17,8 @@ try:
         raise ImportError('No display')
     from kivy.clock import Clock
     from kivy.core.window import Window
+    from kivy.uix.button import Button
+    from kivy.uix.textinput import TextInput
     from cooking_planner.app import CookingPlannerApp
     from cooking_planner.recipes.admin import AdminPanel
     from cooking_planner.shopping.draft import ShoppingDraft, item_key
@@ -65,17 +68,42 @@ class UiFlowTest(unittest.TestCase):
         self.assertEqual([], browser._filtered())
         browser.clear_filters()
         browser.select(self.recipe)
+        browser._show_detail_tab('ingredients')
+        self.assertTrue(browser.detail_tabs['ingredients'].text.startswith('● '))
+        browser._show_detail_tab('recipe')
+        self.assertTrue(browser.detail_tabs['recipe'].text.startswith('● '))
         self.assertEqual(self.recipe['id'], self.app.selected_id)
         self.app.show_tab('week')
         self.app.show_tab('shopping')
         self.app.show_tab('overview')
         self.assertEqual('overview', self.app.tab)
 
+    def test_saved_plan_opens_its_week_and_drives_shopping(self):
+        day = self.app.week_start + timedelta(days=8)
+        self.app.show_tab('explore')
+        with patch.object(self.app, '_submit', side_effect=lambda work, success: success({'id': 7})), \
+             patch.object(self.app, 'refresh') as refresh:
+            self.app.save_plan(day, 'DINNER', self.recipe['id'], 3)
+        self.assertEqual('week', self.app.tab)
+        self.assertEqual(day - timedelta(days=day.weekday()), self.app.week_start)
+        refresh.assert_called_once()
+        plan = {'id': 7, 'date': day.isoformat(), 'mealType': 'DINNER',
+                'recipeId': self.recipe['id'], 'recipeTitle': self.recipe['name'], 'servings': 3}
+        self.app._loaded((['en'], [self.recipe], {'countryCount': 1}, [plan]), self.app.generation)
+        shopping = self.app.shopping_draft.items(self.app.week_start.isoformat(),
+                                                 self.app.plans, self.app.recipes)
+        self.assertEqual({str(item['ingredientId']) for item in self.recipe['ingredients']},
+                         {item['ingredientId'] for item in shopping})
+        first = self.recipe['ingredients'][0]
+        self.assertEqual(first['amount'] * 3,
+                         next(item['amount'] for item in shopping
+                              if item['ingredientId'] == first['ingredientId']))
+
     def test_shopping_checks_and_scale_persistence(self):
         draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
         start = self.app.week_start.isoformat()
         draft.add_custom(start, 'Rice', '100', 'g')
-        panel = ShoppingPanel([], [], draft, 'en', self.app.week_start, lambda _: None, lambda: None)
+        panel = ShoppingPanel([], [], draft, 'en', self.app.week_start, lambda _: None)
         key = item_key(panel.items[0])
         panel.toggle(key)
         self.assertIn(key, draft.week(start)['checked'])
@@ -94,6 +122,29 @@ class UiFlowTest(unittest.TestCase):
             self.app.toggle_window()
             self.assertIs(False, fake_window.fullscreen)
             self.assertEqual('Fullscreen', self.app.window_button.text)
+
+    def test_shopping_dialog_adds_multiple_items_without_reopening(self):
+        draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
+        panel = ShoppingPanel([], [], draft, 'en', self.app.week_start, lambda _: None)
+        dialog = SimpleNamespace(open=lambda: None, dismiss=lambda: None)
+        with patch('cooking_planner.shopping.panel.styled_popup', return_value=dialog) as popup:
+            panel.add_item()
+        body = popup.call_args.args[1]
+        fields = [widget for widget in body.children if isinstance(widget, TextInput)]
+        name = next(widget for widget in fields if widget.hint_text == 'Item name')
+        amount = next(widget for widget in fields if widget.hint_text == 'Quantity')
+        unit = next(widget for widget in fields if widget.hint_text == 'Unit')
+        actions = next(widget for widget in body.children if any(isinstance(child, Button)
+                                                                 for child in widget.children))
+        more = next(widget for widget in actions.children if widget.text == 'Add another')
+        done = next(widget for widget in actions.children if widget.text == 'Add item')
+        name.text, amount.text, unit.text = 'Milk', '2', 'l'
+        more.dispatch('on_release', None)
+        self.assertEqual('', name.text)
+        self.assertEqual(1, len(panel.items))
+        name.text, amount.text, unit.text = 'Eggs', '6', 'pcs'
+        done.dispatch('on_release', None)
+        self.assertEqual({'Milk', 'Eggs'}, {item['name'] for item in panel.items})
 
     def test_admin_requires_a_choice_for_each_language(self):
         saved = []
@@ -119,6 +170,14 @@ class UiFlowTest(unittest.TestCase):
 
 @unittest.skipUnless(HAS_KIVY, 'Kivy and a desktop display are required')
 class AdminEditorTest(unittest.TestCase):
+    def test_status_tab_is_available_without_a_selected_recipe(self):
+        panel = AdminPanel([], ('en',), 'en', lambda _: None, lambda *args: None,
+                           lambda _: None, lambda: None, lambda _: None)
+        panel._show_page('status')
+        panel.set_status('Backend ready')
+        self.assertIs(panel.status_page, panel.form.children[0])
+        self.assertEqual('Backend ready', panel.status_text.text)
+
     def test_catalog_choices_change_labels_without_losing_codes(self):
         data = Path(__file__).resolve().parents[2] / 'data'
         english = json.loads((data / 'recipes_en.json').read_text())['recipes'][0]
