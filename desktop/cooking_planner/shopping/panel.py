@@ -76,6 +76,10 @@ class ShoppingPanel:
     def _amount(item):
         return format(Decimal(str(item['amount'])).normalize(), 'f')
 
+    @staticmethod
+    def _name_width(row_width):
+        return max(dp(125), min(dp(280), row_width * 0.35))
+
     def _section(self, title, count):
         heading = box(False, spacing=6, size_hint_y=None, height=dp(30))
         heading.add_widget(label(title, 15, GOLD, 30, True))
@@ -87,13 +91,18 @@ class ShoppingPanel:
     def _column_header(self):
         heading = box(False, padding=5, spacing=5, size_hint_y=None, height=dp(25))
         heading.add_widget(label('', 12, MUTED, 25, size_hint_x=None, width=dp(38)))
-        heading.add_widget(label(t(self.locale, 'shopping_item_label'), 12, MUTED, 25))
+        name = label(t(self.locale, 'shopping_item_label'), 12, MUTED, 25,
+                     size_hint_x=None, width=dp(280))
+        name.text_size = (name.width, name.height)
+        heading.bind(width=lambda _, width: setattr(name, 'width', self._name_width(width)))
+        heading.add_widget(name)
         quantity = label(t(self.locale, 'manual_amount'), 12, MUTED, 25,
                          size_hint_x=None, width=dp(82))
         quantity.halign = 'right'
         heading.add_widget(quantity)
         heading.add_widget(label(t(self.locale, 'manual_unit'), 12, MUTED, 25,
                                  size_hint_x=None, width=dp(70)))
+        heading.add_widget(box(False))
         heading.add_widget(label('', 12, MUTED, 25, size_hint_x=None, width=dp(38)))
         self.rows.add_widget(heading)
 
@@ -107,12 +116,15 @@ class ShoppingPanel:
             check.background_color = GREEN
             check.color = BG
         row.add_widget(check)
-        name = button(item['name'], lambda: self.toggle(key), height=38)
+        name = button(item['name'], lambda: self.toggle(key), height=38,
+                      size_hint_x=None, width=dp(280))
+        row.bind(width=lambda _, width: setattr(name, 'width', self._name_width(width)))
         name.background_color = (0, 0, 0, 0)
         name.color = MUTED if checked else WHITE
         name.halign = 'left'
         name.valign = 'middle'
         name.shorten = True
+        name.text_size = (name.width - dp(8), name.height)
         name.bind(size=lambda widget, _: setattr(widget, 'text_size',
                                                 (widget.width - dp(8), widget.height)))
         row.add_widget(name)
@@ -123,6 +135,7 @@ class ShoppingPanel:
         unit = label(item['unit'], 13, MUTED, 38, size_hint_x=None, width=dp(70))
         unit.shorten = True
         row.add_widget(unit)
+        row.add_widget(box(False))
         row.add_widget(button('×', lambda: self.remove(key), 'danger',
                               height=38, size_hint_x=None, width=dp(38)))
         return row

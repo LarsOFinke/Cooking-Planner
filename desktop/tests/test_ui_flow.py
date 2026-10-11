@@ -194,12 +194,18 @@ class UiFlowTest(unittest.TestCase):
         panel = ShoppingPanel([], [], draft, 'en', self.app.week_start, lambda _: None)
         rice = panel.rows.children[0]
         self.assertEqual(['[ ]', 'Rice', '100', 'g', '×'],
-                         [widget.text for widget in reversed(rice.children)])
+                         [widget.text for widget in reversed(rice.children) if hasattr(widget, 'text')])
+        self.assertEqual('left', rice.children[-2].halign)
+        self.assertIsNotNone(rice.children[-2].text_size)
+        rice.width = dp(1000)
+        self.assertEqual(dp(280), rice.children[-2].width)
+        rice.width = dp(390)
+        self.assertEqual(dp(136.5), rice.children[-2].width)
         self.assertEqual('To buy', panel.rows.children[-1].children[-1].text)
         panel.toggle(item_key(next(item for item in panel.items if item['name'] == 'Rice')))
         completed = panel.rows.children[0]
         self.assertEqual(['[x]', 'Rice', '100', 'g', '×'],
-                         [widget.text for widget in reversed(completed.children)])
+                         [widget.text for widget in reversed(completed.children) if hasattr(widget, 'text')])
         self.assertEqual('Completed', panel.rows.children[1].children[-1].text)
         self.assertEqual('1 / 2 items to buy', panel.summary.text)
         panel.scroll.height = dp(120)
