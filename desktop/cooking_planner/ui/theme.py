@@ -1,9 +1,11 @@
 from kivy.graphics import Color, RoundedRectangle
+from kivy.effects.scroll import ScrollEffect
 from kivy.metrics import dp
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.spinner import Spinner
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
 
 from cooking_planner.ui.clipboard import get_clipboard
@@ -34,6 +36,14 @@ def box(vertical=True, padding=0, spacing=0, color=None, **kwargs) -> BoxLayout:
     return widget
 
 
+def scroll_view(**kwargs) -> ScrollView:
+    view = ScrollView(effect_cls=ScrollEffect, scroll_wheel_distance=dp(22), **kwargs)
+    for effect in (view.effect_x, view.effect_y):
+        if effect is not None:
+            effect.friction = 0.18
+    return view
+
+
 def label(text, size=16, color=WHITE, height=32, bold=False, **kwargs) -> Label:
     widget = Label(text=str(text), color=color, font_size=dp(size), bold=bold,
                    size_hint_y=None, height=dp(height), halign="left", valign="middle", **kwargs)
@@ -53,8 +63,8 @@ def button(text, callback=None, kind="secondary", height=42, **kwargs) -> Button
 
 
 def set_tab_active(widget: Button, text: str, active: bool) -> None:
-    """Show the selected tab with color, weight, and a text marker."""
-    widget.text = f"● {text}" if active else text
+    """Show the selected tab with color and weight."""
+    widget.text = text
     widget.background_color = GOLD if active else PANEL_LIGHT
     widget.color = BG if active else MUTED
     widget.bold = active

@@ -4,12 +4,11 @@ from copy import deepcopy
 from decimal import Decimal, InvalidOperation
 
 from kivy.metrics import dp
-from kivy.uix.scrollview import ScrollView
 from kivy.uix.togglebutton import ToggleButton
 
 from cooking_planner.ui.strings import t
 from cooking_planner.ui.theme import (GOLD, MUTED, PANEL, PANEL_LIGHT, WHITE, box, button,
-                                      field, label, set_tab_active, spinner, tab_button)
+                                      field, label, scroll_view, set_tab_active, spinner, tab_button)
 
 CHOICES = (
     ('country_code', 'admin_country'), ('region_code', 'admin_region'),
@@ -58,37 +57,40 @@ class AdminPanel:
         self.options = options or {}
         self.status_message = status_message or t(locale, 'ready')
         self.entry, self.creating, self.page = None, False, 'details'
-        self.root = box(spacing=8)
-        header = box(False, spacing=8, size_hint_y=None, height=dp(46))
-        header.add_widget(label(t(locale, 'admin'), 22, GOLD, 46, True))
+        self.root = box(spacing=6)
+        header = box(False, spacing=7, size_hint_y=None, height=dp(42))
+        header.add_widget(label(t(locale, 'admin'), 19, GOLD, 42, True))
         header.add_widget(button(t(locale, 'admin_new'), self.new, 'primary',
-                                 size_hint_x=None, width=dp(145)))
-        header.add_widget(button(t(locale, 'refresh'), on_reload, size_hint_x=None, width=dp(115)))
+                                 size_hint_x=None, width=dp(130), height=40))
+        header.add_widget(button(t(locale, 'refresh'), on_reload,
+                                 size_hint_x=None, width=dp(95), height=40))
         self.root.add_widget(header)
-        horizontal = ScrollView(do_scroll_y=False)
-        columns = box(False, spacing=8, size_hint_x=None)
-        horizontal.bind(width=lambda _, width: setattr(columns, 'width', max(width, dp(780))))
+        horizontal = scroll_view(do_scroll_y=False)
+        self.horizontal = horizontal
+        columns = box(False, spacing=6, size_hint_x=None)
+        self.columns = columns
+        horizontal.bind(width=lambda _, width: setattr(columns, 'width', max(width, dp(500))))
         horizontal.add_widget(columns)
         self.root.add_widget(horizontal)
-        left = box(padding=8, spacing=6, color=PANEL, size_hint_x=None, width=dp(235))
-        self.search = field(t(locale, 'admin_search'))
+        left = box(padding=6, spacing=5, color=PANEL, size_hint_x=0.28)
+        self.search = field(t(locale, 'admin_search'), height=38)
         self.search.bind(text=lambda *_: self._render_list())
         left.add_widget(self.search)
-        list_scroll = ScrollView(do_scroll_x=False)
+        list_scroll = scroll_view(do_scroll_x=False)
         self.list_rows = box(spacing=4, size_hint_y=None)
         self.list_rows.bind(minimum_height=self.list_rows.setter('height'))
         list_scroll.add_widget(self.list_rows)
         left.add_widget(list_scroll)
         columns.add_widget(left)
-        right = box(spacing=6)
-        self.toolbar = box(False, spacing=7, size_hint_y=None, height=dp(44))
+        right = box(spacing=5, size_hint_x=0.72)
+        self.toolbar = box(False, spacing=5, size_hint_y=None, height=dp(38))
         right.add_widget(self.toolbar)
-        editor_scroll = ScrollView(do_scroll_x=False)
-        self.form = box(padding=dp(12), color=PANEL, size_hint_y=None)
+        editor_scroll = scroll_view(do_scroll_x=False)
+        self.form = box(padding=8, color=PANEL, size_hint_y=None)
         self.form.bind(minimum_height=self.form.setter('height'))
         editor_scroll.add_widget(self.form)
         right.add_widget(editor_scroll)
-        self.actions = box(False, spacing=8, size_hint_y=None, height=dp(44))
+        self.actions = box(False, spacing=6, size_hint_y=None, height=dp(40))
         right.add_widget(self.actions)
         columns.add_widget(right)
         self._render_list()
@@ -102,17 +104,27 @@ class AdminPanel:
         self.list_rows.add_widget(label(f"{len(matches)} {t(self.locale, 'results')}", 13, MUTED, 28))
         for record in matches[:80]:
             name = record['names'].get(self.locale) or next(iter(record['names'].values()), '')
-            self.list_rows.add_widget(button(f"{name}\n{record['id']}",
-                                             lambda recipe_id=record['id']: self.on_select(recipe_id), height=62))
+            item = button(f"{name}\n{record['id']}",
+                          lambda recipe_id=record['id']: self.on_select(recipe_id),
+                          'primary' if self.entry and record['id'] == self.entry['id'] else 'secondary',
+                          height=52)
+            item.halign = 'left'
+            item.valign = 'middle'
+            item.shorten = True
+            item.bind(size=lambda widget, _: setattr(widget, 'text_size',
+                                                     (widget.width - dp(12), widget.height)))
+            self.list_rows.add_widget(item)
 
     def show_recipe(self, entry):
         self.entry, self.creating = deepcopy(entry), False
         self.page = 'details'
+        self._render_list()
         self._render_form()
 
     def new(self):
         self.entry, self.creating = None, True
         self.page = 'details'
+        self._render_list()
         self._render_form()
 
     def reset(self):
@@ -168,21 +180,32 @@ class AdminPanel:
         self.actions.clear_widgets()
         self.shared_inputs, self.locale_inputs, self.locale_choices = {}, {}, {}
         self.ingredient_rows = []
-        self.status_page = box(spacing=10, size_hint_y=None)
+        self.status_page = box(spacing=8, size_hint_y=None)
         self.status_page.bind(minimum_height=self.status_page.setter('height'))
         self._heading(self.status_page, 'admin_status')
-        self.status_page.add_widget(label(f"{len(self.records)} {t(self.locale, 'results')} · "
-                                          f"{len(self.locales)} {t(self.locale, 'admin_languages').lower()}",
-                                          16, WHITE, 48))
-        self.status_text = label(self.status_message, 15, MUTED, 66)
-        self.status_page.add_widget(self.status_text)
-        self.page_titles = {'status': 'admin_status'}
-        self.page_tabs = {'status': tab_button(t(self.locale, 'admin_status'),
-                                               lambda: self._show_page('status'), self.page == 'status')}
+        stats = box(False, spacing=7, size_hint_y=None, height=dp(64))
+        for value, caption in ((len(self.records), 'recipes_count'),
+                               (len(self.locales), 'admin_languages')):
+            tile = box(padding=7, spacing=0, color=PANEL_LIGHT)
+            tile.add_widget(label(str(value), 20, GOLD, 29, True))
+            tile.add_widget(label(t(self.locale, caption), 12, MUTED, 22))
+            stats.add_widget(tile)
+        self.status_page.add_widget(stats)
+        status_card = box(padding=9, spacing=3, color=PANEL_LIGHT,
+                          size_hint_y=None, height=dp(80))
+        status_card.add_widget(label(t(self.locale, 'admin_latest_status'), 14, GOLD, 24, True))
+        self.status_text = label(self.status_message, 14, WHITE, 42)
+        status_card.add_widget(self.status_text)
+        self.status_page.add_widget(status_card)
+        self.page_titles = {'status': 'admin_status_short'}
+        self.page_tabs = {'status': tab_button(t(self.locale, 'admin_status_short'),
+                                               lambda: self._show_page('status'), self.page == 'status',
+                                               height=38)}
         self.toolbar.add_widget(self.page_tabs['status'])
         if not self.creating and self.entry is None:
-            self.select_page = box(size_hint_y=None, height=dp(80))
-            self.select_page.add_widget(label(t(self.locale, 'admin_select'), 16, MUTED, 80))
+            self.select_page = box(padding=10, color=PANEL_LIGHT,
+                                   size_hint_y=None, height=dp(80))
+            self.select_page.add_widget(label(t(self.locale, 'admin_select'), 15, MUTED, 60))
             self._show_page(self.page if self.page == 'status' else 'details')
             return
         recipe_id = '' if self.creating else self.entry['id']
@@ -198,19 +221,17 @@ class AdminPanel:
         self.edit_locale = source
         self.source = spinner(source.upper(), (code.upper() for code in self.locales))
         self.language = spinner(source.upper(), (code.upper() for code in self.locales),
-                                size_hint_x=None, width=dp(85))
+                                size_hint_x=None, width=dp(68))
         self.language.bind(text=lambda *_: self._change_language(self.language.text.lower()))
-        self.toolbar.add_widget(label(t(self.locale, 'admin_edit_language'), 14, WHITE, 40,
-                                      size_hint_x=None, width=dp(125)))
-        self.toolbar.add_widget(self.language)
-        self.page_titles.update({'details': 'admin_details_tab', 'ingredients': 'admin_ingredients',
+        self.page_titles.update({'details': 'admin_details_tab', 'ingredients': 'admin_ingredients_short',
                                  'recipe': 'admin_recipe_tab'})
         for page in ('details', 'ingredients', 'recipe'):
             title = self.page_titles[page]
             control = tab_button(t(self.locale, title), lambda selected=page: self._show_page(selected),
-                                 page == self.page)
+                                 page == self.page, height=38)
             self.page_tabs[page] = control
             self.toolbar.add_widget(control)
+        self.toolbar.add_widget(self.language)
         self.details = box(spacing=8, size_hint_y=None)
         self.details.bind(minimum_height=self.details.setter('height'))
         self.ingredients_page = box(spacing=8, size_hint_y=None)
@@ -284,11 +305,11 @@ class AdminPanel:
         self._change_language(source)
         self._show_page(self.page)
         self.actions.add_widget(button(t(self.locale, 'admin_create' if self.creating else 'admin_update'),
-                                       self.save, 'primary'))
-        self.actions.add_widget(button(t(self.locale, 'admin_reset'), self.reset))
+                                       self.save, 'primary', height=40))
+        self.actions.add_widget(button(t(self.locale, 'admin_reset'), self.reset, height=40))
         if not self.creating:
             self.actions.add_widget(button(t(self.locale, 'admin_delete'),
-                                           lambda: self.on_delete(self.entry['id']), 'danger'))
+                                           lambda: self.on_delete(self.entry['id']), 'danger', height=40))
 
     def _show_page(self, page):
         self.page = page
@@ -304,7 +325,7 @@ class AdminPanel:
         else:
             pages['details'] = self.select_page
         self.form.add_widget(pages[page])
-        self.actions.height = dp(44) if page != 'status' and (self.creating or self.entry) else 0
+        self.actions.height = dp(40) if page != 'status' and (self.creating or self.entry) else 0
         self.actions.opacity = 1 if self.actions.height else 0
 
     def _change_language(self, code):

@@ -1,55 +1,72 @@
 """App orientation and weekly summary without an unsolicited recipe selection."""
 
 from kivy.metrics import dp
-from kivy.uix.scrollview import ScrollView
+from kivy.uix.gridlayout import GridLayout
 
-from cooking_planner.ui.theme import GOLD, MUTED, PANEL, WHITE, box, button, label
+from cooking_planner.ui.theme import GOLD, MUTED, PANEL, PANEL_LIGHT, WHITE, box, button, label, scroll_view
 from cooking_planner.ui.strings import t
 
 
 class OverviewPanel:
     def __init__(self, recipes, plans, info, locale, on_navigate, on_notes):
-        self.root = box(spacing=10)
-        scroll = ScrollView(do_scroll_x=False)
-        content = box(spacing=12, size_hint_y=None)
+        self.root = box()
+        scroll = scroll_view(do_scroll_x=False)
+        self.scroll = scroll
+        content = box(spacing=8, size_hint_y=None)
         content.bind(minimum_height=content.setter('height'))
-        content.add_widget(label(t(locale, 'overview_welcome'), 25, GOLD, 46, True))
-        content.add_widget(label(t(locale, 'overview_intro'), 15, MUTED, 50))
 
-        metrics = box(False, spacing=8, size_hint_y=None, height=dp(88))
+        hero = box(padding=10, spacing=2, color=PANEL, size_hint_y=None, height=dp(82))
+        hero.add_widget(label(t(locale, 'overview_welcome'), 21, GOLD, 34, True))
+        hero.add_widget(label(t(locale, 'overview_intro'), 13, MUTED, 30))
+        content.add_widget(hero)
+
+        metrics = box(False, spacing=7, size_hint_y=None, height=dp(72))
         categories = len({recipe.get('categoryLabel') for recipe in recipes if recipe.get('categoryLabel')})
         for value, caption in ((len(recipes), 'recipes_count'), (categories, 'categories_count'),
                                (info.get('countryCount', 0), 'countries'), (len(plans), 'planned')):
-            tile = box(padding=10, spacing=1, color=PANEL)
-            tile.add_widget(label(str(value), 23, GOLD, 34, True))
-            tile.add_widget(label(t(locale, caption), 13, MUTED, 26))
+            tile = box(padding=7, spacing=0, color=PANEL_LIGHT)
+            tile.add_widget(label(str(value), 21, GOLD, 32, True))
+            tile.add_widget(label(t(locale, caption), 12, MUTED, 24))
             metrics.add_widget(tile)
         content.add_widget(metrics)
 
         if not plans:
-            guide = box(padding=14, spacing=5, color=PANEL, size_hint_y=None, height=dp(170))
-            guide.add_widget(label(t(locale, 'overview_start'), 18, GOLD, 32, True))
+            guide = box(padding=10, spacing=2, color=PANEL,
+                        size_hint_y=None, height=dp(120))
+            guide.add_widget(label(t(locale, 'overview_start'), 16, GOLD, 27, True))
             for key in ('overview_step_explore', 'overview_step_plan', 'overview_step_shop'):
-                guide.add_widget(label(t(locale, key), 14, WHITE, 30))
+                guide.add_widget(label(t(locale, key), 13, WHITE, 25))
             content.add_widget(guide)
 
-        content.add_widget(label(t(locale, 'overview_modules'), 19, GOLD, 34, True))
+        content.add_widget(label(t(locale, 'overview_modules'), 17, GOLD, 28, True))
+        modules = GridLayout(cols=1, spacing=dp(7), row_default_height=dp(78),
+                             row_force_default=True, size_hint_y=None)
+        self.modules = modules
+        modules.bind(minimum_height=modules.setter('height'))
+        modules.bind(width=lambda _, width: setattr(modules, 'cols',
+                                                    3 if width >= dp(900) else 2 if width >= dp(600) else 1))
         for tab, description in (('explore', 'overview_explore_help'), ('week', 'overview_week_help'),
                                  ('shopping', 'overview_shopping_help')):
-            row = box(False, padding=10, spacing=10, color=PANEL,
-                      size_hint_y=None, height=dp(84))
+            card = box(False, padding=8, spacing=6, color=PANEL_LIGHT,
+                       size_hint_y=None, height=dp(78))
             copy = box(spacing=0)
-            copy.add_widget(label(t(locale, tab), 17, WHITE, 29, True))
-            copy.add_widget(label(t(locale, description), 13, MUTED, 32))
-            row.add_widget(copy)
-            row.add_widget(button(t(locale, 'open'), lambda selected=tab: on_navigate(selected),
-                                  size_hint_x=None, width=dp(105)))
-            content.add_widget(row)
+            copy.add_widget(label(t(locale, tab), 15, WHITE, 27, True))
+            copy.add_widget(label(t(locale, description), 12, MUTED, 34))
+            card.add_widget(copy)
+            card.add_widget(button(t(locale, 'open'), lambda selected=tab: on_navigate(selected),
+                                   size_hint_x=None, width=dp(62), height=38))
+            modules.add_widget(card)
+        content.add_widget(modules)
 
-        notes = box(padding=14, spacing=5, color=PANEL, size_hint_y=None, height=dp(170))
-        notes.add_widget(label(t(locale, 'overview_good_to_know'), 18, GOLD, 30, True))
-        notes.add_widget(label(t(locale, 'overview_catalog_note'), 14, WHITE, 56))
-        notes.add_widget(button(t(locale, 'data_notes'), on_notes, size_hint_x=None, width=dp(175)))
+        notes = box(False, padding=10, spacing=8, color=PANEL,
+                    size_hint_y=None, height=dp(90))
+        copy = box(spacing=2)
+        copy.add_widget(label(t(locale, 'overview_good_to_know'), 16, GOLD, 28, True))
+        copy.add_widget(label(t(locale, 'overview_catalog_note'), 13, WHITE, 42))
+        notes.add_widget(copy)
+        notes.add_widget(button(t(locale, 'data_notes'), on_notes,
+                                size_hint_x=None, width=dp(130), height=38))
         content.add_widget(notes)
+
         scroll.add_widget(content)
         self.root.add_widget(scroll)

@@ -1,11 +1,10 @@
 from decimal import Decimal, InvalidOperation
 
 from kivy.metrics import dp
-from kivy.uix.scrollview import ScrollView
 
 from cooking_planner.ui.dialogs import confirm_popup, styled_popup
 from cooking_planner.shopping.draft import item_key
-from cooking_planner.ui.theme import GOLD, MUTED, box, button, field, label
+from cooking_planner.ui.theme import BG, GOLD, GREEN, MUTED, PANEL, WHITE, box, button, field, label, scroll_view
 from cooking_planner.ui.strings import t
 from cooking_planner.ui.clipboard import get_clipboard
 
@@ -15,7 +14,7 @@ Clipboard = get_clipboard()
 
 class ShoppingPanel:
     def __init__(self, plans, recipes, draft, locale, week_start, on_status):
-        self.root = box(spacing=10)
+        self.root = box(spacing=7)
         self.plans = plans
         self.recipes = recipes
         self.draft = draft
@@ -23,29 +22,47 @@ class ShoppingPanel:
         self.start = week_start.isoformat()
         self.on_status = on_status
         self.items = []
-        header = box(False, spacing=8, size_hint_y=None, height=dp(48))
-        header.add_widget(label(t(locale, 'shopping'), 23, GOLD, 48, True))
-        header.add_widget(button(t(locale, 'copy'), self.copy, size_hint_x=None, width=dp(150)))
+        header = box(False, spacing=8, size_hint_y=None, height=dp(42))
+        header.add_widget(label(t(locale, 'shopping'), 19, GOLD, 42, True))
+        header.add_widget(button(t(locale, 'copy'), self.copy, size_hint_x=None, width=dp(120)))
         self.root.add_widget(header)
-        actions = box(spacing=6, size_hint_y=None, height=dp(94))
-        primary = box(False, spacing=7, size_hint_y=None, height=dp(44))
-        primary.add_widget(button(t(locale, 'add_week'), self.add_all, 'primary'))
-        primary.add_widget(button(t(locale, 'choose_meals'), self.choose_meals))
-        primary.add_widget(button(t(locale, 'add_item'), self.add_item))
+        actions = box(spacing=5, size_hint_y=None, height=dp(45))
+        self.actions = actions
+        primary = box(False, spacing=5, size_hint_y=None, height=dp(40))
+        primary.add_widget(button(t(locale, 'add_item'), self.add_item, 'primary', height=40))
+        primary.add_widget(button(t(locale, 'choose_meals'), self.choose_meals, height=40))
+        primary.add_widget(button(t(locale, 'add_week_short'), self.add_all, height=40))
+        self.more_button = button(t(locale, 'more_actions'), self.toggle_actions, height=40)
+        primary.add_widget(self.more_button)
         actions.add_widget(primary)
-        secondary = box(False, spacing=7, size_hint_y=None, height=dp(44))
-        secondary.add_widget(button(t(locale, 'reset_checks'), self.reset))
-        secondary.add_widget(button(t(locale, 'clear_list'), self.confirm_clear, 'danger'))
+        secondary = box(False, spacing=5, size_hint_y=None, height=0, opacity=0, disabled=True)
+        self.more_row = secondary
+        secondary.add_widget(button(t(locale, 'reset_checks'), self.reset, height=40))
+        secondary.add_widget(button(t(locale, 'clear_list'), self.confirm_clear, 'danger', height=40))
         actions.add_widget(secondary)
         self.root.add_widget(actions)
-        self.summary = label('', 15, MUTED, 36)
-        self.root.add_widget(self.summary)
-        scroll = ScrollView(do_scroll_x=False)
-        self.rows = box(spacing=7, size_hint_y=None)
+        summary = box(False, padding=8, spacing=8, color=PANEL,
+                      size_hint_y=None, height=dp(46))
+        self.summary = label('', 15, WHITE, 30, True)
+        self.meal_summary = label('', 13, MUTED, 30)
+        summary.add_widget(self.summary)
+        summary.add_widget(self.meal_summary)
+        self.root.add_widget(summary)
+        scroll = scroll_view(do_scroll_x=False)
+        self.scroll = scroll
+        self.rows = box(spacing=5, size_hint_y=None)
         self.rows.bind(minimum_height=self.rows.setter('height'))
         scroll.add_widget(self.rows)
         self.root.add_widget(scroll)
         self._render()
+
+    def toggle_actions(self):
+        expanded = self.more_row.height == 0
+        self.more_row.height = dp(40) if expanded else 0
+        self.more_row.opacity = int(expanded)
+        self.more_row.disabled = not expanded
+        self.actions.height = dp(90 if expanded else 45)
+        self.more_button.text = t(self.locale, 'less_actions' if expanded else 'more_actions')
 
     @staticmethod
     def _amount(item):
@@ -58,21 +75,25 @@ class ShoppingPanel:
         self.rows.clear_widgets()
         remaining = sum(item_key(item) not in checked for item in self.items)
         selected = len(self.draft.selected_plan_ids(self.start, self.plans))
-        self.summary.text = (f"{remaining} / {len(self.items)} {t(self.locale, 'shopping_items')}"
-                             f" · {selected} {t(self.locale, 'selected_meals')}")
+        self.summary.text = f"{remaining} / {len(self.items)} {t(self.locale, 'shopping_items')}"
+        self.meal_summary.text = f"{selected} {t(self.locale, 'selected_meal' if selected == 1 else 'selected_meals')}"
         if not self.items:
             self.rows.add_widget(label(t(self.locale, 'empty_shopping_draft'), 17, MUTED, 80))
         for item in self.items:
             key = item_key(item)
             line = f"{item['name']}    {self._amount(item)} {item['unit']}"
-            row = box(False, spacing=6, size_hint_y=None, height=dp(51))
-            entry = button(('✓  ' if key in checked else '○  ') + line,
-                           lambda selected_key=key: self.toggle(selected_key), height=51)
+            row = box(False, spacing=5, size_hint_y=None, height=dp(42))
+            entry = button(('[x]  ' if key in checked else '[ ]  ') + line,
+                           lambda selected_key=key: self.toggle(selected_key), height=42)
             entry.halign = 'left'
+            entry.shorten = True
+            if key in checked:
+                entry.background_color = GREEN
+                entry.color = BG
             entry.bind(size=lambda widget, _: setattr(widget, 'text_size', (widget.width - dp(24), widget.height)))
             row.add_widget(entry)
             row.add_widget(button('×', lambda selected_key=key: self.remove(selected_key), 'danger',
-                                  height=51, size_hint_x=None, width=dp(48)))
+                                  height=42, size_hint_x=None, width=dp(40)))
             self.rows.add_widget(row)
 
     def _changed(self):
@@ -86,7 +107,7 @@ class ShoppingPanel:
         body = box(padding=12, spacing=8)
         rows = box(spacing=5, size_hint_y=None)
         rows.bind(minimum_height=rows.setter('height'))
-        scroll = ScrollView(do_scroll_x=False)
+        scroll = scroll_view(do_scroll_x=False)
         scroll.add_widget(rows)
         body.add_widget(scroll)
         dialog = styled_popup(t(self.locale, 'choose_meals'), body, 0.65, 0.75)

@@ -17,9 +17,12 @@ try:
         raise ImportError('No display')
     from kivy.clock import Clock
     from kivy.core.window import Window
+    from kivy.metrics import dp
     from kivy.uix.button import Button
     from kivy.uix.textinput import TextInput
     from cooking_planner.app import CookingPlannerApp
+    from cooking_planner.overview.panel import OverviewPanel
+    from cooking_planner.plans.week import WeekPlanner
     from cooking_planner.recipes.admin import AdminPanel
     from cooking_planner.shopping.draft import ShoppingDraft, item_key
     from cooking_planner.shopping.panel import ShoppingPanel
@@ -75,9 +78,9 @@ class UiFlowTest(unittest.TestCase):
         browser.clear_filters()
         browser.select(self.recipe)
         browser._show_detail_tab('ingredients')
-        self.assertTrue(browser.detail_tabs['ingredients'].text.startswith('● '))
+        self.assertTrue(browser.detail_tabs['ingredients'].bold)
         browser._show_detail_tab('recipe')
-        self.assertTrue(browser.detail_tabs['recipe'].text.startswith('● '))
+        self.assertTrue(browser.detail_tabs['recipe'].bold)
         self.assertEqual(self.recipe['id'], self.app.selected_id)
         self.app.show_tab('week')
         self.app.show_tab('shopping')
@@ -113,11 +116,20 @@ class UiFlowTest(unittest.TestCase):
         key = item_key(panel.items[0])
         panel.toggle(key)
         self.assertIn(key, draft.week(start)['checked'])
+        self.assertTrue(panel.rows.children[0].children[-1].text.startswith('[x]'))
         panel.reset()
+        self.assertTrue(panel.rows.children[0].children[-1].text.startswith('[ ]'))
         with patch('cooking_planner.shopping.panel.Clipboard.copy') as copy:
             panel.copy()
         copy.assert_called_once_with('100 g Rice')
         self.assertFalse(draft.week(start)['checked'])
+        self.assertEqual(dp(45), panel.actions.height)
+        panel.toggle_actions()
+        self.assertEqual(dp(90), panel.actions.height)
+        self.assertFalse(panel.more_row.disabled)
+        panel.toggle_actions()
+        self.assertEqual(dp(45), panel.actions.height)
+        self.assertTrue(panel.more_row.disabled)
         self.app.change_scale(2.0)
         self.assertIn('scale = 2.0', (Path(self.temp.name) / 'client.cfg').read_text())
         fake_window = SimpleNamespace(fullscreen=False)
@@ -128,6 +140,18 @@ class UiFlowTest(unittest.TestCase):
             self.app.toggle_window()
             self.assertIs(False, fake_window.fullscreen)
             self.assertEqual('Fullscreen', self.app.window_button.text)
+
+    def test_overview_and_week_reflow_when_resized(self):
+        overview = OverviewPanel([self.recipe], [], {}, 'en', lambda _: None, lambda: None)
+        week = WeekPlanner(self.app.week_start, [], 'en', lambda _: None,
+                           lambda: None, lambda *_: None, lambda _: None)
+        for width, overview_cols, week_cols in ((dp(400), 1, 1),
+                                                 (dp(650), 2, 2),
+                                                 (dp(950), 3, 3)):
+            overview.modules.width = width
+            week.scroll.width = width
+            self.assertEqual(overview_cols, overview.modules.cols)
+            self.assertEqual(week_cols, week.days.cols)
 
     def test_shopping_dialog_adds_multiple_items_without_reopening(self):
         draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
@@ -163,6 +187,7 @@ class UiFlowTest(unittest.TestCase):
         draft.clear(start, [plan])
         panel = ShoppingPanel([plan], [self.recipe], draft, 'en', self.app.week_start,
                               lambda _: None)
+        self.assertEqual('0 meals selected', panel.meal_summary.text)
         dismissed = []
         dialog = SimpleNamespace(open=lambda: None, dismiss=lambda: dismissed.append(True))
         with patch('cooking_planner.shopping.panel.styled_popup', return_value=dialog) as popup:
@@ -172,6 +197,7 @@ class UiFlowTest(unittest.TestCase):
         meal.dispatch('on_release', None)
         self.assertEqual([True], dismissed)
         self.assertEqual({'9'}, draft.selected_plan_ids(start, [plan]))
+        self.assertEqual('1 meal selected', panel.meal_summary.text)
         self.assertTrue(panel.items)
 
     def test_admin_requires_a_choice_for_each_language(self):
@@ -221,11 +247,11 @@ class AdminEditorTest(unittest.TestCase):
                            lambda _: None, lambda: None, lambda _: None, options)
         panel.show_recipe({'id': english['id'], 'translations': {'en': english, 'de': german}})
         self.assertIs(panel.details, panel.form.children[0])
-        self.assertTrue(panel.page_tabs['details'].text.startswith('● '))
+        self.assertTrue(panel.page_tabs['details'].bold)
         panel._show_page('recipe')
         self.assertIs(panel.recipe_page, panel.form.children[0])
-        self.assertTrue(panel.page_tabs['recipe'].text.startswith('● '))
-        self.assertFalse(panel.page_tabs['details'].text.startswith('● '))
+        self.assertTrue(panel.page_tabs['recipe'].bold)
+        self.assertFalse(panel.page_tabs['details'].bold)
         self.assertEqual(english['name'], panel.recipe_title.text)
         panel.language.text = 'DE'
         self.assertEqual(german['name'], panel.recipe_title.text)

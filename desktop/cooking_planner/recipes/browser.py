@@ -3,23 +3,13 @@ import random
 import webbrowser
 
 from kivy.clock import Clock
-from kivy.effects.scroll import ScrollEffect
 from kivy.metrics import dp
 from kivy.uix.image import Image
-from kivy.uix.scrollview import ScrollView
 
 from cooking_planner.recipes.images import attributions, image_file
 from cooking_planner.ui.theme import (GOLD, MUTED, PANEL, WHITE, box, button, field,
-                                      label, set_tab_active, spinner, tab_button)
+                                      label, scroll_view, set_tab_active, spinner, tab_button)
 from cooking_planner.ui.strings import t
-
-
-def scroll_view(**kwargs) -> ScrollView:
-    view = ScrollView(effect_cls=ScrollEffect, scroll_wheel_distance=dp(22), **kwargs)
-    for effect in (view.effect_x, view.effect_y):
-        if effect is not None:
-            effect.friction = 0.18
-    return view
 
 
 class RecipeBrowser:
