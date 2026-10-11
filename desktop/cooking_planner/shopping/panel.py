@@ -3,8 +3,8 @@ from decimal import Decimal, InvalidOperation
 from kivy.metrics import dp
 
 from cooking_planner.ui.dialogs import confirm_popup, styled_popup
-from cooking_planner.shopping.draft import item_key
-from cooking_planner.ui.theme import BG, GOLD, GREEN, MUTED, PANEL, PANEL_LIGHT, WHITE, box, button, field, label, scroll_view
+from cooking_planner.shopping.draft import item_key, normalize_price
+from cooking_planner.ui.theme import BG, GOLD, GREEN, MUTED, PANEL, PANEL_LIGHT, RED, WHITE, box, button, field, label, scroll_view
 from cooking_planner.ui.strings import t
 from cooking_planner.ui.clipboard import get_clipboard
 
@@ -45,8 +45,10 @@ class ShoppingPanel:
                       size_hint_y=None, height=dp(46))
         self.summary = label('', 15, WHITE, 30, True)
         self.meal_summary = label('', 13, MUTED, 30)
+        self.price_summary = label('', 13, GOLD, 30)
         summary.add_widget(self.summary)
         summary.add_widget(self.meal_summary)
+        summary.add_widget(self.price_summary)
         self.root.add_widget(summary)
         scroll = scroll_view(do_scroll_x=False)
         self.scroll = scroll
@@ -78,7 +80,34 @@ class ShoppingPanel:
 
     @staticmethod
     def _name_width(row_width):
-        return max(dp(125), min(dp(280), row_width * 0.35))
+        return max(dp(80), min(dp(240), row_width * 0.28, row_width - dp(381)))
+
+    def _money(self, value):
+        amount = format(value, '.2f')
+        if self.locale == 'de':
+            return f"{amount.replace('.', ',')} €"
+        return f'€{amount}'
+
+    def _update_price_summary(self):
+        prices = [price for item in self.items
+                  if (price := self.draft.price_for(self.start, item_key(item))) is not None]
+        total = sum(prices, Decimal('0'))
+        self.price_summary.color = GOLD
+        self.price_summary.text = t(self.locale, 'shopping_prices_summary').format(
+            count=len(prices), total=len(self.items), amount=self._money(total))
+
+    def _save_price(self, key, widget):
+        try:
+            self.draft.set_price(self.start, key, widget.text)
+        except ValueError:
+            widget.background_color = RED
+            self.price_summary.color = RED
+            self.price_summary.text = t(self.locale, 'invalid_price')
+            return
+        widget.background_color = PANEL
+        saved = self.draft.price_for(self.start, key)
+        widget.text = '' if saved is None else format(saved, '.2f').replace('.', ',' if self.locale == 'de' else '.')
+        self._update_price_summary()
 
     def _section(self, title, count):
         heading = box(False, spacing=6, size_hint_y=None, height=dp(30))
@@ -92,7 +121,7 @@ class ShoppingPanel:
         heading = box(False, padding=5, spacing=5, size_hint_y=None, height=dp(25))
         heading.add_widget(label('', 12, MUTED, 25, size_hint_x=None, width=dp(38)))
         name = label(t(self.locale, 'shopping_item_label'), 12, MUTED, 25,
-                     size_hint_x=None, width=dp(280))
+                     size_hint_x=None, width=dp(240))
         name.text_size = (name.width, name.height)
         heading.bind(width=lambda _, width: setattr(name, 'width', self._name_width(width)))
         heading.add_widget(name)
@@ -100,8 +129,11 @@ class ShoppingPanel:
                          size_hint_x=None, width=dp(82))
         quantity.halign = 'right'
         heading.add_widget(quantity)
+        heading.add_widget(box(False, size_hint_x=None, width=dp(8)))
         heading.add_widget(label(t(self.locale, 'manual_unit'), 12, MUTED, 25,
                                  size_hint_x=None, width=dp(70)))
+        heading.add_widget(label(t(self.locale, 'shopping_price'), 12, MUTED, 25,
+                                 size_hint_x=None, width=dp(100)))
         heading.add_widget(box(False))
         heading.add_widget(label('', 12, MUTED, 25, size_hint_x=None, width=dp(38)))
         self.rows.add_widget(heading)
@@ -117,7 +149,7 @@ class ShoppingPanel:
             check.color = BG
         row.add_widget(check)
         name = button(item['name'], lambda: self.toggle(key), height=38,
-                      size_hint_x=None, width=dp(280))
+                      size_hint_x=None, width=dp(240))
         row.bind(width=lambda _, width: setattr(name, 'width', self._name_width(width)))
         name.background_color = (0, 0, 0, 0)
         name.color = MUTED if checked else WHITE
@@ -132,9 +164,19 @@ class ShoppingPanel:
                        size_hint_x=None, width=dp(82))
         amount.halign = 'right'
         row.add_widget(amount)
+        row.add_widget(box(False, size_hint_x=None, width=dp(8)))
         unit = label(item['unit'], 13, MUTED, 38, size_hint_x=None, width=dp(70))
         unit.shorten = True
         row.add_widget(unit)
+        saved_price = self.draft.price_for(self.start, key)
+        price_text = '' if saved_price is None else format(saved_price, '.2f').replace(
+            '.', ',' if self.locale == 'de' else '.')
+        price = field(t(self.locale, 'shopping_price_hint'), text=price_text, height=38,
+                      size_hint_x=None, width=dp(100))
+        price.background_color = PANEL
+        price.bind(focus=lambda widget, focused: self._save_price(key, widget) if not focused else None)
+        price.bind(on_text_validate=lambda widget: self._save_price(key, widget))
+        row.add_widget(price)
         row.add_widget(box(False))
         row.add_widget(button('×', lambda: self.remove(key), 'danger',
                               height=38, size_hint_x=None, width=dp(38)))
@@ -149,6 +191,7 @@ class ShoppingPanel:
         selected = len(self.draft.selected_plan_ids(self.start, self.plans))
         self.summary.text = f"{remaining} / {len(self.items)} {t(self.locale, 'shopping_items')}"
         self.meal_summary.text = f"{selected} {t(self.locale, 'selected_meal' if selected == 1 else 'selected_meals')}"
+        self._update_price_summary()
         if not self.items:
             self.rows.add_widget(label(t(self.locale, 'empty_shopping_draft'), 17, MUTED, 80))
             return
@@ -203,31 +246,47 @@ class ShoppingPanel:
 
     def add_item(self):
         body = box(padding=16, spacing=10)
+        form = box(spacing=10, size_hint_y=None)
+        form.bind(minimum_height=form.setter('height'))
+        scroll = scroll_view(do_scroll_x=False)
+        scroll.add_widget(form)
+        body.add_widget(scroll)
         name = field(t(self.locale, 'manual_name'))
         amount = field(t(self.locale, 'manual_amount'), text='1')
         unit = field(t(self.locale, 'manual_unit'), text='pcs')
+        price = field(t(self.locale, 'shopping_optional_price'))
         error = label('', 13, MUTED, 32)
-        for widget in (name, amount, unit, error):
-            body.add_widget(widget)
+        quantity = box(False, spacing=10, size_hint_y=None, height=dp(42))
+        quantity.add_widget(amount)
+        quantity.add_widget(unit)
+        for widget in (name, quantity, price, error):
+            form.add_widget(widget)
         actions = box(False, spacing=8, size_hint_y=None, height=dp(44))
         dialog = styled_popup(t(self.locale, 'add_item'), body, 0.72, 0.78)
         actions.add_widget(button(t(self.locale, 'cancel'), dialog.dismiss))
 
         def save(keep_open=False):
             try:
-                self.draft.add_custom(self.start, name.text, amount.text, unit.text)
+                normalize_price(price.text)
+            except ValueError:
+                error.text = t(self.locale, 'invalid_price')
+                return
+            try:
+                self.draft.add_custom(self.start, name.text, amount.text, unit.text, price.text)
             except (ValueError, InvalidOperation):
                 error.text = t(self.locale, 'invalid_item')
                 return
             if keep_open:
                 name.text = ''
                 amount.text = '1'
+                price.text = ''
                 error.text = t(self.locale, 'item_added')
                 name.focus = True
             else:
                 name.focus = False
                 amount.focus = False
                 unit.focus = False
+                price.focus = False
                 dialog.dismiss()
             self._changed()
 
@@ -258,8 +317,15 @@ class ShoppingPanel:
 
     def copy(self):
         checked = set(self.draft.week(self.start)['checked'])
-        lines = [f"{self._amount(item)} {item['unit']} {item['name']}"
-                 for item in self.items if item_key(item) not in checked]
+        lines = []
+        for item in self.items:
+            key = item_key(item)
+            if key in checked:
+                continue
+            line = f"{self._amount(item)} {item['unit']} {item['name']}"
+            if (price := self.draft.price_for(self.start, key)) is not None:
+                line += f" · {self._money(price)}"
+            lines.append(line)
         try:
             Clipboard.copy('\n'.join(lines))
             self.on_status(t(self.locale, 'copied'))

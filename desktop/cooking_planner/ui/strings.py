@@ -76,6 +76,9 @@ STRINGS = {
         "manual_name": "Item name", "manual_amount": "Quantity", "manual_unit": "Unit", "invalid_item": "Enter a name, positive quantity and unit.",
         "selected_meal": "meal selected", "selected_meals": "meals selected", "remove_item": "Remove item", "clear_question": "Clear this week's shopping list?",
         "shopping_to_buy": "To buy", "shopping_completed": "Completed", "shopping_item_label": "Item",
+        "shopping_price": "Price (€)", "shopping_price_hint": "€", "shopping_optional_price": "Price (€), optional",
+        "shopping_prices_summary": "{count}/{total} priced · {amount}",
+        "invalid_price": "Enter a valid euro price (up to two decimals).",
         "rights_pending": "Image rights and credits are not yet documented.", "image_source": "Image source and license",
         "reset_checks": "Reset checks", "data_notes": "About this catalog", "estimate": "Planning estimate",
         "no_instructions": "This catalog provides ingredients and time estimates, not cooking instructions.",
@@ -83,6 +86,8 @@ STRINGS = {
         "origin": "Cuisine", "of": "of", "ready": "Ready", "refresh": "Refresh",
         "enter_fullscreen": "Fullscreen", "leave_fullscreen": "Windowed",
         "week_total": "servings this week", "shopping_items": "items to buy", "no_country": "Global", "shown": "shown",
+        "week_price_estimate": "Est. {amount} · {priced}/{total} ingredients priced",
+        "day_price_estimate": "Est. {amount} · {priced}/{total}",
     },
     "de": {
         "tagline": "Gerichte aus aller Welt, entspannt geplant",
@@ -159,6 +164,9 @@ STRINGS = {
         "manual_name": "Bezeichnung", "manual_amount": "Menge", "manual_unit": "Einheit", "invalid_item": "Name, positive Menge und Einheit eingeben.",
         "selected_meal": "Gericht ausgewählt", "selected_meals": "Gerichte ausgewählt", "remove_item": "Eintrag entfernen", "clear_question": "Einkaufsliste dieser Woche leeren?",
         "shopping_to_buy": "Noch offen", "shopping_completed": "Erledigt", "shopping_item_label": "Artikel",
+        "shopping_price": "Preis (€)", "shopping_price_hint": "€", "shopping_optional_price": "Preis (€), optional",
+        "shopping_prices_summary": "{count}/{total} mit Preis · {amount}",
+        "invalid_price": "Gültigen Europreis mit höchstens zwei Nachkommastellen eingeben.",
         "rights_pending": "Bildrechte und Urhebernachweis sind noch offen.", "image_source": "Bildquelle und Lizenz",
         "reset_checks": "Haken zurücksetzen", "data_notes": "Über die Daten", "estimate": "Planungswert",
         "no_instructions": "Die Daten enthalten Zutaten und Zeitangaben, aber keine Kochanleitung.",
@@ -166,6 +174,8 @@ STRINGS = {
         "origin": "Küche", "of": "von", "ready": "Bereit", "refresh": "Aktualisieren",
         "enter_fullscreen": "Vollbild", "leave_fullscreen": "Fensteransicht",
         "week_total": "Portionen diese Woche", "shopping_items": "Einkäufe", "no_country": "Global", "shown": "angezeigt",
+        "week_price_estimate": "Ca. {amount} · {priced}/{total} Zutaten bepreist",
+        "day_price_estimate": "Ca. {amount} · {priced}/{total}",
     },
 }
 

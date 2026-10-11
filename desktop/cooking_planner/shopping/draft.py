@@ -11,6 +11,21 @@ def item_key(item: dict) -> str:
     return f"{item['ingredientId']}:{item['unit']}"
 
 
+def normalize_price(raw: str) -> str | None:
+    """Normalize an optional euro price for the complete listed quantity."""
+    value = raw.strip().replace(',', '.')
+    if not value:
+        return None
+    try:
+        price = Decimal(value)
+        cents = price.quantize(Decimal('0.01'))
+    except InvalidOperation as error:
+        raise ValueError('Enter a price with at most two decimal places') from error
+    if not price.is_finite() or price < 0 or price > 1_000_000 or price != cents:
+        raise ValueError('Enter a non-negative price with at most two decimal places')
+    return format(cents, '.2f')
+
+
 def valid_week(state: object) -> bool:
     if not isinstance(state, dict):
         return False
@@ -21,6 +36,17 @@ def valid_week(state: object) -> bool:
     if 'excludedPlans' in state and (not isinstance(state['excludedPlans'], list) or
                                      any(not isinstance(value, str) for value in state['excludedPlans'])):
         return False
+    prices = state.get('prices', {})
+    if not isinstance(prices, dict):
+        return False
+    for key, value in prices.items():
+        if not isinstance(key, str) or not isinstance(value, str):
+            return False
+        try:
+            if normalize_price(value) is None:
+                return False
+        except ValueError:
+            return False
     for item in state['custom']:
         if (not isinstance(item, dict) or
                 any(not isinstance(item.get(key), str) for key in ('ingredientId', 'name', 'unit'))):
@@ -55,7 +81,7 @@ class ShoppingDraft:
 
     def week(self, start: str) -> dict:
         return self.weeks.setdefault(start, {'plans': [], 'excludedPlans': [], 'excluded': [],
-                                             'custom': [], 'checked': []})
+                                             'custom': [], 'checked': [], 'prices': {}})
 
     def selected_plan_ids(self, start: str, plans: list[dict]) -> set[str]:
         state = self.week(start)
@@ -93,18 +119,36 @@ class ShoppingDraft:
             excluded.append(key)
         self.save()
 
-    def add_custom(self, start: str, name: str, amount: str, unit: str) -> None:
+    def add_custom(self, start: str, name: str, amount: str, unit: str, price: str = '') -> None:
         quantity = Decimal(amount.strip().replace(',', '.'))
         if (not name.strip() or not unit.strip() or len(name.strip()) > 120 or len(unit.strip()) > 24
                 or not quantity.is_finite() or quantity <= 0 or quantity > 1_000_000):
             raise ValueError('Name, positive quantity, and unit are required')
-        self.week(start)['custom'].append({'ingredientId': 'custom-' + uuid4().hex,
-                                           'name': name.strip(), 'amount': str(quantity), 'unit': unit.strip(),
-                                           'recipeCount': 0})
+        normalized = normalize_price(price)
+        item = {'ingredientId': 'custom-' + uuid4().hex,
+                'name': name.strip(), 'amount': str(quantity), 'unit': unit.strip(), 'recipeCount': 0}
+        state = self.week(start)
+        state['custom'].append(item)
+        if normalized is not None:
+            state.setdefault('prices', {})[item_key(item)] = normalized
+        self.save()
+
+    def price_for(self, start: str, key: str) -> Decimal | None:
+        value = self.week(start).get('prices', {}).get(key)
+        return Decimal(value) if value is not None else None
+
+    def set_price(self, start: str, key: str, price: str) -> None:
+        normalized = normalize_price(price)
+        prices = self.week(start).setdefault('prices', {})
+        if normalized is None:
+            prices.pop(key, None)
+        else:
+            prices[key] = normalized
         self.save()
 
     def remove_item(self, start: str, key: str) -> None:
         state = self.week(start)
+        state.setdefault('prices', {}).pop(key, None)
         custom = state['custom']
         state['custom'] = [item for item in custom if item_key(item) != key]
         if len(state['custom']) == len(custom) and key not in state['excluded']:
@@ -125,7 +169,7 @@ class ShoppingDraft:
 
     def clear(self, start: str, plans: list[dict] | None = None) -> None:
         self.weeks[start] = {'plans': [], 'excludedPlans': [str(plan['id']) for plan in (plans or [])],
-                             'excluded': [], 'custom': [], 'checked': []}
+                             'excluded': [], 'custom': [], 'checked': [], 'prices': {}}
         self.save()
 
     def items(self, start: str, plans: list[dict], recipes: list[dict]) -> list[dict]:

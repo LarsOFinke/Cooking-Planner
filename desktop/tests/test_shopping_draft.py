@@ -6,7 +6,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from cooking_planner.shopping.draft import ShoppingDraft, item_key
+from cooking_planner.shopping.draft import ShoppingDraft, item_key, normalize_price
 
 
 class ShoppingDraftTest(unittest.TestCase):
@@ -80,10 +80,48 @@ class ShoppingDraftTest(unittest.TestCase):
         draft.add_custom('2026-10-05', 'Milk', '1,5', 'l')
         self.assertEqual('1.5', str(draft.items('2026-10-05', [], [])[0]['amount']))
 
+    def test_optional_prices_persist_for_manual_and_planned_items(self):
+        start = '2026-10-05'
+        recipes = [{'id': 'dish', 'ingredients': [
+            {'ingredientId': 'rice', 'name': 'Rice', 'amount': 100, 'unit': 'g'}]}]
+        plans = [{'id': 1, 'recipeId': 'dish', 'servings': 2}]
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'shopping.json'
+            draft = ShoppingDraft(path)
+            draft.add_custom(start, 'Milk', '2', 'l', '3,50')
+            milk = next(item for item in draft.items(start, plans, recipes) if item['name'] == 'Milk')
+            self.assertEqual('3.50', str(draft.price_for(start, item_key(milk))))
+            draft.set_price(start, 'rice:g', '2.49')
+            self.assertEqual('2.49', str(ShoppingDraft(path).price_for(start, 'rice:g')))
+            plans[0]['servings'] = 3
+            self.assertEqual('300', str(draft.items(start, plans, recipes)[1]['amount']))
+            self.assertEqual('2.49', str(draft.price_for(start, 'rice:g')))
+            draft.set_price(start, 'rice:g', '')
+            self.assertIsNone(ShoppingDraft(path).price_for(start, 'rice:g'))
+            draft.remove_item(start, item_key(milk))
+            self.assertIsNone(draft.price_for(start, item_key(milk)))
+            draft.set_price(start, 'rice:g', '1.00')
+            draft.clear(start, plans)
+            self.assertIsNone(draft.price_for(start, 'rice:g'))
+
+    def test_price_validation_does_not_change_existing_price(self):
+        start = '2026-10-05'
+        draft = ShoppingDraft()
+        draft.set_price(start, 'rice:g', '1,50')
+        for raw in ('-1', '1.001', 'NaN', 'Infinity', 'wrong'):
+            with self.assertRaises(ValueError):
+                draft.set_price(start, 'rice:g', raw)
+            self.assertEqual('1.50', str(draft.price_for(start, 'rice:g')))
+        self.assertEqual('0.00', normalize_price('0'))
+        with self.assertRaises(ValueError):
+            draft.add_custom(start, 'Eggs', '6', 'pcs', '1.234')
+        self.assertFalse(draft.week(start)['custom'])
+
     def test_invalid_draft_is_backed_up_before_new_edits(self):
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / 'shopping.json'
             for contents in ('{broken', '[]', '{"version":2,"weeks":{}}',
+                             '{"version":1,"weeks":{"2026-10-05":{"plans":[],"excluded":[],"custom":[],"checked":[],"prices":{"rice:g":"bad"}}}}',
                              '{"version":1,"weeks":{"2026-10-05":{"plans":[],"excluded":[],"custom":[{}],"checked":[]}}}'):
                 path.write_text(contents, encoding='utf-8')
                 draft = ShoppingDraft(path)

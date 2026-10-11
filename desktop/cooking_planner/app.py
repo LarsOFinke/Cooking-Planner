@@ -179,7 +179,8 @@ class CookingPlannerApp(App):
                 panel.select_id(self.selected_id)
         elif self.tab == 'week':
             panel = WeekPlanner(self.week_start, self.plans, self.locale,
-                                self.shift_week, self.current_week, self.pick_recipe, self.remove_plan)
+                                self.shift_week, self.current_week, self.pick_recipe, self.remove_plan,
+                                self.recipes, self.shopping_draft)
         elif self.tab == 'shopping':
             panel = ShoppingPanel(self.plans, self.recipes, self.shopping_draft, self.locale,
                                   self.week_start, self._status)
