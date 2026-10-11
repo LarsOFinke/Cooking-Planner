@@ -4,6 +4,8 @@ STRINGS = {
     "en": {
         "tagline": "A world of meals, thoughtfully planned",
         "overview": "Overview", "explore": "Explore recipes", "week": "Week planner", "shopping": "Shopping list",
+        "nav_overview": "Overview", "nav_explore": "Explore", "nav_week": "Week",
+        "nav_shopping": "Shopping", "nav_admin": "Admin",
         "admin": "Recipe admin", "admin_new": "New recipe", "admin_search": "Search recipes or IDs",
         "admin_select": "Select a recipe to edit, or create a new one.", "admin_id": "Recipe ID (shared across languages)",
         "admin_shared_help": "Shared fields and ingredient quantities update every included language. Enter one value per line in list fields.",
@@ -55,6 +57,7 @@ STRINGS = {
         "search": "Search dishes, countries or ingredients", "all": "All", "category": "Category", "continent": "Continent",
         "diet": "Diet", "difficulty": "Difficulty", "time": "Total time", "sort": "Sort by", "name": "Name",
         "shortest": "Quickest", "country": "Country", "clear": "Clear filters", "surprise": "Surprise me",
+        "filters": "Filters",
         "results": "recipes", "ingredients": "Ingredients per person", "plan_this": "Plan this meal",
         "prep": "Prep", "cook": "Cook", "total": "Total", "minutes": "min", "effort": "Effort",
         "servings": "Servings", "select_day": "Choose a day", "select_meal": "Meal", "save": "Save to plan",
@@ -79,6 +82,8 @@ STRINGS = {
     "de": {
         "tagline": "Gerichte aus aller Welt, entspannt geplant",
         "overview": "Übersicht", "explore": "Rezepte entdecken", "week": "Wochenplan", "shopping": "Einkaufsliste",
+        "nav_overview": "Übersicht", "nav_explore": "Rezepte", "nav_week": "Woche",
+        "nav_shopping": "Einkauf", "nav_admin": "Admin",
         "admin": "Rezeptverwaltung", "admin_new": "Neues Rezept", "admin_search": "Rezept oder ID suchen",
         "admin_select": "Wähle ein Rezept zum Bearbeiten oder lege ein neues an.", "admin_id": "Rezept-ID (für alle Sprachen)",
         "admin_shared_help": "Gemeinsame Felder und Zutatenmengen werden in allen gewählten Sprachen aktualisiert. In Listenfeldern einen Wert pro Zeile eingeben.",
@@ -130,6 +135,7 @@ STRINGS = {
         "search": "Gerichte, Länder oder Zutaten suchen", "all": "Alle", "category": "Kategorie", "continent": "Kontinent",
         "diet": "Ernährung", "difficulty": "Schwierigkeit", "time": "Gesamtzeit", "sort": "Sortieren", "name": "Name",
         "shortest": "Schnellste", "country": "Land", "clear": "Filter zurücksetzen", "surprise": "Überrasche mich",
+        "filters": "Filter",
         "results": "Rezepte", "ingredients": "Zutaten pro Person", "plan_this": "Gericht einplanen",
         "prep": "Vorbereitung", "cook": "Kochen", "total": "Gesamt", "minutes": "Min.", "effort": "Aufwand",
         "servings": "Portionen", "select_day": "Tag wählen", "select_meal": "Mahlzeit", "save": "Einplanen",

@@ -62,6 +62,12 @@ class UiFlowTest(unittest.TestCase):
         self.app.show_tab('explore')
         browser = self.app.browser
         self.assertIs(browser.search.parent.parent, browser.root.children[1])
+        self.assertEqual(0, browser.filter_panel.height)
+        browser.toggle_filters()
+        self.assertGreater(browser.filter_panel.height, 0)
+        browser.toggle_filters()
+        self.assertEqual(0, browser.filter_panel.height)
+        self.assertIs(self.app.admin_button.parent.parent, self.app.root_view.children[2])
         self.assertEqual([self.recipe], browser._filtered())
         browser.search.text = 'no matching dish'
         browser._filter_changed()
@@ -126,7 +132,8 @@ class UiFlowTest(unittest.TestCase):
     def test_shopping_dialog_adds_multiple_items_without_reopening(self):
         draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
         panel = ShoppingPanel([], [], draft, 'en', self.app.week_start, lambda _: None)
-        dialog = SimpleNamespace(open=lambda: None, dismiss=lambda: None)
+        dismissed = []
+        dialog = SimpleNamespace(open=lambda: None, dismiss=lambda: dismissed.append(True))
         with patch('cooking_planner.shopping.panel.styled_popup', return_value=dialog) as popup:
             panel.add_item()
         body = popup.call_args.args[1]
@@ -142,9 +149,30 @@ class UiFlowTest(unittest.TestCase):
         more.dispatch('on_release', None)
         self.assertEqual('', name.text)
         self.assertEqual(1, len(panel.items))
+        self.assertFalse(dismissed)
         name.text, amount.text, unit.text = 'Eggs', '6', 'pcs'
         done.dispatch('on_release', None)
         self.assertEqual({'Milk', 'Eggs'}, {item['name'] for item in panel.items})
+        self.assertEqual([True], dismissed)
+
+    def test_meal_selection_closes_after_adding_to_shopping(self):
+        draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
+        start = self.app.week_start.isoformat()
+        plan = {'id': 9, 'date': start, 'recipeId': self.recipe['id'],
+                'recipeTitle': self.recipe['name'], 'servings': 2}
+        draft.clear(start, [plan])
+        panel = ShoppingPanel([plan], [self.recipe], draft, 'en', self.app.week_start,
+                              lambda _: None)
+        dismissed = []
+        dialog = SimpleNamespace(open=lambda: None, dismiss=lambda: dismissed.append(True))
+        with patch('cooking_planner.shopping.panel.styled_popup', return_value=dialog) as popup:
+            panel.choose_meals()
+        body = popup.call_args.args[1]
+        meal = body.children[0].children[0].children[0]
+        meal.dispatch('on_release', None)
+        self.assertEqual([True], dismissed)
+        self.assertEqual({'9'}, draft.selected_plan_ids(start, [plan]))
+        self.assertTrue(panel.items)
 
     def test_admin_requires_a_choice_for_each_language(self):
         saved = []

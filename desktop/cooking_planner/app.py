@@ -62,48 +62,44 @@ class CookingPlannerApp(App):
 
     def _build_shell(self):
         root = box(padding=14, spacing=10)
-        header = box(spacing=5, size_hint_y=None, height=dp(104))
+        header = box(False, spacing=10, size_hint_y=None, height=dp(48))
         self.header = header
-        top_row = box(False, spacing=10, size_hint_y=None, height=dp(52))
         heading = box(spacing=0)
-        heading.add_widget(label('COOKING PLANNER', 21, GOLD, 29, True))
-        heading.add_widget(label(t(self.locale, 'tagline'), 12, MUTED, 19))
-        top_row.add_widget(heading)
-        self.admin_button = tab_button(t(self.locale, 'admin'), lambda: self.show_tab('admin'),
-                                       self.tab == 'admin', size_hint_x=None, width=dp(138))
-        top_row.add_widget(self.admin_button)
-        header.add_widget(top_row)
-        controls = box(False, spacing=8, size_hint_y=None, height=dp(42))
+        heading.add_widget(label('COOKING PLANNER', 19, GOLD, 27, True))
+        heading.add_widget(label(t(self.locale, 'tagline'), 11, MUTED, 18))
+        header.add_widget(heading)
+        controls = box(False, spacing=6, size_hint_x=None, width=dp(420))
         self.header_controls = controls
-        controls.add_widget(box())
         controls.add_widget(button(t(self.locale, 'data_notes'), self.show_notes,
-                                   size_hint_x=None, width=dp(130)))
+                                   size_hint_x=None, width=dp(120)))
         languages = spinner(self.locale.upper(), (item.upper() for item in self.locales),
-                            size_hint_x=None, width=dp(76))
+                            size_hint_x=None, width=dp(66))
         languages.bind(text=lambda _, value: self.change_locale(value.lower()))
         controls.add_widget(languages)
         scales = spinner(f'{round(self.ui_scale * 100)}%',
                          ('100%', '125%', '150%', '175%', '200%'),
-                         size_hint_x=None, width=dp(84))
+                         size_hint_x=None, width=dp(76))
         scales.bind(text=lambda _, value: self.change_scale(int(value[:-1]) / 100))
         controls.add_widget(scales)
         self.window_button = button(t(self.locale, 'leave_fullscreen' if self.window_fullscreen else 'enter_fullscreen'),
-                                    self.toggle_window, size_hint_x=None, width=dp(115))
+                                    self.toggle_window, size_hint_x=None, width=dp(140))
         controls.add_widget(self.window_button)
         header.add_widget(controls)
         root.add_widget(header)
-        nav_scroll = ScrollView(size_hint_y=None, height=dp(48), do_scroll_y=False)
-        nav = box(False, spacing=8, size_hint_x=None)
-        nav_scroll.bind(width=lambda _, width: setattr(nav, 'width', max(width, dp(740))))
-        for tab in ('overview', 'explore', 'week', 'shopping'):
-            nav.add_widget(tab_button(t(self.locale, tab),
-                                      lambda selected=tab: self.show_tab(selected),
-                                      tab == self.tab, height=48))
+        nav_scroll = ScrollView(size_hint_y=None, height=dp(42), do_scroll_y=False)
+        nav = box(False, spacing=8, size_hint=(None, None), height=dp(42))
+        nav_scroll.bind(width=lambda _, width: setattr(nav, 'width', max(width, dp(500))))
+        for tab in ('overview', 'explore', 'week', 'shopping', 'admin'):
+            control = tab_button(t(self.locale, 'nav_' + tab), lambda selected=tab: self.show_tab(selected),
+                                 tab == self.tab, height=42)
+            if tab == 'admin':
+                self.admin_button = control
+            nav.add_widget(control)
         nav_scroll.add_widget(nav)
         root.add_widget(nav_scroll)
         self.content = box(color=PANEL, padding=10)
         root.add_widget(self.content)
-        footer = box(False, size_hint_y=None, height=dp(42))
+        footer = box(False, size_hint_y=None, height=dp(36))
         self.exit_button = button(t(self.locale, 'exit'), self.stop, 'danger',
                                   size_hint_x=None, width=dp(100))
         footer.add_widget(self.exit_button)

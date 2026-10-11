@@ -102,8 +102,8 @@ class ShoppingPanel:
 
         def choose(plan_id):
             self.draft.toggle_plan(self.start, plan_id)
+            dialog.dismiss()
             self._changed()
-            render_choices()
 
         render_choices()
         dialog.open()
@@ -126,14 +126,17 @@ class ShoppingPanel:
             except (ValueError, InvalidOperation):
                 error.text = t(self.locale, 'invalid_item')
                 return
-            self._changed()
             if keep_open:
                 name.text = ''
                 amount.text = '1'
                 error.text = t(self.locale, 'item_added')
                 name.focus = True
             else:
+                name.focus = False
+                amount.focus = False
+                unit.focus = False
                 dialog.dismiss()
+            self._changed()
 
         actions.add_widget(button(t(self.locale, 'add_another'), lambda: save(True)))
         actions.add_widget(button(t(self.locale, 'add_item'), save, 'primary'))
