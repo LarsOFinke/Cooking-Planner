@@ -1,0 +1,5279 @@
+{
+  "version": 1,
+  "images": {
+    "dz-algerischer-couscous/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "000abecddcc125239f368094de5feee4fc30c5cb0c37d8b4aed8ded228f4402e"
+    },
+    "dz-chorba-frik/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0a73168a99c358b4c4c1a4c7f451cc8b002bf98c102da1f89c543fb13898d916"
+    },
+    "dz-makroud/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "082b97a232945121f4f33f4fcefe1bc89b9177ded7f481341c327861f7e21e7b"
+    },
+    "bw-seswaa/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "4835d8618de3bdc9bc21a30087671cdc151cf6c8e4a213cc67ebad1a60c00c90"
+    },
+    "cm-ndole/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "561247943c7eb9e5d2e6f59615aff6aa72e65e5c2eeb0ec23b20c8df755d41b4"
+    },
+    "cm-poulet-dg/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "983422b9f17cad38ad95835afc64e66749ed6e88a1eb98b237512051895c886f"
+    },
+    "ci-attieke-mit-fisch/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "fe16d9298f61854e73f5e422c72b3891980a66e5205c9c456fc0b594c6e8679b"
+    },
+    "ci-kedjenou/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "10355edcbc876fae9739986107894aa44340ddee43749a17aa8a283a585aac33"
+    },
+    "eg-falafel/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "5091517c9ba54dc0c2c71a7b930c4926a062fa00365d4398b3916fe1eced191c"
+    },
+    "eg-ful-medames/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "836a9cfb0b35cabb629e4d9f46b3253bd699ab0f0ea33d009cc57664d3957854"
+    },
+    "eg-koshari/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "523d0b22952d8b4d2307f7aba8637898b980fbc6bfa92f16dfa6627315348b34"
+    },
+    "eg-molokhia/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "753593574f0280dcc3d2a94954f7153e56bbb030c24cf6736e885ff9e7c2a26a"
+    },
+    "et-doro-wot/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "986323073f7e6a5e788ac638d12ab8e747cb44e4c10e4b11281e99ae2919abd8"
+    },
+    "et-injera/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "233d33884980d19462e75c07292a2e4ae3e02e4b78fc84cdcc3a7be6b19287ce"
+    },
+    "et-kitfo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ae2f0f6b5e4a17a5b73f06c2f9fe264100a2b7850fedb9dc3d80b17e9bdc69b5"
+    },
+    "et-misir-wot/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6045e04b3f6984c0ded9ae25cb35d0f68c803088718bc267d64b283b6ac00bb1"
+    },
+    "et-shiro-wot/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "16dc134c620a23c51671d2e76ca8de63595ebfc79c5e5047fce558168f7cb9d5"
+    },
+    "et-tibs/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "aa1431abf05dc25797df2eed14f5fc27941b24b183e42e244716e0567d879aed"
+    },
+    "gm-groundnut-stew/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6424c671d9800d35bbd2eee339fafaa4b729fd5e2a401177134655fe08fcf2e8"
+    },
+    "gh-fufu-mit-erdnusssuppe/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0e7244614747aad1a9ba6e239c854ea1f7e73265849dbc1f7576a70ce28f0316"
+    },
+    "gh-red-red/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ae605a33cbee3e0fe8af39d1b89a932f7b776b47715ad07871becea53c526681"
+    },
+    "gh-waakye/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9f099760f2bb0ce4728f8a4f0ec5e46c158b8018e8ffb888f02e8a096b2ceb45"
+    },
+    "ke-nyama-choma/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "eb6795896535666a64d70ff6d9388a91a7e5d8159326e4692dccd84c0d7aa64e"
+    },
+    "ke-ugali-mit-sukuma-wiki/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "63fa900bc4abcc9e260038f772d521807b62c21257c352bd242ca012c5f9ecdd"
+    },
+    "mg-ravitoto/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "84a5179458c598fce72d36102aaabfb679b71a9f4085a51e4fcdde4d6e2d8122"
+    },
+    "mg-romazava/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "383ff66a54de4c8adc7da7b31ef1db8b5415c63b5dfc5e8981a0ac5bdb4a638e"
+    },
+    "mu-dholl-puri/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "8ec967c37b8d42dda9e119149a8f76c86bb8c38687e96cdd54aa3d34e8ff9b03"
+    },
+    "mu-rougaille-saucisse/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "8973c48d6e9662653e396c7bdb1bd46c606faf2322c5491c3ebbffe765661f83"
+    },
+    "ma-couscous-mit-gemuse/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a097e48de03d9b26d8cfc492111d3f0db38801b54f3fd14c4f76bbd47ef23b18"
+    },
+    "ma-harira/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6ecd44d447cff25140e5cf929d7325bbddef7783f019478b142dc2d9af37d693"
+    },
+    "ma-rfissa/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "4cc5f0c30cbb4c25d353ad478f33b7e0e16e5182d39c5255403da70d0eb543c6"
+    },
+    "ma-tajine-mit-lamm-und-pflaumen/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "08851f03059b976f5c41b9d262e4592ce63c65adcc5d3ae50e67a8d62c11404e"
+    },
+    "ma-zaalouk/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0c8f22eb8dcf7a292d851cb9ef4b4cec71df436392de56c1c57ad3f9dc54ecde"
+    },
+    "na-kapana/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "7e44dc27fb9badaa172a1086d667c2df60552adf3082efe624a218a061289a93"
+    },
+    "ng-efo-riro/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ea480418a92fe99aeafd76193cc943a2e31951cc72e70f3f9002fd8dc3b44c2b"
+    },
+    "ng-egusi-soup/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "de043722f393a82eb0d1ded10eda57e2366c3af4715cb5c14f0a5502a95f516f"
+    },
+    "ng-jollof-rice/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1e17566b1f2b4f3af30f592bacba3dd84df826eb0070e35fafe4acadabb6b0a2"
+    },
+    "ng-moi-moi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "5d9fd4275d7794f3ce731c8cb3f3ebb9a7fdba9971fe7815297f8e4dc6effe3b"
+    },
+    "ng-suya/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "54e93e3f9be62a6e5f46f7070e0d764e6512d4fd3acaa9b50294484f3fc6f34c"
+    },
+    "rw-isombe/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1a211ce24cc821a429b5370c949b03f5053fbb36ba01aad9c1ad87455c88d29e"
+    },
+    "sn-mafe/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f67e2ee294fb39a9b59b3f2322c62212be14013036419ac8db40550157f671f7"
+    },
+    "sn-thieboudienne/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ef2160edf4fbb471325fb5ea1d4f916c09b128a11d0d3bf11da0d3cfeff40963"
+    },
+    "sn-yassa-poulet/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a6a936a5a2cbe1bcd035558755cce63b518fed1442fda0dd381e7408c0f1f610"
+    },
+    "sc-octopus-curry-seychelles/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b229191e43a091c3643b9964628896463580236ce38c1e1507e4406f71e31e17"
+    },
+    "sc-poisson-sale-rougaille/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b86a8e044b39119718486b74ec3cd38066f38b7c40d63b356e0ac9ea395dc0a0"
+    },
+    "za-bobotie/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9c780aa737d668ba3530af30a7ead09105a21ebfa8e47122f74dc37bc0699b21"
+    },
+    "za-chakalaka/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0d8259b4a92c5cdf6968a7503af1c2b172f15aba86aff2055a9eb3405f69caee"
+    },
+    "za-pap-mit-wors/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "02a1aed09a071d4eb4e13caa3a31ca6c88299477faa4bd6c644be9ef067f9e87"
+    },
+    "za-potjiekos/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "bfabbf6cfc95395e85df88c7cb7bdce1d9ae923bbb974f315c77647529cbeb21"
+    },
+    "tz-pilau-ostafrika/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c7eb473c554ed531e6bb86db7cd5123bb5328e36c9bee660bf5e346638800ad8"
+    },
+    "tz-zanzibar-fish-curry/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "35779471d018fe946d644829af340ae1aa309712312a755717729f034bb3aa79"
+    },
+    "tn-lablabi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "5b19f5a25edfec14097b2b65f94b35110bbda1e51bceacaf05074b5e6d1a7773"
+    },
+    "tn-shakshuka/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9055cc0cd091761bf28ee93deb427deb09b3dc7c86ae53a4957f6a2cd2cca3e7"
+    },
+    "ug-luwombo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0f694506ca012cc9082498c031e30a821823b29eaad569b8a93756804c5dcdd3"
+    },
+    "ug-matoke/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "85efddcbc4b1818ca73acc11c1effbb1c3f32267366af1ac89a2df664ea1d14c"
+    },
+    "zm-nshima-mit-ifisashi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0fe779e9f720eeeb9c892d778b1f359e1bc4a9580b16d8a93c6eaa4419bc5fec"
+    },
+    "zw-sadza-mit-rinderragout/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "be561f5a8df59ed238f8b631686a04ee908be1c08ebd28cc6554a1aa5de442a8"
+    },
+    "af-ashak/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "728515afdf28edfcc12466670beb1a98f8032a82bc099e17b6dbb4ffed6dcf38"
+    },
+    "af-bolani-kachalu/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1ead839c1ef7995b7b1b78b4af34f11901babed0d6d7170ceb2676112cd5f613"
+    },
+    "af-kabuli-pulao/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ff14947743497dafb83e1212e5dbc4a45143b493a73a0cb76532b8e1a20e3dc9"
+    },
+    "af-mantu/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1c8a8388947515f113cc2b7b601f8acc1242832b94c961fe182a7a39156a766f"
+    },
+    "am-dolma-armenisch/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e3e69c682bd78709b97589f781b190787230f3fcd000c6b0688a50408d3e7940"
+    },
+    "am-ghapama/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b4e51610c52cabb9a03bf2d896fe6f03a15200d9ea4b18cd3304efc043f0ba03"
+    },
+    "am-harissa-armenisch/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a6437aa999dd3bcfb6fb482c7b8f4e660cea42b8146c7e3d4f060d3b80b902a4"
+    },
+    "am-zhingyalov-hats/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b7f5b5b65f06457e39a54f8943daeb4e1a9adf2f5d965f8b71ffc391f96033ea"
+    },
+    "az-dovga/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "55fc837fb65ca7861805ca53737df02cf32896dada6638cda9123c25d5d42542"
+    },
+    "az-dushbara/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "5bee2c68b600aad75f0c8f4837e449f34eb73143e1701728a6c03ba764816f7c"
+    },
+    "az-qutab-mit-krautern/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b1db9f45c6d623010b504f10f9df83d8947fea9cdc7ac81461ab73a274685b50"
+    },
+    "az-shah-plov/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "71df023b20e17a3becc0dc28253f9252110570f1d70b25e6f08469bc587fe3a3"
+    },
+    "bh-bahraini-tikka/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e021f81662d0a07093fa560fac67f52d96698602551f6c4c55f07b0e54aba8c7"
+    },
+    "bh-muhammar/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "44e1a066f5f4bab762402abaec1b14626cb651fae3cdd427076f849dce41c23e"
+    },
+    "bd-bengali-fish-curry/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1d3fc88bfa0b788c0b6fceb23bac22fb12bdb1a5cdfa077ef9baa3a715d13555"
+    },
+    "bd-bhuna-khichuri/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f793fee3af9e14191fcd58b8a851246b8ce9219ca1d33eae1be8b234826bb855"
+    },
+    "bd-khichuri/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "969e77efb9f4d36aa5d945dc9a219248a18cc810445d4a7d201c649d1cfcb24d"
+    },
+    "bt-ema-datshi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "515858cf466fdcd0f01fde31f50900b19f6e627ba1dd448c15d942e37037889d"
+    },
+    "bt-jasha-maroo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9ece1aaf4fcfd8cab6fa154a638b56bd3eba1172e3f4123d4fd1c02b357ec07e"
+    },
+    "bt-kewa-datshi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b6a5d8d30b010893ee914b869f0a4c267a0d88eb4923569d65bea6570ae5c02f"
+    },
+    "kh-amok-trey/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d0865de2b89f7e0901df5b054dade931e7df268ac8daf15f10b45f89c3c11c54"
+    },
+    "kh-lok-lak/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ca9d2bd15b5de8aac22197f8cbb642e07c336e36002971a63e221b4ee5ae4418"
+    },
+    "cn-chow-mein/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1506cc50e330a3f1cf219f3050d8d5114eba8f2bd0891b49dabb2a2f7512ab4e"
+    },
+    "cn-congee/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0d8993fece21172e9a73e05a1b588faf4dc33b13c37b76a891bbe9d7f0df815d"
+    },
+    "cn-dan-dan-noodles/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "7e501c3b9fcd712ca546bbbffbd1949d1c2db9da080884c4d69d54c04e563873"
+    },
+    "cn-hot-pot-sichuan/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "189e5c1e31cd5f98c1ce68531bccd46efce8f14b6f69ae6b905d3df793b2cd80"
+    },
+    "cn-jiaozi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "5769e9a22016c27cab468a6fda67c707c7e37f99ce79ecae031e3be67addb79d"
+    },
+    "cn-kung-pao-chicken/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6044e9f04a58cc8d701bd5f31596654ebd86a76318b77307013360cf6295f2b7"
+    },
+    "cn-ma-po-aubergine-vegan/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f1ae50988e50d5ba7dbda7bab3228815032c4a1c74f19c8d364d474d713057f1"
+    },
+    "cn-mapo-tofu/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f53368b8a7594fd585d56be4855e256772c263dc8f65559e248cb0de6ed07684"
+    },
+    "cn-peking-duck/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ce2aeca42b25bd8ffe5f9ebd1bd6c151635c2e3c3310b10b128e7aa832b8fe51"
+    },
+    "cn-scallion-pancakes/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6c43bb2240f9cecb51c36563f1d2f7e61601715055cfccc189da1768b87cf9c8"
+    },
+    "cn-sweet-and-sour-pork/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9773ab98fed342efae18b777893b981b39a994b7528e1968e0b3545bb96c4940"
+    },
+    "cn-tomato-egg-stir-fry/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "77ff5a63912cb603a9fcd8a37e4d159f114f32b7c95acb8f25709705496c6b9a"
+    },
+    "cn-wonton-soup/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "83ee5d0f1cff88b9319a2a2dc1e05270aea29d3b2ee55fdafc092c6747fd0fd1"
+    },
+    "cn-xiao-long-bao/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "4f64614876fa5aa95d4d715b05b1b01929576fc93b2144b782ab07192896ae58"
+    },
+    "cn-yangzhou-fried-rice/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "36acb545be3960ac2dbc3ef8d7870df0f08c91e61bc42e777c46d3d34d4e0eec"
+    },
+    "in-aloo-gobi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "558b8c0b5c6801f84c726d355d18e31881cc33964acc218e832a6ac7c4425f3f"
+    },
+    "in-aloo-paratha/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "61ae8641a5a87b9fa7d046d4d55471e28d41ab13e109317950e32ec57030b16a"
+    },
+    "in-baingan-bharta/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "5304ebfff1eb60e7c304b0823490cbdec5ef2cca87c52ecf5d9a820a50da43e5"
+    },
+    "in-butter-chicken/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "db1da00ed99f0aee14a93875938a00d32ce26bb1da0103405cdb5aa04c40f72b"
+    },
+    "in-chana-masala/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "2c9e50a66e81335125672b74480f02c40822346e87dc54df8bc3c27b744a3263"
+    },
+    "in-chicken-biryani/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "3975ed55e7999595a81797d18e844eae20e2fe33c2178ff55114c6c5bdce02f9"
+    },
+    "in-chole-bhature/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "fd9fb94aab7aef86eb6e742fda91b64a0c40feaf7633cf0645cb26ae6fb37876"
+    },
+    "in-dal-makhani/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e51cdd3c6f9ef06d341d6c27cf2ad3194b8df22dbbdce1be92ed180a5bd247eb"
+    },
+    "in-dal-tadka/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "4b86f6eb8b700088abfb29c0ba4a90c1a277e5a0ff2745558114859414d67f1c"
+    },
+    "in-gulab-jamun/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9ac0c46baa86d89d329b02f1b5caf1ebd7ba8986923d083da6a186a1d1b88ab8"
+    },
+    "in-hyderabadi-veg-biryani/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c20acbfdbdc51a0055981e54672987952e8389a0c0808aee4ae0e83d2684583c"
+    },
+    "in-idli-mit-sambar/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "78dbde9144cc97459888af438b661dea4ca9b1ea2034c5b60c80aa5d98dd329e"
+    },
+    "in-keema-matar/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9bd06d52b8dc4392145808d06eb91bca26d5a5a8e4512a687fc93384c8b38049"
+    },
+    "in-kheer/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "eb7052b74c83250bd7cdde0411fb7e24816fdc5f1b6ec079c4d02c0d3a62e5d4"
+    },
+    "in-masala-dosa/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "3504686bea2ea009f3b66b2967d9844ce0ca756dfb0f43797101bf21533810fa"
+    },
+    "in-naan/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "270bd5b233f30a41f93df43a0df5812a56afb2aefff27e544819352aaf0adbdf"
+    },
+    "in-pakora/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c9b645042c75b39a3b6b09f71ac7547e0f71ea6680cf7e4da19de6b4d2c81b0c"
+    },
+    "in-palak-paneer/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ce95b3472da7e1c7bfe1aa32e6325cbeea0e11a31de99f8a7503d2684a14470c"
+    },
+    "in-paneer-butter-masala/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "3a118ebdcdbf095aff1586f43009270471a4065cb11308dba2e6226a0fa422b9"
+    },
+    "in-pav-bhaji/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "bdf08d4dec0c74f5fd9135d0f155adbc234c2657eb2ee4a71bd1eae2087f03f7"
+    },
+    "in-poha/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "bed79f56136c4041a03efe7c4aa3dbb36d75ac2b8d27a946c8bf3d7d0d72c2a2"
+    },
+    "in-rajma-chawal/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "481ddb886b76b0f1cc445bfd8aa68c855edc41b633c684f41df9a2fdbff2af8b"
+    },
+    "in-rogan-josh/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ad4c352f189eafe25432fe71acc5eeb11534681ed416b94b87c610fd245d1c8e"
+    },
+    "in-saag-aloo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "78500d209a5e4ce52e66e00e4097d46bee711d8700a93e98e06ac2794c9c1f67"
+    },
+    "in-samosa/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "313d8315a6c20fc68a918bd27e493926dbda70ebe2eb8de138dbb8e38a4d9312"
+    },
+    "in-tandoori-chicken/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "80712523e37c164df96560bbc5ce2b260e33a7394d885d1ae169ed84ed0ffbf3"
+    },
+    "in-upma/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f2069fc97834ec973598babad51d5b703fe7c978d20e36455de8bc2e733f791f"
+    },
+    "id-bakso/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "64c81679b6bd49ee19857a6979a5ffd31683244d4887e7871079fadc17575f70"
+    },
+    "id-gado-gado/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "48ad8ebc6c15d1c08e2ea9eb33a8cb6e074a17babea00e95eb5ae2237f1638b5"
+    },
+    "id-mie-goreng/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0d2fb2d8fec6741214256b8605378c1e0cfc9b66723a59594390d8c222c46ea1"
+    },
+    "id-nasi-goreng/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "bfbd14f37a8b15f34e4691e835e0d868ddc2d9765f94545ac070c74a130ace2f"
+    },
+    "id-rendang/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0b2b72c099c218913d8154e1b969981f9ccd7faab204cd44fd43810b8410c494"
+    },
+    "id-satay-ayam/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f02aa260db7293db3cc99e2a943343085f8eeca47e4b47830e3810c0e2bc5bc7"
+    },
+    "id-sayur-lodeh/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "70b26e75cf4675f5bacea7814a3f04e210c8d2a64a9ee8b7fe9118622dc16725"
+    },
+    "id-soto-ayam/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "8635ce801044f15736f624243f2aadfecf0598fc9885b28e4d20e4ab948de97b"
+    },
+    "ir-ash-reshteh/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "cf6e0e12bf378f57fcc6de9fa5e3469f8dd0bff0e8b2128700cfbe708051f223"
+    },
+    "ir-dizi-abgoosht/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d9c8c517e42d836cba35cc7abfa9f6c950d63615883c1c9d1558e3d2344dac71"
+    },
+    "ir-fesenjan/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "5f04be0c781bd313a0429d6ee5541d11a3bd51fde04a72ed63801a00bfc2c182"
+    },
+    "ir-ghormeh-sabzi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "cc785446f63d871351a2c07ae595a18652663582ecea1c88a185ee6eba040c38"
+    },
+    "ir-kuku-sabzi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "613caf4301ef02eed3a938d2ffb3b716be683c183e32b7ac849fadd283d44501"
+    },
+    "ir-tahdig/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c53d447efcd4d3504e3664c4ef8e4e1f59f7aa4cc462e74537786b77560797f4"
+    },
+    "ir-zereshk-polo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "3d619e69a83fb4c42c8e4a54d3006810d05e65e9bc3a36ab706f113e7cc0c8d7"
+    },
+    "iq-dolma/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "76a0ac4d162eeae5157049a264d4c0f90f40c870e5e3ba5b69f195e3ef5dce9c"
+    },
+    "iq-masgouf/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "32e0f6b711b8c3806c6a244e4bc2850569d2522624706ffcd848fe6c5b75a745"
+    },
+    "iq-tepsi-baytinijan/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "982b60582ad4bb1bd665d97a908e2a1cf5af8f87c1e492362c73b0cc74f611c4"
+    },
+    "il-jerusalem-mixed-grill/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "fec958afa8ff50b349bd3c24f740db0038302c5786fbe307db3b3800c28c5c6e"
+    },
+    "il-malawach/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "7a4cf97df1058afab45818638f3ec97d6e28f1859878e3419d284959ec13ed21"
+    },
+    "il-sabich/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b11e282f9c07d6dd0db38ee9640c707ab7d42b26e0168df61dc96df430ae17a2"
+    },
+    "jp-chicken-teriyaki/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f819f9ff0e72d736d380d6c1c2bb4e5b654b93427fdadc4be1f495666aeb26e8"
+    },
+    "jp-gyudon/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "115a835a70194458671aaa85bee22ee9e1cc339f0eeb194906349c35bdd0de76"
+    },
+    "jp-katsu-curry/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ec9398a302c6b7de61a24864c708ea862046835d0383e6e92189b15e0c37129b"
+    },
+    "jp-miso-soup/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "86c4e17cd098d6a3e2a2ed7cf0062a9554a521df62fbb5308c36746bd5c1d68a"
+    },
+    "jp-okonomiyaki/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "2c364202e76473508c6fed3215b8f51f84831afeb0cfb802028e2baead3fe507"
+    },
+    "jp-onigiri-umeboshi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b59209868aa30c1461826da3aa7faa46f96963ff6c47e86eb2a5816239d86a0d"
+    },
+    "jp-oyakodon/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9c83c2f1eae0ec10a45c94aa3d4e4fb8a04daad8ebd6278c761b1049e4d00fb2"
+    },
+    "jp-ramen-shoyu/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "36f0ff1ce66a9759661536315984c672ef226dc42b6f07ee077a1089eace5091"
+    },
+    "jp-soba-mit-sesam/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "41814f1332f2291587fb195177d1926aa1cf61acff372905345758eccab07aaa"
+    },
+    "jp-sushi-maki-lachs/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "aa0585f377c3825389e538999fd348a3dbde114d34c7b1952d745d95eceef1ac"
+    },
+    "jp-takoyaki/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d8c86778c532f1e0d92f1e003d9a4e9229e2fc2014cec6fd00320fdcbfcd0193"
+    },
+    "jp-tempura-gemuse/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "eedba153d92d276cfe99082345a81416de0aedba1a894d911825f7587e77ab96"
+    },
+    "jp-tonkatsu/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "135c09220802fdddc116a1c65992fb3efe013e435af987b827b97975aadfaa11"
+    },
+    "jp-udon-noodle-soup/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "28d7204b6b328e4a284a63bcf4b66cb039b7662bae9ba3f6087ad1e9289757b9"
+    },
+    "jp-yakisoba/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d87e7337f32c3c599be2521a810c1276a97aa3b93d31733f4909df3d30b95bff"
+    },
+    "jo-mansaf/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "5bc8a726b5a121208a61169ab7c4cd99d6cffe694dbaf014ce325249bc23f9c0"
+    },
+    "kz-beshbarmak/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a32aba70d42b8ee01a59c3de5bdfcc31bae234d90543375b8878e172e96d702f"
+    },
+    "kw-machboos/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9f55da07565a873834cea04ff9cf69d0044564da4e653d5a9263dda0c66bf939"
+    },
+    "kg-kuurdak/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "01efa40aea7eeb204479ce1188e5c456ecc7c8ae74073c581c657137a8cf2793"
+    },
+    "kg-lagman/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d5f8a695c60e8d6f9f4d170f05b60c55769fbb40180869598c591895d1501186"
+    },
+    "la-laap/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a7a81bcf0424beb4d6d55c5ba75d72b17861d99f3e2000e141b3e774616cf4b4"
+    },
+    "la-tam-mak-hoong/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d4b259ff340d91df4b2b74a2410daaff25bba806b07ad99e9db529bfc48fd685"
+    },
+    "lb-baba-ganoush/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "03a893486c9a61a7452fd390626dd7f6a4d78867e3b311bcfffd7a99d90f3909"
+    },
+    "lb-fattoush/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "fe8a9c426ae848a0857b0cc163648a1f3ff592528e6fcc720dad94f0e6b359f1"
+    },
+    "lb-hummus/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "8c769f166f80760511528eb68bc23d52ed445a5c8ff80dba2ad98bb1bf12c9e1"
+    },
+    "lb-kibbeh/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "5d44d02f04542fc3d1abaa48c1c37e35b0f8e3847301039e165d829a994e67fc"
+    },
+    "lb-manakish-zaatar/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ce99b5f7fe3002237425f7634921fc93150f4e4abe98750bb876b3bd2ea80ced"
+    },
+    "lb-mujadara/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a219410214eda5dd9c87cbc67bd2eb283db6ea33dc74ab72435675c2523f8d34"
+    },
+    "lb-tabbouleh/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a10bd5dad99161e6df90d55b15d8a5ae5526133b9e58524731f1148ef6a91e2a"
+    },
+    "my-char-kway-teow/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e54c5144168b128925ef86b3d270e382b365bc8535c8ad945ee303baec8d4d0a"
+    },
+    "my-laksa-lemak/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "266eb92eed56213379b26d825b5eb86001568956308dfdc53a1c95d999812de8"
+    },
+    "my-nasi-lemak/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ce630a708b4f3bc213abd3e824a7785f09d6d3f50f8e404fd480aaabadaadd23"
+    },
+    "my-roti-canai/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0416c6c54e591f81982cc6b262f6bdc61b81661c0c0c7c9528cf129c576f01de"
+    },
+    "mn-bansh-soup/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "5c202c28dcd615b82847a2db0748f62b5bd113c1dee0e5d93ff4cf10b5593fd1"
+    },
+    "mn-buuz/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "fdf0d15f447059368ef925e6d5ef55f41e0da811dfff8901ae2eb7b643545ad1"
+    },
+    "mn-khuushuur/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d4fe68a29a728c881cd79cad5eed6cd8fd4c73a678e0cb37cc13994c63964e98"
+    },
+    "mn-tsuivan/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "985897dd1433e6823274c70cdbb92a32ddd212e62e7d199becf5ee30a34d5515"
+    },
+    "mm-lahpet-thoke/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e195529b8deea0ba90316644c068f15f08ba1f9400ff70f531686971b2c1b90b"
+    },
+    "mm-mohinga/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "392779e61a14f26543eb8b65f725c27e97c312be6767b6c9484eb1859209eb69"
+    },
+    "mm-ohn-no-khao-swe/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e6fdff472f977766c36eb146ae67402c7831d832b1d263cfa65ecddc8f54b558"
+    },
+    "np-dal-bhat/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ebcefa1311518096c97bd9a4210ba6811342ea8eb3ce9135228e230ba9c5cc19"
+    },
+    "np-momo-mit-fleisch/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "eebe10944b4a72bd471f25faec973031c45d095543d106b55f00ea7c7323f803"
+    },
+    "np-momo-mit-gemuse/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e687bdba443a90d059614909076346abb1e540497f08c1efaca8c53036e3bb7b"
+    },
+    "np-thukpa/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "00bb0fa5b548897a4d1118aa86a3d1ca0f0e3dd1af31c3cb8ae8d559fd937922"
+    },
+    "om-omani-mashuai/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "884ff467282e156f97b920b413e4babce07adf8387d9251b59bd4317c8731990"
+    },
+    "om-shuwa/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0d0ae98ddd78dbe87cab46d1511628770375df3706e77aa2e8bae911441a7f77"
+    },
+    "pk-aloo-keema/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c7f63e9efb31da8ae3d5ffdc25034bab25ffedc6d0c25e10982a602614038846"
+    },
+    "pk-chicken-karahi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0f307117759a81aaebcf788c554eb37f2c2300c54f827120b47d142696c7d6ef"
+    },
+    "pk-haleem/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a5fb3da3e4176817037c35377a04522dcc506cbd3a0427989446bf0e258d6793"
+    },
+    "pk-nihari/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "62058de5698a28afc0cd0f2b633d4ea463c7dd126d815017a03e01d92b03cfa6"
+    },
+    "pk-paya/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "891cb7bba1def753bd9c49b79d8e280c68be30f175b19e9dd65ae46625847724"
+    },
+    "ps-maqluba/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "bbe679af983b1a74b123e25dac1998b53ec7a51bc6bff4cd359a9459b0cc7998"
+    },
+    "ps-musakhan/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f243293bbecf631a47a3f902781cd429fb88d0e750827f9ea585cd9596409dcd"
+    },
+    "ph-adobo-chicken/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "023b4d7654031ed64cd3d57e488e103b9d8a61b01cc1ff6502b03d7b26e170d8"
+    },
+    "ph-chicken-inasal/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "dc965b328f3870ede4b8f1a0f5c7a3ed86b3ce20891b7129b5784df4c8591aa7"
+    },
+    "ph-kare-kare/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "bbcd283e07bccf3d490b6d923fcb4ff2b0749ecbb0d3c2da870601307b1a2f62"
+    },
+    "ph-lechon-kawali/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ff82c64a8d5e06f78a7cc61ca58e6308fb67c7b8dc0fec22f0981142addeaaf0"
+    },
+    "ph-lumpia-shanghai/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "148d7a578c3286a104b01106d8dbc0c55ed409fe6b9b217edfba9b4d71ea6561"
+    },
+    "ph-pancit-canton/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d5161e3cd916335c405b0d6060f3417f5365378615d8b41d7145a7a2b7bce231"
+    },
+    "ph-sinigang-na-baboy/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "53274aafacebfa007b992237a01224b885eabe3bf48f8c267d1f36b445831355"
+    },
+    "qa-balaleet/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c31d05f486bd8a6210b348258745548591f92e09fb2dcc54bb836b68cf4624ef"
+    },
+    "qa-thareed/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6437f71f3b40fa3c0bb36f1cff9aefeac6fb73037cf9f80c5c756f29d6c2787b"
+    },
+    "sa-kabsa/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "925a693d13005ba832907d5d9a1a5d08b5f4a1f4e5e462253861eeb9b084c496"
+    },
+    "sg-chili-crab/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "7f287a68a12143ea35ac1c4683facf20d41881185fb7e651327c7bf593e32b73"
+    },
+    "sg-hainanese-chicken-rice/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "3ed50dac22f2c399f09671dcf613d8d22ea33841ae1496d6d98b9d1155828409"
+    },
+    "kr-bibimbap/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "2385ef99adaead1631a866b1aa474707316d66ec58bfe8207551905721e03a52"
+    },
+    "kr-bulgogi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "fd15cf81a704d93d105e6c33de9790ff5583edcb415477547f19baa4bbbe7a66"
+    },
+    "kr-doenjang-jjigae/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "662bbd17b16278a9f3cff7be284a6e8f61486cb1dc1357f7d85b8c18629b7962"
+    },
+    "kr-haemul-pajeon/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "aaf875502c93c835ca40f4d1ac871577e1bdeb60c6c8bbd56230a81f196f6aff"
+    },
+    "kr-japchae/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ad44e2beb7b7b106acf9a36c922b1ad03ee337d669590d73ba2434da1cecbec2"
+    },
+    "kr-kimchi-bokkeumbap/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b89decd627de3289605e0f51a838364ebdf9c1cc4bb0740e4f34b1f8c84a4786"
+    },
+    "kr-kimchi-jjigae/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "98a8a61e631c587eba2d1d00f5342cd523aada6183de146584f17525b5fe5a1c"
+    },
+    "kr-korean-fried-chicken/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c6fd55da74e433de35af9115f8b75358fe23e5a29dd469a063c8d42d213e23d3"
+    },
+    "kr-samgyeopsal/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "66a5b371ae415cee5208755e7b236071b348da1a934a3d8c654f4b89f52d55ea"
+    },
+    "kr-seolleongtang/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "83b2a3e0933e090b6c16e8ae7d593d9a45c63aa31dc4eada7d804646cf9b709f"
+    },
+    "kr-tteokbokki/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c18835c2da7918c87656a93f828c03fb5dd951232180da53f7663955101fe533"
+    },
+    "lk-hoppers/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c79f03a11a21848864b62381916fafcb903628e8a1b7e3023eca9118ca936090"
+    },
+    "lk-kottu-roti/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "2e11a2ba51c8b4de605a2f27729896756a5a0616775c37515b2ba4439b4b9f66"
+    },
+    "lk-pol-sambol/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "bf34ccb6b2c5141c3a3526d5545ab446310400ef1f45db0521a49919143a653f"
+    },
+    "lk-sri-lankan-dhal-curry/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "cdb2e5b8d864e7b5e10055a81d438252f8e76af5142e3d45dfbf254759bf678c"
+    },
+    "sy-fatteh-mit-kichererbsen/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "4d92ce109d69b1df4316579f213ccd81f5ed35211ef2892d2810d4cd9515e1e6"
+    },
+    "sy-kibbeh-labaniyeh/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a3f225eb59bd99852176b8de6ece4e2724cacade8b90ae78fce24301be821588"
+    },
+    "sy-muhammara/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "962b3b5eea098ec8f8c1797cbdf657aab00af0b49ffdfec6421a039520770bad"
+    },
+    "tw-gua-bao/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1e1bee2764dc183d3bc98957a724df4e070c93b27e1f2d102a424ff9fcb62779"
+    },
+    "tw-lu-rou-fan/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "844d41476c734828c5e5579e50ee5048db34afe06f145af13ce91a0ab57e8c65"
+    },
+    "tw-oyster-omelette/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "3e2127cd7c817f135b64220c422d3fe2c9d8fd8b2e33a1eb4d22c175f255c6ea"
+    },
+    "tw-taiwanese-beef-noodle-soup/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f204b0bd17b830c3da2e2eee73ad0e8dbeea6f35ecc6de5a690a5da9c682ea68"
+    },
+    "tj-qurutob/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "aa6fc656dddada1b916f43227431a769d3df0aed89a8117a1c961c4ac780338e"
+    },
+    "th-grunes-thai-curry/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1e7323f4f526c2cb0e0b3f79ec8463d76519eff965b20aaa8ae4b890765dd4e1"
+    },
+    "th-khao-pad/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "22eb04b09a3fcdafdfd4f3a14b7312a2b0acb82cdd0e49c20dff975ec11135b6"
+    },
+    "th-mango-sticky-rice/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "2c0a1b21f189706ec3fe9373146cd7c4a325bd318c0a349598d9de5d09f7e2a7"
+    },
+    "th-massaman-curry/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "cf202fb75299eb82dfdda1933df8f8ca3e707d890f42bab3a90eeda997972510"
+    },
+    "th-pad-kra-pao/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a2a5dfe12ff92b22eb616b71e6da21501b9fc9ffcbcbd8f703479e5a42f1cb96"
+    },
+    "th-pad-see-ew/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "3b4773b0cd0949ad363fef951b29b551e6bdf14498f9e9083a2992dbf62ec2c9"
+    },
+    "th-pad-thai-mit-garnelen/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "be9386f2f6c0a66c50c9736d3abcaa9e02d88ec39dad08d409ea14cbc8d64ebf"
+    },
+    "th-rotes-thai-curry-mit-tofu/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "2fcc955aa893337bb2a44e78cf57965bbf9cb0549d76430ecdb8ce142c21151f"
+    },
+    "th-som-tam/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "7d36136452d04cbf90f410c3755cec002fe07d34ed5573d3581fef21edea5c2a"
+    },
+    "th-tom-kha-gai/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "259914c08e03e117c36e55c981e9857305ec4755a85659f02899943a6c2d150a"
+    },
+    "th-tom-yum-goong/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "7886ba5592f9592dfe3f730d4ec4edad35f13cd26ee36fdd023298650e7ac80a"
+    },
+    "tr-adana-kebab/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "2b786a97c793e89eaad8240c13ac3cbc9da83599a28ea8f0289d77f28e09ae23"
+    },
+    "tr-borek-mit-spinat/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0df071631ed778c10b7f8a59c5e385f67be1ccb6e50983dcc3900dd7ca9d770e"
+    },
+    "tr-gozleme-mit-spinat/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "14b8113265f73175f05a67ce56e41a07b5dac5de2d564c57275ef9578a2806ce"
+    },
+    "tr-kumpir/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "93ccc79ca3e16240e43f52d943785e8ba82c6f3a02eb94727cc6fe4e29f6140b"
+    },
+    "tr-kunefe/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c21e82478dbdb5b0519eb16c5b9a6c35aa57c28fd0de7040ee28b99310a43319"
+    },
+    "tr-k-s-r/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "856db41b10aaafc68d6913950b8fa25003b633a7ce3f4a5bb322b593548b2805"
+    },
+    "tr-lahmacun/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a4e385d13058e227d409c27f0cb381b05934ad6d45b8dd6146164dc89def50d6"
+    },
+    "tr-menemen/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6ac0c05c0e4b439e3bb72786bc2524385d41dc283aee11e4df2c9eb77f0ab98b"
+    },
+    "tr-mercimek-corbas/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ab3aaa9533ee4f1ec91062a4c248b1fb4f49c0c0384e818b0c754961e48014ab"
+    },
+    "tr-pide-mit-kase/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6c1f55dcb20dfeb837f8cb706cf30d23eb721f24a3bfc594e891a597aef9174c"
+    },
+    "tr-simit/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ba81bfd1de67215ce7b2eeef7888fa9d633ea471395774388caf883eba215c5f"
+    },
+    "tr-c-lb-r/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d3222ddd217ca20a3686eda56aeb848fddc82359210febcde8b4b1379cfe88e3"
+    },
+    "tr-imam-bay-ld/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e19dd7e82741ddcb14bd283241dba0bbdfbba0d2386775d9175396e7ca82b8c1"
+    },
+    "tr-iskender-kebab/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0d4facfc3c909bef4236944313b1902a27aa269e4da081b6cd2d4839ec6cfc6a"
+    },
+    "ae-harees/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b2710023c71d5d131cf3ff2ac0b6942fefd8e61d26679c28c52ee95c806a1d4f"
+    },
+    "uz-manti-usbekisch/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f0e12ac5da39714c56bd0db9f2fd7e68399b232d709402e33ea50ee8c64d734b"
+    },
+    "uz-plov-usbekisch/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a4c9655aef0e78173ae87a1ccdb7a5978d156cb57c5ae67793da2755bb0c327e"
+    },
+    "uz-shurpa/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "684d6836de0730a8f2370d00c28f8c6555c1e0b8d18f144fa46fcca81b07a9bb"
+    },
+    "vn-banh-mi-thit/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "59b7e3dbfc7f0d6fc16a502962d6455c636e6cbe668a756a49745e3dbca5779d"
+    },
+    "vn-banh-xeo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "94a99156b70843f37f5f23b4a2e1b0bb898cc1bf84fefe3a1656750ab3a80035"
+    },
+    "vn-bun-bo-hue/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "876ac4dc0d467fced80f61dc03e66743560ab584c2156a1af36b35ed80278955"
+    },
+    "vn-bun-cha/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "bfcefaf741d52f9b5c0d046c2918d7d1233ee5935bc47fab403fbf30193c8aa0"
+    },
+    "vn-bun-rieu/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "7f98d17fa5943ad0717381c63c64308b852006c81351ebfd697ab063f40d8bf6"
+    },
+    "vn-com-tam/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "3db07909e529849e305f50c70f55625ec3db8b1eaf713b2efb4243b52e7db841"
+    },
+    "vn-goi-cuon/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9d08e8fbd03c7c356ad835e34150eb77a738d74f1033c38ea4098fe6ed777784"
+    },
+    "vn-pho-bo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "460077a60db23c0e776b53f5c29fe79e554627f28836104a7b6eac764bcafd43"
+    },
+    "vn-pho-ga/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "03aa9ab8c429ad56fd4aad5effb4bcf1560ab674638209b8ad2c775d82e6bcc8"
+    },
+    "ye-mandi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d599af020081b914f3da3a8c86c15eacb98aa2ea220616456f756579e729c63a"
+    },
+    "ye-saltah/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "4ad0410940da4b36d6c788ba5aff5eb0fcc803ccbe9b08cacad2a4b6372027b2"
+    },
+    "al-fergese/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "10fe0a3143e87776b6cac1d5f49181e9fafbcc16a1acab7c793044dccb8c9534"
+    },
+    "al-tave-kosi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9cbcd8f1723d8fa49e832b2a2829cd880b9cf144b863bc9d5546f49c3c663618"
+    },
+    "at-apfelstrudel/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "26fa5fe8e892afc2051bc8501f9660296819da739b627052e2a10fec3897037a"
+    },
+    "at-kaiserschmarrn/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "84105bcba8e63d81961c82f1673100219f62a3e981ce4e88d6fcc69d76958bc7"
+    },
+    "at-kurbiscremesuppe/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1d0016227ab7212f327dd74b0e55acb52d67b10b7d18559fb18d8ffa816b1cbb"
+    },
+    "at-leberknodelsuppe/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "df4958893ffd547fcb625293c6149b81275d87ffd67900c0350507febdfdf117"
+    },
+    "at-sachertorte/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "422f0593c5354a127c4d6742e59e463838ac41ee50aaf2bd8d1c08ef8a1edc13"
+    },
+    "at-tafelspitz/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "71a74f7d2b0a2a14eb732f9c44d1380fd6fa93db795ad2248031996752c86a0b"
+    },
+    "at-tiroler-grostl/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "16f671bc5858f3c0f03eb7e2b1f8f44a6ec88dff9d455baef579752f4f3d9c8d"
+    },
+    "at-wiener-schnitzel/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f9b49fdc4de97ad9edd193f308dcb9e000bb18db2d320eeb689848445ed42ca9"
+    },
+    "by-draniki/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f15ae5f873a37e62a34a0d4009af4c038ca06d66cd0cf4982b58a40d32eddfd6"
+    },
+    "by-machanka/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "710b493c0651205f61aa847b4c8260650600f3b3fdf09b2607103a4d0e05382c"
+    },
+    "ba-burek-mit-fleisch/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "32592d9774a12f13a82fa6c5d03fef90670460376e4c74168d9543b15aead8ea"
+    },
+    "ba-cevapcici/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9a64d755bbe3c55984cea5270be9646bb95a5fc5c5ff3e8b2c8e159ef71337df"
+    },
+    "bg-banitsa/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c58ed001af29c725cfa0d77c69fb82d5df19feaa3f4e846e1575b17c0bf17970"
+    },
+    "bg-shopska-salata/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "8304c66f6b1b870657f063046e522342b2df3705d34d583e0e0b344372514be6"
+    },
+    "hr-pasticada/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "08a8bf685cd3fd786b4e61ac1ad7714ecc9b88db1aa9487b7fb0bb1b4c857b77"
+    },
+    "hr-crni-rizot/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6f29c8ea0da7e9f7341d6b8a46ede0b88d3d1da6cd66e2653b68c8de68116c70"
+    },
+    "cy-halloumi-vom-grill/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e0b4aef8fde7c1ebd89af20040ba71fd96bee63d376e7119e0a25275e87afdf8"
+    },
+    "cz-bramboraky/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "2593932c5088b213a19c1929b94460571d2f48af0289fc550c7616c18b824110"
+    },
+    "cz-knedliky/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "aec2d95950e1105fb1df1bdd3c779a3c511809f7555429c1f09373fc43c47ae0"
+    },
+    "cz-svickova/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0dd9ad835b919ddb4569dab85d6e81f0a9c74bc83ae9b3c0665e19ceaecf2ce7"
+    },
+    "cz-trdelnik/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a851654be305e64cb30c03a6c8b0d40935b8a493f2284b0e05d10d9bb1e47305"
+    },
+    "dk-frikadeller/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "3a66aa387af4835b2bcc6d35e17c07bf8626360b4c753c0e072ca34cab94a557"
+    },
+    "dk-sm-rrebr-d-mit-hering/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "fe0ff7c62c813f9b976e8b0be1c938d33045b02da5e11c9c04bf30d714e4c07d"
+    },
+    "dk-bleskiver/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0e398c88e379167e931cfb296c310368a33871a1af76d69f995d46c264c19ebf"
+    },
+    "fi-karjalanpiirakka/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d71f186be696d92b2afb9eff4a5520a5d7b402270b00c8f02f6e9097b778547c"
+    },
+    "fi-lohikeitto/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e12f35912adb028ecdfedf6415966e65f7a317d18eee1790f1c47db892dfa6aa"
+    },
+    "fi-poronkaristys/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6b32d2cab3f2a1802078e3d0aa1a99c41cf2ce8c15d852e3c110ff8cb136e29e"
+    },
+    "fr-boeuf-bourguignon/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "35f1a17b2f730910cd263d6a3602f215aaf66565d2faa9119e7afd488e76a77b"
+    },
+    "fr-bouillabaisse/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f9733c48dbfe49638a315a071e662c3bc01dffbefbe1d618c574e97c98bd96cb"
+    },
+    "fr-cassoulet/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "7b7370a4f25733b20bf8397e546dcfe1c04330c92aa510af22e2c003d4fe04cb"
+    },
+    "fr-clafoutis/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "13db4618a199022d3481ee12370d11c5ce06ee098dc50a975998f49a1407c745"
+    },
+    "fr-coq-au-vin/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c04ad9e0ad5775db3f77c1503e46c001dc5b8fb2706776a8e4c16647dd1e7f6e"
+    },
+    "fr-croque-monsieur/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ad02ad80547d0821663b0672837133ad64eb03fc2a1b5df8cbdee28523a2cf6b"
+    },
+    "fr-creme-brulee/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "4777ce51bce320cf16ebe576612f93cf9efa203aca178f99679078949e095944"
+    },
+    "fr-crepes-suzette/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9bd88cba57375dc0af2fa5117eae4de250191bb7cd83123e5df375b074fee62f"
+    },
+    "fr-galette-bretonne/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d8715805395c78bc7a75753c5b3a00bb2cedaf4fd888418c96da6ba60de1cf1e"
+    },
+    "fr-gratin-dauphinois/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ee8cc19befdc53573b668aa52da3aa5234b8ee5b2b6fb224032f448d90e0c71b"
+    },
+    "fr-quiche-lorraine/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "8598517597897814a88f8766332388ef8fd906103a4da95f6af2ed6035c90168"
+    },
+    "fr-ratatouille/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "266050a2fc1f8666a89e916dd1a81c1c24999015a078b70e9341c7ba28fa3d3a"
+    },
+    "fr-salade-nicoise/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "3e5c3284f69bf4eaadae3afd8c2eedd9fb63642cfd1fa38044e19333f102201a"
+    },
+    "fr-soupe-a-l-oignon/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "76910458c9ba75a431824d0ee94110d973812f8641da4e32a04df209501797e3"
+    },
+    "ge-chakhokhbili/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "8fc119d0b57d561d1693423bd3fd22f1f37af1e0f2f416e09d0f0dc2adfc000d"
+    },
+    "ge-khachapuri-adjaruli/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e06d64b26ae3bf2c168f97e5d80afdaa7e529dbdd3360b98f28ddd06599fc3c8"
+    },
+    "ge-khinkali/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "41d028b2ff8df5f0c94d3f385759cc397644c3d4e59023abe3e76371065beef6"
+    },
+    "ge-lobio/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "8d573f0f49201f3315015e1ff631ec1168b8007e8e2960474ad19f36d15cca1b"
+    },
+    "ge-pkhali-spinat/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c3bd7b88f3d0b787cc4d1068fef03b12c780bcfb4ca1117b5a935b4015a0a951"
+    },
+    "de-currywurst/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "54ea5870f29f482c06dcb546e297d8311fb5852426c8c7838141452199557a71"
+    },
+    "de-erbsensuppe-mit-speck/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "8089e3b8f2a7065abe3458e7ccf2c1748929703fff4a12c17f5703ee6c087ef8"
+    },
+    "de-flammkuchen/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f0125d7ae29f39d917007fc4007ddcb5c61ea2c322e41bd31b45083404e31045"
+    },
+    "de-kartoffelsalat-schwabisch/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "56573f813044d3eb2c665415b663a4f6e0d647a8c91b139e3212b511e4249c4d"
+    },
+    "de-kasespatzle/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "22af1ec505ec27320561ab5dcf95dc6a6057d5b9a5006d528ec87734b4cf5fc7"
+    },
+    "de-linseneintopf/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d85b933f1f66e77e7b59a37f876a1326600a7f79be497d281d14b4806eec0a01"
+    },
+    "de-maultaschen/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d54e5ad5d39f9df0b0d8fb6bcdf049f7d58274d28ca1a9c2a4c891079682d4a7"
+    },
+    "de-reibekuchen-mit-apfelmus/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9e67d41fc0f5eee431fe49bc7aa1110457f95cbf312c89af3e0521652c789fac"
+    },
+    "de-rinderrouladen/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f3abfe79f0297f4b0c122178f60f49403929afeb1cbd395709355a144080aeaa"
+    },
+    "de-sauerbraten/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "867b1c5623ce6a46e579ea6ce2c7f63fabb70ffbabc94800806ceeb5f21aa37b"
+    },
+    "de-schwarzwalder-kirschtorte/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "58e2c191340b8cdfcdb998d030995bbfe59cd1e6a566433a162cab8070db95c7"
+    },
+    "de-schweinebraten-mit-knodel/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b33c7584ff0e320cc506d21dd171fa0f799914314a4631828b8851a36e428e5c"
+    },
+    "gr-avgolemono/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9d8fddcea7fb6af712438723b32bff49bdb93c9edad93befc1e5e8ad84c588b4"
+    },
+    "gr-baklava/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "91c80524812a5cc5b0c6344cd1045876f105a18746410e976331ec5c076aa45e"
+    },
+    "gr-dakos/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "7eae6b0553d9fb14c0fefd2f8cddc89b79f6105a9a9e33842beed0d1fcfa5c52"
+    },
+    "gr-dolmades/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "cebd326337fcd46cb589e8cf363a82fa6912f904b564f865b3f27913b5ac69f4"
+    },
+    "gr-fasolada/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "56d4cafc7a6192ae49d19169a5abfae20db1304a787ae6dfc5e2506870a107f2"
+    },
+    "gr-gemista/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f83d2a73fc891ab12662e92d78b7c57da13214a1ecd50f809f4953a72f9e2be0"
+    },
+    "gr-griechischer-bauernsalat/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d4f6ab33f84c3a8f6d9d6bbb3bcb0d4cb72fe2a467ffde0e820628946e3d0d55"
+    },
+    "gr-keftedes/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0ce8a6044d4486c8ce9745e1f358cd3d029cb72d4b45c409560f5a7e997e90c7"
+    },
+    "gr-moussaka/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "cdf28b1c3ca09e41e7b775bb2bcaa358fdcb6d91f0c1521a31b725e885873ada"
+    },
+    "gr-souvlaki/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b5b9be46e97158d236bb823802675f15ce0b2ce5d5ea20f285c9ece6d264287b"
+    },
+    "gr-spanakopita/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "2114980bb221c79cf0f6294cec288181d6a1fbc821454a9d0708f1e0dd830fc8"
+    },
+    "gr-tzatziki/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d743902da8b150f0383622428861dbff69d332e58ffdff91c278fd5406c8f370"
+    },
+    "hu-gulasch-ungarisch/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "176f056af52e0cc66f0e4d6b07e00be59bafcc5c73295ca0c765a5883bcd13e8"
+    },
+    "hu-kurtoskalacs/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "5c5bf43a8fd5e4764637a2569f7555bf7fdaa7b44c01d13a134479ede69d24f7"
+    },
+    "hu-lecso/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9a18d2d477380d6a148189190cc9a4d84bba0105ee73acdc7760785545e90a74"
+    },
+    "hu-langos/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "52e33b08fb01748a58b952880c9064bd11ec6ab28a37aa43169159b728f44d73"
+    },
+    "hu-paprikas-csirke/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1f1faaf2b29b20cc799cb617e4a419db69199e7a6c12f9ad4e1f9068d0be693c"
+    },
+    "is-plokkfiskur/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0be9ad331d86ab1250c7aae5bb83a9d99a922827278034fdb5733416b6983a53"
+    },
+    "ie-colcannon/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "40ac199cee51d16d81ad1e3a1be88d70c069b6a0560f2925cd475e5035183e48"
+    },
+    "ie-irish-stew/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "3ed3cf5586127352d6947dc32f267497946ef5ef550a9d8f5359ba7b8cee9d4d"
+    },
+    "ie-soda-bread/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f2c48bb02f20c624782939681a422a74134c4cf38022213678623619906e5536"
+    },
+    "it-arancini/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "25daca7e4082633431923679187e4775156493138d914f0f978820191ae6775c"
+    },
+    "it-bruschetta-al-pomodoro/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a0e57bfa98a9d1378127282b9315e8a8c6261431c6c493d88f4afad3faa78ddb"
+    },
+    "it-cacio-e-pepe/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "8cae350749bcf96621d48ced32d682aa36cb02da0a789c072aaa96edf13ae8ce"
+    },
+    "it-caprese/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9472b3207386a9ff9a79a945a27bfc4d85186dccc65560a5fd8d7bcf30d53553"
+    },
+    "it-focaccia/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "85d99c6f4f58d223f3a077f818f6221c1e0065028a414f27e83e08894b558f4a"
+    },
+    "it-gnocchi-al-pesto/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "629a6887bc65bb6c94d1facc8e0019192876aac929e77de57fda8b8666a87f29"
+    },
+    "it-lasagne-alla-bolognese/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a2cb9a5cb437634a8233d948308745d16cd22e19b19b0abe3f784ba71f16448f"
+    },
+    "it-melanzane-alla-parmigiana/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6c601c14bb85d21e5af37c47f8f3b5b10a9ae094f82ade8cf2c5d2bff73f10e4"
+    },
+    "it-minestrone/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c88568c431086898fcade673e19f41224f6a69295fac8933ace0f4b7b88a97b5"
+    },
+    "it-osso-buco/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1636dcc47762c7c7767ef113be03a40686ab4d9eb697d6edf791e1c809a6b6e0"
+    },
+    "it-panna-cotta/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "dc98f272cb299face4206ba53655fe75f1c7b7d6eb1aec815b95c7fa4feb1b37"
+    },
+    "it-panzanella/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "4faccd95f812b329bae4dfad7dd10397137ecd73a2c330a211d845bb533e764a"
+    },
+    "it-pasta-aglio-e-olio/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b81258674378e73d0cadff49420649360f4e62e1c32e8b578f527b2dc1dacb4d"
+    },
+    "it-pasta-alla-norma/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "da8e22fb319650d46a026ab9a3f4f25a646a30c6f362b6b0e5b353376252cfe9"
+    },
+    "it-pasta-e-fagioli/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "47a49ad3dd22049ea44db6fea88b51577b1f4dd3321bd61c5dae97f224e84d56"
+    },
+    "it-penne-all-arrabbiata/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c7c077c9306e318d3d47ecc9ef492ab03ae3d887be3e8e9b9c379f2e331b3ad0"
+    },
+    "it-pizza-margherita/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "20c7b980b884e4193f2d22a2dc94c63d0695e07474d78b8fdfffd300dd3de9dd"
+    },
+    "it-pizza-marinara/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ed4fc9907afde1d7d505711e189083430134dc76ad552584e18e36e2f6a3adf2"
+    },
+    "it-polenta-mit-pilzragout/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "47a165c40e07e31c415a71d735416f54f0b46715f0723d5d1f875fca8cb0e92d"
+    },
+    "it-ravioli-ricotta-e-spinaci/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "281d57cecb98865b5f89f6d6df371b3f1b1508a698af10b103501bfe1e14348a"
+    },
+    "it-risotto-ai-funghi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6e38d3696fd5afb889155cef129fbb2fd99c1bf95c83b9818952ca2f5e073987"
+    },
+    "it-risotto-alla-milanese/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e899ea41ac2c89debd304c966ece353e25306bc8808bc921cfe259456b18d83f"
+    },
+    "it-saltimbocca-alla-romana/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "3ca441d5ad9fb043d4d9eb81a6d952061aa30397cb1b1ba39aee4807f92e5697"
+    },
+    "it-spaghetti-al-pomodoro/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6ef75c8da7691741c92b61a3abd4018894670194b8a81991156f6f0e72ea3a0b"
+    },
+    "it-spaghetti-alla-carbonara/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "74bf7be662b500853b0553942667cf20ca4979a83cc6fca023833e03034f4c3c"
+    },
+    "it-tiramisu/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "2950c817346d8aaada53d9f43df52ef6ccda96b82c40d76b49e1c161c8793a1f"
+    },
+    "no-farikal/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "8deb8d06282e82e8ee58ecdc9ace93ff297f343cbabfa03c5400c039f11e55de"
+    },
+    "no-lutefisk/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f3b09cba4471b2dd0735afbeca71a4f28e6fe46d9e718dd6781e01d455209bd9"
+    },
+    "no-skolebr-d/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e3f4fa9d16932633b19ad18dd862cc3d72405095b0325277737d183cfb20a141"
+    },
+    "pl-barszcz-czerwony/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "043b6718d87c228c9be71d291fe426d0f820bac05bbc3d0a72b97f1ca45c8c7e"
+    },
+    "pl-bigos/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "fb011f1d359b14419dc2ffbcfd4b1770b2533cd60b6a228c5f9909077049cdf3"
+    },
+    "pl-go-abki/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a2f724e0d756b4a593387111b57af8aeeec9da8ab5fa916a69387e95354e9b43"
+    },
+    "pl-pierogi-ruskie/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "775f9030451ca764766e95896c88bf20198e289ca439b51286b0dcb22d7a2646"
+    },
+    "pl-zurek/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "029a6bac782b7612017be8e38d88e35baf2b48eecb040fc7ad342df60bb7432a"
+    },
+    "pt-arroz-de-marisco/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1a033a63118cf3ee8577e8c7b27269e9aaafcaaf6c7bafe40333cefaf892f4e4"
+    },
+    "pt-acorda-de-marisco/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "33f7261c2261ecbcb4c34d162cf87d4c7436e783898ec9e1b149aca9d3b65de8"
+    },
+    "pt-bacalao-a-bras/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "bd5a8d4f4535fea497707856a3d4a8f6e1f8ab2b3e3d07bc2429540306432d73"
+    },
+    "pt-caldo-verde/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "58cc0e5c2f9b02339060bd14d814612dc8d2fb583786257649674a71ee7cab87"
+    },
+    "pt-francesinha/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d9ecd34ff3fe4e271bdc8b8502d16f8aa6f771cf711dc8adf1a8e9e7b08a1e95"
+    },
+    "pt-frango-piri-piri/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "cbcdd4a5415f00c4a229337943b885a6488633f63ff92528f89bc86c32fbfc95"
+    },
+    "pt-pastel-de-nata/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "7113b7d855105291fe674faf0ce75f8350f5112f46f81a5563c974739777c9a2"
+    },
+    "ro-mamaliga-mit-kase/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e98dae5afd9ccf83a24ce56370750103a16d88f734020ce8917df6a480a5dc97"
+    },
+    "ro-sarmale/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "cc4c45902ed8eea9cd0265b83779fe530c1fc5411ffa19d61037d1aec332d3a0"
+    },
+    "ru-beef-stroganoff/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "79f01951163d1a2af5bb26b97618480860e59d841a723eb6fcf87adbd7feabb9"
+    },
+    "ru-blini/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "5233eeaf80d6efdb85ce5e80909c7ccc4572dd671761b2815cf108f35632579c"
+    },
+    "ru-pelmeni/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0afde3eb00cb687e1296298564b9c3684970ccc163a484765f30aedb506f73ed"
+    },
+    "ru-schtschi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "469de56c60629964f7575a9303f595a0cfbc90f3164acc46788ab3bae515f2c1"
+    },
+    "rs-pljeskavica/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6bbf2f01e928c48b9ae410241fdf195ab45c5d91273ef39f86668a1a0ec80ed5"
+    },
+    "rs-prebranac/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "bf16cdd50f49fbc4327a759e7ec847c2200f3e21135630d97cd6514c023a805e"
+    },
+    "sk-bryndzove-halusky/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f5bb09bad262939316cf14c05bd89a4475a00c0d5f70689925cc6e2fd5cf0954"
+    },
+    "sk-kapustnica/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "fd1659200e3f97e307fc0579d3be453e5310bc358755f63c26cf525c1c403f10"
+    },
+    "es-churros/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "682ceb32402ea59630bdc8c55fd58e2e3cc41fdd263a58cc633bfd09b8fa0b4b"
+    },
+    "es-croquetas-de-jamon/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ad44712b51481c41cd5c3ae1227b14ef76e092874fff03d7fffc196777f637ef"
+    },
+    "es-gambas-al-ajillo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "52074f157c12067ef8977f3e742aaa31abe16ff2ea2d8032a9a60edc4cca74c2"
+    },
+    "es-gazpacho/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "8b43ad1bdc12b71a358750513c8fd16562889ddf0f4eb33e98b3d696d3f88033"
+    },
+    "es-paella-valenciana/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "94998b70498d7924d718386bf69cbb09ce0709a9cd12703fca3816bea8f78dc8"
+    },
+    "es-paella-de-marisco/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b4f21f634620d56ec56aa4b80910e7416366ec54235a0bc99240680a0d175787"
+    },
+    "es-patatas-bravas/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "40606f76c8baafb32e651c92334016814142e749f9c655b7af148989a75c74a8"
+    },
+    "es-pimientos-de-padron/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "cf52fe4d6d5fe62555a7c13a1e3a731edf175d94a610bad4042356102398d195"
+    },
+    "es-pulpo-a-la-gallega/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "3c8bc33d9a39f4f6a723234d5a5e6921a52b1895d116b772e6322b064eac51fd"
+    },
+    "es-salmorejo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ab1b4c6bbd1ab95dae5c5641c8843ecd79e51f5f5ca73a5ec56a0d9d884ad9c3"
+    },
+    "es-tortilla-espanola/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "fe8fbd7cd3c8b514905b103755decdf758f2147e8aa4dd4696bf6f63507ff407"
+    },
+    "se-gravlax/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "43afa466f6b97d01f6cd105d75171c79eccc922251fef83ebe818529431c16cc"
+    },
+    "se-janssons-frestelse/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "813dd92e838039fa93a1cc8323269332582fa20674fdb7c579ee7b7790119d35"
+    },
+    "se-kanelbullar/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "987ff189041045e2f1ee90397a12fa61ea916949b41a061e03ab30b2c022d285"
+    },
+    "se-kottbullar/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "43301ca1cc1f433fea0e963d26580f917f29519d0809373163f051924c313a56"
+    },
+    "se-smorgastarta/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "fee982f4ab3adeaca5b8e0f2aa403798bd56fa6dcf49353a42d072db668cbc70"
+    },
+    "ch-birchermuesli/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "554cb0ba88a8634df954d3d3bc52a54755ef8852a3db17989dd0c8d5588fd71a"
+    },
+    "ch-kasefondue/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "eeb0c6f27c402c20ed8d3c18805d368a7f53eb4161c934920021c5d713ff40a0"
+    },
+    "ch-rosti/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "8ec21e4381c65bb5c793437a68994052629384f37c17a4206ad9847e2fd63133"
+    },
+    "ch-zurcher-geschnetzeltes/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "7ee9d599182ff80c4beec666c2734340d65cde58a82d6ee3f59957b6a962874d"
+    },
+    "ch-alplermagronen/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "cab1eb87df4d02485696a3803fca498d47bdf2049db359428beb4194f65465a6"
+    },
+    "ua-borschtsch-ukrainisch/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f76272fe88b9dc70d954e47b4d3368bbb1023957e6541f7eea5b297fbc66f0dc"
+    },
+    "ua-deruny/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b11500e0204199af924a091a8c3d9f2e3651392cce51014dbdba4c404737eb8c"
+    },
+    "ua-holubtsi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "8b566cce4c5616437e434e12df7544e958559672c36f6323fe94b4d08b891139"
+    },
+    "ua-wareniki-mit-kartoffeln/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ea2e052b446e6484200635187275373030904e7904378e12ca00e5794a50a8b8"
+    },
+    "gb-bangers-and-mash/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "146a6b74812be812f1183a251b2c6e09cc28273eac4fd960c278ce8d8f14b640"
+    },
+    "gb-chicken-tikka-masala/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e95aa83d25a3727fda6e175b06382596d39083e8e03530f2331d0f2ba4ef015e"
+    },
+    "gb-cottage-pie/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1814240b750b5d847863601a26371d6426a0a532a9fb7ca0704f16d494f7109a"
+    },
+    "gb-fish-and-chips/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b843003867b81fa4c181db28343c8a719b3d9c9f1fd4f290bd3e8d105b26b350"
+    },
+    "gb-full-english-breakfast/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e80f310ffa8db81f8e4dfa24e52b9b24a5d8a20b43d8beb69aafe72acf98160f"
+    },
+    "gb-scones/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b741032b3d2041fdab0bda278217d7779f7a9d0929f0ca9fed670379b4399134"
+    },
+    "gb-shepherd-s-pie/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "90ec8383ac678da29f379efb784e3fc56e13489db7ef494f0495484e144450c9"
+    },
+    "gb-sticky-toffee-pudding/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "06c27327ad63448f57760dacc12cd6f2f696d4aa33035b9b7cec40612d978257"
+    },
+    "gb-yorkshire-pudding/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f719dc7b619b3f732b9697e1b3e3e120c5b920ceeab3fe214a5f554e5073339c"
+    },
+    "xx-gegrillter-lachs-pur/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a5cfc3789eaa4064810dba2136a94a89474db539c2c2399af681780cf0b1f7e3"
+    },
+    "xx-hahnchenschenkel-natur/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d4901a0bc6746ff0cf4ac95a96262833bcbf686f5f2f4413255d748a36be3c5a"
+    },
+    "xx-lammkoteletts-pur/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e098e12875b8d6a641018ce7fd064d83fb95cc80287b4fdde2ff65ded8b4a007"
+    },
+    "xx-rinderleber-in-butter/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6f74ac02525a3e2e21bc52d999ecd6aee66d3c448d25445453066864c591602e"
+    },
+    "xx-rindersteak-pur/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f9d9988cfee79d36ed043537f0910a50d4cafa6f758b86b64b107144cc86e351"
+    },
+    "xx-ruhrei-nur-mit-butter/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b36320d41b355933710c6a18a9ce293955c36537904930785dd2b80fb1c7c494"
+    },
+    "bs-conch-salad-bahamas/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "294e131cf3794b7cfde7211daff64a7e83140c34e5a8d4e34c05f4eecd3b64f0"
+    },
+    "bs-cracked-conch/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d03516fd5a655162f78ce2404fa0d2b322d815f6b831b0a936819c9a57677ce5"
+    },
+    "bz-hudut/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "303863e3733eede1dec53250566cfb316d11eb365b2be0ac99943b34e17c85e8"
+    },
+    "bz-rice-and-beans-belize/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d7e010dc4d28da9e016a961d955d198188ae8458eb4a124b0d5db030a7ac6a6d"
+    },
+    "ca-butter-tarts/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1306901faf24d95a409bfe58b7d1dd332d9356f8c25e08bf5d847a8aeec72727"
+    },
+    "ca-peameal-bacon-sandwich/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1da7ea96f9c52ec3f6e79f4e0f4f58a95a1f91897ff790b8ebc3057c887e0e59"
+    },
+    "ca-poutine/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "4c9f859720ebb85d99374d2f7bb2e9f5eaa276d0b92b228f97123dd94f82df9d"
+    },
+    "ca-poutine-mit-pulled-pork/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "8b913f51dbb80914f928c69ab846ec3ff1861abb994fab6cb32185478591e588"
+    },
+    "ca-tourtiere/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "70959b2c3601cb9cffa21c475f1968283492dae65808ca170de9e0b5e5be5370"
+    },
+    "cr-casado/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f40b94a60b85879805242a565b2a02b81ba2dc4c82a995603c109152d78c60f3"
+    },
+    "cr-gallo-pinto/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "dc8c7acedc5ac9e8785c89b39d390c11443e87d544661685474f1984c3431d6f"
+    },
+    "cr-olla-de-carne/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6b5542ab8d200f72666f02fd337cdf81c0ea5314047aa41f91813be415a11e6e"
+    },
+    "cu-arroz-con-pollo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e1fa2c04a71aac7e2a0246553465216861b219acc63fef7917218eed6fe44f75"
+    },
+    "cu-cubano-sandwich/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c97e7e8cd089fa1376fd5fc82575932be105fb207d1eeb14a65733b1a822883e"
+    },
+    "cu-moros-y-cristianos/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "991f3fba4838aa6ea7930de68e08461535d4eb3f4454d3f37b20372d3ff80d3e"
+    },
+    "cu-ropa-vieja/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e351f4b461ca3115a73fec7142781eee25817d4624cd735443513382bc969396"
+    },
+    "do-la-bandera-dominicana/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6e022b955c62fbc888d2e575f1ee43227034354d738050703fc6a2ed2cb11281"
+    },
+    "do-mangu/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "94a41ae64f6a25047a6acf29b94becdac8edebea2e9b34f9cb623e17a4aee78b"
+    },
+    "do-sancocho-dominicano/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "637d0c0db25e8db151175009547c07b47095db69f572223bb1158a0c8e8d65ed"
+    },
+    "sv-pupusas-revuelta/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "7571264b4ca926790e1865aed1d67a05542598a74e89829a5db5945ae5ead1bd"
+    },
+    "sv-pupusas-de-queso/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "dff28679e37a5a4327a995ccc851d0d141ea9260a334261973a1f6303290a35d"
+    },
+    "sv-yuca-frita/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "515e1b4581c3e3c3cb2a737903521653c05beb4111abc52613190f36c823b26e"
+    },
+    "gt-kak-ik/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "caeae0b3443ca739758047268854c2c3f4944d67f1367e973a1af9ead7c14393"
+    },
+    "gt-pepian-de-pollo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "2191875bbffc786e74dfd246570c19ca1f946f8f7e3e9f128748922fd4b9cc46"
+    },
+    "ht-diri-ak-pwa/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "de36287ecf1b43eb5322d19abf173df22c2416175711163ee613ade81980a3b3"
+    },
+    "ht-griot/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "5c951c658ff9531c15c05caad9182982cae5b6925a6a3c1e93fcd57aeca32eb3"
+    },
+    "ht-soup-joumou/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "eca4abd609f23b23108f4a0e7a961de52f319e3a9a23c48207d609919f7341ad"
+    },
+    "hn-baleadas/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9e81383918919af901a4d9860c5c24fd60eb24f9906da8077186646948ff3cc2"
+    },
+    "hn-sopa-de-caracol/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "8b8b30cd19c9bd97a2c8af02e765a0634331767a4be22048b2ca2d9f7aaecba0"
+    },
+    "jm-ackee-and-saltfish/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c597d3d6318e03232abccc8a42093b56a3db3162b2b7b238191867668c2bcbf5"
+    },
+    "jm-jamaican-curry-goat/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "037bcbd3fa6add51e172958aa9f710b940678453556b8be9253cf06a08142da2"
+    },
+    "jm-jerk-chicken/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c284ad610b0b3ac1c8bb76f51f49b8bd89b7e6a9cb638f66265559fc176bfed7"
+    },
+    "jm-rice-and-peas/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "97259cc3b28c86652d4e1c7714d57b5dc63eec91c04c599884af48fe6f6fed46"
+    },
+    "mx-burrito-mit-bohnen/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "4d426f99656b18b0d4f966a0fc601322d92594caf56279a999b22711a0d977db"
+    },
+    "mx-chilaquiles-verdes/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "bf31d47f9fedbb6c2c14751aa8048add81d50591fd2c28541ba567bfad0eb37c"
+    },
+    "mx-chiles-rellenos/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e32d7e71ca6d8b2edd5a04a5acac0abd103273706b151bed08f034232f7b1443"
+    },
+    "mx-cochinita-pibil/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "97db2fe7d7f0442fe70c3e77b0c01c9684d53422f6c915119c093b4447738c52"
+    },
+    "mx-elote/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "aa17c2b7516e7cffa70c060b25b6c8fe65c6e6cef2e76a1eee1de696a7fa871a"
+    },
+    "mx-enchiladas-rojas/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e06b8452fa8c8c87d37489f4dca57b0674049c97233b9f4aadd86b785a5fcb80"
+    },
+    "mx-guacamole/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c39c044f14ae0c90e2646eda455a76b2f422bbd19fd7d7aa4eb51babf9f41f54"
+    },
+    "mx-mole-poblano/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1f5d7677571971f7ccc07a64b054df137bde9738d77fcf4ef2bad62fb733c14c"
+    },
+    "mx-pico-de-gallo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e8a7c52e8bdc648638b7ff6ea1a32fd0c072bd615649e6ca5ac927ca19d00077"
+    },
+    "mx-pozole-rojo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b955a63ac6dedae8509eb9618b0d6c9a2e5cdb93e9b1070c4e729633bb478182"
+    },
+    "mx-quesadilla-mit-kase/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1bc35a27e8bf2fc4d0e05b563dea8ca9a6b720ef47467fd9d70a56bd6a653097"
+    },
+    "mx-sopa-de-lima/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "71167296e06ca2b546a2352c1ce733a9a8e34cf37daae3b957334614e9156bf0"
+    },
+    "mx-sopa-de-tortilla/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "bab552bc4a69a04174aba1c40d62b58d349288d49e5f1551e1a48bdf5f607cd8"
+    },
+    "mx-tacos-al-pastor/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a56d1c538c27e03b868a5005662bb5d2077a69e4284b45980bba864322fcdecb"
+    },
+    "mx-tacos-de-carnitas/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9c2edab7695aa5d62457e968cac0c9580ca756b53b60abcc20295c560922ae79"
+    },
+    "mx-tacos-de-pescado/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b2ce451affca98066e1b8555e05dbb2a3b05576b016a162f153ce370f8da6caf"
+    },
+    "mx-tamales-de-pollo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b43f4de807261e5751be352674eb0f5493f96b0a095988bff48077df024322b6"
+    },
+    "ni-nacatamales/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "59e6a18e6c51ad9ae29433dba64aa73595e79687bb386134cfc345eefdea8786"
+    },
+    "ni-vigoron/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "12b9463009d32ea1d4c4bbe0b5b03d0ccf7b563267f40764d58f9bdd1422ce72"
+    },
+    "pa-sancocho-panameno/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "7834ae21a5ddaa56fe3e65c320b9e350f90c6197b02facec1800094c273a0094"
+    },
+    "pr-arroz-con-gandules/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "14a8c5f330495675cee59084e478ddbb231b1ba718d309a269efbb7a7b8693bc"
+    },
+    "pr-mofongo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b9fd6519d9993cb27d7a01d90db0b9a999c6b7d49df4a8646232693c7e953e93"
+    },
+    "pr-pastelon-de-platano-maduro/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "2896824c35f32a554cb4d3fb58d08885a190e79dd7aa071a9aa4fbfc2d55c1a4"
+    },
+    "tt-callaloo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d06cda0e0b171c2dd38867d0c3cdea05282360794eae841d5bf2ef19b721cefd"
+    },
+    "tt-doubles/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "514cb52c0cf9dcdfdee1c558b731aa637b6b5f157de60a6cd85203443d036ede"
+    },
+    "tt-doubles-mit-tamarinde/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9b9d1099e8198a27b95447a4ee5fb853601796a678d02fa11b7ffd034620bd5b"
+    },
+    "tt-pelau/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1ed768027fd028182adccc223836cbbb5de373209b0b5fc5d81ace4b3bc7358a"
+    },
+    "us-apple-pie/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b5e04f7e25809cb50b6a6f1c679207f8f4755019722bd24480cc4fefe7c62f3c"
+    },
+    "us-bbq-beef-brisket/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b1d0cb3c1fa8017628320527c46c0f582ea680202fa573db0b27034c762b922f"
+    },
+    "us-biscuits-and-gravy/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "3a46138cc2b9747a486645fa5c9461974b6e7c495798a2716d0111d6e8a0943b"
+    },
+    "us-buffalo-chicken-wings/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a5dbc2d617a5bd0a9f6a39c331d063854625d660f14e1282b31049279bdba92e"
+    },
+    "us-caesar-salad-mit-hahnchen/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "30781e123cffa7d11768121c31f834c059c36495573bdec0c9a73e50c975cbac"
+    },
+    "us-cajun-jambalaya/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6e12ef1197a4483c7e8754bf55b31d070dfcf11365a08858542a7ad0f32d52e5"
+    },
+    "us-cheeseburger/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9bb666e7063edc5b205266fe76436d96d0b8aeb87d4bb28d82a1a4555c693c9d"
+    },
+    "us-clam-chowder/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "8e47207eb458700233dd95c14f0cf770343145e2ff9ddfe5c0966b679ae6ebb0"
+    },
+    "us-cobb-salad/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0489d6b53ef9e4cbf72eff2ead041f9165c6a516e3f335a833f9c16be0842a48"
+    },
+    "us-cornbread/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "cd813381dc8897761760ba89e433ebaf43fb8ddd8ab44bceac2ec8a406b1549d"
+    },
+    "us-grilled-cheese-sandwich/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1fbd098eb8532c7d1df6078808bfd0e91fd4c9f517949b2b001321d23b13b4f2"
+    },
+    "us-gumbo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "7c1b7542bc76aa2f54370596b4e42802808ae449348e1f0004116d3a3acc1ed2"
+    },
+    "us-mac-and-cheese/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "76783ad240bbefd6510895a7554a9986dcbc3670090c022a15de41d798fe2f90"
+    },
+    "us-new-england-lobster-roll/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6961573510f7bee278d964e3b9bbd8d62afe4e6d916a1833bb05c2f3ca5db608"
+    },
+    "us-pancakes-american/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b07546ee28e91b58059cc52e8a42be2cbc5426cd2e8728ede4ef2c93d9cc5f5a"
+    },
+    "us-philly-cheesesteak/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a0d6080dc18afdb746aa1f646a652b75eac3e6d5cdb5a4adc209969f900cf1f7"
+    },
+    "us-pulled-pork-sandwich/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "98544edd55dda471581618eba7aa34dc19cc237b6e74c449ece9dbdbe4585d22"
+    },
+    "us-pumpkin-pie/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9c0ab660fc2a06b63cfae315e283e912f540cc89528e98b721aab82f38796ee5"
+    },
+    "au-chicken-parmigiana-australian/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9d2c044df914018cff260e2b217caa9d36cad36d3805b8da16503bb6c8dac960"
+    },
+    "au-lamingtons/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "2746185f121901c5132ba5dd45d470e9dc6b1666a01e650b3c40922fed400072"
+    },
+    "au-meat-pie-australian/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "85fc16102b8e8d758188cf00ff7024b1a9694275e4ddadf4aa7658bf3e892cfb"
+    },
+    "ck-ika-mata/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "405916060b8c07b8d42379964b8a78b968dc951bffbceb1155108d25c65c9617"
+    },
+    "fj-kokoda/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "a7a831781a28906207b9d161f749a08b2d28bfbdfe49c7473b2c672e73fd9eff"
+    },
+    "fj-lovo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "44baeb4fe9217004eed6e50fc67355a163cb642e6cb8f7fb217896567f61b69f"
+    },
+    "nz-hangi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "371b2aaebed7ad109e49799131d2452cc52586bef54f53f6dfae3b386cfbdd4e"
+    },
+    "nz-pavlova/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f9e1c3a0fb3d494ad722213c282ec1499fa3865e185dcf6147e27e3d5c4bb466"
+    },
+    "nz-whitebait-fritters/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "2f4fbfc1b64392f3d7b8b7b95df6ea0d1f30958a4762dcb63e2707b73677e10c"
+    },
+    "pg-mumu/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ae4c1a2c6064bfb0f600ee82a900952fead642a5d051c795b01f8ec5aa1ec9ae"
+    },
+    "ws-oka-i-a/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "744b546415650b2152a3f11ddd3bdd3ed01dbc7920180a090c5aa399ba634a0b"
+    },
+    "ws-palusami/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "41a97298cc93c2b53eb3e705916c7aa568dac9f0a8442c366b1b1d13d036bdae"
+    },
+    "sb-poi/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9113a0ea11a06d549ba26733c9f96e53a593dae6b2287ee09e2960ddb27b944c"
+    },
+    "to-lu-pulu/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1000980139aa951fc21952b4c494c39c73b5d37b1ca97d635ab66c27222ef58a"
+    },
+    "vu-lap-lap/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6f5eda23c314e812b97e857ba5167e4cf340127c084801f0b3bab10a58d43181"
+    },
+    "ar-alfajores/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "6ad81c1a02ebcdfc9ef034c7c44ec02a7402eb14cccb683071f40706fefe08ab"
+    },
+    "ar-asado-argentino/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c9f3aa544fb076a1e4a1fb53b23388a502205745a1d78e9b63ef904e4bb9186a"
+    },
+    "ar-chimichurri/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "24b276b347e07a9bfaf0a1697924207c550f1cab62f338ce35fb01f1a43ffd17"
+    },
+    "ar-choripan/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "7469ec8fc4e1b04e7023def28cb5f6da6099944b9407ec00966d430d1fcde457"
+    },
+    "ar-empanadas-argentinas/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1784d7668c44adbb9b5438dd9f7ea827f08aa49f906f5caa0088981190a7d92c"
+    },
+    "ar-locro/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "2d556b021c73a068dafbda0b2cc052e8b646bb877bf8c1ef2daebff9ba8990c1"
+    },
+    "ar-milanesa-napolitana/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d9509f9c599ed848cfa06f5237faba1e76e409b28b64e5a2f63af21973b7ed01"
+    },
+    "ar-provoleta/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "010edc6407ba484874a50739d3df6d1e70ceadc82c5b203bb195ee9711e9ffcf"
+    },
+    "bo-pique-macho/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c122234389c8837adcbefe3335bbadc696c16b3c666c275816738c997dc2017f"
+    },
+    "bo-saltenas/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c855215606032e7e9958405266e31dcf30c8302c3f038282b533f0d0a02f62b2"
+    },
+    "bo-silpancho/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "0b2c7d5770a54c258996f3e3eadb3930a0b3d95990cfb8fe50b0ea48c4f4e595"
+    },
+    "bo-sopa-de-mani/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "886e119932648d3c0d28ff8a8c4347cd50af893cb2dd36eb302019aa9c50571c"
+    },
+    "br-acaraje/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c0035c54192de9dd484baa65c7af9454cfc345718b1d9d8cacfd22bcbec5a28e"
+    },
+    "br-brigadeiro/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f3c8383ec8fb080a270d5cc9172548d2bd5dcfec1d6225d55c62f346e7406091"
+    },
+    "br-churrasco/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "4088854fc9761316ee7c9361b17fcda8d35a92159c2eeda5e113505b5c929a73"
+    },
+    "br-coxinha/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "32ec51a421211737e60e38e0e345560e03c49787a43b06c4b76353318b74d930"
+    },
+    "br-feijoada/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "15f1b180c6d41d54cb05f3615f5492561caef37f26d850764b8065246fadb77a"
+    },
+    "br-moqueca-baiana/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d52ee9fccc06df32aa9d55611f552126802cca4e8983ac1c0191f2182a478dd2"
+    },
+    "br-picanha-vom-grill/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "26cddc60aafe02a28084fece89b3b70c19fb46478db03d7f9090c67841480696"
+    },
+    "br-pao-de-queijo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "07c56daaa611f041ee49d6ce40b8936875a74fbaef1df562502e47ff6f26fdb5"
+    },
+    "br-vatapa/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e9c08a4461dc3d6e4651a8035c627e4df4a812b6d8214b91eeb7d1fdf1d0c0e3"
+    },
+    "cl-cazuela-chilena/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "24b59791b0b0f50ced754379b296a5de4d926c4b3bb644a8335addebfa3818a7"
+    },
+    "cl-curanto/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "5c9460efa153cc5f488590b451defd3c186c5ff81e5dd364cba3ca30b36d41a0"
+    },
+    "cl-humitas-chilenas/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "cb81313fac45bba2a4cc9b4e7fa2e15090bd241b4df037147c041c5725b00c5d"
+    },
+    "cl-pastel-de-choclo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "1bb63ee222e25dd6b394150b8e5714bfe22f5bb075846625d42cca964708e2c9"
+    },
+    "cl-sopaipillas/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c418385726846fd3932d56dacaafba1c4a87bab840cb4b4d45ecf5a419956e5d"
+    },
+    "co-ajiaco-bogotano/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "bb3aa21c6f014e50f9910b7ad7152805c71eadaee199004d4ed851d0321700e8"
+    },
+    "co-arepas-mit-kase/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d45d0bfaeee0f574832a03136d8f5045946807f26efa878ec377582ae21d9e33"
+    },
+    "co-bandeja-paisa/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "32bdfe24aa215e3bdfe8e336c54cc755f67321b64551fdc515baf15030c173be"
+    },
+    "co-changua/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "fe6bb287a0c538af2f61a25a71f7f05cf13c4a6824c29f4d2f33f78bab92dd10"
+    },
+    "co-patacones/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e65c6c7dd06d80f41a05d8ac5ce0e97ab5dbfa321314019879bb48eb02d3ee0b"
+    },
+    "co-sancocho-colombiano/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ac2038d8b45eacbc2f14147a7129ee641180085f8fa2394d8e482fb1c2eb159a"
+    },
+    "ec-encebollado/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "e1d534105c00bb3d846516d5cd60861fab3d02527d50ed7258a9a75429191d4f"
+    },
+    "ec-hornado/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "2de390aeff730d16920cdb223bf06ccfca8351972b1ec62cccfb331762275270"
+    },
+    "ec-llapingachos/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "ef33bd6e8406579f952e0270a370c4d9e8f2361227ef631167055fdacacf3fcd"
+    },
+    "py-chipa/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f0c023d6b1255b0c263bfdde0ab78ec1a169beacc8be04be029b6fbdf4f814ac"
+    },
+    "py-mbeju/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "87bd7930045f50ec04e5a178fe06674139702078db6705226a4e3f37149df22e"
+    },
+    "py-sopa-paraguaya/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "768955da8400b90a13285430374aa1f6f6bcd51d711758344ae05b1459ad4e9e"
+    },
+    "pe-aji-de-gallina/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "3214b24f8ff65c05f1012484250cf83d442ad9a6a33827106dbf07e5d54679b2"
+    },
+    "pe-anticuchos/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "b665464d95798096bb278290ce7ecb915156e4f0adb79f63513c5d4c11873bbf"
+    },
+    "pe-arroz-chaufa/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "9de493cb041e9b2b173a78ed2407741693a57e2d9a9295c5f6a6c13c690d65c8"
+    },
+    "pe-causa-limena/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "82d4771897d5f5bfe5509799670302415548c9692dd131de466d2613301bf2f5"
+    },
+    "pe-ceviche-peruano/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "91d299b8408060c331e4906c2bc2bd126ffce3ec9b799e5dcafa75ff7906e3cf"
+    },
+    "pe-lomo-saltado/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "4ef89e52a2c6043f215c679e2797f48376f739fc87a45e0e2dfcad1733ca8327"
+    },
+    "pe-papa-a-la-huancaina/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "3f819c2195b2c04a2a38b4f68e0e4a0895d71b7ed0570fbde34a82170bd233e7"
+    },
+    "uy-chaja/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "c30e16442a7b5e19f848750f098555d40a27e1d8967930f64d0a54059a47d36d"
+    },
+    "uy-chivito/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "aa3d1444244681b3f55a42815253803964b5b6eea41810c9bfca364b52a0d7ec"
+    },
+    "ve-cachapa/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "95d0f0e170e261afafa1b3b1c166f92dc7250aa07a62ad70824bedb3e3a3ca8e"
+    },
+    "ve-hallacas/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "bb2a80f0ba0f11a861163ecccc4b0301d492db17379b222355381771b6360eeb"
+    },
+    "ve-pabellon-criollo/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "f4f428189173768fe0250f8137ab2b15eaf6bae2b3804314be2f1bb3355ff9d9"
+    },
+    "ve-tequenos/image_01.webp": {
+      "author": "",
+      "license": "",
+      "source_url": "",
+      "license_url": "",
+      "credit": "",
+      "rights_status": "pending",
+      "sha256": "d8f2c7136d89a0979ae22950253b55af0cd231e3d7a91b835ad9a49a84052001"
+    }
+  }
+}

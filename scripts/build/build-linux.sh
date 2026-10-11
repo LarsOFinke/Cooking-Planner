@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$project_root"
+
+mvn -f backend/pom.xml package
+mkdir -p build
+cp backend/target/cooking-planner-api-0.1.0.jar build/backend.jar
+bash scripts/build/build-wheel.sh
+
+shopt -s nullglob
+wheels=(dist/wheels/cooking_planner_desktop-0.1.0-*.whl)
+if (( ${#wheels[@]} != 1 )); then
+    echo "Expected one Cooking Planner wheel in dist/wheels" >&2
+    exit 1
+fi
+"$project_root/.build-venv/bin/python" -m pip install --no-deps --force-reinstall "${wheels[0]}"
+
+runtime_dir="build/runtime-linux"
+rm -rf -- "$runtime_dir"
+jlink --add-modules ALL-MODULE-PATH --strip-debug --no-header-files --no-man-pages --output "$runtime_dir"
+mkdir -p dist/linux
+"$project_root/.build-venv/bin/python" -m PyInstaller --noconfirm --clean --onefile --windowed \
+    --name CookingPlanner --distpath dist/linux --workpath build/pyinstaller-linux --specpath build \
+    --add-binary "$runtime_dir:runtime" \
+    --add-data "build/backend.jar:." \
+    --add-data "data:catalogs" \
+    scripts/build/frozen_entry.py
+echo "Built dist/linux/CookingPlanner"

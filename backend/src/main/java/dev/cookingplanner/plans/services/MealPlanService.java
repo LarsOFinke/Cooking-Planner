@@ -16,19 +16,19 @@ public class MealPlanService {
     private final MealPlanRepository plans;
     private final RecipeRepository recipes;
     public MealPlanService(MealPlanRepository plans, RecipeRepository recipes) { this.plans = plans; this.recipes = recipes; }
-    public List<MealPlan> list(LocalDate from, LocalDate to) {
+    public List<MealPlan> list(LocalDate from, LocalDate to, String locale) {
         if (to.isBefore(from) || ChronoUnit.DAYS.between(from, to) > 62) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Date range must be at most 62 days");
-        return plans.findBetween(from, to).stream().map(this::withTitle).toList();
+        return plans.findBetween(from, to).stream().map(plan -> withTitle(plan, locale)).toList();
     }
     public MealPlan save(MealPlanInput input) {
-        if (recipes.findById(input.recipeId()).isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found");
-        return withTitle(plans.save(input));
+        if (!recipes.exists(input.recipeId())) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found");
+        return withTitle(plans.save(input), "en");
     }
     public void delete(long id) {
         if (plans.delete(id) == 0) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Plan not found");
     }
-    private MealPlan withTitle(MealPlan plan) {
-        String title = recipes.findById(plan.recipeId()).map(recipe -> recipe.title()).orElse("Missing recipe");
-        return new MealPlan(plan.id(), plan.date(), plan.mealType(), plan.recipeId(), title);
+    private MealPlan withTitle(MealPlan plan, String locale) {
+        String title = recipes.findById(locale, plan.recipeId()).map(recipe -> recipe.name()).orElse("Missing recipe");
+        return new MealPlan(plan.id(), plan.date(), plan.mealType(), plan.recipeId(), plan.servings(), title);
     }
 }

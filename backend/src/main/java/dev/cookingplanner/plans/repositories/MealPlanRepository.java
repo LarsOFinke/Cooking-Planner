@@ -15,7 +15,11 @@ public class MealPlanRepository {
     private static final String FILE = "plans.json";
     private final JsonFileStore store;
     public MealPlanRepository(JsonFileStore store) { this.store = store; }
-    private List<MealPlan> read() { return store.read(FILE, new TypeReference<List<MealPlan>>() {}, List.of()); }
+    private List<MealPlan> read() {
+        return store.read(FILE, new TypeReference<List<MealPlan>>() {}, List.of()).stream()
+            .map(plan -> new MealPlan(plan.id(), plan.date(), plan.mealType(), plan.recipeId(),
+                plan.servings() < 1 ? 1 : plan.servings(), plan.recipeTitle())).toList();
+    }
     public synchronized List<MealPlan> findBetween(LocalDate from, LocalDate to) {
         return read().stream().filter(p -> !p.date().isBefore(from) && !p.date().isAfter(to))
             .sorted(Comparator.comparing(MealPlan::date).thenComparing(MealPlan::mealType)).toList();
@@ -25,7 +29,7 @@ public class MealPlanRepository {
         MealPlan existing = plans.stream().filter(p -> p.date().equals(input.date()) && p.mealType() == input.mealType()).findFirst().orElse(null);
         long id = existing == null ? plans.stream().mapToLong(MealPlan::id).max().orElse(0) + 1 : existing.id();
         plans.removeIf(p -> p.date().equals(input.date()) && p.mealType() == input.mealType());
-        MealPlan plan = new MealPlan(id, input.date(), input.mealType(), input.recipeId(), "");
+        MealPlan plan = new MealPlan(id, input.date(), input.mealType(), input.recipeId(), input.servings(), "");
         plans.add(plan); store.write(FILE, plans); return plan;
     }
     public synchronized int delete(long id) {
@@ -33,5 +37,4 @@ public class MealPlanRepository {
         if (!plans.removeIf(p -> p.id() == id)) return 0;
         store.write(FILE, plans); return 1;
     }
-    public synchronized boolean hasRecipe(long recipeId) { return read().stream().anyMatch(p -> p.recipeId() == recipeId); }
 }

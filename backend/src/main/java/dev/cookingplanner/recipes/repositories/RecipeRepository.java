@@ -1,74 +1,124 @@
 package dev.cookingplanner.recipes.repositories;
 
-import dev.cookingplanner.recipes.dtos.RecipeInput;
+import dev.cookingplanner.recipes.RecipeLocale;
+import dev.cookingplanner.recipes.entities.CatalogInfo;
 import dev.cookingplanner.recipes.entities.Recipe;
-import dev.cookingplanner.shared.JsonFileStore;
+import dev.cookingplanner.recipes.mappers.CatalogMapper;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
-import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 @Repository
 public class RecipeRepository {
-    private final JsonFileStore store;
-    public RecipeRepository(JsonFileStore store) { this.store = store; }
+    private record Catalog(FileTime modified, long editRevision, List<Recipe> recipes,
+        Map<String, Recipe> byId, Map<String, JsonNode> rawById, CatalogInfo info) {}
+    private final Path directory;
+    private final ObjectMapper json;
+    private final CatalogMapper mapper;
+    private final RecipeEditRepository edits;
+    private final Map<String, Catalog> cache = new HashMap<>();
 
-    private String file(String locale) { return "recipes_" + locale + ".json"; }
-    private String readableFile(String locale) {
-        // Existing V1 installations used recipes.json for English recipes.
-        if (locale.equals("en") && !store.fileNames().contains(file("en")) && store.fileNames().contains("recipes.json")) return "recipes.json";
-        return file(locale);
+    public RecipeRepository(@Value("${cooking-planner.catalog-dir}") String directory, ObjectMapper json,
+        CatalogMapper mapper, RecipeEditRepository edits) {
+        this.directory = Path.of(directory).toAbsolutePath(); this.json = json; this.mapper = mapper; this.edits = edits;
     }
-    private List<Recipe> read(String locale) {
-        return store.read(readableFile(locale), new TypeReference<List<Recipe>>() {}, List.of()).stream()
-            .map(recipe -> new Recipe(recipe.id(), recipe.title(), recipe.category(), recipe.ingredients(),
-                recipe.instructions(), recipe.prepMinutes(), locale)).toList();
+    public List<String> locales() {
+        if (!Files.isDirectory(directory)) return List.of();
+        try (var paths = Files.list(directory)) {
+            return paths.map(path -> path.getFileName().toString())
+                .filter(name -> name.matches("recipes_[a-z]{2}\\.json"))
+                .map(name -> name.substring(8, 10)).sorted().toList();
+        } catch (IOException e) { throw new IllegalStateException("Could not list recipe catalogs", e); }
     }
-    public synchronized List<String> locales() {
-        Set<String> locales = new TreeSet<>();
-        for (String name : store.fileNames()) {
-            if (name.matches("recipes_[a-z]{2}\\.json")) locales.add(name.substring(8, 10));
-            if (name.equals("recipes.json")) locales.add("en");
+    private synchronized Catalog catalog(String language) {
+        String locale = RecipeLocale.normalize(language);
+        Path file = directory.resolve("recipes_" + locale + ".json");
+        if (!Files.isRegularFile(file)) throw new IllegalArgumentException("Recipe language unavailable: " + locale);
+        try {
+            FileTime modified = Files.getLastModifiedTime(file);
+            Catalog cached = cache.get(locale);
+            long revision = edits.revision();
+            if (cached != null && cached.modified().equals(modified) && cached.editRevision() == revision) return cached;
+            if (Files.size(file) > 8_000_000) throw new IllegalStateException("Recipe catalog is too large: " + file);
+            JsonNode root = json.readTree(Files.readAllBytes(file));
+            JsonNode metadata = root.path("metadata");
+            if (!"1.1.0".equals(metadata.path("schema_version").asString()) ||
+                !locale.equals(metadata.path("language").asString())) {
+                throw new IllegalStateException("Unsupported or mismatched recipe catalog: " + file);
+            }
+            JsonNode rows = root.path("recipes");
+            if (!rows.isArray()) throw new IllegalStateException("Missing recipes array: " + file);
+            Map<String, JsonNode> raw = new LinkedHashMap<>();
+            List<Recipe> recipes = new ArrayList<>();
+            Map<String, Recipe> byId = new HashMap<>();
+            for (JsonNode row : rows) {
+                Recipe recipe = mapper.recipe(row, locale);
+                if (recipe.id().isBlank() || recipe.name().isBlank() || recipe.ingredients().isEmpty() ||
+                    byId.putIfAbsent(recipe.id(), recipe) != null) {
+                    throw new IllegalStateException("Invalid or duplicate recipe in " + file);
+                }
+                recipes.add(recipe);
+                raw.put(recipe.id(), row);
+            }
+            if (metadata.path("recipe_count").asInt(-1) != recipes.size())
+                throw new IllegalStateException("Recipe count does not match metadata: " + file);
+            var changes = edits.snapshot();
+            changes.deleted().forEach(raw::remove);
+            for (var entry : changes.upserts().entrySet()) {
+                if (!entry.getValue().containsKey(locale)) continue;
+                JsonNode translated = entry.getValue().get(locale);
+                if (translated == null || translated.isNull()) raw.remove(entry.getKey());
+                else raw.put(entry.getKey(), translated);
+            }
+            recipes = new ArrayList<>();
+            byId = new HashMap<>();
+            for (JsonNode row : raw.values()) {
+                Recipe recipe = mapper.recipe(row, locale);
+                if (recipe.id().isBlank() || recipe.name().isBlank() || recipe.ingredients().isEmpty() ||
+                    byId.putIfAbsent(recipe.id(), recipe) != null) {
+                    throw new IllegalStateException("Invalid edited recipe in " + locale);
+                }
+                recipes.add(recipe);
+            }
+            var baseInfo = mapper.info(metadata, locale, recipes.size());
+            int countries = (int) raw.values().stream().map(row -> row.path("country_code").asString())
+                .filter(code -> !code.isBlank()).distinct().count();
+            int regions = (int) raw.values().stream().map(row -> row.path("region_code").asString())
+                .filter(code -> !code.isBlank()).distinct().count();
+            CatalogInfo info = new CatalogInfo(locale, baseInfo.dataset(), recipes.size(), countries, regions,
+                baseInfo.quantityNote(), baseInfo.dietNote(), baseInfo.originNote(), baseInfo.quality());
+            Catalog loaded = new Catalog(modified, revision, List.copyOf(recipes), Map.copyOf(byId), Map.copyOf(raw), info);
+            cache.put(locale, loaded);
+            return loaded;
+        } catch (IOException e) { throw new IllegalStateException("Could not read recipe catalog: " + file, e); }
+    }
+    public List<Recipe> findAll(String locale) { return catalog(locale).recipes(); }
+    public CatalogInfo info(String locale) { return catalog(locale).info(); }
+    public Optional<JsonNode> raw(String locale, String id) { return Optional.ofNullable(catalog(locale).rawById().get(id)); }
+    public List<JsonNode> rawAll(String locale) { return List.copyOf(catalog(locale).rawById().values()); }
+    public List<String> ids() {
+        return locales().stream().flatMap(locale -> catalog(locale).rawById().keySet().stream()).distinct().sorted().toList();
+    }
+    public Optional<Recipe> findById(String locale, String id) {
+        String normalized = RecipeLocale.normalize(locale);
+        if (locales().contains(normalized)) {
+            Recipe recipe = catalog(normalized).byId().get(id);
+            if (recipe != null) return Optional.of(recipe);
         }
-        if (locales.isEmpty()) locales.add("en");
-        return List.copyOf(locales);
+        return Optional.empty();
     }
-    public synchronized List<Recipe> findAll(String locale) {
-        return read(locale).stream().sorted(Comparator.comparing(Recipe::category, String.CASE_INSENSITIVE_ORDER)
-            .thenComparing(Recipe::title, String.CASE_INSENSITIVE_ORDER)).toList();
-    }
-    public synchronized Optional<Recipe> findById(long id) {
-        return locales().stream().flatMap(locale -> read(locale).stream()).filter(recipe -> recipe.id() == id).findFirst();
-    }
-    public synchronized Recipe create(String locale, RecipeInput input) { return importAll(locale, List.of(input)).getFirst(); }
-    public synchronized List<Recipe> importAll(String locale, List<RecipeInput> inputs) {
-        List<Recipe> recipes = new ArrayList<>(read(locale));
-        long nextId = locales().stream().flatMap(language -> read(language).stream()).mapToLong(Recipe::id).max().orElse(0) + 1;
-        List<Recipe> added = new ArrayList<>();
-        for (RecipeInput input : inputs) {
-            Recipe recipe = new Recipe(nextId++, input.title().trim(), input.category().trim(),
-                List.copyOf(input.ingredients()), input.instructions().trim(), input.prepMinutes(), locale);
-            recipes.add(recipe); added.add(recipe);
-        }
-        store.write(file(locale), recipes);
-        return added;
-    }
-    public synchronized Recipe update(long id, RecipeInput input) {
-        Recipe existing = findById(id).orElseThrow(() -> new IllegalArgumentException("Recipe not found"));
-        List<Recipe> recipes = new ArrayList<>(read(existing.locale()));
-        Recipe updated = new Recipe(id, input.title().trim(), input.category().trim(), List.copyOf(input.ingredients()), input.instructions().trim(), input.prepMinutes(), existing.locale());
-        recipes.removeIf(recipe -> recipe.id() == id);
-        recipes.add(updated); store.write(file(existing.locale()), recipes); return updated;
-    }
-    public synchronized void delete(long id) {
-        Optional<Recipe> existing = findById(id);
-        if (existing.isEmpty()) return;
-        String locale = existing.get().locale();
-        List<Recipe> recipes = new ArrayList<>(read(locale));
-        if (recipes.removeIf(recipe -> recipe.id() == id)) store.write(file(locale), recipes);
+    public boolean exists(String id) {
+        return locales().stream().anyMatch(locale -> catalog(locale).byId().containsKey(id));
     }
 }

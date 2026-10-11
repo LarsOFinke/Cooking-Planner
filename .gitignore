@@ -1,11 +1,16 @@
 .venv/
+.venv-dev-linux/
+.venv-dev-windows/
+.build-venv/
+*.egg-info/
 __pycache__/
 *.pyc
 target/
 dist/
-build/
+/build/
 *.spec
 *.db
 *.db-*
 .idea/
+.kivy/
 

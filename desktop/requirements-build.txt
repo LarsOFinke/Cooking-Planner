@@ -1,0 +1,4 @@
+build>=1.2,<2
+PyInstaller>=6.18,<7
+setuptools>=75
+wheel>=0.44

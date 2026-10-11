@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from cooking_planner.RecipeLocale import locale_from_filename
+from cooking_planner.recipes.locale import locale_from_filename
 
 
 class RecipeLocaleTest(unittest.TestCase):
