@@ -4,9 +4,11 @@ import webbrowser
 
 from kivy.clock import Clock
 from kivy.metrics import dp
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 
 from cooking_planner.recipes.images import attributions, image_file
+from cooking_planner.ui.dialogs import styled_popup
 from cooking_planner.ui.theme import (GOLD, MUTED, PANEL, WHITE, box, button, field,
                                       label, scroll_view, set_tab_active, spinner, tab_button)
 from cooking_planner.ui.strings import t
@@ -39,58 +41,67 @@ class RecipeBrowser:
 
     def _build_filters(self) -> None:
         outer = box(padding=6, spacing=4, color=PANEL, size_hint_y=None, height=dp(50))
-        self.filter_outer = outer
         search_row = box(False, spacing=6, size_hint_y=None, height=dp(38))
         self.search = field(t(self.locale, "search"), height=38)
         self.search.bind(text=self._search_changed)
         search_row.add_widget(self.search)
         search_row.add_widget(button(t(self.locale, "surprise"), self.surprise, "primary",
                                      size_hint_x=None, width=dp(125), height=38))
-        search_row.add_widget(button(t(self.locale, "clear"), self.clear_filters,
-                                     size_hint_x=None, width=dp(110), height=38))
         self.filter_toggle = button(t(self.locale, 'filters'), self.toggle_filters,
-                                    size_hint_x=None, width=dp(95), height=38)
+                                    size_hint_x=None, width=dp(115), height=38)
         search_row.add_widget(self.filter_toggle)
         outer.add_widget(search_row)
-        scroll = scroll_view(do_scroll_y=False, size_hint_y=None, height=0,
-                             opacity=0, disabled=True)
-        self.filter_panel = scroll
-        row = box(False, spacing=10, size_hint_x=None, width=dp(960))
+        self.root.add_widget(outer)
+
+        body = box(padding=12, spacing=10, color=PANEL)
+        scroll = scroll_view(do_scroll_x=False)
+        grid = GridLayout(cols=2, spacing=dp(10), padding=dp(3), size_hint_y=None)
+        grid.bind(minimum_height=grid.setter('height'))
+        scroll.bind(width=lambda _, width: setattr(grid, 'cols', 2 if width >= dp(340) else 1))
         self.filters = {}
         for key, property_name in (("category", "categoryLabel"), ("continent", "continent"),
                                    ("diet", "dietTypeLabel"), ("difficulty", "difficultyLabel")):
-            group = box(spacing=4, size_hint_x=None, width=dp(150))
-            group.add_widget(label(t(self.locale, key), 12, MUTED, 20))
+            group = box(spacing=4, size_hint_y=None, height=dp(72))
+            group.add_widget(label(t(self.locale, key), 13, WHITE, 22, True))
             values = sorted({recipe[property_name] for recipe in self.recipes if recipe[property_name]})
             widget = spinner(t(self.locale, "all"), (t(self.locale, "all"), *values))
             widget.bind(text=lambda *_: self._filter_changed())
             self.filters[key] = (widget, property_name)
             group.add_widget(widget)
-            row.add_widget(group)
-        time_group = box(spacing=4, size_hint_x=None, width=dp(130))
-        time_group.add_widget(label(t(self.locale, "time"), 12, MUTED, 20))
+            grid.add_widget(group)
+        time_group = box(spacing=4, size_hint_y=None, height=dp(72))
+        time_group.add_widget(label(t(self.locale, "time"), 13, WHITE, 22, True))
         self.time_filter = spinner(t(self.locale, "all"),
                                    (t(self.locale, "all"), "≤ 30 min", "≤ 60 min", "≤ 120 min"))
         self.time_filter.bind(text=lambda *_: self._filter_changed())
         time_group.add_widget(self.time_filter)
-        row.add_widget(time_group)
-        sort_group = box(spacing=4, size_hint_x=None, width=dp(140))
-        sort_group.add_widget(label(t(self.locale, "sort"), 12, MUTED, 20))
+        grid.add_widget(time_group)
+        sort_group = box(spacing=4, size_hint_y=None, height=dp(72))
+        sort_group.add_widget(label(t(self.locale, "sort"), 13, WHITE, 22, True))
         self.sort = spinner(t(self.locale, "name"),
                             (t(self.locale, "name"), t(self.locale, "shortest"), t(self.locale, "country")))
         self.sort.bind(text=lambda *_: self._filter_changed())
         sort_group.add_widget(self.sort)
-        row.add_widget(sort_group)
-        scroll.add_widget(row)
-        outer.add_widget(scroll)
-        self.root.add_widget(outer)
+        grid.add_widget(sort_group)
+        scroll.add_widget(grid)
+        body.add_widget(scroll)
+        actions = box(False, spacing=8, size_hint_y=None, height=dp(40))
+        actions.add_widget(button(t(self.locale, 'clear'), self.clear_filters, height=40))
+        actions.add_widget(button(t(self.locale, 'close'), self.close_filters, 'primary', height=40))
+        body.add_widget(actions)
+        self.filter_dialog = styled_popup(t(self.locale, 'filters'), body, 0.74, 0.78)
+        self.filter_dialog.bind(on_dismiss=lambda *_: setattr(self, 'filters_open', False))
 
     def toggle_filters(self) -> None:
-        self.filters_open = not self.filters_open
-        self.filter_outer.height = dp(98 if self.filters_open else 50)
-        self.filter_panel.height = dp(42 if self.filters_open else 0)
-        self.filter_panel.opacity = int(self.filters_open)
-        self.filter_panel.disabled = not self.filters_open
+        if self.filters_open:
+            self.close_filters()
+        else:
+            self.filters_open = True
+            self.filter_dialog.open()
+
+    def close_filters(self) -> None:
+        self.filter_dialog.dismiss()
+        self.filters_open = False
 
     def _build_results(self) -> None:
         center = box(padding=7, spacing=5, color=PANEL, size_hint_x=0.36)
@@ -148,6 +159,10 @@ class RecipeBrowser:
 
     def _filter_changed(self) -> None:
         self.page = 0
+        active = sum(widget.text != t(self.locale, 'all') for widget, _ in self.filters.values())
+        active += self.time_filter.text != t(self.locale, 'all')
+        active += self.sort.text != t(self.locale, 'name')
+        self.filter_toggle.text = f"{t(self.locale, 'filters')} ({active})" if active else t(self.locale, 'filters')
         self.refresh()
 
     def _filtered(self) -> list[dict]:
