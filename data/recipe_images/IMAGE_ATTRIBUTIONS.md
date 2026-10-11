@@ -3,589 +3,589 @@
 Bitte prüfe vor Veröffentlichung die Lizenzbedingungen jedes einzelnen Bildes.
 Bildnachweise müssen auch in deiner App sichtbar sein, falls die Lizenz das verlangt.
 
-- **Algerischer Couscous** · `dz-algerischer-couscous/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Chorba Frik (Weizengrützensuppe)** · `dz-chorba-frik/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Makroud** · `dz-makroud/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Seswaa** · `bw-seswaa/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ndolé** · `cm-ndole/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Poulet DG** · `cm-poulet-dg/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Attiéké mit Fisch** · `ci-attieke-mit-fisch/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kedjenou** · `ci-kedjenou/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Falafel** · `eg-falafel/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ful Medames** · `eg-ful-medames/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Koshari** · `eg-koshari/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Molokhia** · `eg-molokhia/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Doro Wot** · `et-doro-wot/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Injera** · `et-injera/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kitfo** · `et-kitfo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Misir Wot** · `et-misir-wot/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Shiro Wot** · `et-shiro-wot/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tibs** · `et-tibs/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Erdnusseintopf** · `gm-groundnut-stew/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Fufu mit Erdnusssuppe** · `gh-fufu-mit-erdnusssuppe/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Red Red** · `gh-red-red/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Waakye** · `gh-waakye/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Nyama Choma** · `ke-nyama-choma/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ugali mit Sukuma Wiki** · `ke-ugali-mit-sukuma-wiki/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ravitoto** · `mg-ravitoto/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Romazava** · `mg-romazava/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Dholl Puri** · `mu-dholl-puri/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Rougaille Saucisse** · `mu-rougaille-saucisse/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gemüse-Couscous** · `ma-couscous-mit-gemuse/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Harira** · `ma-harira/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Rfissa** · `ma-rfissa/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lamm-Tajine mit Pflaumen** · `ma-tajine-mit-lamm-und-pflaumen/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Zaalouk** · `ma-zaalouk/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kapana** · `na-kapana/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Efo Riro** · `ng-efo-riro/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Egusi-Suppe** · `ng-egusi-soup/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Jollof-Reis** · `ng-jollof-rice/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Moi Moi** · `ng-moi-moi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Suya** · `ng-suya/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Isombe** · `rw-isombe/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Mafé** · `sn-mafe/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Thieboudienne** · `sn-thieboudienne/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Hähnchen-Yassa** · `sn-yassa-poulet/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Seychellisches Oktopuscurry** · `sc-octopus-curry-seychelles/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Poisson Sale Rougaille** · `sc-poisson-sale-rougaille/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bobotie** · `za-bobotie/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Chakalaka** · `za-chakalaka/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pap mit Boerewors** · `za-pap-mit-wors/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Potjiekos** · `za-potjiekos/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ostafrikanischer Pilau** · `tz-pilau-ostafrika/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Sansibar-Fischcurry** · `tz-zanzibar-fish-curry/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lablabi** · `tn-lablabi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Shakshuka** · `tn-shakshuka/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Luwombo** · `ug-luwombo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Matoke** · `ug-matoke/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Nshima mit Ifisashi** · `zm-nshima-mit-ifisashi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Sadza mit Rinderragout** · `zw-sadza-mit-rinderragout/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ashak** · `af-ashak/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bolani Kachalu** · `af-bolani-kachalu/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kabuli Pulao** · `af-kabuli-pulao/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Mantu** · `af-mantu/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Armenische Dolma** · `am-dolma-armenisch/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ghapama** · `am-ghapama/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Armenische Harissa (Weizenbrei mit Fleisch)** · `am-harissa-armenisch/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Zhingyalov Hats** · `am-zhingyalov-hats/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Dovga** · `az-dovga/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Dushbara** · `az-dushbara/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kräuter-Qutab** · `az-qutab-mit-krautern/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Shah Plov** · `az-shah-plov/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bahrainisches Tikka** · `bh-bahraini-tikka/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Muhammar** · `bh-muhammar/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bengalisches Fischcurry** · `bd-bengali-fish-curry/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bhuna Khichuri** · `bd-bhuna-khichuri/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Khichuri** · `bd-khichuri/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ema Datshi** · `bt-ema-datshi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Jasha Maroo** · `bt-jasha-maroo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kewa Datshi** · `bt-kewa-datshi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Amok Trey** · `kh-amok-trey/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lok Lak** · `kh-lok-lak/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Chow Mein** · `cn-chow-mein/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Congee** · `cn-congee/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Dan-Dan-Nudeln** · `cn-dan-dan-noodles/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Sichuan-Feuertopf** · `cn-hot-pot-sichuan/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Jiaozi** · `cn-jiaozi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kung-Pao-Hähnchen** · `cn-kung-pao-chicken/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Vegane Mapo-Aubergine** · `cn-ma-po-aubergine-vegan/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Mapo Tofu** · `cn-mapo-tofu/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pekingente** · `cn-peking-duck/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Chinesische Frühlingszwiebel-Pfannkuchen** · `cn-scallion-pancakes/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Schweinefleisch süß-sauer** · `cn-sweet-and-sour-pork/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gebratene Tomaten mit Ei** · `cn-tomato-egg-stir-fry/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Wan-Tan-Suppe** · `cn-wonton-soup/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Xiao Long Bao** · `cn-xiao-long-bao/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Yangzhou-Bratreis** · `cn-yangzhou-fried-rice/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Aloo Gobi** · `in-aloo-gobi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Aloo Paratha** · `in-aloo-paratha/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Baingan Bharta (Auberginencurry)** · `in-baingan-bharta/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Butterhähnchen (Butter Chicken)** · `in-butter-chicken/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Chana Masala** · `in-chana-masala/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Hähnchen-Biryani** · `in-chicken-biryani/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Chole Bhature** · `in-chole-bhature/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Dal Makhani** · `in-dal-makhani/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Dal Tadka** · `in-dal-tadka/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gulab Jamun** · `in-gulab-jamun/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Vegetarisches Hyderabadi-Biryani** · `in-hyderabadi-veg-biryani/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Idli mit Sambar** · `in-idli-mit-sambar/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Keema Matar** · `in-keema-matar/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kheer** · `in-kheer/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Masala Dosa** · `in-masala-dosa/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Naan** · `in-naan/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pakora** · `in-pakora/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Palak Paneer** · `in-palak-paneer/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Paneer in Butter-Masala-Sauce** · `in-paneer-butter-masala/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pav Bhaji** · `in-pav-bhaji/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Poha** · `in-poha/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Rajma Chawal** · `in-rajma-chawal/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Rogan Josh** · `in-rogan-josh/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Saag Aloo** · `in-saag-aloo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Samosa** · `in-samosa/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tandoori-Hähnchen** · `in-tandoori-chicken/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Upma** · `in-upma/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bakso** · `id-bakso/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gado Gado** · `id-gado-gado/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Mie Goreng (gebratene Nudeln)** · `id-mie-goreng/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Nasi Goreng** · `id-nasi-goreng/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Rendang** · `id-rendang/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Satay Ayam** · `id-satay-ayam/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Sayur Lodeh** · `id-sayur-lodeh/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Soto Ayam (Hähnchensuppe)** · `id-soto-ayam/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ash Reshteh** · `ir-ash-reshteh/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Dizi Abgoosht** · `ir-dizi-abgoosht/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Fesenjan** · `ir-fesenjan/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ghormeh Sabzi** · `ir-ghormeh-sabzi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kuku Sabzi** · `ir-kuku-sabzi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tahdig** · `ir-tahdig/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Zereshk Polo** · `ir-zereshk-polo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Dolma** · `iq-dolma/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Masgouf** · `iq-masgouf/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tepsi Baytinijan** · `iq-tepsi-baytinijan/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Jerusalemer Grill-Mix** · `il-jerusalem-mixed-grill/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Malawach** · `il-malawach/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Sabich** · `il-sabich/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Teriyaki-Hähnchen** · `jp-chicken-teriyaki/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gyudon** · `jp-gyudon/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Katsu-Curry** · `jp-katsu-curry/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Misosuppe** · `jp-miso-soup/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Okonomiyaki** · `jp-okonomiyaki/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Onigiri mit Umeboshi** · `jp-onigiri-umeboshi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Oyakodon** · `jp-oyakodon/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Shoyu-Ramen** · `jp-ramen-shoyu/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Soba mit Sesam** · `jp-soba-mit-sesam/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lachs-Maki-Sushi** · `jp-sushi-maki-lachs/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Takoyaki** · `jp-takoyaki/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gemüse-Tempura** · `jp-tempura-gemuse/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tonkatsu** · `jp-tonkatsu/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Udon-Nudelsuppe** · `jp-udon-noodle-soup/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Yakisoba** · `jp-yakisoba/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Mansaf** · `jo-mansaf/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Beshbarmak** · `kz-beshbarmak/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Machboos** · `kw-machboos/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kuurdak** · `kg-kuurdak/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lagman** · `kg-lagman/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Laap** · `la-laap/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tam Mak Hoong (Papayasalat)** · `la-tam-mak-hoong/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Baba Ghanoush (Auberginencreme)** · `lb-baba-ganoush/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Fattoush** · `lb-fattoush/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Hummus** · `lb-hummus/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kibbeh** · `lb-kibbeh/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Manakish mit Za'atar** · `lb-manakish-zaatar/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Mujadara** · `lb-mujadara/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tabbouleh** · `lb-tabbouleh/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Char Kway Teow** · `my-char-kway-teow/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Laksa Lemak** · `my-laksa-lemak/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Nasi Lemak** · `my-nasi-lemak/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Roti Canai** · `my-roti-canai/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bansh-Suppe** · `mn-bansh-soup/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Buuz** · `mn-buuz/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Khuushuur** · `mn-khuushuur/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tsuivan** · `mn-tsuivan/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lahpet Thoke** · `mm-lahpet-thoke/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Mohinga** · `mm-mohinga/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ohn No Khao Swe** · `mm-ohn-no-khao-swe/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Dal Bhat** · `np-dal-bhat/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Momo mit Fleisch** · `np-momo-mit-fleisch/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Momo mit Gemüse** · `np-momo-mit-gemuse/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Thukpa** · `np-thukpa/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Omanisches Mashuai (gegrillter Fisch)** · `om-omani-mashuai/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Shuwa** · `om-shuwa/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Aloo Keema** · `pk-aloo-keema/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Hähnchen-Karahi** · `pk-chicken-karahi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Haleem** · `pk-haleem/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Nihari** · `pk-nihari/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Paya** · `pk-paya/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Maqluba** · `ps-maqluba/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Musakhan** · `ps-musakhan/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Hähnchen-Adobo** · `ph-adobo-chicken/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Hähnchen-Inasal** · `ph-chicken-inasal/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kare-Kare (philippinischer Erdnusseintopf)** · `ph-kare-kare/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lechon Kawali** · `ph-lechon-kawali/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lumpia Shanghai** · `ph-lumpia-shanghai/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pancit Canton** · `ph-pancit-canton/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Sinigang mit Schweinefleisch** · `ph-sinigang-na-baboy/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Balaleet** · `qa-balaleet/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Thareed** · `qa-thareed/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kabsa** · `sa-kabsa/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Chilikrabbe** · `sg-chili-crab/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Hainan-Hähnchenreis** · `sg-hainanese-chicken-rice/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bibimbap** · `kr-bibimbap/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bulgogi** · `kr-bulgogi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Doenjang Jjigae** · `kr-doenjang-jjigae/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Haemul Pajeon** · `kr-haemul-pajeon/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Japchae** · `kr-japchae/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kimchi-Bratreis** · `kr-kimchi-bokkeumbap/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kimchi Jjigae** · `kr-kimchi-jjigae/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Koreanisches frittiertes Hähnchen** · `kr-korean-fried-chicken/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Samgyeopsal** · `kr-samgyeopsal/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Seolleongtang** · `kr-seolleongtang/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tteokbokki** · `kr-tteokbokki/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Hoppers (Schüsselpfannkuchen)** · `lk-hoppers/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kottu Roti** · `lk-kottu-roti/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pol Sambol** · `lk-pol-sambol/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Sri-Lanka-Dal-Curry** · `lk-sri-lankan-dhal-curry/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kichererbsen-Fatteh** · `sy-fatteh-mit-kichererbsen/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kibbeh Labaniyeh** · `sy-kibbeh-labaniyeh/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Muhammara** · `sy-muhammara/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gua Bao** · `tw-gua-bao/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lu Rou Fan** · `tw-lu-rou-fan/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Austernomelett** · `tw-oyster-omelette/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Taiwanische Rindfleisch-Nudelsuppe** · `tw-taiwanese-beef-noodle-soup/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Qurutob** · `tj-qurutob/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Grünes Thai-Curry** · `th-grunes-thai-curry/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Khao Pad** · `th-khao-pad/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Klebreis mit Mango** · `th-mango-sticky-rice/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Massaman Curry** · `th-massaman-curry/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pad Kra Pao** · `th-pad-kra-pao/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pad See Ew** · `th-pad-see-ew/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pad Thai mit Garnelen** · `th-pad-thai-mit-garnelen/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Rotes Thai-Curry mit Tofu** · `th-rotes-thai-curry-mit-tofu/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Som Tam (Papayasalat)** · `th-som-tam/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tom Kha Gai (Kokos-Hähnchensuppe)** · `th-tom-kha-gai/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tom Yum Goong (scharf-saure Garnelensuppe)** · `th-tom-yum-goong/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Adana-Kebab** · `tr-adana-kebab/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Spinat-Börek** · `tr-borek-mit-spinat/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Spinat-Gözleme** · `tr-gozleme-mit-spinat/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kumpir (gefüllte Ofenkartoffel)** · `tr-kumpir/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Künefe** · `tr-kunefe/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kısır** · `tr-k-s-r/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lahmacun** · `tr-lahmacun/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Menemen** · `tr-menemen/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Türkische Linsensuppe (Mercimek Çorbası)** · `tr-mercimek-corbas/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Käse-Pide** · `tr-pide-mit-kase/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Simit** · `tr-simit/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Çılbır (türkische Eier mit Joghurt)** · `tr-c-lb-r/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **İmam Bayıldı (geschmorte Aubergine)** · `tr-imam-bay-ld/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **İskender Kebab** · `tr-iskender-kebab/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Harees** · `ae-harees/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Usbekische Manti** · `uz-manti-usbekisch/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Usbekischer Plov** · `uz-plov-usbekisch/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Shurpa** · `uz-shurpa/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bánh Mì mit Fleisch** · `vn-banh-mi-thit/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bánh Xèo (vietnamesischer Pfannkuchen)** · `vn-banh-xeo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bún bò Huế** · `vn-bun-bo-hue/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bún chả** · `vn-bun-cha/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bún riêu** · `vn-bun-rieu/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Cơm tấm** · `vn-com-tam/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gỏi cuốn (Sommerrollen)** · `vn-goi-cuon/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Phở bò (Rindfleisch-Nudelsuppe)** · `vn-pho-bo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Phở gà (Hähnchen-Nudelsuppe)** · `vn-pho-ga/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Mandi** · `ye-mandi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Saltah** · `ye-saltah/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Fërgesë** · `al-fergese/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tavë Kosi** · `al-tave-kosi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Apfelstrudel** · `at-apfelstrudel/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kaiserschmarrn** · `at-kaiserschmarrn/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kürbiscremesuppe** · `at-kurbiscremesuppe/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Leberknödelsuppe** · `at-leberknodelsuppe/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Sachertorte** · `at-sachertorte/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tafelspitz** · `at-tafelspitz/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tiroler Gröstl** · `at-tiroler-grostl/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Wiener Schnitzel** · `at-wiener-schnitzel/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Draniki** · `by-draniki/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Machanka** · `by-machanka/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Fleisch-Burek** · `ba-burek-mit-fleisch/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ćevapčići** · `ba-cevapcici/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Banitsa** · `bg-banitsa/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Schopska-Salat** · `bg-shopska-salata/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pasticada** · `hr-pasticada/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Schwarzes Tintenfischrisotto** · `hr-crni-rizot/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gegrillter Halloumi** · `cy-halloumi-vom-grill/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bramboráky** · `cz-bramboraky/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Knedlíky** · `cz-knedliky/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Svíčková** · `cz-svickova/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Trdelník** · `cz-trdelnik/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Frikadeller** · `dk-frikadeller/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Smørrebrød mit Hering** · `dk-sm-rrebr-d-mit-hering/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Æbleskiver (dänische Pfannkuchenbällchen)** · `dk-bleskiver/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Karjalanpiirakka** · `fi-karjalanpiirakka/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lohikeitto** · `fi-lohikeitto/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Poronkäristys** · `fi-poronkaristys/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Boeuf Bourguignon (Rinderschmortopf)** · `fr-boeuf-bourguignon/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bouillabaisse** · `fr-bouillabaisse/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Cassoulet** · `fr-cassoulet/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Clafoutis** · `fr-clafoutis/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Coq au Vin** · `fr-coq-au-vin/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Croque Monsieur** · `fr-croque-monsieur/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Crème Brûlée** · `fr-creme-brulee/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Crêpes Suzette** · `fr-crepes-suzette/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bretonische Buchweizengalette** · `fr-galette-bretonne/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kartoffelgratin Dauphinois** · `fr-gratin-dauphinois/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Quiche Lorraine** · `fr-quiche-lorraine/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ratatouille** · `fr-ratatouille/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Salade Niçoise** · `fr-salade-nicoise/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Französische Zwiebelsuppe** · `fr-soupe-a-l-oignon/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Chakhokhbili** · `ge-chakhokhbili/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Khachapuri Adjaruli** · `ge-khachapuri-adjaruli/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Khinkali** · `ge-khinkali/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lobio** · `ge-lobio/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Spinat-Pkhali** · `ge-pkhali-spinat/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Currywurst** · `de-currywurst/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Erbsensuppe mit Speck** · `de-erbsensuppe-mit-speck/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Flammkuchen** · `de-flammkuchen/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Schwäbischer Kartoffelsalat** · `de-kartoffelsalat-schwabisch/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Käsespätzle** · `de-kasespatzle/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Linseneintopf** · `de-linseneintopf/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Maultaschen** · `de-maultaschen/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Reibekuchen mit Apfelmus** · `de-reibekuchen-mit-apfelmus/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Rinderrouladen** · `de-rinderrouladen/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Sauerbraten** · `de-sauerbraten/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Schwarzwälder Kirschtorte** · `de-schwarzwalder-kirschtorte/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Schweinebraten mit Knödel** · `de-schweinebraten-mit-knodel/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Avgolemono** · `gr-avgolemono/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Baklava** · `gr-baklava/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Dakos** · `gr-dakos/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Dolmades** · `gr-dolmades/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Fasolada** · `gr-fasolada/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gemista** · `gr-gemista/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Griechischer Bauernsalat** · `gr-griechischer-bauernsalat/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Keftedes** · `gr-keftedes/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Moussaka** · `gr-moussaka/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Souvlaki** · `gr-souvlaki/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Spanakopita** · `gr-spanakopita/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tzatziki** · `gr-tzatziki/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ungarisches Gulasch** · `hu-gulasch-ungarisch/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kürtőskalács** · `hu-kurtoskalacs/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lecsó** · `hu-lecso/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lángos** · `hu-langos/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Paprikás Csirke** · `hu-paprikas-csirke/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Plokkfiskur** · `is-plokkfiskur/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Colcannon** · `ie-colcannon/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Irischer Eintopf** · `ie-irish-stew/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Irisches Sodabrot** · `ie-soda-bread/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Arancini** · `it-arancini/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tomaten-Bruschetta** · `it-bruschetta-al-pomodoro/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Cacio e Pepe** · `it-cacio-e-pepe/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Caprese-Salat** · `it-caprese/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Focaccia** · `it-focaccia/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gnocchi mit Pesto** · `it-gnocchi-al-pesto/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lasagne Bolognese** · `it-lasagne-alla-bolognese/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Auberginen-Parmigiana** · `it-melanzane-alla-parmigiana/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Minestrone** · `it-minestrone/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Osso Buco** · `it-osso-buco/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Panna Cotta** · `it-panna-cotta/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Panzanella** · `it-panzanella/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pasta Aglio e Olio** · `it-pasta-aglio-e-olio/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pasta alla Norma** · `it-pasta-alla-norma/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pasta mit Bohnen** · `it-pasta-e-fagioli/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Penne all'Arrabbiata** · `it-penne-all-arrabbiata/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pizza Margherita** · `it-pizza-margherita/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pizza Marinara** · `it-pizza-marinara/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Polenta mit Pilzragout** · `it-polenta-mit-pilzragout/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ravioli mit Ricotta und Spinat** · `it-ravioli-ricotta-e-spinaci/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pilzrisotto** · `it-risotto-ai-funghi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Risotto alla Milanese** · `it-risotto-alla-milanese/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Saltimbocca alla Romana** · `it-saltimbocca-alla-romana/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Spaghetti mit Tomatensauce** · `it-spaghetti-al-pomodoro/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Spaghetti alla Carbonara** · `it-spaghetti-alla-carbonara/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tiramisu** · `it-tiramisu/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Fårikål** · `no-farikal/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lutefisk** · `no-lutefisk/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Skolebrød** · `no-skolebr-d/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Polnischer roter Borschtsch** · `pl-barszcz-czerwony/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bigos** · `pl-bigos/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gołąbki** · `pl-go-abki/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pierogi Ruskie** · `pl-pierogi-ruskie/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Żurek (polnische Sauermehlsuppe)** · `pl-zurek/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Portugiesischer Meeresfrüchtereis** · `pt-arroz-de-marisco/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Açorda mit Meeresfrüchten** · `pt-acorda-de-marisco/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bacalao à Brás** · `pt-bacalao-a-bras/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Caldo Verde (portugiesische Grünkohlsuppe)** · `pt-caldo-verde/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Francesinha** · `pt-francesinha/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Piri-Piri-Hähnchen** · `pt-frango-piri-piri/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Portugiesisches Puddingtörtchen** · `pt-pastel-de-nata/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Mămăligă mit Käse** · `ro-mamaliga-mit-kase/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Sarmale** · `ro-sarmale/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Rindergeschnetzeltes Stroganoff** · `ru-beef-stroganoff/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Blini** · `ru-blini/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pelmeni** · `ru-pelmeni/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Schtschi** · `ru-schtschi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pljeskavica** · `rs-pljeskavica/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Prebranac** · `rs-prebranac/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bryndzové Halušky** · `sk-bryndzove-halusky/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kapustnica** · `sk-kapustnica/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Churros** · `es-churros/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Schinkenkroketten** · `es-croquetas-de-jamon/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Garnelen in Knoblauchöl** · `es-gambas-al-ajillo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gazpacho** · `es-gazpacho/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Valencianische Paella** · `es-paella-valenciana/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Meeresfrüchte-Paella** · `es-paella-de-marisco/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Patatas Bravas** · `es-patatas-bravas/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gebratene Padrón-Paprika** · `es-pimientos-de-padron/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pulpo a la Gallega** · `es-pulpo-a-la-gallega/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Salmorejo** · `es-salmorejo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Spanische Tortilla** · `es-tortilla-espanola/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gravlax** · `se-gravlax/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Janssons Frestelse** · `se-janssons-frestelse/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kanelbullar** · `se-kanelbullar/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Köttbullar** · `se-kottbullar/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Schwedische Sandwich-Torte** · `se-smorgastarta/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Birchermüesli** · `ch-birchermuesli/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Käsefondue** · `ch-kasefondue/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Rösti** · `ch-rosti/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Zürcher Geschnetzeltes** · `ch-zurcher-geschnetzeltes/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Älplermagronen** · `ch-alplermagronen/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ukrainischer Borschtsch** · `ua-borschtsch-ukrainisch/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Deruny** · `ua-deruny/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Holubtsi** · `ua-holubtsi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kartoffel-Wareniki** · `ua-wareniki-mit-kartoffeln/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Würstchen mit Kartoffelpüree** · `gb-bangers-and-mash/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Hähnchen-Tikka-Masala** · `gb-chicken-tikka-masala/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Cottage Pie (Hackfleisch-Kartoffelauflauf)** · `gb-cottage-pie/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Fisch mit Pommes (Fish and Chips)** · `gb-fish-and-chips/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Englisches Frühstück** · `gb-full-english-breakfast/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Scones** · `gb-scones/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Shepherd's Pie (Hirtenauflauf)** · `gb-shepherd-s-pie/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Sticky Toffee Pudding (Dattelkuchen mit Karamellsauce)** · `gb-sticky-toffee-pudding/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Yorkshire Pudding** · `gb-yorkshire-pudding/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lachs natur vom Grill** · `xx-gegrillter-lachs-pur/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Hähnchenschenkel natur** · `xx-hahnchenschenkel-natur/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lammkoteletts natur** · `xx-lammkoteletts-pur/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Rinderleber in Butter** · `xx-rinderleber-in-butter/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Rindersteak natur** · `xx-rindersteak-pur/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Rührei mit Butter** · `xx-ruhrei-nur-mit-butter/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bahamas-Conch-Salat** · `bs-conch-salad-bahamas/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Frittierte Conch-Muschel** · `bs-cracked-conch/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Hudut** · `bz-hudut/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Reis und Bohnen aus Belize** · `bz-rice-and-beans-belize/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kanadische Buttertörtchen** · `ca-butter-tarts/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kanadisches Peameal-Bacon-Sandwich** · `ca-peameal-bacon-sandwich/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Poutine** · `ca-poutine/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Poutine mit Pulled Pork** · `ca-poutine-mit-pulled-pork/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tourtière** · `ca-tourtiere/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Casado** · `cr-casado/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gallo Pinto** · `cr-gallo-pinto/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Olla de Carne** · `cr-olla-de-carne/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Reis mit Hähnchen** · `cu-arroz-con-pollo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kubanisches Sandwich** · `cu-cubano-sandwich/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Moros y Cristianos (Reis mit schwarzen Bohnen)** · `cu-moros-y-cristianos/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ropa Vieja** · `cu-ropa-vieja/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Dominikanische Bandera** · `do-la-bandera-dominicana/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Mangú** · `do-mangu/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Dominikanischer Sancocho** · `do-sancocho-dominicano/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pupusas Revuelta** · `sv-pupusas-revuelta/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Käse-Pupusas** · `sv-pupusas-de-queso/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Frittierte Maniokstücke** · `sv-yuca-frita/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kak'ik** · `gt-kak-ik/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Guatemaltekisches Hähnchen-Pepián** · `gt-pepian-de-pollo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Diri Ak Pwa** · `ht-diri-ak-pwa/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Griot** · `ht-griot/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Haitianische Kürbissuppe** · `ht-soup-joumou/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Baleadas** · `hn-baleadas/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Sopa de Caracol (Muschelsuppe)** · `hn-sopa-de-caracol/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ackee mit Salzfisch** · `jm-ackee-and-saltfish/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Jamaikanisches Ziegencurry** · `jm-jamaican-curry-goat/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Jerk-Hähnchen** · `jm-jerk-chicken/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Karibischer Reis mit Bohnen** · `jm-rice-and-peas/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bohnen-Burrito** · `mx-burrito-mit-bohnen/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Grüne Chilaquiles** · `mx-chilaquiles-verdes/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gefüllte Chilis (Chiles Rellenos)** · `mx-chiles-rellenos/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Cochinita Pibil** · `mx-cochinita-pibil/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Elote** · `mx-elote/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Rote Enchiladas** · `mx-enchiladas-rojas/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Guacamole** · `mx-guacamole/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Mole Poblano** · `mx-mole-poblano/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pico de Gallo** · `mx-pico-de-gallo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pozole Rojo** · `mx-pozole-rojo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Käse-Quesadilla** · `mx-quesadilla-mit-kase/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Mexikanische Limettensuppe** · `mx-sopa-de-lima/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tortillasuppe** · `mx-sopa-de-tortilla/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tacos al Pastor** · `mx-tacos-al-pastor/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Carnitas-Tacos** · `mx-tacos-de-carnitas/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Fisch-Tacos** · `mx-tacos-de-pescado/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Hähnchen-Tamales** · `mx-tamales-de-pollo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Nacatamales** · `ni-nacatamales/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Vigorón** · `ni-vigoron/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Panamaischer Sancocho** · `pa-sancocho-panameno/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Reis mit Straucherbsen** · `pr-arroz-con-gandules/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Mofongo** · `pr-mofongo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Auflauf mit reifen Kochbananen** · `pr-pastelon-de-platano-maduro/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Callaloo** · `tt-callaloo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Doubles** · `tt-doubles/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Doubles mit Tamarinde** · `tt-doubles-mit-tamarinde/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pelau** · `tt-pelau/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Amerikanischer Apfelkuchen** · `us-apple-pie/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **BBQ-Rinderbrust** · `us-bbq-beef-brisket/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Amerikanische Biscuits mit Bratensauce** · `us-biscuits-and-gravy/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Buffalo-Hähnchenflügel** · `us-buffalo-chicken-wings/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Caesar-Salat mit Hähnchen** · `us-caesar-salad-mit-hahnchen/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Cajun-Jambalaya** · `us-cajun-jambalaya/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Cheeseburger** · `us-cheeseburger/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Muschelsuppe (Clam Chowder)** · `us-clam-chowder/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Cobb-Salat** · `us-cobb-salad/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Maisbrot** · `us-cornbread/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gegrilltes Käsesandwich** · `us-grilled-cheese-sandwich/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gumbo** · `us-gumbo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Makkaroni mit Käsesauce** · `us-mac-and-cheese/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **New-England-Hummerbrötchen** · `us-new-england-lobster-roll/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Amerikanische Pancakes** · `us-pancakes-american/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Philly-Cheesesteak-Sandwich** · `us-philly-cheesesteak/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pulled-Pork-Sandwich** · `us-pulled-pork-sandwich/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Amerikanischer Kürbiskuchen** · `us-pumpkin-pie/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Australisches Hähnchen-Parmigiana** · `au-chicken-parmigiana-australian/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lamingtons** · `au-lamingtons/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Australische Fleischpastete** · `au-meat-pie-australian/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ika Mata** · `ck-ika-mata/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kokoda** · `fj-kokoda/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lovo** · `fj-lovo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Hāngī** · `nz-hangi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pavlova** · `nz-pavlova/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Frittierte Jungfische** · `nz-whitebait-fritters/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Mumu** · `pg-mumu/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Oka i'a** · `ws-oka-i-a/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Palusami** · `ws-palusami/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Poi** · `sb-poi/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lu Pulu** · `to-lu-pulu/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lap Lap** · `vu-lap-lap/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Alfajores** · `ar-alfajores/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Argentinisches Asado** · `ar-asado-argentino/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Chimichurri** · `ar-chimichurri/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Choripán (Chorizo-Sandwich)** · `ar-choripan/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Argentinische Empanadas** · `ar-empanadas-argentinas/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Locro** · `ar-locro/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Milanesa Napolitana** · `ar-milanesa-napolitana/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Provoleta** · `ar-provoleta/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pique Macho** · `bo-pique-macho/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Salteñas** · `bo-saltenas/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Silpancho** · `bo-silpancho/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Sopa de Maní (Erdnusssuppe)** · `bo-sopa-de-mani/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Acarajé** · `br-acaraje/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Brigadeiro** · `br-brigadeiro/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Churrasco** · `br-churrasco/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Coxinha** · `br-coxinha/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Feijoada** · `br-feijoada/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Moqueca Baiana** · `br-moqueca-baiana/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Gegrillte Picanha** · `br-picanha-vom-grill/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pão de Queijo** · `br-pao-de-queijo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Vatapá** · `br-vatapa/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Chilenischer Eintopf** · `cl-cazuela-chilena/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Curanto** · `cl-curanto/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Chilenische Humitas** · `cl-humitas-chilenas/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Chilenischer Maisauflauf** · `cl-pastel-de-choclo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Sopaipillas** · `cl-sopaipillas/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ajiaco aus Bogotá** · `co-ajiaco-bogotano/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Arepas mit Käse** · `co-arepas-mit-kase/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Bandeja Paisa** · `co-bandeja-paisa/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Changua** · `co-changua/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Patacones** · `co-patacones/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Kolumbianischer Sancocho** · `co-sancocho-colombiano/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Encebollado** · `ec-encebollado/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Hornado** · `ec-hornado/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Llapingachos** · `ec-llapingachos/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Chipa** · `py-chipa/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Mbejú** · `py-mbeju/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Paraguayischer Maiskuchen** · `py-sopa-paraguaya/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Ají de Gallina** · `pe-aji-de-gallina/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Anticuchos** · `pe-anticuchos/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Arroz Chaufa (peruanischer Bratreis)** · `pe-arroz-chaufa/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Causa Limeña (peruanischer Kartoffelauflauf)** · `pe-causa-limena/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Peruanische Ceviche** · `pe-ceviche-peruano/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Lomo Saltado** · `pe-lomo-saltado/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Papa a la Huancaína** · `pe-papa-a-la-huancaina/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Chajá** · `uy-chaja/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Chivito** · `uy-chivito/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Cachapa** · `ve-cachapa/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Hallacas** · `ve-hallacas/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Pabellón Criollo** · `ve-pabellon-criollo/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
-- **Tequeños** · `ve-tequenos/image_01.webp` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Algerischer Couscous** · `dz-algerischer-couscous/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Chorba Frik (Weizengrützensuppe)** · `dz-chorba-frik/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Makroud** · `dz-makroud/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Seswaa** · `bw-seswaa/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ndolé** · `cm-ndole/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Poulet DG** · `cm-poulet-dg/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Attiéké mit Fisch** · `ci-attieke-mit-fisch/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kedjenou** · `ci-kedjenou/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Falafel** · `eg-falafel/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ful Medames** · `eg-ful-medames/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Koshari** · `eg-koshari/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Molokhia** · `eg-molokhia/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Doro Wot** · `et-doro-wot/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Injera** · `et-injera/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kitfo** · `et-kitfo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Misir Wot** · `et-misir-wot/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Shiro Wot** · `et-shiro-wot/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tibs** · `et-tibs/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Erdnusseintopf** · `gm-groundnut-stew/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Fufu mit Erdnusssuppe** · `gh-fufu-mit-erdnusssuppe/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Red Red** · `gh-red-red/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Waakye** · `gh-waakye/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Nyama Choma** · `ke-nyama-choma/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ugali mit Sukuma Wiki** · `ke-ugali-mit-sukuma-wiki/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ravitoto** · `mg-ravitoto/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Romazava** · `mg-romazava/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Dholl Puri** · `mu-dholl-puri/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Rougaille Saucisse** · `mu-rougaille-saucisse/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gemüse-Couscous** · `ma-couscous-mit-gemuse/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Harira** · `ma-harira/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Rfissa** · `ma-rfissa/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lamm-Tajine mit Pflaumen** · `ma-tajine-mit-lamm-und-pflaumen/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Zaalouk** · `ma-zaalouk/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kapana** · `na-kapana/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Efo Riro** · `ng-efo-riro/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Egusi-Suppe** · `ng-egusi-soup/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Jollof-Reis** · `ng-jollof-rice/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Moi Moi** · `ng-moi-moi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Suya** · `ng-suya/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Isombe** · `rw-isombe/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Mafé** · `sn-mafe/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Thieboudienne** · `sn-thieboudienne/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Hähnchen-Yassa** · `sn-yassa-poulet/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Seychellisches Oktopuscurry** · `sc-octopus-curry-seychelles/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Poisson Sale Rougaille** · `sc-poisson-sale-rougaille/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bobotie** · `za-bobotie/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Chakalaka** · `za-chakalaka/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pap mit Boerewors** · `za-pap-mit-wors/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Potjiekos** · `za-potjiekos/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ostafrikanischer Pilau** · `tz-pilau-ostafrika/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Sansibar-Fischcurry** · `tz-zanzibar-fish-curry/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lablabi** · `tn-lablabi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Shakshuka** · `tn-shakshuka/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Luwombo** · `ug-luwombo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Matoke** · `ug-matoke/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Nshima mit Ifisashi** · `zm-nshima-mit-ifisashi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Sadza mit Rinderragout** · `zw-sadza-mit-rinderragout/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ashak** · `af-ashak/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bolani Kachalu** · `af-bolani-kachalu/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kabuli Pulao** · `af-kabuli-pulao/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Mantu** · `af-mantu/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Armenische Dolma** · `am-dolma-armenisch/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ghapama** · `am-ghapama/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Armenische Harissa (Weizenbrei mit Fleisch)** · `am-harissa-armenisch/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Zhingyalov Hats** · `am-zhingyalov-hats/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Dovga** · `az-dovga/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Dushbara** · `az-dushbara/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kräuter-Qutab** · `az-qutab-mit-krautern/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Shah Plov** · `az-shah-plov/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bahrainisches Tikka** · `bh-bahraini-tikka/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Muhammar** · `bh-muhammar/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bengalisches Fischcurry** · `bd-bengali-fish-curry/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bhuna Khichuri** · `bd-bhuna-khichuri/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Khichuri** · `bd-khichuri/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ema Datshi** · `bt-ema-datshi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Jasha Maroo** · `bt-jasha-maroo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kewa Datshi** · `bt-kewa-datshi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Amok Trey** · `kh-amok-trey/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lok Lak** · `kh-lok-lak/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Chow Mein** · `cn-chow-mein/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Congee** · `cn-congee/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Dan-Dan-Nudeln** · `cn-dan-dan-noodles/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Sichuan-Feuertopf** · `cn-hot-pot-sichuan/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Jiaozi** · `cn-jiaozi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kung-Pao-Hähnchen** · `cn-kung-pao-chicken/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Vegane Mapo-Aubergine** · `cn-ma-po-aubergine-vegan/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Mapo Tofu** · `cn-mapo-tofu/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pekingente** · `cn-peking-duck/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Chinesische Frühlingszwiebel-Pfannkuchen** · `cn-scallion-pancakes/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Schweinefleisch süß-sauer** · `cn-sweet-and-sour-pork/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gebratene Tomaten mit Ei** · `cn-tomato-egg-stir-fry/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Wan-Tan-Suppe** · `cn-wonton-soup/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Xiao Long Bao** · `cn-xiao-long-bao/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Yangzhou-Bratreis** · `cn-yangzhou-fried-rice/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Aloo Gobi** · `in-aloo-gobi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Aloo Paratha** · `in-aloo-paratha/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Baingan Bharta (Auberginencurry)** · `in-baingan-bharta/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Butterhähnchen (Butter Chicken)** · `in-butter-chicken/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Chana Masala** · `in-chana-masala/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Hähnchen-Biryani** · `in-chicken-biryani/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Chole Bhature** · `in-chole-bhature/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Dal Makhani** · `in-dal-makhani/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Dal Tadka** · `in-dal-tadka/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gulab Jamun** · `in-gulab-jamun/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Vegetarisches Hyderabadi-Biryani** · `in-hyderabadi-veg-biryani/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Idli mit Sambar** · `in-idli-mit-sambar/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Keema Matar** · `in-keema-matar/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kheer** · `in-kheer/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Masala Dosa** · `in-masala-dosa/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Naan** · `in-naan/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pakora** · `in-pakora/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Palak Paneer** · `in-palak-paneer/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Paneer in Butter-Masala-Sauce** · `in-paneer-butter-masala/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pav Bhaji** · `in-pav-bhaji/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Poha** · `in-poha/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Rajma Chawal** · `in-rajma-chawal/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Rogan Josh** · `in-rogan-josh/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Saag Aloo** · `in-saag-aloo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Samosa** · `in-samosa/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tandoori-Hähnchen** · `in-tandoori-chicken/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Upma** · `in-upma/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bakso** · `id-bakso/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gado Gado** · `id-gado-gado/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Mie Goreng (gebratene Nudeln)** · `id-mie-goreng/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Nasi Goreng** · `id-nasi-goreng/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Rendang** · `id-rendang/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Satay Ayam** · `id-satay-ayam/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Sayur Lodeh** · `id-sayur-lodeh/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Soto Ayam (Hähnchensuppe)** · `id-soto-ayam/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ash Reshteh** · `ir-ash-reshteh/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Dizi Abgoosht** · `ir-dizi-abgoosht/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Fesenjan** · `ir-fesenjan/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ghormeh Sabzi** · `ir-ghormeh-sabzi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kuku Sabzi** · `ir-kuku-sabzi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tahdig** · `ir-tahdig/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Zereshk Polo** · `ir-zereshk-polo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Dolma** · `iq-dolma/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Masgouf** · `iq-masgouf/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tepsi Baytinijan** · `iq-tepsi-baytinijan/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Jerusalemer Grill-Mix** · `il-jerusalem-mixed-grill/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Malawach** · `il-malawach/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Sabich** · `il-sabich/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Teriyaki-Hähnchen** · `jp-chicken-teriyaki/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gyudon** · `jp-gyudon/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Katsu-Curry** · `jp-katsu-curry/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Misosuppe** · `jp-miso-soup/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Okonomiyaki** · `jp-okonomiyaki/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Onigiri mit Umeboshi** · `jp-onigiri-umeboshi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Oyakodon** · `jp-oyakodon/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Shoyu-Ramen** · `jp-ramen-shoyu/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Soba mit Sesam** · `jp-soba-mit-sesam/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lachs-Maki-Sushi** · `jp-sushi-maki-lachs/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Takoyaki** · `jp-takoyaki/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gemüse-Tempura** · `jp-tempura-gemuse/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tonkatsu** · `jp-tonkatsu/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Udon-Nudelsuppe** · `jp-udon-noodle-soup/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Yakisoba** · `jp-yakisoba/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Mansaf** · `jo-mansaf/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Beshbarmak** · `kz-beshbarmak/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Machboos** · `kw-machboos/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kuurdak** · `kg-kuurdak/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lagman** · `kg-lagman/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Laap** · `la-laap/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tam Mak Hoong (Papayasalat)** · `la-tam-mak-hoong/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Baba Ghanoush (Auberginencreme)** · `lb-baba-ganoush/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Fattoush** · `lb-fattoush/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Hummus** · `lb-hummus/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kibbeh** · `lb-kibbeh/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Manakish mit Za'atar** · `lb-manakish-zaatar/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Mujadara** · `lb-mujadara/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tabbouleh** · `lb-tabbouleh/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Char Kway Teow** · `my-char-kway-teow/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Laksa Lemak** · `my-laksa-lemak/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Nasi Lemak** · `my-nasi-lemak/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Roti Canai** · `my-roti-canai/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bansh-Suppe** · `mn-bansh-soup/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Buuz** · `mn-buuz/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Khuushuur** · `mn-khuushuur/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tsuivan** · `mn-tsuivan/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lahpet Thoke** · `mm-lahpet-thoke/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Mohinga** · `mm-mohinga/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ohn No Khao Swe** · `mm-ohn-no-khao-swe/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Dal Bhat** · `np-dal-bhat/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Momo mit Fleisch** · `np-momo-mit-fleisch/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Momo mit Gemüse** · `np-momo-mit-gemuse/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Thukpa** · `np-thukpa/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Omanisches Mashuai (gegrillter Fisch)** · `om-omani-mashuai/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Shuwa** · `om-shuwa/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Aloo Keema** · `pk-aloo-keema/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Hähnchen-Karahi** · `pk-chicken-karahi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Haleem** · `pk-haleem/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Nihari** · `pk-nihari/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Paya** · `pk-paya/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Maqluba** · `ps-maqluba/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Musakhan** · `ps-musakhan/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Hähnchen-Adobo** · `ph-adobo-chicken/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Hähnchen-Inasal** · `ph-chicken-inasal/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kare-Kare (philippinischer Erdnusseintopf)** · `ph-kare-kare/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lechon Kawali** · `ph-lechon-kawali/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lumpia Shanghai** · `ph-lumpia-shanghai/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pancit Canton** · `ph-pancit-canton/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Sinigang mit Schweinefleisch** · `ph-sinigang-na-baboy/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Balaleet** · `qa-balaleet/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Thareed** · `qa-thareed/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kabsa** · `sa-kabsa/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Chilikrabbe** · `sg-chili-crab/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Hainan-Hähnchenreis** · `sg-hainanese-chicken-rice/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bibimbap** · `kr-bibimbap/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bulgogi** · `kr-bulgogi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Doenjang Jjigae** · `kr-doenjang-jjigae/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Haemul Pajeon** · `kr-haemul-pajeon/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Japchae** · `kr-japchae/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kimchi-Bratreis** · `kr-kimchi-bokkeumbap/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kimchi Jjigae** · `kr-kimchi-jjigae/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Koreanisches frittiertes Hähnchen** · `kr-korean-fried-chicken/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Samgyeopsal** · `kr-samgyeopsal/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Seolleongtang** · `kr-seolleongtang/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tteokbokki** · `kr-tteokbokki/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Hoppers (Schüsselpfannkuchen)** · `lk-hoppers/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kottu Roti** · `lk-kottu-roti/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pol Sambol** · `lk-pol-sambol/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Sri-Lanka-Dal-Curry** · `lk-sri-lankan-dhal-curry/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kichererbsen-Fatteh** · `sy-fatteh-mit-kichererbsen/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kibbeh Labaniyeh** · `sy-kibbeh-labaniyeh/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Muhammara** · `sy-muhammara/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gua Bao** · `tw-gua-bao/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lu Rou Fan** · `tw-lu-rou-fan/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Austernomelett** · `tw-oyster-omelette/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Taiwanische Rindfleisch-Nudelsuppe** · `tw-taiwanese-beef-noodle-soup/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Qurutob** · `tj-qurutob/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Grünes Thai-Curry** · `th-grunes-thai-curry/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Khao Pad** · `th-khao-pad/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Klebreis mit Mango** · `th-mango-sticky-rice/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Massaman Curry** · `th-massaman-curry/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pad Kra Pao** · `th-pad-kra-pao/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pad See Ew** · `th-pad-see-ew/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pad Thai mit Garnelen** · `th-pad-thai-mit-garnelen/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Rotes Thai-Curry mit Tofu** · `th-rotes-thai-curry-mit-tofu/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Som Tam (Papayasalat)** · `th-som-tam/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tom Kha Gai (Kokos-Hähnchensuppe)** · `th-tom-kha-gai/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tom Yum Goong (scharf-saure Garnelensuppe)** · `th-tom-yum-goong/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Adana-Kebab** · `tr-adana-kebab/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Spinat-Börek** · `tr-borek-mit-spinat/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Spinat-Gözleme** · `tr-gozleme-mit-spinat/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kumpir (gefüllte Ofenkartoffel)** · `tr-kumpir/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Künefe** · `tr-kunefe/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kısır** · `tr-k-s-r/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lahmacun** · `tr-lahmacun/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Menemen** · `tr-menemen/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Türkische Linsensuppe (Mercimek Çorbası)** · `tr-mercimek-corbas/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Käse-Pide** · `tr-pide-mit-kase/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Simit** · `tr-simit/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Çılbır (türkische Eier mit Joghurt)** · `tr-c-lb-r/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **İmam Bayıldı (geschmorte Aubergine)** · `tr-imam-bay-ld/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **İskender Kebab** · `tr-iskender-kebab/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Harees** · `ae-harees/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Usbekische Manti** · `uz-manti-usbekisch/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Usbekischer Plov** · `uz-plov-usbekisch/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Shurpa** · `uz-shurpa/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bánh Mì mit Fleisch** · `vn-banh-mi-thit/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bánh Xèo (vietnamesischer Pfannkuchen)** · `vn-banh-xeo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bún bò Huế** · `vn-bun-bo-hue/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bún chả** · `vn-bun-cha/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bún riêu** · `vn-bun-rieu/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Cơm tấm** · `vn-com-tam/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gỏi cuốn (Sommerrollen)** · `vn-goi-cuon/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Phở bò (Rindfleisch-Nudelsuppe)** · `vn-pho-bo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Phở gà (Hähnchen-Nudelsuppe)** · `vn-pho-ga/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Mandi** · `ye-mandi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Saltah** · `ye-saltah/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Fërgesë** · `al-fergese/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tavë Kosi** · `al-tave-kosi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Apfelstrudel** · `at-apfelstrudel/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kaiserschmarrn** · `at-kaiserschmarrn/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kürbiscremesuppe** · `at-kurbiscremesuppe/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Leberknödelsuppe** · `at-leberknodelsuppe/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Sachertorte** · `at-sachertorte/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tafelspitz** · `at-tafelspitz/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tiroler Gröstl** · `at-tiroler-grostl/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Wiener Schnitzel** · `at-wiener-schnitzel/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Draniki** · `by-draniki/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Machanka** · `by-machanka/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Fleisch-Burek** · `ba-burek-mit-fleisch/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ćevapčići** · `ba-cevapcici/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Banitsa** · `bg-banitsa/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Schopska-Salat** · `bg-shopska-salata/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pasticada** · `hr-pasticada/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Schwarzes Tintenfischrisotto** · `hr-crni-rizot/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gegrillter Halloumi** · `cy-halloumi-vom-grill/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bramboráky** · `cz-bramboraky/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Knedlíky** · `cz-knedliky/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Svíčková** · `cz-svickova/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Trdelník** · `cz-trdelnik/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Frikadeller** · `dk-frikadeller/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Smørrebrød mit Hering** · `dk-sm-rrebr-d-mit-hering/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Æbleskiver (dänische Pfannkuchenbällchen)** · `dk-bleskiver/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Karjalanpiirakka** · `fi-karjalanpiirakka/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lohikeitto** · `fi-lohikeitto/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Poronkäristys** · `fi-poronkaristys/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Boeuf Bourguignon (Rinderschmortopf)** · `fr-boeuf-bourguignon/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bouillabaisse** · `fr-bouillabaisse/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Cassoulet** · `fr-cassoulet/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Clafoutis** · `fr-clafoutis/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Coq au Vin** · `fr-coq-au-vin/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Croque Monsieur** · `fr-croque-monsieur/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Crème Brûlée** · `fr-creme-brulee/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Crêpes Suzette** · `fr-crepes-suzette/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bretonische Buchweizengalette** · `fr-galette-bretonne/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kartoffelgratin Dauphinois** · `fr-gratin-dauphinois/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Quiche Lorraine** · `fr-quiche-lorraine/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ratatouille** · `fr-ratatouille/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Salade Niçoise** · `fr-salade-nicoise/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Französische Zwiebelsuppe** · `fr-soupe-a-l-oignon/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Chakhokhbili** · `ge-chakhokhbili/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Khachapuri Adjaruli** · `ge-khachapuri-adjaruli/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Khinkali** · `ge-khinkali/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lobio** · `ge-lobio/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Spinat-Pkhali** · `ge-pkhali-spinat/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Currywurst** · `de-currywurst/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Erbsensuppe mit Speck** · `de-erbsensuppe-mit-speck/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Flammkuchen** · `de-flammkuchen/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Schwäbischer Kartoffelsalat** · `de-kartoffelsalat-schwabisch/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Käsespätzle** · `de-kasespatzle/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Linseneintopf** · `de-linseneintopf/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Maultaschen** · `de-maultaschen/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Reibekuchen mit Apfelmus** · `de-reibekuchen-mit-apfelmus/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Rinderrouladen** · `de-rinderrouladen/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Sauerbraten** · `de-sauerbraten/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Schwarzwälder Kirschtorte** · `de-schwarzwalder-kirschtorte/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Schweinebraten mit Knödel** · `de-schweinebraten-mit-knodel/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Avgolemono** · `gr-avgolemono/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Baklava** · `gr-baklava/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Dakos** · `gr-dakos/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Dolmades** · `gr-dolmades/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Fasolada** · `gr-fasolada/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gemista** · `gr-gemista/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Griechischer Bauernsalat** · `gr-griechischer-bauernsalat/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Keftedes** · `gr-keftedes/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Moussaka** · `gr-moussaka/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Souvlaki** · `gr-souvlaki/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Spanakopita** · `gr-spanakopita/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tzatziki** · `gr-tzatziki/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ungarisches Gulasch** · `hu-gulasch-ungarisch/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kürtőskalács** · `hu-kurtoskalacs/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lecsó** · `hu-lecso/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lángos** · `hu-langos/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Paprikás Csirke** · `hu-paprikas-csirke/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Plokkfiskur** · `is-plokkfiskur/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Colcannon** · `ie-colcannon/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Irischer Eintopf** · `ie-irish-stew/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Irisches Sodabrot** · `ie-soda-bread/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Arancini** · `it-arancini/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tomaten-Bruschetta** · `it-bruschetta-al-pomodoro/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Cacio e Pepe** · `it-cacio-e-pepe/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Caprese-Salat** · `it-caprese/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Focaccia** · `it-focaccia/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gnocchi mit Pesto** · `it-gnocchi-al-pesto/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lasagne Bolognese** · `it-lasagne-alla-bolognese/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Auberginen-Parmigiana** · `it-melanzane-alla-parmigiana/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Minestrone** · `it-minestrone/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Osso Buco** · `it-osso-buco/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Panna Cotta** · `it-panna-cotta/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Panzanella** · `it-panzanella/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pasta Aglio e Olio** · `it-pasta-aglio-e-olio/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pasta alla Norma** · `it-pasta-alla-norma/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pasta mit Bohnen** · `it-pasta-e-fagioli/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Penne all'Arrabbiata** · `it-penne-all-arrabbiata/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pizza Margherita** · `it-pizza-margherita/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pizza Marinara** · `it-pizza-marinara/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Polenta mit Pilzragout** · `it-polenta-mit-pilzragout/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ravioli mit Ricotta und Spinat** · `it-ravioli-ricotta-e-spinaci/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pilzrisotto** · `it-risotto-ai-funghi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Risotto alla Milanese** · `it-risotto-alla-milanese/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Saltimbocca alla Romana** · `it-saltimbocca-alla-romana/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Spaghetti mit Tomatensauce** · `it-spaghetti-al-pomodoro/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Spaghetti alla Carbonara** · `it-spaghetti-alla-carbonara/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tiramisu** · `it-tiramisu/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Fårikål** · `no-farikal/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lutefisk** · `no-lutefisk/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Skolebrød** · `no-skolebr-d/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Polnischer roter Borschtsch** · `pl-barszcz-czerwony/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bigos** · `pl-bigos/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gołąbki** · `pl-go-abki/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pierogi Ruskie** · `pl-pierogi-ruskie/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Żurek (polnische Sauermehlsuppe)** · `pl-zurek/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Portugiesischer Meeresfrüchtereis** · `pt-arroz-de-marisco/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Açorda mit Meeresfrüchten** · `pt-acorda-de-marisco/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bacalao à Brás** · `pt-bacalao-a-bras/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Caldo Verde (portugiesische Grünkohlsuppe)** · `pt-caldo-verde/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Francesinha** · `pt-francesinha/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Piri-Piri-Hähnchen** · `pt-frango-piri-piri/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Portugiesisches Puddingtörtchen** · `pt-pastel-de-nata/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Mămăligă mit Käse** · `ro-mamaliga-mit-kase/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Sarmale** · `ro-sarmale/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Rindergeschnetzeltes Stroganoff** · `ru-beef-stroganoff/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Blini** · `ru-blini/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pelmeni** · `ru-pelmeni/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Schtschi** · `ru-schtschi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pljeskavica** · `rs-pljeskavica/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Prebranac** · `rs-prebranac/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bryndzové Halušky** · `sk-bryndzove-halusky/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kapustnica** · `sk-kapustnica/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Churros** · `es-churros/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Schinkenkroketten** · `es-croquetas-de-jamon/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Garnelen in Knoblauchöl** · `es-gambas-al-ajillo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gazpacho** · `es-gazpacho/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Valencianische Paella** · `es-paella-valenciana/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Meeresfrüchte-Paella** · `es-paella-de-marisco/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Patatas Bravas** · `es-patatas-bravas/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gebratene Padrón-Paprika** · `es-pimientos-de-padron/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pulpo a la Gallega** · `es-pulpo-a-la-gallega/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Salmorejo** · `es-salmorejo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Spanische Tortilla** · `es-tortilla-espanola/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gravlax** · `se-gravlax/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Janssons Frestelse** · `se-janssons-frestelse/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kanelbullar** · `se-kanelbullar/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Köttbullar** · `se-kottbullar/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Schwedische Sandwich-Torte** · `se-smorgastarta/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Birchermüesli** · `ch-birchermuesli/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Käsefondue** · `ch-kasefondue/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Rösti** · `ch-rosti/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Zürcher Geschnetzeltes** · `ch-zurcher-geschnetzeltes/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Älplermagronen** · `ch-alplermagronen/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ukrainischer Borschtsch** · `ua-borschtsch-ukrainisch/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Deruny** · `ua-deruny/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Holubtsi** · `ua-holubtsi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kartoffel-Wareniki** · `ua-wareniki-mit-kartoffeln/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Würstchen mit Kartoffelpüree** · `gb-bangers-and-mash/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Hähnchen-Tikka-Masala** · `gb-chicken-tikka-masala/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Cottage Pie (Hackfleisch-Kartoffelauflauf)** · `gb-cottage-pie/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Fisch mit Pommes (Fish and Chips)** · `gb-fish-and-chips/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Englisches Frühstück** · `gb-full-english-breakfast/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Scones** · `gb-scones/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Shepherd's Pie (Hirtenauflauf)** · `gb-shepherd-s-pie/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Sticky Toffee Pudding (Dattelkuchen mit Karamellsauce)** · `gb-sticky-toffee-pudding/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Yorkshire Pudding** · `gb-yorkshire-pudding/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lachs natur vom Grill** · `xx-gegrillter-lachs-pur/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Hähnchenschenkel natur** · `xx-hahnchenschenkel-natur/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lammkoteletts natur** · `xx-lammkoteletts-pur/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Rinderleber in Butter** · `xx-rinderleber-in-butter/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Rindersteak natur** · `xx-rindersteak-pur/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Rührei mit Butter** · `xx-ruhrei-nur-mit-butter/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bahamas-Conch-Salat** · `bs-conch-salad-bahamas/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Frittierte Conch-Muschel** · `bs-cracked-conch/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Hudut** · `bz-hudut/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Reis und Bohnen aus Belize** · `bz-rice-and-beans-belize/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kanadische Buttertörtchen** · `ca-butter-tarts/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kanadisches Peameal-Bacon-Sandwich** · `ca-peameal-bacon-sandwich/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Poutine** · `ca-poutine/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Poutine mit Pulled Pork** · `ca-poutine-mit-pulled-pork/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tourtière** · `ca-tourtiere/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Casado** · `cr-casado/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gallo Pinto** · `cr-gallo-pinto/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Olla de Carne** · `cr-olla-de-carne/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Reis mit Hähnchen** · `cu-arroz-con-pollo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kubanisches Sandwich** · `cu-cubano-sandwich/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Moros y Cristianos (Reis mit schwarzen Bohnen)** · `cu-moros-y-cristianos/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ropa Vieja** · `cu-ropa-vieja/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Dominikanische Bandera** · `do-la-bandera-dominicana/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Mangú** · `do-mangu/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Dominikanischer Sancocho** · `do-sancocho-dominicano/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pupusas Revuelta** · `sv-pupusas-revuelta/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Käse-Pupusas** · `sv-pupusas-de-queso/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Frittierte Maniokstücke** · `sv-yuca-frita/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kak'ik** · `gt-kak-ik/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Guatemaltekisches Hähnchen-Pepián** · `gt-pepian-de-pollo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Diri Ak Pwa** · `ht-diri-ak-pwa/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Griot** · `ht-griot/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Haitianische Kürbissuppe** · `ht-soup-joumou/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Baleadas** · `hn-baleadas/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Sopa de Caracol (Muschelsuppe)** · `hn-sopa-de-caracol/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ackee mit Salzfisch** · `jm-ackee-and-saltfish/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Jamaikanisches Ziegencurry** · `jm-jamaican-curry-goat/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Jerk-Hähnchen** · `jm-jerk-chicken/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Karibischer Reis mit Bohnen** · `jm-rice-and-peas/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bohnen-Burrito** · `mx-burrito-mit-bohnen/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Grüne Chilaquiles** · `mx-chilaquiles-verdes/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gefüllte Chilis (Chiles Rellenos)** · `mx-chiles-rellenos/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Cochinita Pibil** · `mx-cochinita-pibil/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Elote** · `mx-elote/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Rote Enchiladas** · `mx-enchiladas-rojas/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Guacamole** · `mx-guacamole/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Mole Poblano** · `mx-mole-poblano/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pico de Gallo** · `mx-pico-de-gallo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pozole Rojo** · `mx-pozole-rojo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Käse-Quesadilla** · `mx-quesadilla-mit-kase/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Mexikanische Limettensuppe** · `mx-sopa-de-lima/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tortillasuppe** · `mx-sopa-de-tortilla/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tacos al Pastor** · `mx-tacos-al-pastor/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Carnitas-Tacos** · `mx-tacos-de-carnitas/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Fisch-Tacos** · `mx-tacos-de-pescado/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Hähnchen-Tamales** · `mx-tamales-de-pollo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Nacatamales** · `ni-nacatamales/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Vigorón** · `ni-vigoron/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Panamaischer Sancocho** · `pa-sancocho-panameno/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Reis mit Straucherbsen** · `pr-arroz-con-gandules/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Mofongo** · `pr-mofongo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Auflauf mit reifen Kochbananen** · `pr-pastelon-de-platano-maduro/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Callaloo** · `tt-callaloo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Doubles** · `tt-doubles/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Doubles mit Tamarinde** · `tt-doubles-mit-tamarinde/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pelau** · `tt-pelau/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Amerikanischer Apfelkuchen** · `us-apple-pie/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **BBQ-Rinderbrust** · `us-bbq-beef-brisket/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Amerikanische Biscuits mit Bratensauce** · `us-biscuits-and-gravy/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Buffalo-Hähnchenflügel** · `us-buffalo-chicken-wings/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Caesar-Salat mit Hähnchen** · `us-caesar-salad-mit-hahnchen/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Cajun-Jambalaya** · `us-cajun-jambalaya/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Cheeseburger** · `us-cheeseburger/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Muschelsuppe (Clam Chowder)** · `us-clam-chowder/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Cobb-Salat** · `us-cobb-salad/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Maisbrot** · `us-cornbread/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gegrilltes Käsesandwich** · `us-grilled-cheese-sandwich/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gumbo** · `us-gumbo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Makkaroni mit Käsesauce** · `us-mac-and-cheese/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **New-England-Hummerbrötchen** · `us-new-england-lobster-roll/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Amerikanische Pancakes** · `us-pancakes-american/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Philly-Cheesesteak-Sandwich** · `us-philly-cheesesteak/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pulled-Pork-Sandwich** · `us-pulled-pork-sandwich/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Amerikanischer Kürbiskuchen** · `us-pumpkin-pie/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Australisches Hähnchen-Parmigiana** · `au-chicken-parmigiana-australian/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lamingtons** · `au-lamingtons/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Australische Fleischpastete** · `au-meat-pie-australian/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ika Mata** · `ck-ika-mata/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kokoda** · `fj-kokoda/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lovo** · `fj-lovo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Hāngī** · `nz-hangi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pavlova** · `nz-pavlova/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Frittierte Jungfische** · `nz-whitebait-fritters/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Mumu** · `pg-mumu/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Oka i'a** · `ws-oka-i-a/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Palusami** · `ws-palusami/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Poi** · `sb-poi/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lu Pulu** · `to-lu-pulu/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lap Lap** · `vu-lap-lap/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Alfajores** · `ar-alfajores/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Argentinisches Asado** · `ar-asado-argentino/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Chimichurri** · `ar-chimichurri/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Choripán (Chorizo-Sandwich)** · `ar-choripan/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Argentinische Empanadas** · `ar-empanadas-argentinas/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Locro** · `ar-locro/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Milanesa Napolitana** · `ar-milanesa-napolitana/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Provoleta** · `ar-provoleta/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pique Macho** · `bo-pique-macho/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Salteñas** · `bo-saltenas/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Silpancho** · `bo-silpancho/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Sopa de Maní (Erdnusssuppe)** · `bo-sopa-de-mani/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Acarajé** · `br-acaraje/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Brigadeiro** · `br-brigadeiro/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Churrasco** · `br-churrasco/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Coxinha** · `br-coxinha/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Feijoada** · `br-feijoada/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Moqueca Baiana** · `br-moqueca-baiana/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Gegrillte Picanha** · `br-picanha-vom-grill/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pão de Queijo** · `br-pao-de-queijo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Vatapá** · `br-vatapa/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Chilenischer Eintopf** · `cl-cazuela-chilena/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Curanto** · `cl-curanto/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Chilenische Humitas** · `cl-humitas-chilenas/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Chilenischer Maisauflauf** · `cl-pastel-de-choclo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Sopaipillas** · `cl-sopaipillas/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ajiaco aus Bogotá** · `co-ajiaco-bogotano/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Arepas mit Käse** · `co-arepas-mit-kase/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Bandeja Paisa** · `co-bandeja-paisa/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Changua** · `co-changua/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Patacones** · `co-patacones/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Kolumbianischer Sancocho** · `co-sancocho-colombiano/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Encebollado** · `ec-encebollado/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Hornado** · `ec-hornado/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Llapingachos** · `ec-llapingachos/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Chipa** · `py-chipa/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Mbejú** · `py-mbeju/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Paraguayischer Maiskuchen** · `py-sopa-paraguaya/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Ají de Gallina** · `pe-aji-de-gallina/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Anticuchos** · `pe-anticuchos/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Arroz Chaufa (peruanischer Bratreis)** · `pe-arroz-chaufa/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Causa Limeña (peruanischer Kartoffelauflauf)** · `pe-causa-limena/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Peruanische Ceviche** · `pe-ceviche-peruano/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Lomo Saltado** · `pe-lomo-saltado/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Papa a la Huancaína** · `pe-papa-a-la-huancaina/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Chajá** · `uy-chaja/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Chivito** · `uy-chivito/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Cachapa** · `ve-cachapa/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Hallacas** · `ve-hallacas/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Pabellón Criollo** · `ve-pabellon-criollo/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert
+- **Tequeños** · `ve-tequenos/image_01.png` — Urheber offen · Bildrechte noch nicht dokumentiert

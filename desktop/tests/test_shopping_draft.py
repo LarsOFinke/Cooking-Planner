@@ -113,6 +113,22 @@ class ShoppingDraftTest(unittest.TestCase):
                 draft.set_price(start, 'rice:g', raw)
             self.assertEqual('1.50', str(draft.price_for(start, 'rice:g')))
         self.assertEqual('0.00', normalize_price('0'))
+
+    def test_database_prices_override_legacy_values_and_failed_writes_preserve_state(self):
+        start = '2026-10-05'
+        draft = ShoppingDraft()
+        draft.set_price(start, 'rice:g', '1.00')
+        draft.use_prices(start, {'rice:g': '2.50'})
+        self.assertEqual('2.50', str(draft.price_for(start, 'rice:g')))
+        calls = []
+        draft.price_writer = lambda week, key, price: calls.append((week, key, price))
+        draft.set_price(start, 'rice:g', '3,75')
+        self.assertEqual((start, 'rice:g', '3.75'), calls[-1])
+        self.assertEqual('3.75', str(draft.price_for(start, 'rice:g')))
+        draft.price_writer = lambda *_: (_ for _ in ()).throw(RuntimeError('offline'))
+        with self.assertRaises(RuntimeError):
+            draft.set_price(start, 'rice:g', '4.00')
+        self.assertEqual('3.75', str(draft.price_for(start, 'rice:g')))
         with self.assertRaises(ValueError):
             draft.add_custom(start, 'Eggs', '6', 'pcs', '1.234')
         self.assertFalse(draft.week(start)['custom'])

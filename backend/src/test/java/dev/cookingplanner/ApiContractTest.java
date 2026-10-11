@@ -2,6 +2,7 @@ package dev.cookingplanner;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import dev.cookingplanner.recipes.repositories.RecipeRepository;
 import dev.cookingplanner.recipes.services.RecipeAdminService.EditInput;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +30,15 @@ class ApiContractTest {
     @Autowired WebApplicationContext context;
     @Autowired RecipeRepository recipes;
     @Autowired ObjectMapper json;
+    @Autowired JdbcTemplate jdbc;
 
     private static Path createDirectory() {
-        try { return Files.createTempDirectory("cooking-planner-api-"); }
+        try {
+            Path directory = Files.createTempDirectory("cooking-planner-api-");
+            Files.writeString(directory.resolve("shopping.json"),
+                "{\"version\":1,\"weeks\":{\"2026-10-05\":{\"prices\":{\"couscous:g\":\"2.50\"}}}}");
+            return directory;
+        }
         catch (IOException e) { throw new IllegalStateException(e); }
     }
 
@@ -97,6 +105,46 @@ class ApiContractTest {
         mvc.perform(get("/api/recipes/{id}?locale=de", id)).andExpect(status().isNotFound());
         mvc.perform(delete("/api/admin/recipes/{id}", id)).andExpect(status().isNoContent());
         mvc.perform(get("/api/recipes/{id}?locale=en", id)).andExpect(status().isNotFound());
+    }
+
+    @Test
+    void localizedIngredientsAndLegacyPricesLiveInNormalizedSqliteTables() throws Exception {
+        var mvc = MockMvcBuilders.webAppContextSetup(context).build();
+        mvc.perform(get("/api/ingredients?locale=en&q=Carrot"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[?(@.id == 'karotte')].translations.de").value("Karotte"));
+        mvc.perform(get("/api/ingredients?locale=de&q=Karotte"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[?(@.id == 'karotte')].translations.en").value("Carrot"));
+        mvc.perform(post("/api/ingredients").contentType("application/json")
+            .content("{\"id\":\"custom-pantry-test\",\"locale\":\"en\",\"name\":\"Pantry item\"}"))
+            .andExpect(status().isCreated());
+        mvc.perform(post("/api/ingredients").contentType("application/json")
+            .content("{\"id\":\"custom-pantry-test\",\"locale\":\"de\",\"name\":\"Vorrat\"}"))
+            .andExpect(status().isCreated());
+        mvc.perform(get("/api/ingredients?locale=de&q=Vorrat"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$[0].translations.en").value("Pantry item"));
+        mvc.perform(get("/api/ingredients/prices?week=2026-10-05"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$['couscous:g']").value("2.50"));
+        mvc.perform(put("/api/ingredients/couscous/prices?week=2026-10-05&unit=g")
+            .contentType("application/json").content("{\"price\":\"3,75\"}"))
+            .andExpect(status().isOk());
+        mvc.perform(get("/api/ingredients/prices?week=2026-10-05"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$['couscous:g']").value("3.75"));
+        mvc.perform(put("/api/ingredients/couscous/prices?week=2026-10-05&unit=g")
+            .contentType("application/json").content("{\"price\":\"-1\"}"))
+            .andExpect(status().isBadRequest());
+        assertEquals(1, jdbc.queryForObject("SELECT count(*) FROM ingredient WHERE id='karotte'", Integer.class));
+        assertEquals(2, jdbc.queryForObject(
+            "SELECT count(*) FROM ingredient_translation WHERE ingredient_id='karotte'", Integer.class));
+        assertEquals(1, jdbc.queryForObject(
+            "SELECT count(*) FROM ingredient_price WHERE ingredient_id='couscous'", Integer.class));
+        assertEquals(1, jdbc.queryForObject("PRAGMA foreign_keys", Integer.class));
+        assertTrue(Files.readString(DATA.resolve("shopping.json")).contains("2.50"));
+        mvc.perform(delete("/api/ingredients/prices?week=2026-10-05"))
+            .andExpect(status().isOk());
+        assertEquals(0, jdbc.queryForObject(
+            "SELECT count(*) FROM ingredient_price WHERE week_start='2026-10-05'", Integer.class));
     }
 
     @AfterAll

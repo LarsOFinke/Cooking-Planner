@@ -56,7 +56,7 @@ class BackendLauncher:
         environment["COOKING_PLANNER_CATALOG_DIR"] = str(catalogs)
         environment["COOKING_PLANNER_INSTANCE_TOKEN"] = self.instance_token
         self.process = subprocess.Popen([str(java), "-jar", str(jar)], stdout=self.log, stderr=subprocess.STDOUT, env=environment)
-        for _ in range(40):
+        for _ in range(240):
             if self.process.poll() is not None:
                 break
             if self._healthy():

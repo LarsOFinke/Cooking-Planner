@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import tools.jackson.databind.JsonNode;
@@ -26,9 +27,14 @@ public class RecipeAdminService {
         "diet_type", "suitable_for", "image_folder", "images");
     private final RecipeRepository recipes;
     private final RecipeEditRepository edits;
+    private final IngredientService ingredients;
 
+    @Autowired
+    public RecipeAdminService(RecipeRepository recipes, RecipeEditRepository edits, IngredientService ingredients) {
+        this.recipes = recipes; this.edits = edits; this.ingredients = ingredients;
+    }
     public RecipeAdminService(RecipeRepository recipes, RecipeEditRepository edits) {
-        this.recipes = recipes; this.edits = edits;
+        this(recipes, edits, null);
     }
 
     public List<Map<String, Object>> list() {
@@ -85,6 +91,7 @@ public class RecipeAdminService {
         boolean found = false;
         for (String locale : recipes.locales()) {
             JsonNode row = recipes.raw(locale, id).orElse(null);
+            if (row != null && ingredients != null) row = ingredients.canonicalize(row, locale);
             translations.put(locale, row);
             found |= row != null;
         }
@@ -124,6 +131,7 @@ public class RecipeAdminService {
             if (!translated.isObject()) throw bad("Translation for " + locale + " must be a JSON object");
             synchronizedRows.put(locale, synchronizeRow(source, translated, locale));
         }
+        if (ingredients != null) ingredients.register(synchronizedRows);
         edits.upsert(id, synchronizedRows);
         return get(id);
     }
@@ -153,6 +161,24 @@ public class RecipeAdminService {
             ingredients.add(updated);
         }
         row.set("ingredients", ingredients);
+        JsonNode sourceSteps = source.path("instructions").path("steps");
+        JsonNode translatedSteps = translated.path("instructions").path("steps");
+        if (!sourceSteps.isMissingNode()) {
+            if (!translatedSteps.isArray() || translatedSteps.size() != sourceSteps.size())
+                throw bad("Translate every instruction step for " + locale);
+            ArrayNode steps = row.arrayNode();
+            for (int index = 0; index < sourceSteps.size(); index++) {
+                String text = translatedSteps.get(index).path("text").asString().trim();
+                if (text.isBlank() || text.length() > 2000)
+                    throw bad("Instruction step " + (index + 1) + " is required for " + locale);
+                ObjectNode step = (ObjectNode) sourceSteps.get(index).deepCopy();
+                step.put("text", text);
+                steps.add(step);
+            }
+            ObjectNode instructions = row.objectNode();
+            instructions.set("steps", steps);
+            row.set("instructions", instructions);
+        }
         return row;
     }
 
@@ -190,6 +216,22 @@ public class RecipeAdminService {
                 !amount.isNumber() || amount.decimalValue().compareTo(BigDecimal.ZERO) <= 0 ||
                 !List.of("g", "ml", "pcs").contains(ingredient.path("unit").asString())) {
                 throw bad("Ingredients need unique IDs, positive amounts and g, ml or pcs units");
+            }
+        }
+        JsonNode instructions = row.path("instructions");
+        if (!instructions.isMissingNode()) {
+            JsonNode steps = instructions.path("steps");
+            if (!instructions.isObject() || !steps.isArray() || steps.size() > 50)
+                throw bad("Instructions must contain up to 50 steps");
+            for (int index = 0; index < steps.size(); index++) {
+                JsonNode step = steps.get(index);
+                String text = step.path("text").asString().trim();
+                if (!step.path("step").isIntegralNumber() || step.path("step").asInt() != index + 1 ||
+                    text.isBlank() || text.length() > 2000 || !step.path("ingredient_ids").isArray())
+                    throw bad("Invalid instruction step " + (index + 1));
+                for (JsonNode ingredientId : step.path("ingredient_ids"))
+                    if (!ingredientId.isString() || !ingredientIds.contains(ingredientId.asString()))
+                        throw bad("Instruction step references an unknown ingredient");
             }
         }
     }

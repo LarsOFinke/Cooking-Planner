@@ -94,6 +94,18 @@ class UiFlowTest(unittest.TestCase):
         self.app.show_tab('overview')
         self.assertEqual('overview', self.app.tab)
 
+    def test_recipe_tab_shows_each_instruction_as_a_separate_card(self):
+        self.recipe['instructions'] = [
+            {'step': 1, 'text': 'Prepare the carrots.', 'ingredientIds': ['karotte']},
+            {'step': 2, 'text': 'Cook until tender.', 'ingredientIds': []},
+        ]
+        self.app.show_tab('explore')
+        browser = self.app.browser
+        browser._show_detail_tab('recipe')
+        self.assertEqual(3, len(browser.detail_body.children))
+        self.assertEqual('Step 1', browser.detail_body.children[-2].children[-1].text)
+        self.assertEqual('Step 2', browser.detail_body.children[-3].children[-1].text)
+
     def test_saved_plan_opens_its_week_and_drives_shopping(self):
         day = self.app.week_start + timedelta(days=8)
         self.app.show_tab('explore')
@@ -289,6 +301,25 @@ class UiFlowTest(unittest.TestCase):
 
 @unittest.skipUnless(HAS_KIVY, 'Kivy and a desktop display are required')
 class AdminEditorTest(unittest.TestCase):
+    def test_ingredient_search_fills_shared_id_and_localized_names(self):
+        searches = []
+        panel = AdminPanel([], ('en', 'de'), 'en', lambda _: None, lambda *args: None,
+                           lambda _: None, lambda: None, lambda _: None,
+                           on_ingredient_search=lambda locale, query, callback:
+                               searches.append((locale, query, callback)))
+        panel.new()
+        panel._show_page('ingredients')
+        with patch('cooking_planner.recipes.admin.Clock.schedule_once',
+                   side_effect=lambda callback, delay: callback()):
+            panel.ingredient_search.text = 'carr'
+        self.assertEqual(('en', 'carr'), searches[-1][:2])
+        searches[-1][2]([{'id': 'karotte', 'name': 'Carrot',
+                          'translations': {'en': 'Carrot', 'de': 'Karotte'}}])
+        panel.ingredient_matches.children[0].dispatch('on_release', None)
+        self.assertEqual('karotte', panel.ingredient_rows[0]['shared']['ingredient_id'].text)
+        self.assertEqual('Carrot', panel.ingredient_rows[0]['names']['en'].text)
+        self.assertEqual('Karotte', panel.ingredient_rows[0]['names']['de'].text)
+
     def test_status_tab_is_available_without_a_selected_recipe(self):
         panel = AdminPanel([], ('en',), 'en', lambda _: None, lambda *args: None,
                            lambda _: None, lambda: None, lambda _: None)
@@ -356,6 +387,13 @@ class AdminEditorTest(unittest.TestCase):
             added['shared']['amount'].text = '0.5'
             added['names']['en'].text = 'Spice'
             added['names']['de'].text = 'Gewürz'
+            panel.step_rows[0]['texts']['en'].text = 'Prepare all ingredients.'
+            panel.step_rows[0]['texts']['de'].text = 'Alle Zutaten vorbereiten.'
+            panel.add_step()
+            final_step = panel.step_rows[-1]
+            final_step['ids'].text = 'test-spice'
+            final_step['texts']['en'].text = 'Add the spice.'
+            final_step['texts']['de'].text = 'Das Gewürz zugeben.'
             panel.save()
             self.assertEqual(45, saved[0][2]['en']['prep_minutes'])
             self.assertEqual(45, saved[0][2]['de']['prep_minutes'])
@@ -365,10 +403,14 @@ class AdminEditorTest(unittest.TestCase):
             self.assertEqual('Gewürz', saved[0][2]['de']['ingredients'][-1]['name'])
             self.assertEqual(0.5, saved[0][2]['en']['ingredients'][-1]['amount'])
             self.assertEqual(english['suitable_for'], saved[0][2]['en']['suitable_for'])
+            self.assertEqual('Prepare all ingredients.', saved[0][2]['en']['instructions']['steps'][0]['text'])
+            self.assertEqual('Alle Zutaten vorbereiten.', saved[0][2]['de']['instructions']['steps'][0]['text'])
+            self.assertEqual(['test-spice'], saved[0][2]['de']['instructions']['steps'][-1]['ingredient_ids'])
             panel.reset()
             self.assertEqual(english['name'], panel.locale_inputs['en']['name'].text)
             self.assertEqual(english['prep_minutes'], int(panel.shared_inputs['prep_minutes'].text))
             self.assertEqual(len(english['ingredients']), len(panel.ingredient_rows))
+            self.assertEqual(len(english['instructions']['steps']), len(panel.step_rows))
         finally:
             Window.remove_widget(panel.root)
 

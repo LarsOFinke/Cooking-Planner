@@ -6,10 +6,11 @@ from kivy.clock import Clock
 from kivy.metrics import dp
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
+from kivy.uix.label import Label
 
 from cooking_planner.recipes.images import attributions, image_file
 from cooking_planner.ui.dialogs import styled_popup
-from cooking_planner.ui.theme import (GOLD, MUTED, PANEL, WHITE, box, button, field,
+from cooking_planner.ui.theme import (GOLD, MUTED, PANEL, PANEL_LIGHT, WHITE, box, button, field,
                                       label, scroll_view, set_tab_active, spinner, tab_button)
 from cooking_planner.ui.strings import t
 
@@ -243,7 +244,20 @@ class RecipeBrowser:
             return
         if self.detail_tab == 'recipe':
             self.detail_body.add_widget(label(recipe['name'], 17, GOLD, 32, True))
-            self.detail_body.add_widget(label(t(self.locale, 'no_instructions'), 15, MUTED, 85))
+            steps = recipe.get('instructions') or []
+            if not steps:
+                self.detail_body.add_widget(label(t(self.locale, 'no_instructions'), 15, MUTED, 85))
+            for step in steps:
+                card = box(padding=8, spacing=3, color=PANEL_LIGHT, size_hint_y=None)
+                card.bind(minimum_height=card.setter('height'))
+                card.add_widget(label(f"{t(self.locale, 'instruction_step')} {step['step']}",
+                                      13, GOLD, 24, True))
+                text = Label(text=step['text'], color=WHITE, font_size=dp(14),
+                             size_hint_y=None, halign='left', valign='top')
+                text.bind(width=lambda widget, width: setattr(widget, 'text_size', (width, None)))
+                text.bind(texture_size=lambda widget, size: setattr(widget, 'height', max(dp(28), size[1] + dp(6))))
+                card.add_widget(text)
+                self.detail_body.add_widget(card)
             return
         photos = [(reference, photo) for reference in recipe.get("images", [])
                   if (photo := image_file(recipe["id"], reference)) is not None]

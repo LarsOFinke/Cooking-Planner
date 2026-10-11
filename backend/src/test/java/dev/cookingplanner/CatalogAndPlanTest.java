@@ -46,6 +46,9 @@ class CatalogAndPlanTest {
         assertEquals(english.ingredients().getFirst().amount(), german.ingredients().getFirst().amount());
         assertEquals(english.images(), german.images());
         assertEquals(586, repository.info("en").recipeCount());
+        assertFalse(english.instructions().isEmpty());
+        assertEquals(1, english.instructions().getFirst().step());
+        assertNotEquals(english.instructions().getFirst().text(), german.instructions().getFirst().text());
     }
 
     @Test
@@ -104,7 +107,7 @@ class CatalogAndPlanTest {
     @Test
     void mismatchedCatalogMetadataFailsWithoutTouchingSource() throws Exception {
         var source = Files.readString(catalogs().resolve("recipes_en.json"));
-        var damaged = source.replaceFirst("\\\"schema_version\\\": \\\"1\\.1\\.0\\\"", "\"schema_version\": \"9.0.0\"");
+        var damaged = source.replaceFirst("\\\"schema_version\\\": \\\"1\\.2\\.0\\\"", "\"schema_version\": \"9.0.0\"");
         Files.writeString(directory.resolve("recipes_en.json"), damaged);
         var repository = repository(directory, new ObjectMapper());
         assertThrows(IllegalStateException.class, () -> repository.findAll("en"));

@@ -10,7 +10,7 @@ PHOTO_NAME = re.compile(r'image_\d{2}\.(?:jpg|jpeg|png|webp)', re.IGNORECASE)
 
 
 def image_file(recipe_id: str, reference: str) -> Path | None:
-    """Reject arbitrary paths from API data and return only real local JPEGs."""
+    """Reject arbitrary paths from API data and resolve a local recipe image."""
     if not recipe_id or any(character not in "abcdefghijklmnopqrstuvwxyz0123456789-" for character in recipe_id):
         return None
     prefix = f"recipe_images/{recipe_id}/"

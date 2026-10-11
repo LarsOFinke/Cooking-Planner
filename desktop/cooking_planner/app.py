@@ -46,6 +46,10 @@ class CookingPlannerApp(App):
         self.generation = 0
         self.selected_id = None
         self.shopping_draft = ShoppingDraft(self.config_path.parent / 'shopping.json' if self.config_path else None)
+        self.shopping_draft.price_writer = self.client.save_ingredient_price if hasattr(self.client, 'save_ingredient_price') else None
+        self.shopping_draft.price_clearer = self.client.clear_ingredient_prices if hasattr(self.client, 'clear_ingredient_prices') else None
+        self.shopping_draft.ingredient_writer = (lambda ingredient_id, name:
+            self.client.register_ingredient(ingredient_id, self.locale, name)) if hasattr(self.client, 'register_ingredient') else None
         self.window_fullscreen = False
 
     def build(self):
@@ -138,13 +142,15 @@ class CookingPlannerApp(App):
         end = (self.week_start + timedelta(days=6)).isoformat()
         def load():
             return (self.client.locales(), self.client.recipes(locale), self.client.catalog_info(locale),
-                    self.client.plans(start, end, locale))
+                    self.client.plans(start, end, locale), self.client.ingredient_prices(start))
         self._submit(load, lambda data: self._loaded(data, generation))
 
     def _loaded(self, data, generation):
         if generation != self.generation:
             return
-        locales, self.recipes, self.info, self.plans = data
+        locales, self.recipes, self.info, self.plans = data[:4]
+        if len(data) > 4:
+            self.shopping_draft.use_prices(self.week_start.isoformat(), data[4])
         new_locales = tuple(locales)
         if self.locales != new_locales:
             self.locales = new_locales
@@ -187,7 +193,7 @@ class CookingPlannerApp(App):
         else:
             panel = AdminPanel(self.admin_records, self.locales, self.locale, self.select_admin_recipe,
                                self.save_admin_recipe, self.delete_admin_recipe, self.load_admin, self._status,
-                               getattr(self, 'admin_options', {}), self.status_message)
+                               getattr(self, 'admin_options', {}), self.status_message, self.search_ingredients)
             self.admin_panel = panel
             if self.admin_entry:
                 panel.show_recipe(self.admin_entry)
@@ -205,6 +211,18 @@ class CookingPlannerApp(App):
                 self._render_tab()
                 self._status(f"{len(records)} {t(self.locale, 'results')}")
         self._submit(load, loaded)
+
+    def search_ingredients(self, locale, query, on_result):
+        future = self.worker.submit(lambda: self.client.ingredients(locale, query))
+        def done(result):
+            try:
+                matches = result.result()
+            except Exception as error:
+                message = str(error)
+                Clock.schedule_once(lambda *_: self._status(message), 0)
+                return
+            Clock.schedule_once(lambda *_: on_result(matches), 0)
+        future.add_done_callback(done)
 
     def select_admin_recipe(self, recipe_id):
         def loaded(entry):

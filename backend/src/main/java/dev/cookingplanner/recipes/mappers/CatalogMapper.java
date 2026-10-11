@@ -2,6 +2,7 @@ package dev.cookingplanner.recipes.mappers;
 
 import dev.cookingplanner.recipes.entities.CatalogInfo;
 import dev.cookingplanner.recipes.entities.Ingredient;
+import dev.cookingplanner.recipes.entities.InstructionStep;
 import dev.cookingplanner.recipes.entities.Recipe;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -26,13 +27,18 @@ public class CatalogMapper {
             ingredients.add(new Ingredient(value(item, "name"), value(item, "ingredient_id"),
                 new BigDecimal(value(item, "amount")), value(item, "unit")));
         }
+        List<InstructionStep> steps = new ArrayList<>();
+        for (JsonNode item : row.path("instructions").path("steps")) {
+            steps.add(new InstructionStep(item.path("step").asInt(), value(item, "text"),
+                strings(item, "ingredient_ids")));
+        }
         return new Recipe(value(row, "id"), value(row, "name"), value(row, "country"), value(row, "country_code"),
             value(row, "region"), value(row, "continent"), value(row, "category"), value(row, "category_label"),
             value(row, "difficulty"), value(row, "difficulty_label"), value(row, "effort"), value(row, "effort_label"),
             value(row, "diet_type"), value(row, "diet_type_label"), strings(row, "suitable_for"),
             strings(row, "suitable_for_labels"), List.copyOf(ingredients), row.path("prep_minutes").asInt(),
             row.path("cook_minutes").asInt(), row.path("total_minutes").asInt(), value(row, "data_source_label"), locale,
-            strings(row, "images"));
+            strings(row, "images"), List.copyOf(steps));
     }
     public CatalogInfo info(JsonNode metadata, String locale, int actualCount) {
         return new CatalogInfo(locale, value(metadata, "dataset"), actualCount,

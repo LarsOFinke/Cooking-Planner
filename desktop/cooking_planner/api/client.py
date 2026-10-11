@@ -43,6 +43,24 @@ class ApiClient:
     def shopping(self, start: str, end: str, locale: str) -> list[dict]:
         return self.request("GET", "/api/plans/shopping?" + urlencode({"from": start, "to": end, "locale": locale}))
 
+    def ingredients(self, locale: str, query: str) -> list[dict]:
+        return self.request("GET", "/api/ingredients?" + urlencode({"locale": locale, "q": query}))
+
+    def register_ingredient(self, ingredient_id: str, locale: str, name: str) -> dict:
+        return self.request("POST", "/api/ingredients",
+                            {"id": ingredient_id, "locale": locale, "name": name})
+
+    def ingredient_prices(self, week: str) -> dict[str, str]:
+        return self.request("GET", "/api/ingredients/prices?" + urlencode({"week": week}))
+
+    def save_ingredient_price(self, week: str, key: str, price: str) -> None:
+        ingredient_id, unit = key.rsplit(':', 1)
+        self.request("PUT", "/api/ingredients/" + quote(ingredient_id, safe="") + "/prices?" +
+                     urlencode({"week": week, "unit": unit}), {"price": price})
+
+    def clear_ingredient_prices(self, week: str) -> None:
+        self.request("DELETE", "/api/ingredients/prices?" + urlencode({"week": week}))
+
     def save_plan(self, date: str, meal_type: str, recipe_id: str, servings: int) -> dict:
         return self.request("PUT", "/api/plans", {"date": date, "mealType": meal_type,
                                                   "recipeId": recipe_id, "servings": servings})

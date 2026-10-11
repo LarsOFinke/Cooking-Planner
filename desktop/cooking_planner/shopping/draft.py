@@ -63,6 +63,10 @@ class ShoppingDraft:
     def __init__(self, path: Path | None = None):
         self.path = path
         self.weeks = {}
+        self.database_prices = {}
+        self.price_writer = None
+        self.price_clearer = None
+        self.ingredient_writer = None
         self.recovery_notice = None
         if path and path.is_file():
             try:
@@ -82,6 +86,10 @@ class ShoppingDraft:
     def week(self, start: str) -> dict:
         return self.weeks.setdefault(start, {'plans': [], 'excludedPlans': [], 'excluded': [],
                                              'custom': [], 'checked': [], 'prices': {}})
+
+    def use_prices(self, start: str, prices: dict[str, str]) -> None:
+        """Use database prices for a loaded week; legacy JSON remains a migration source."""
+        self.database_prices[start] = dict(prices)
 
     def selected_plan_ids(self, start: str, plans: list[dict]) -> set[str]:
         state = self.week(start)
@@ -128,27 +136,43 @@ class ShoppingDraft:
         item = {'ingredientId': 'custom-' + uuid4().hex,
                 'name': name.strip(), 'amount': str(quantity), 'unit': unit.strip(), 'recipeCount': 0}
         state = self.week(start)
+        if self.ingredient_writer is not None:
+            self.ingredient_writer(item['ingredientId'], item['name'])
+        if normalized is not None and self.price_writer is not None:
+            self.price_writer(start, item_key(item), normalized)
         state['custom'].append(item)
         if normalized is not None:
             state.setdefault('prices', {})[item_key(item)] = normalized
         self.save()
 
     def price_for(self, start: str, key: str) -> Decimal | None:
-        value = self.week(start).get('prices', {}).get(key)
+        source = self.database_prices.get(start)
+        value = (source if source is not None else self.week(start).get('prices', {})).get(key)
         return Decimal(value) if value is not None else None
 
     def set_price(self, start: str, key: str, price: str) -> None:
         normalized = normalize_price(price)
+        if self.price_writer is not None:
+            self.price_writer(start, key, normalized or '')
         prices = self.week(start).setdefault('prices', {})
         if normalized is None:
             prices.pop(key, None)
         else:
             prices[key] = normalized
+        if start in self.database_prices:
+            if normalized is None:
+                self.database_prices[start].pop(key, None)
+            else:
+                self.database_prices[start][key] = normalized
         self.save()
 
     def remove_item(self, start: str, key: str) -> None:
         state = self.week(start)
+        if self.price_writer is not None and self.price_for(start, key) is not None:
+            self.price_writer(start, key, '')
         state.setdefault('prices', {}).pop(key, None)
+        if start in self.database_prices:
+            self.database_prices[start].pop(key, None)
         custom = state['custom']
         state['custom'] = [item for item in custom if item_key(item) != key]
         if len(state['custom']) == len(custom) and key not in state['excluded']:
@@ -168,6 +192,12 @@ class ShoppingDraft:
         self.save()
 
     def clear(self, start: str, plans: list[dict] | None = None) -> None:
+        if self.price_clearer is not None:
+            self.price_clearer(start)
+        elif self.price_writer is not None:
+            for key in list(self.database_prices.get(start, self.week(start).get('prices', {}))):
+                self.price_writer(start, key, '')
+        self.database_prices.pop(start, None)
         self.weeks[start] = {'plans': [], 'excludedPlans': [str(plan['id']) for plan in (plans or [])],
                              'excluded': [], 'custom': [], 'checked': [], 'prices': {}}
         self.save()

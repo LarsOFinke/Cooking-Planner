@@ -53,7 +53,7 @@ public class RecipeRepository {
             if (Files.size(file) > 8_000_000) throw new IllegalStateException("Recipe catalog is too large: " + file);
             JsonNode root = json.readTree(Files.readAllBytes(file));
             JsonNode metadata = root.path("metadata");
-            if (!"1.1.0".equals(metadata.path("schema_version").asString()) ||
+            if (!List.of("1.1.0", "1.2.0").contains(metadata.path("schema_version").asString()) ||
                 !locale.equals(metadata.path("language").asString())) {
                 throw new IllegalStateException("Unsupported or mismatched recipe catalog: " + file);
             }

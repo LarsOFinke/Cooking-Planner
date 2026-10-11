@@ -99,10 +99,10 @@ class ShoppingPanel:
     def _save_price(self, key, widget):
         try:
             self.draft.set_price(self.start, key, widget.text)
-        except ValueError:
+        except (ValueError, RuntimeError) as error:
             widget.background_color = RED
             self.price_summary.color = RED
-            self.price_summary.text = t(self.locale, 'invalid_price')
+            self.price_summary.text = str(error) if isinstance(error, RuntimeError) else t(self.locale, 'invalid_price')
             return
         widget.background_color = PANEL
         saved = self.draft.price_for(self.start, key)
@@ -273,7 +273,7 @@ class ShoppingPanel:
                 return
             try:
                 self.draft.add_custom(self.start, name.text, amount.text, unit.text, price.text)
-            except (ValueError, InvalidOperation):
+            except (ValueError, InvalidOperation, RuntimeError):
                 error.text = t(self.locale, 'invalid_item')
                 return
             if keep_open:
@@ -296,7 +296,11 @@ class ShoppingPanel:
         dialog.open()
 
     def remove(self, key):
-        self.draft.remove_item(self.start, key)
+        try:
+            self.draft.remove_item(self.start, key)
+        except RuntimeError as error:
+            self.on_status(str(error))
+            return
         self._changed()
 
     def toggle(self, key):
@@ -312,7 +316,11 @@ class ShoppingPanel:
                       title=t(self.locale, 'clear_list'), confirm_label=t(self.locale, 'clear_list'))
 
     def clear(self):
-        self.draft.clear(self.start, self.plans)
+        try:
+            self.draft.clear(self.start, self.plans)
+        except RuntimeError as error:
+            self.on_status(str(error))
+            return
         self._changed()
 
     def copy(self):

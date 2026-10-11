@@ -1,7 +1,6 @@
 """Check local image ingestion across both real recipe locales."""
 
 import json
-import shutil
 import struct
 import sys
 import tempfile
@@ -48,8 +47,7 @@ class ImageImportTest(unittest.TestCase):
             folder.mkdir(parents=True)
             (folder / 'image_01.png').write_bytes(png(5))
             (folder / 'image_02.png').write_bytes(png(19))
-            shutil.copy2(ROOT / 'data/recipe_images/dz-algerischer-couscous/image_01.webp',
-                         folder / 'image_03.webp')
+            (folder / 'image_03.png').write_bytes(png(31))
             self.assertEqual((1, 3), import_images(data / 'recipe_images'))
             self.assertEqual((1, 3), import_images(data / 'recipe_images'))
             refs = []
