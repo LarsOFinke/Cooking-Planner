@@ -6,7 +6,7 @@ from kivy.metrics import dp
 from cooking_planner.ui.dialogs import confirm_popup, styled_popup
 from cooking_planner.shopping.dialogs import open_add_item_dialog
 from cooking_planner.shopping.draft import item_key
-from cooking_planner.ui.theme import BG, GOLD, GREEN, MUTED, PANEL, PANEL_LIGHT, RED, WHITE, box, button, field, label, scroll_view, spinner
+from cooking_planner.ui.theme import BG, GOLD, GREEN, MUTED, PANEL, PANEL_LIGHT, WHITE, box, button, label, scroll_view
 from cooking_planner.ui.strings import t
 from cooking_planner.ui.clipboard import get_clipboard
 
@@ -104,65 +104,6 @@ class ShoppingPanel:
         self.price_summary.text = t(self.locale, 'shopping_prices_summary').format(
             count=len(prices), total=len(self.items), amount=self._money(total))
 
-    def edit_price(self, item):
-        key, unit = item_key(item), item['unit']
-        if unit == 'g':
-            choices = {'100 g': 100, '1 kg': 1000}
-        elif unit == 'ml':
-            choices = {'100 ml': 100, '1 l': 1000}
-        else:
-            choices = {f'1 {unit}': 1}
-        reference = self.draft.reference_price_for(key)
-        weekly = self.draft.weekly_price_for(self.start, key)
-        if weekly is not None and reference is None:
-            choices[t(self.locale, 'shopping_listed_quantity')] = None
-        if reference is not None:
-            reference_price, basis = reference
-            selected = next((name for name, quantity in choices.items() if quantity == basis), None)
-            if selected is None:
-                selected = f'{basis} {unit}'
-                choices[selected] = int(basis)
-            initial = reference_price
-        elif weekly is not None:
-            selected, initial = t(self.locale, 'shopping_listed_quantity'), weekly
-        else:
-            selected, initial = next(iter(choices)), None
-        body = box(padding=14, spacing=8, size_hint_y=None)
-        body.bind(minimum_height=body.setter('height'))
-        scroll = scroll_view(do_scroll_x=False)
-        scroll.add_widget(body)
-        body.add_widget(label(t(self.locale, 'shopping_reference_help'), 13, MUTED, 45))
-        body.add_widget(label(t(self.locale, 'shopping_price'), 14, WHITE, 26))
-        price = field(t(self.locale, 'shopping_price_hint'),
-                      text='' if initial is None else format(initial, '.2f').replace(
-                          '.', ',' if self.locale == 'de' else '.'))
-        body.add_widget(price)
-        body.add_widget(label(t(self.locale, 'shopping_price_basis'), 14, WHITE, 26))
-        basis = spinner(selected, choices)
-        body.add_widget(basis)
-        error = label('', 12, RED, 28)
-        body.add_widget(error)
-        actions = box(False, spacing=8, size_hint_y=None, height=dp(42))
-        dialog = styled_popup(item['name'], scroll, 0.55, 0.72)
-        actions.add_widget(button(t(self.locale, 'cancel'), dialog.dismiss))
-
-        def save():
-            try:
-                quantity = choices[basis.text]
-                if quantity is None:
-                    self.draft.set_price(self.start, key, price.text)
-                else:
-                    self.draft.set_reference_price(key, price.text, quantity)
-            except (ValueError, RuntimeError) as failure:
-                error.text = str(failure) if isinstance(failure, RuntimeError) else t(self.locale, 'invalid_price')
-                return
-            dialog.dismiss()
-            self._render()
-
-        actions.add_widget(button(t(self.locale, 'shopping_save_price'), save, 'primary'))
-        body.add_widget(actions)
-        dialog.open()
-
     def _section(self, title, count):
         heading = box(False, spacing=6, size_hint_y=None, height=dp(30))
         heading.add_widget(label(title, 15, GOLD, 30, True))
@@ -224,9 +165,9 @@ class ShoppingPanel:
         unit.shorten = True
         row.add_widget(unit)
         estimated = self.draft.price_for(self.start, key, item['amount'])
-        price_text = self._money(estimated) if estimated is not None else t(self.locale, 'shopping_set_price')
-        row.add_widget(button(price_text, lambda: self.edit_price(item), height=38,
-                              size_hint_x=None, width=dp(100)))
+        price_text = self._money(estimated) if estimated is not None else '—'
+        row.add_widget(label(price_text, 13, GOLD if estimated is not None else MUTED, 38,
+                             size_hint_x=None, width=dp(100)))
         row.add_widget(box(False))
         row.add_widget(button('×', lambda: self.remove(key), 'danger',
                               height=38, size_hint_x=None, width=dp(38)))

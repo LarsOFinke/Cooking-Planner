@@ -68,6 +68,39 @@ class AdminEditorTest(unittest.TestCase):
         panel._show_results(rows[-1:], panel.generation)
         self.assertEqual('Page 1 of 1', panel.page_label.text)
 
+    def test_ingredient_catalog_edits_reusable_prices_by_unit(self):
+        saved = []
+        panel = IngredientAdminPanel(('en',), 'en', lambda: None,
+                                     lambda *_: None, lambda *_: None, lambda *_: None,
+                                     lambda *_: None,
+                                     reference_prices={'rice:g': {'price': '1.80', 'basisQuantity': 100}},
+                                     on_save_price=lambda *args: saved.append(args))
+        panel.select({'id': 'rice', 'translations': {'en': 'Rice'}})
+        self.assertEqual('1.80', panel.price_input.text)
+        self.assertEqual('100 g', panel.price_basis.text)
+        panel.price_input.text = '2,50'
+        panel.price_basis.text = '1 kg'
+        panel.save_price()
+        self.assertEqual(('rice', 'g', '2.50', 1000), saved[-1])
+        panel.price_unit.text = 'ml'
+        self.assertEqual('', panel.price_input.text)
+        panel.price_input.text = '2.555'
+        panel.save_price()
+        self.assertEqual(1, len(saved))
+        panel.price_input.text = '1.10'
+        panel.save_price()
+        self.assertEqual(('rice', 'ml', '1.10', 100), saved[-1])
+        panel.update_prices({'rice:g': {'price': '2.50', 'basisQuantity': 1000},
+                             'rice:ml': {'price': '1.10', 'basisQuantity': 100}})
+        self.assertEqual('1.10', panel.price_input.text)
+        panel.price_input.text = ''
+        panel.save_price()
+        self.assertEqual(('rice', 'ml', '', 100), saved[-1])
+        panel.update_prices({'milk:ml': {'price': '2.20', 'basisQuantity': 100}})
+        panel.select({'id': 'milk', 'translations': {'en': 'Milk'}})
+        self.assertEqual('ml', panel.price_unit.text)
+        self.assertEqual('2.20', panel.price_input.text)
+
     def test_ingredient_search_fills_shared_id_and_localized_names(self):
         searches = []
         panel = AdminPanel([], ('en', 'de'), 'en', lambda _: None, lambda *args: None,

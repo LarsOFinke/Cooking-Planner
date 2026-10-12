@@ -4,7 +4,6 @@ from decimal import InvalidOperation
 
 from kivy.metrics import dp
 
-from cooking_planner.shopping.draft import normalize_price
 from cooking_planner.ui.strings import t
 from cooking_planner.ui.theme import MUTED, box, button, field, label, scroll_view, spinner
 
@@ -59,14 +58,11 @@ def open_add_item_dialog(locale, draft, start, on_ingredient_search, on_added,
     form.add_widget(label(t(locale, 'shopping_quantity_unit'), 13, MUTED, 24))
     amount = field(t(locale, 'manual_amount'), text='1')
     unit = spinner('pcs', ('pcs', 'g', 'kg', 'ml', 'l', 'pack'))
-    price = field(t(locale, 'shopping_optional_price'))
     error = label('', 13, MUTED, 32)
     quantity = box(False, spacing=10, size_hint_y=None, height=dp(42))
     quantity.add_widget(amount)
     quantity.add_widget(unit)
     form.add_widget(quantity)
-    form.add_widget(label(t(locale, 'shopping_optional_price'), 13, MUTED, 24))
-    form.add_widget(price)
     form.add_widget(error)
     actions = box(False, spacing=8, size_hint_y=None, height=dp(44))
     dialog = popup_factory(t(locale, 'add_item'), body, 0.72, 0.78)
@@ -74,26 +70,19 @@ def open_add_item_dialog(locale, draft, start, on_ingredient_search, on_added,
 
     def save(keep_open=False):
         try:
-            normalize_price(price.text)
-        except ValueError:
-            error.text = t(locale, 'invalid_price')
-            return
-        try:
-            draft.add_custom(start, name.text, amount.text, unit.text, price.text, selection['id'])
+            draft.add_custom(start, name.text, amount.text, unit.text, ingredient_id=selection['id'])
         except (ValueError, InvalidOperation, RuntimeError) as failure:
             error.text = str(failure) if isinstance(failure, RuntimeError) else t(locale, 'invalid_item')
             return
         if keep_open:
             name.text = ''
             amount.text = '1'
-            price.text = ''
             selection['id'], selection['name'] = None, None
             error.text = t(locale, 'item_added')
             name.focus = True
         else:
             name.focus = False
             amount.focus = False
-            price.focus = False
             dialog.dismiss()
         on_added()
 

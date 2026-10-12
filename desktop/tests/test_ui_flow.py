@@ -174,9 +174,9 @@ class UiFlowTest(unittest.TestCase):
         self.app.show_tab('explore')
         browser = self.app.browser
         browser._show_detail_tab('recipe')
-        self.assertEqual(3, len(browser.detail_body.children))
-        self.assertEqual('Step 1', browser.detail_body.children[-2].children[-1].text)
-        self.assertEqual('Step 2', browser.detail_body.children[-3].children[-1].text)
+        self.assertEqual(4, len(browser.detail_body.children))
+        self.assertEqual('Step 1', browser.detail_body.children[-3].children[-1].text)
+        self.assertEqual('Step 2', browser.detail_body.children[-4].children[-1].text)
 
     def test_recipe_photo_opens_window_sized_gallery(self):
         self.app.show_tab('explore')
@@ -188,6 +188,25 @@ class UiFlowTest(unittest.TestCase):
         self.assertIsNotNone(popup.parent)
         popup.dismiss()
 
+    def test_explore_shows_reference_prices_and_partial_per_serving_cost(self):
+        ingredients = self.recipe['ingredients']
+        first = ingredients[0]
+        key = item_key(first)
+        self.app.shopping_draft.use_reference_prices({
+            key: {'price': '1.80', 'basisQuantity': 100}})
+        self.app.show_tab('explore')
+        browser = self.app.browser
+        browser._show_detail_tab('ingredients')
+        texts = [getattr(widget, 'text', '') for card in browser.detail_body.children
+                 for widget in (card, *card.children)]
+        self.assertTrue(any('€1.80 / 100 g' in value for value in texts))
+        self.assertTrue(any('No reference price' in value for value in texts))
+        self.assertTrue(any(f'1/{len(ingredients)} priced' in value for value in texts))
+        browser._show_detail_tab('recipe')
+        self.assertTrue(any(f'Estimated per serving: €1.80 · 1/{len(ingredients)} priced'
+                            in widget.text for widget in browser.detail_body.children
+                            if hasattr(widget, 'text')))
+
     def test_admin_switches_between_recipe_and_ingredient_catalogs(self):
         self.app.tab = 'admin'
         self.app._render_tab()
@@ -197,6 +216,25 @@ class UiFlowTest(unittest.TestCase):
             self.assertIsInstance(self.app.admin_panel, IngredientAdminPanel)
             self.app.show_recipe_admin()
         self.assertIsInstance(self.app.admin_panel, AdminPanel)
+
+    def test_admin_price_save_updates_shared_reference_prices(self):
+        ingredient = self.recipe['ingredients'][0]
+        key = item_key(ingredient)
+        saved = []
+        prices = {key: {'price': '1.80', 'basisQuantity': 100}}
+        self.app.client = SimpleNamespace(
+            save_reference_price=lambda *args: saved.append(args),
+            reference_prices=lambda: prices)
+        self.app.tab = 'admin'
+        self.app.admin_mode = 'ingredients'
+        self.app.ingredient_admin_entry = {
+            'id': ingredient['ingredientId'], 'translations': {'en': ingredient['name']}}
+        self.app._render_tab()
+        with patch.object(self.app, '_submit', side_effect=lambda work, done: done(work())):
+            self.app.save_admin_price(ingredient['ingredientId'], ingredient['unit'], '1.80', 100)
+        self.assertEqual([(key, '1.80', 100)], saved)
+        self.assertEqual('1.80', self.app.admin_panel.price_input.text)
+        self.assertEqual('1.80', str(self.app.shopping_draft.reference_price_for(key)[0]))
 
     def test_saved_plan_opens_its_week_and_drives_shopping(self):
         day = self.app.week_start + timedelta(days=8)
@@ -280,17 +318,15 @@ class UiFlowTest(unittest.TestCase):
         amount = next(widget for widget in fields if widget.hint_text == 'Quantity')
         unit = next(child for widget in form.children for child in widget.children
                     if isinstance(child, Spinner))
-        price = next(widget for widget in fields if widget.hint_text == 'Price (€), optional')
         actions = next(widget for widget in body.children if any(isinstance(child, Button)
                                                                  for child in widget.children))
         more = next(widget for widget in actions.children if widget.text == 'Add another')
         done = next(widget for widget in actions.children if widget.text == 'Add item')
-        name.text, amount.text, unit.text, price.text = 'Milk', '2', 'l', '3,50'
+        name.text, amount.text, unit.text = 'Milk', '2', 'l'
         more.dispatch('on_release', None)
         self.assertEqual('', name.text)
-        self.assertEqual('', price.text)
         self.assertEqual(1, len(panel.items))
-        self.assertEqual('3.50', str(draft.price_for(panel.start, item_key(panel.items[0]))))
+        self.assertIsNone(draft.price_for(panel.start, item_key(panel.items[0])))
         self.assertFalse(dismissed)
         name.text, amount.text, unit.text = 'Eggs', '6', 'pcs'
         done.dispatch('on_release', None)
@@ -329,7 +365,7 @@ class UiFlowTest(unittest.TestCase):
         draft.add_custom(start, 'Olive oil', '2', 'l')
         panel = ShoppingPanel([], [], draft, 'en', self.app.week_start, lambda _: None)
         rice = panel.rows.children[0]
-        self.assertEqual(['[ ]', 'Rice', '100', 'g', 'Set price', '×'],
+        self.assertEqual(['[ ]', 'Rice', '100', 'g', '—', '×'],
                          [widget.text for widget in reversed(rice.children) if hasattr(widget, 'text')])
         self.assertEqual('left', rice.children[-2].halign)
         self.assertIsNotNone(rice.children[-2].text_size)
@@ -340,7 +376,7 @@ class UiFlowTest(unittest.TestCase):
         self.assertEqual('To buy', panel.rows.children[-1].children[-1].text)
         panel.toggle(item_key(next(item for item in panel.items if item['name'] == 'Rice')))
         completed = panel.rows.children[0]
-        self.assertEqual(['[x]', 'Rice', '100', 'g', 'Set price', '×'],
+        self.assertEqual(['[x]', 'Rice', '100', 'g', '—', '×'],
                          [widget.text for widget in reversed(completed.children) if hasattr(widget, 'text')])
         self.assertEqual('Completed', panel.rows.children[1].children[-1].text)
         self.assertEqual('1 / 2 items to buy', panel.summary.text)
@@ -349,42 +385,21 @@ class UiFlowTest(unittest.TestCase):
         self.assertEqual(2, len(panel.rows.children))
         self.assertEqual('[x]', panel.rows.children[0].children[-1].text)
 
-    def test_shopping_row_price_updates_saved_draft_and_partial_total(self):
+    def test_shopping_row_shows_admin_reference_price_as_read_only_estimate(self):
         draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
         start = self.app.week_start.isoformat()
         draft.add_custom(start, 'Rice', '100', 'g')
         draft.add_custom(start, 'Milk', '2', 'l')
+        rice = next(item for item in draft.items(start, [], []) if item['name'] == 'Rice')
+        draft.use_reference_prices({item_key(rice): {'price': '2.75', 'basisQuantity': 100}})
         panel = ShoppingPanel([], [], draft, 'en', self.app.week_start, lambda _: None)
-        rice = next(item for item in panel.items if item['name'] == 'Rice')
-        def edit_price(value):
-            dialog = SimpleNamespace(open=lambda: None, dismiss=lambda: None)
-            with patch('cooking_planner.shopping.panel.styled_popup', return_value=dialog) as popup:
-                panel.edit_price(rice)
-            body = popup.call_args.args[1]
-            def descendants(widget):
-                yield widget
-                for child in widget.children:
-                    yield from descendants(child)
-            widgets = list(descendants(body))
-            price = next(widget for widget in widgets if isinstance(widget, TextInput))
-            price.text = value
-            save = next(widget for widget in widgets if getattr(widget, 'text', '') == 'Save price')
-            save.dispatch('on_release', None)
-            return widgets
-
-        edit_price('2,75')
-        self.assertEqual('2.75', str(draft.reference_price_for(item_key(rice))[0]))
-        self.assertEqual('100', str(draft.reference_price_for(item_key(rice))[1]))
         self.assertEqual('1/2 priced · €2.75', panel.price_summary.text)
+        rice_row = next(row for row in panel.rows.children
+                        if any(getattr(widget, 'text', '') == 'Rice' for widget in row.children))
+        self.assertTrue(any(getattr(widget, 'text', '') == '€2.75' for widget in rice_row.children))
         with patch('cooking_planner.shopping.panel.Clipboard.copy') as copy:
             panel.copy()
         self.assertIn('100 g Rice · €2.75', copy.call_args.args[0])
-        widgets = edit_price('2.755')
-        self.assertEqual('2.75', str(draft.reference_price_for(item_key(rice))[0]))
-        self.assertTrue(any('valid euro price' in getattr(widget, 'text', '') for widget in widgets))
-        edit_price('')
-        self.assertIsNone(draft.price_for(start, item_key(rice), rice['amount']))
-        self.assertEqual('0/2 priced · €0.00', panel.price_summary.text)
 
     def test_meal_selection_stays_open_for_multiple_choices(self):
         draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')

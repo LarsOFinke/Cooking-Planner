@@ -5,19 +5,22 @@ import re
 from kivy.clock import Clock
 from kivy.metrics import dp
 
+from cooking_planner.pricing import normalize_price
 from cooking_planner.ui.dialogs import confirm_popup
 from cooking_planner.ui.strings import t
-from cooking_planner.ui.theme import GOLD, MUTED, PANEL, WHITE, box, button, field, label, scroll_view
+from cooking_planner.ui.theme import GOLD, MUTED, PANEL, WHITE, box, button, field, label, scroll_view, spinner
 
 
 class IngredientAdminPanel:
     PAGE_SIZE = 40
 
     def __init__(self, locales, locale, on_recipes, on_search, on_save, on_delete, on_status,
-                 selected=None):
+                 selected=None, reference_prices=None, on_save_price=None):
         self.locales, self.locale = tuple(locales), locale
         self.on_search, self.on_save, self.on_delete = on_search, on_save, on_delete
         self.on_status = on_status
+        self.reference_prices = dict(reference_prices or {})
+        self.on_save_price = on_save_price
         self.selected = selected
         self.generation = 0
         self.search_event = None
@@ -157,6 +160,56 @@ class IngredientAdminPanel:
             actions.add_widget(button(t(self.locale, 'delete_ingredient'), self.confirm_delete,
                                       'danger', height=42))
         self.editor.add_widget(actions)
+        if not new and self.on_save_price is not None:
+            self._render_price_editor(entry['id'])
+
+    def _render_price_editor(self, ingredient_id):
+        self.editor.add_widget(label(t(self.locale, 'admin_reference_price'), 17, GOLD, 36, True))
+        self.editor.add_widget(label(t(self.locale, 'admin_reference_price_help'), 13, MUTED, 58))
+        units = ('g', 'kg', 'ml', 'l', 'pcs', 'pack')
+        initial_unit = next((unit for unit in units
+                             if f'{ingredient_id}:{unit}' in self.reference_prices), 'g')
+        self.price_unit = spinner(initial_unit, units)
+        self._cell(t(self.locale, 'manual_unit'), self.price_unit)
+        self.price_input = field(t(self.locale, 'shopping_price_hint'))
+        self._cell(t(self.locale, 'shopping_price'), self.price_input)
+        self.price_basis = spinner('100 g', ('100 g', '1 kg'))
+        self._cell(t(self.locale, 'shopping_price_basis'), self.price_basis)
+        self.price_unit.bind(text=lambda *_: self._show_price_for_unit(ingredient_id))
+        self._show_price_for_unit(ingredient_id)
+        self.editor.add_widget(button(t(self.locale, 'shopping_save_price'), self.save_price,
+                                      'primary', height=42))
+
+    def _show_price_for_unit(self, ingredient_id):
+        unit = self.price_unit.text
+        bases = {'g': {'100 g': 100, '1 kg': 1000},
+                 'ml': {'100 ml': 100, '1 l': 1000}}.get(unit, {f'1 {unit}': 1})
+        quote = self.reference_prices.get(f'{ingredient_id}:{unit}')
+        if quote is not None:
+            quantity = quote['basisQuantity']
+            if quantity not in bases.values():
+                bases[f'{quantity} {unit}'] = quantity
+        self.price_bases = bases
+        self.price_basis.values = tuple(bases)
+        self.price_basis.text = next((name for name, quantity in bases.items()
+                                      if quote is not None and quantity == quote['basisQuantity']),
+                                     next(iter(bases)))
+        price = quote['price'] if quote is not None else ''
+        self.price_input.text = price.replace('.', ',') if self.locale == 'de' else price
+
+    def save_price(self):
+        try:
+            price = normalize_price(self.price_input.text)
+        except ValueError:
+            self.set_status(t(self.locale, 'invalid_price'))
+            return
+        self.on_save_price(self.selected['id'], self.price_unit.text, price or '',
+                           self.price_bases[self.price_basis.text])
+
+    def update_prices(self, prices):
+        self.reference_prices = dict(prices)
+        if self.selected is not None:
+            self._show_price_for_unit(self.selected['id'])
 
     def save(self):
         ingredient_id = self.id_input.text.strip()

@@ -6,24 +6,11 @@ from pathlib import Path
 from shutil import copyfileobj
 from uuid import uuid4
 
+from cooking_planner.pricing import normalize_price
+
 
 def item_key(item: dict) -> str:
     return f"{item['ingredientId']}:{item['unit']}"
-
-
-def normalize_price(raw: str) -> str | None:
-    """Normalize an optional euro price for the complete listed quantity."""
-    value = raw.strip().replace(',', '.')
-    if not value:
-        return None
-    try:
-        price = Decimal(value)
-        cents = price.quantize(Decimal('0.01'))
-    except InvalidOperation as error:
-        raise ValueError('Enter a price with at most two decimal places') from error
-    if not price.is_finite() or price < 0 or price > 1_000_000 or price != cents:
-        raise ValueError('Enter a non-negative price with at most two decimal places')
-    return format(cents, '.2f')
 
 
 def valid_week(state: object) -> bool:

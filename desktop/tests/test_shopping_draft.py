@@ -6,7 +6,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from cooking_planner.shopping.draft import ShoppingDraft, item_key, normalize_price
+from cooking_planner.pricing import normalize_price
+from cooking_planner.shopping.draft import ShoppingDraft, item_key
 
 
 class ShoppingDraftTest(unittest.TestCase):

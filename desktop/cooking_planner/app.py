@@ -50,7 +50,6 @@ class CookingPlannerApp(App):
         self.selected_id = None
         self.shopping_draft = ShoppingDraft(self.config_path.parent / 'shopping.json' if self.config_path else None)
         self.shopping_draft.price_writer = self.client.save_ingredient_price if hasattr(self.client, 'save_ingredient_price') else None
-        self.shopping_draft.reference_writer = self.client.save_reference_price if hasattr(self.client, 'save_reference_price') else None
         self.shopping_draft.price_clearer = self.client.clear_ingredient_prices if hasattr(self.client, 'clear_ingredient_prices') else None
         self.shopping_draft.ingredient_writer = (lambda ingredient_id, name:
             self.client.register_ingredient(ingredient_id, self.locale, name)) if hasattr(self.client, 'register_ingredient') else None
@@ -188,7 +187,8 @@ class CookingPlannerApp(App):
             panel = OverviewPanel(self.recipes, self.plans, self.info, self.locale,
                                   self.show_tab, self.show_notes)
         elif self.tab == 'explore':
-            panel = RecipeBrowser(self.recipes, self.locale, self.plan_recipe, self._selected_recipe)
+            panel = RecipeBrowser(self.recipes, self.locale, self.plan_recipe, self._selected_recipe,
+                                  self.shopping_draft.reference_price_for)
             self.browser = panel
             if self.selected_id:
                 panel.select_id(self.selected_id)
@@ -204,7 +204,8 @@ class CookingPlannerApp(App):
             panel = IngredientAdminPanel(self.locales, self.locale, self.show_recipe_admin,
                                          self.list_admin_ingredients, self.save_admin_ingredient,
                                          self.delete_admin_ingredient, self._status,
-                                         self.ingredient_admin_entry)
+                                         self.ingredient_admin_entry,
+                                         self.shopping_draft.reference_prices, self.save_admin_price)
             self.admin_panel = panel
         else:
             panel = AdminPanel(self.admin_records, self.locales, self.locale, self.select_admin_recipe,
@@ -248,6 +249,17 @@ class CookingPlannerApp(App):
             self.ingredient_admin_entry = entry
             self.refresh()
         self._submit(lambda: self.client.save_admin_ingredient(ingredient_id, translations), saved)
+
+    def save_admin_price(self, ingredient_id, unit, price, basis_quantity):
+        def save_and_reload():
+            self.client.save_reference_price(f'{ingredient_id}:{unit}', price, basis_quantity)
+            return self.client.reference_prices()
+        def saved(prices):
+            self.shopping_draft.use_reference_prices(prices)
+            if self.tab == 'admin' and self.admin_mode == 'ingredients':
+                self.admin_panel.update_prices(prices)
+            self._status(t(self.locale, 'admin_price_saved'))
+        self._submit(save_and_reload, saved)
 
     def delete_admin_ingredient(self, ingredient_id):
         def deleted(_):

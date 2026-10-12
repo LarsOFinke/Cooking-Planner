@@ -1,6 +1,7 @@
 import math
 import random
 import webbrowser
+from decimal import Decimal
 
 from kivy.clock import Clock
 from kivy.metrics import dp
@@ -18,11 +19,13 @@ from cooking_planner.ui.strings import t
 class RecipeBrowser:
     PAGE_SIZE = 16
 
-    def __init__(self, recipes: list[dict], locale: str, on_plan, on_select=None) -> None:
+    def __init__(self, recipes: list[dict], locale: str, on_plan, on_select=None,
+                 reference_price_for=None) -> None:
         self.recipes = recipes
         self.locale = locale
         self.on_plan = on_plan
         self.on_select = on_select
+        self.reference_price_for = reference_price_for
         self.page = 0
         self.selected_id = recipes[0]["id"] if recipes else None
         self.image_index = 0
@@ -248,11 +251,24 @@ class RecipeBrowser:
             self.detail_body.add_widget(label(t(self.locale, 'ingredients'), 18, GOLD, 36, True))
             for ingredient in recipe['ingredients']:
                 amount = f"{ingredient['amount']:g}" if isinstance(ingredient['amount'], float) else str(ingredient['amount'])
-                self.detail_body.add_widget(label(f"{ingredient['name']}    {amount} {ingredient['unit']}",
-                                                  14, WHITE, 30))
+                quote = self._ingredient_price(ingredient)
+                card = box(spacing=2, padding=5, color=PANEL_LIGHT, hover=True,
+                           size_hint_y=None, height=dp(58))
+                card.add_widget(label(f"{ingredient['name']}    {amount} {ingredient['unit']}",
+                                      14, WHITE, 27))
+                if quote is None:
+                    detail = t(self.locale, 'price_unavailable')
+                else:
+                    price, basis, cost = quote
+                    detail = (f"{self._money(cost)} · {self._money(price)} / "
+                              f"{basis} {ingredient['unit']}")
+                card.add_widget(label(detail, 12, GOLD if quote is not None else MUTED, 23))
+                self.detail_body.add_widget(card)
+            self.detail_body.add_widget(self._cost_summary(recipe))
             return
         if self.detail_tab == 'recipe':
             self.detail_body.add_widget(label(recipe['name'], 17, GOLD, 32, True))
+            self.detail_body.add_widget(self._cost_summary(recipe))
             steps = recipe.get('instructions') or []
             if not steps:
                 self.detail_body.add_widget(label(t(self.locale, 'no_instructions'), 15, MUTED, 85))
@@ -309,6 +325,26 @@ class RecipeBrowser:
                 if credit.get('source_url'):
                     self.detail_body.add_widget(button(t(self.locale, 'image_source'),
                                                        lambda url=credit['source_url']: webbrowser.open(url), height=32))
+
+    def _money(self, value):
+        amount = format(value, '.2f')
+        return f"{amount.replace('.', ',')} €" if self.locale == 'de' else f'€{amount}'
+
+    def _ingredient_price(self, ingredient):
+        key = f"{ingredient['ingredientId']}:{ingredient['unit']}"
+        quote = self.reference_price_for(key) if self.reference_price_for else None
+        if quote is None:
+            return None
+        price, basis = quote
+        return price, basis, price * Decimal(str(ingredient['amount'])) / basis
+
+    def _cost_summary(self, recipe):
+        costs = [quote[2] for ingredient in recipe['ingredients']
+                 if (quote := self._ingredient_price(ingredient)) is not None]
+        total = self._money(sum(costs, Decimal('0')))
+        text = t(self.locale, 'recipe_estimated_cost').format(
+            amount=total, priced=len(costs), total=len(recipe['ingredients']))
+        return label(text, 14, GOLD, 42, True)
 
     def _open_image(self, recipe, photos, index):
         return open_gallery(recipe, photos, index, self.locale)
