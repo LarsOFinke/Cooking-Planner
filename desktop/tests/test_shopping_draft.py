@@ -71,6 +71,39 @@ class ShoppingDraftTest(unittest.TestCase):
         self.assertEqual(1, len(items))
         self.assertEqual('175', str(items[0]['amount']))
 
+    def test_week_plan_ingredients_can_be_removed_and_restored_after_manual_merge(self):
+        start = '2026-10-05'
+        recipes = [{'id': 'dish', 'ingredients': [
+            {'ingredientId': 'rice', 'name': 'Rice', 'amount': 100, 'unit': 'g'}]}]
+        plans = [{'id': 1, 'recipeId': 'dish', 'servings': 2}]
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'shopping.json'
+            draft = ShoppingDraft(path)
+            draft.add_custom(start, 'Rice', '50', 'g', ingredient_id='rice')
+            self.assertEqual('250', str(draft.items(start, plans, recipes)[0]['amount']))
+            draft.remove_item(start, 'rice:g')
+            self.assertEqual([], draft.items(start, plans, recipes))
+            draft.set_item_included(start, 'rice:g', True)
+            self.assertEqual('200', str(ShoppingDraft(path).items(start, plans, recipes)[0]['amount']))
+            draft.set_item_included(start, 'rice:g', False)
+            draft.add_custom(start, 'Rice', '25', 'g', ingredient_id='rice')
+            self.assertEqual('225', str(draft.items(start, plans, recipes)[0]['amount']))
+
+    def test_bulk_meal_and_ingredient_choices_survive_reload(self):
+        start = '2026-10-05'
+        plans = [{'id': 1}, {'id': 2}]
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'shopping.json'
+            draft = ShoppingDraft(path)
+            draft.select_all_plans(start, plans, False)
+            self.assertEqual(set(), draft.selected_plan_ids(start, plans))
+            draft.select_all_plans(start, plans, True)
+            draft.set_item_included(start, 'rice:g', False)
+            draft.include_items(start, {'rice:g'})
+            restored = ShoppingDraft(path)
+            self.assertEqual({'1', '2'}, restored.selected_plan_ids(start, plans))
+            self.assertEqual([], restored.week(start)['excluded'])
+
     def test_legacy_selected_meals_migrate_without_losing_exclusions(self):
         start = '2026-10-05'
         with tempfile.TemporaryDirectory() as temporary:
@@ -164,6 +197,22 @@ class ShoppingDraftTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             draft.add_custom(start, 'Eggs', '6', 'pcs', '1.234')
         self.assertFalse(draft.week(start)['custom'])
+
+    def test_database_price_writes_do_not_create_a_second_json_price(self):
+        start = '2026-10-05'
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'shopping.json'
+            draft = ShoppingDraft(path)
+            draft.use_prices(start, {})
+            writes = []
+            draft.price_writer = lambda week, key, price: writes.append((week, key, price))
+            draft.set_price(start, 'rice:g', '1.80')
+            self.assertEqual([(start, 'rice:g', '1.80')], writes)
+            self.assertEqual('1.80', str(draft.weekly_price_for(start, 'rice:g')))
+            self.assertEqual({}, draft.week(start)['prices'])
+            draft.add_custom(start, 'Milk', '1', 'l', '2.50')
+            saved = json.loads(path.read_text(encoding='utf-8'))
+            self.assertEqual({}, saved['weeks'][start]['prices'])
 
     def test_invalid_draft_is_backed_up_before_new_edits(self):
         with tempfile.TemporaryDirectory() as temporary:

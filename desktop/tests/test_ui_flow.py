@@ -505,9 +505,30 @@ class UiFlowTest(unittest.TestCase):
         self.assertEqual({'9'}, draft.selected_plan_ids(start, [plan]))
         self.assertEqual('1 meal selected', panel.meal_summary.text)
         self.assertTrue(panel.items)
+        body.children[0].children[1].dispatch('on_release', None)
+        self.assertFalse(panel.items)
+        body.children[0].children[2].dispatch('on_release', None)
+        self.assertTrue(panel.items)
         done = body.children[0].children[0]
         done.dispatch('on_release', None)
         self.assertEqual([True], dismissed)
+
+    def test_planned_ingredient_can_be_excluded_and_restored_in_picker(self):
+        draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
+        start = self.app.week_start.isoformat()
+        recipe = {'id': 'simple', 'ingredients': [
+            {'ingredientId': 'rice', 'name': 'Rice', 'amount': 100, 'unit': 'g'}]}
+        plan = {'id': 8, 'date': start, 'mealType': 'DINNER', 'recipeId': 'simple',
+                'recipeTitle': 'Simple', 'servings': 2}
+        panel = ShoppingPanel([plan], [recipe], draft, 'en', self.app.week_start, lambda _: None)
+        dialog = SimpleNamespace(open=lambda: None, dismiss=lambda: None)
+        with patch('cooking_planner.shopping.panel.styled_popup', return_value=dialog) as popup:
+            panel.choose_items()
+        rows = popup.call_args.args[1].children[1].children[0]
+        rows.children[0].dispatch('on_release', None)
+        self.assertFalse(panel.items)
+        rows.children[0].dispatch('on_release', None)
+        self.assertEqual('200', str(panel.items[0]['amount']))
 
     def test_admin_requires_a_choice_for_each_language(self):
         saved = []

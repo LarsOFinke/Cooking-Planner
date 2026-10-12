@@ -125,6 +125,26 @@ class ShoppingDraft:
             excluded.append(key)
         self.save()
 
+    def select_all_plans(self, start: str, plans: list[dict], selected: bool) -> None:
+        self.week(start)['excludedPlans'] = [] if selected else [str(plan['id']) for plan in plans]
+        self.save()
+
+    def set_item_included(self, start: str, key: str, included: bool) -> None:
+        state = self.week(start)
+        excluded = state['excluded']
+        if included and key in excluded:
+            excluded.remove(key)
+        elif not included and key not in excluded:
+            excluded.append(key)
+            if key in state['checked']:
+                state['checked'].remove(key)
+        self.save()
+
+    def include_items(self, start: str, keys: set[str]) -> None:
+        state = self.week(start)
+        state['excluded'] = [key for key in state['excluded'] if key not in keys]
+        self.save()
+
     def add_custom(self, start: str, name: str, amount: str, unit: str, price: str = '',
                    ingredient_id: str | None = None) -> None:
         quantity = Decimal(amount.strip().replace(',', '.'))
@@ -141,7 +161,12 @@ class ShoppingDraft:
             self.price_writer(start, item_key(item), normalized)
         state['custom'].append(item)
         if normalized is not None:
-            state.setdefault('prices', {})[item_key(item)] = normalized
+            if self.price_writer is None:
+                state.setdefault('prices', {})[item_key(item)] = normalized
+            else:
+                self.database_prices.setdefault(start, {})[item_key(item)] = normalized
+        if item_key(item) in state['excluded']:
+            state['excluded'].remove(item_key(item))
         self.save()
 
     def weekly_price_for(self, start: str, key: str) -> Decimal | None:
@@ -171,17 +196,19 @@ class ShoppingDraft:
         normalized = normalize_price(price)
         if self.price_writer is not None:
             self.price_writer(start, key, normalized or '')
-        prices = self.week(start).setdefault('prices', {})
-        if normalized is None:
-            prices.pop(key, None)
-        else:
-            prices[key] = normalized
-        if start in self.database_prices:
+        if self.price_writer is None:
+            prices = self.week(start).setdefault('prices', {})
             if normalized is None:
-                self.database_prices[start].pop(key, None)
+                prices.pop(key, None)
             else:
-                self.database_prices[start][key] = normalized
-        self.save()
+                prices[key] = normalized
+            self.save()
+        else:
+            prices = self.database_prices.setdefault(start, {})
+            if normalized is None:
+                prices.pop(key, None)
+            else:
+                prices[key] = normalized
 
     def remove_item(self, start: str, key: str) -> None:
         state = self.week(start)
@@ -190,10 +217,11 @@ class ShoppingDraft:
         state.setdefault('prices', {}).pop(key, None)
         if start in self.database_prices:
             self.database_prices[start].pop(key, None)
-        custom = state['custom']
-        state['custom'] = [item for item in custom if item_key(item) != key]
-        if len(state['custom']) == len(custom) and key not in state['excluded']:
+        state['custom'] = [item for item in state['custom'] if item_key(item) != key]
+        if key not in state['excluded']:
             state['excluded'].append(key)
+        if key in state['checked']:
+            state['checked'].remove(key)
         self.save()
 
     def toggle_checked(self, start: str, key: str) -> None:
@@ -219,8 +247,8 @@ class ShoppingDraft:
                              'excluded': [], 'custom': [], 'checked': [], 'prices': {}}
         self.save()
 
-    def items(self, start: str, plans: list[dict], recipes: list[dict]) -> list[dict]:
-        state = self.week(start)
+    def planned_items(self, start: str, plans: list[dict], recipes: list[dict]) -> list[dict]:
+        """Project the selected backend plans through the current recipe catalog."""
         selected = self.selected_plan_ids(start, plans)
         by_id = {recipe['id']: recipe for recipe in recipes}
         combined = {}
@@ -239,6 +267,11 @@ class ShoppingDraft:
                 else:
                     combined[key] = {'ingredientId': ingredient['ingredientId'], 'name': ingredient['name'],
                                      'amount': amount, 'unit': ingredient['unit'], 'recipeCount': 1}
+        return sorted(combined.values(), key=lambda item: item['name'].casefold())
+
+    def items(self, start: str, plans: list[dict], recipes: list[dict]) -> list[dict]:
+        state = self.week(start)
+        combined = {item_key(item): item for item in self.planned_items(start, plans, recipes)}
         for item in state['custom']:
             key = item_key(item)
             if key in combined:

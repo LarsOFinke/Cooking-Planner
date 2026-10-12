@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import org.springframework.stereotype.Repository;
 import tools.jackson.core.type.TypeReference;
 
@@ -27,7 +28,7 @@ public class MealPlanRepository {
     public synchronized MealPlan save(MealPlanInput input) {
         List<MealPlan> plans = new ArrayList<>(read());
         MealPlan existing = plans.stream().filter(p -> p.date().equals(input.date()) && p.mealType() == input.mealType()).findFirst().orElse(null);
-        long id = existing == null ? plans.stream().mapToLong(MealPlan::id).max().orElse(0) + 1 : existing.id();
+        long id = existing == null ? newId(plans) : existing.id();
         plans.removeIf(p -> p.date().equals(input.date()) && p.mealType() == input.mealType());
         MealPlan plan = new MealPlan(id, input.date(), input.mealType(), input.recipeId(), input.servings(), "");
         plans.add(plan); store.write(FILE, plans); return plan;
@@ -36,5 +37,11 @@ public class MealPlanRepository {
         List<MealPlan> plans = new ArrayList<>(read());
         if (!plans.removeIf(p -> p.id() == id)) return 0;
         store.write(FILE, plans); return 1;
+    }
+    private static long newId(List<MealPlan> plans) {
+        while (true) {
+            long candidate = ThreadLocalRandom.current().nextLong(1, Long.MAX_VALUE);
+            if (plans.stream().noneMatch(plan -> plan.id() == candidate)) return candidate;
+        }
     }
 }

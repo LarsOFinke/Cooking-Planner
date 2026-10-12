@@ -7,7 +7,7 @@ from cooking_planner.ui.dialogs import confirm_popup, styled_popup
 from cooking_planner.shopping.dialogs import open_add_item_dialog
 from cooking_planner.shopping.draft import item_key
 from cooking_planner.ui.theme import BG, GOLD, GREEN, MUTED, PANEL, PANEL_LIGHT, WHITE, box, button, label, scroll_view
-from cooking_planner.ui.strings import t
+from cooking_planner.ui.strings import MEALS, t
 from cooking_planner.ui.clipboard import get_clipboard
 
 
@@ -33,13 +33,13 @@ class ShoppingPanel:
         self.actions = actions
         primary = box(False, spacing=5, size_hint_y=None, height=dp(40))
         primary.add_widget(button(t(locale, 'add_item'), self.add_item, 'primary', height=40))
-        primary.add_widget(button(t(locale, 'choose_meals'), self.choose_meals, height=40))
-        primary.add_widget(button(t(locale, 'add_week_short'), self.add_all, height=40))
+        primary.add_widget(button(t(locale, 'shopping_from_plan'), self.choose_meals, height=40))
+        primary.add_widget(button(t(locale, 'shopping_choose_items'), self.choose_items, height=40))
         self.more_button = button(t(locale, 'more_actions'), self.toggle_actions, height=40)
         primary.add_widget(self.more_button)
         primary_scroll = scroll_view(do_scroll_y=False, size_hint_y=None, height=dp(40))
         primary.size_hint_x = None
-        primary_scroll.bind(width=lambda _, width: setattr(primary, 'width', max(width, dp(570))))
+        primary_scroll.bind(width=lambda _, width: setattr(primary, 'width', max(width, dp(670))))
         primary_scroll.add_widget(primary)
         actions.add_widget(primary_scroll)
         secondary = box(False, spacing=5, size_hint_y=None, height=0, opacity=0, disabled=True)
@@ -141,6 +141,15 @@ class ShoppingPanel:
         total.halign = 'right'
         heading.add_widget(total)
         self.rows.add_widget(heading)
+
+    @staticmethod
+    def _choice_button(text, callback):
+        control = button(text, callback, height=46)
+        control.halign = 'left'
+        control.shorten = True
+        control.bind(size=lambda widget, _: setattr(widget, 'text_size',
+                                                   (widget.width - dp(16), widget.height)))
+        return control
 
     def _column_header(self):
         heading = box(False, padding=5, spacing=5, size_hint_y=None, height=dp(25))
@@ -244,7 +253,11 @@ class ShoppingPanel:
         scroll = scroll_view(do_scroll_x=False)
         scroll.add_widget(rows)
         body.add_widget(scroll)
-        actions = box(False, size_hint_y=None, height=dp(42))
+        actions = box(False, spacing=6, size_hint_y=None, height=dp(42))
+        actions.add_widget(button(t(self.locale, 'shopping_select_all'),
+                                  lambda: select_all(True)))
+        actions.add_widget(button(t(self.locale, 'shopping_select_none'),
+                                  lambda: select_all(False)))
         actions.add_widget(button(t(self.locale, 'close'), lambda: dialog.dismiss(), 'primary'))
         body.add_widget(actions)
         dialog = styled_popup(t(self.locale, 'choose_meals'), body, 0.65, 0.75)
@@ -252,14 +265,69 @@ class ShoppingPanel:
         def render_choices():
             rows.clear_widgets()
             selected = self.draft.selected_plan_ids(self.start, self.plans)
+            by_id = {recipe['id']: recipe for recipe in self.recipes}
             for plan in self.plans:
-                title = f"{'✓' if str(plan['id']) in selected else '○'}  {plan['date']} · {plan['recipeTitle']} · {plan['servings']} {t(self.locale, 'servings').lower()}"
-                rows.add_widget(button(title, lambda plan_id=plan['id']: choose(plan_id), height=46))
+                recipe = by_id.get(plan['recipeId'])
+                count = len(recipe['ingredients']) if recipe else 0
+                meal = MEALS.get(self.locale, MEALS['en']).get(plan.get('mealType'), '')
+                title = (f"{'✓' if str(plan['id']) in selected else '○'}  {plan['date']} · {meal} · "
+                         f"{plan['recipeTitle']} · {plan['servings']} {t(self.locale, 'servings').lower()} "
+                         f"· {count} {t(self.locale, 'ingredients_count').lower()}")
+                rows.add_widget(self._choice_button(title, lambda plan_id=plan['id']: choose(plan_id)))
             if not self.plans:
                 rows.add_widget(label(t(self.locale, 'empty_week'), 16, MUTED, 70))
 
         def choose(plan_id):
             self.draft.toggle_plan(self.start, plan_id)
+            self._changed()
+            render_choices()
+            self.notice.text = t(self.locale, 'shopping_selection_updated')
+
+        def select_all(selected):
+            self.draft.select_all_plans(self.start, self.plans, selected)
+            self._changed()
+            render_choices()
+            self.notice.text = t(self.locale, 'shopping_selection_updated')
+
+        render_choices()
+        dialog.open()
+
+    def choose_items(self):
+        body = box(padding=12, spacing=8)
+        body.add_widget(label(t(self.locale, 'shopping_choose_items_help'), 14, MUTED, 42))
+        rows = box(spacing=5, size_hint_y=None)
+        rows.bind(minimum_height=rows.setter('height'))
+        scroll = scroll_view(do_scroll_x=False)
+        scroll.add_widget(rows)
+        body.add_widget(scroll)
+        actions = box(False, spacing=6, size_hint_y=None, height=dp(42))
+        actions.add_widget(button(t(self.locale, 'shopping_include_all'), lambda: include_all()))
+        actions.add_widget(button(t(self.locale, 'close'), lambda: dialog.dismiss(), 'primary'))
+        body.add_widget(actions)
+        dialog = styled_popup(t(self.locale, 'shopping_choose_items'), body, 0.7, 0.75)
+
+        def planned():
+            return self.draft.planned_items(self.start, self.plans, self.recipes)
+
+        def render_choices():
+            rows.clear_widgets()
+            excluded = set(self.draft.week(self.start)['excluded'])
+            for item in planned():
+                key = item_key(item)
+                title = f"{'○' if key in excluded else '✓'}  {item['name']} · {self._amount(item)} {item['unit']}"
+                rows.add_widget(self._choice_button(title, lambda item_key_value=key: choose(item_key_value)))
+            if not rows.children:
+                rows.add_widget(label(t(self.locale, 'shopping_no_selected_meals'), 14, MUTED, 70))
+
+        def choose(key):
+            included = key in self.draft.week(self.start)['excluded']
+            self.draft.set_item_included(self.start, key, included)
+            self._changed()
+            render_choices()
+            self.notice.text = t(self.locale, 'shopping_selection_updated')
+
+        def include_all():
+            self.draft.include_items(self.start, {item_key(item) for item in planned()})
             self._changed()
             render_choices()
             self.notice.text = t(self.locale, 'shopping_selection_updated')

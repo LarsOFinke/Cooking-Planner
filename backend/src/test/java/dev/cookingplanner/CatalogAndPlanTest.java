@@ -89,6 +89,8 @@ class CatalogAndPlanTest {
         service.delete(first.id());
         assertTrue(shopping.list(day, day, "en").isEmpty());
         assertThrows(ResponseStatusException.class, () -> service.delete(first.id()));
+        var newPlan = service.save(new MealPlanInput(day, MealType.DINNER, "dz-algerischer-couscous", 1));
+        assertNotEquals(first.id(), newPlan.id());
     }
 
     @Test

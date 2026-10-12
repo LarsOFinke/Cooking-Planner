@@ -5,9 +5,12 @@ project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$project_root"
 
 source scripts/build/ensure-linux-deps.sh
-mvn -f backend/pom.xml package
+progress=("$PYTHON_BIN" scripts/build/progress.py)
+"${progress[@]}" --step 1 --total 5 --name 'Build backend' \
+    --log build/logs/linux-backend.log -- mvn -f backend/pom.xml package
 mkdir -p build
 cp backend/target/cooking-planner-api-0.1.0.jar build/backend.jar
+echo '[2/5] Build desktop wheel'
 bash scripts/build/build-wheel.sh
 
 python_bin="${PYTHON_BIN:-python3}"
@@ -19,13 +22,19 @@ if (( ${#wheels[@]} != 1 )); then
     echo "Expected one Cooking Planner wheel in dist/wheels" >&2
     exit 1
 fi
-"$build_python" -m pip install --no-deps --force-reinstall "${wheels[0]}"
+"${progress[@]}" --step 3 --total 5 --name 'Install desktop wheel' \
+    --log build/logs/linux-wheel-install.log -- \
+    "$build_python" -m pip install --no-deps --force-reinstall "${wheels[0]}"
 
 runtime_dir="$project_root/build/runtime-linux"
 rm -rf -- "$runtime_dir"
-jlink --add-modules ALL-MODULE-PATH --strip-debug --no-header-files --no-man-pages --output "$runtime_dir"
+"${progress[@]}" --step 4 --total 5 --name 'Bundle Java runtime' \
+    --log build/logs/linux-runtime.log -- \
+    jlink --add-modules ALL-MODULE-PATH --strip-debug --no-header-files --no-man-pages --output "$runtime_dir"
 mkdir -p dist/linux
-"$build_python" -m PyInstaller --noconfirm --clean --onefile --windowed \
+"${progress[@]}" --step 5 --total 5 --name 'Build standalone Linux executable' \
+    --log build/logs/linux-executable.log -- \
+    "$build_python" -m PyInstaller --noconfirm --onefile --windowed \
     --name CookingPlanner --distpath dist/linux --workpath build/pyinstaller-linux --specpath build \
     --add-binary "$runtime_dir:runtime" \
     --add-data "$project_root/build/backend.jar:." \

@@ -130,9 +130,8 @@ public class IngredientService implements ApplicationRunner {
                     price.getIngredientId(), price.getWeekStart(), price.getUnit()).isEmpty())
                     prices.save(price);
             }
-            if (!imported.isEmpty())
-                jdbc.update("INSERT INTO migration_marker(name) VALUES ('shopping-prices-v1')");
         }
+        jdbc.update("INSERT INTO migration_marker(name) VALUES ('shopping-prices-v1')");
     }
 
     @Transactional
