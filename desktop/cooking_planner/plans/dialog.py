@@ -3,13 +3,16 @@ from datetime import date, timedelta
 from kivy.metrics import dp
 
 from cooking_planner.ui.dialogs import styled_popup
-from cooking_planner.ui.theme import GOLD, MUTED, box, button, field, label, spinner
+from cooking_planner.ui.theme import GOLD, MUTED, box, button, field, label, scroll_view, spinner
 from cooking_planner.ui.strings import MEALS, t
 
 
 def plan_popup(recipe: dict, locale: str, initial_day: date, initial_meal: str,
                on_save) -> None:
-    body = box(padding=18, spacing=12)
+    content = box(padding=12, spacing=8)
+    scroll = scroll_view(do_scroll_x=False)
+    body = box(padding=12, spacing=10, size_hint_y=None)
+    body.bind(minimum_height=body.setter('height'))
     body.add_widget(label(recipe["name"], 21, GOLD, 48, True))
     body.add_widget(label(f"{recipe['categoryLabel']}  ·  {recipe['totalMinutes']} {t(locale, 'minutes')}", 14, MUTED, 32))
     body.add_widget(label(t(locale, "select_day"), 14, MUTED, 28))
@@ -36,8 +39,10 @@ def plan_popup(recipe: dict, locale: str, initial_day: date, initial_meal: str,
     body.add_widget(serving_row)
     error = label("", 13, MUTED, 34)
     body.add_widget(error)
+    scroll.add_widget(body)
+    content.add_widget(scroll)
     actions = box(False, spacing=8, size_hint_y=None, height=dp(44))
-    dialog = styled_popup(t(locale, "plan_this"), body)
+    dialog = styled_popup(t(locale, "plan_this"), content, 0.7, 0.88)
     actions.add_widget(button(t(locale, "cancel"), dialog.dismiss))
     def save() -> None:
         try:
@@ -49,5 +54,5 @@ def plan_popup(recipe: dict, locale: str, initial_day: date, initial_meal: str,
         dialog.dismiss()
         on_save(selected_day, meal, recipe["id"], int(servings.text))
     actions.add_widget(button(t(locale, "save"), save, kind="primary"))
-    body.add_widget(actions)
+    content.add_widget(actions)
     dialog.open()

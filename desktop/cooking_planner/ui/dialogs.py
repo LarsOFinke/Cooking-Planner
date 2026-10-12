@@ -1,4 +1,5 @@
 from kivy.metrics import dp
+from kivy.core.window import Window
 from kivy.uix.popup import Popup
 
 from cooking_planner.ui.theme import GOLD, PANEL, WHITE, box, button, label
@@ -15,7 +16,8 @@ def confirm_popup(message: str, locale: str, on_confirm, title=None, confirm_lab
     body = box(padding=18, spacing=14)
     body.add_widget(label(message, 17, WHITE, 70))
     actions = box(False, spacing=8, size_hint_y=None, height=dp(44))
-    dialog = styled_popup(title or t(locale, "remove"), body, 0.47, 0.36)
+    dialog = styled_popup(title or t(locale, "remove"), body, 0.55, None)
+    dialog.height = min(dp(240), Window.height * 0.88)
     actions.add_widget(button(t(locale, "cancel"), dialog.dismiss))
     def confirm() -> None:
         dialog.dismiss()

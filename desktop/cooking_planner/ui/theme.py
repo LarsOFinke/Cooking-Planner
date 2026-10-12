@@ -136,7 +136,7 @@ class HoverSpinnerOption(RoundedControlBehavior, HoverColorBehavior, SpinnerOpti
         super().__init__(**kwargs)
 
 
-class HoverTextInput(RoundedControlBehavior, HoverColorBehavior, TextInput):
+class HoverTextInput(HoverColorBehavior, TextInput):
     hover_cursor = 'ibeam'
 
 

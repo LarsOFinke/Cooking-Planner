@@ -4,7 +4,7 @@ import sys
 import tempfile
 import unittest
 from copy import deepcopy
-from datetime import timedelta
+from datetime import date, timedelta
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -17,10 +17,13 @@ try:
     if not HAS_DISPLAY:
         raise ImportError('No display')
     from kivy.core.window import Window
+    from kivy.clock import Clock
     from kivy.metrics import dp
     from kivy.uix.button import Button
     from kivy.uix.textinput import TextInput
     from kivy.uix.spinner import Spinner
+    from kivy.uix.popup import Popup
+    from kivy.uix.scrollview import ScrollView
     from cooking_planner.app import CookingPlannerApp
     from cooking_planner.overview.panel import OverviewPanel
     from cooking_planner.plans.week import WeekPlanner
@@ -294,6 +297,33 @@ class UiFlowTest(unittest.TestCase):
             self.app.toggle_window()
             self.assertIs(False, fake_window.fullscreen)
             self.assertEqual('Fullscreen', self.app.window_button.text)
+
+    def test_planning_dialog_day_controls_and_save_at_both_scales(self):
+        for scale in (1.0, 2.0):
+            self.app.change_scale(scale)
+            with patch.object(self.app, 'save_plan') as save_plan:
+                self.app.plan_recipe(self.recipe)
+                popup = next(widget for widget in Window.children if isinstance(widget, Popup))
+                try:
+                    Clock.tick()
+                    Clock.tick()
+                    date_input = next(widget for widget in popup.walk()
+                                      if isinstance(widget, TextInput))
+                    arrows = {widget.text: widget for widget in date_input.parent.children
+                              if isinstance(widget, Button)}
+                    self.assertIsInstance(popup.content.children[1], ScrollView)
+                    self.assertIs(date_input.parent.parent,
+                                  popup.content.children[1].children[0])
+                    initial = date.fromisoformat(date_input.text)
+                    arrows['›'].dispatch('on_release', None)
+                    self.assertEqual((initial + timedelta(days=1)).isoformat(), date_input.text)
+                    save = next(widget for widget in popup.walk()
+                                if isinstance(widget, Button) and widget.text == 'Save to plan')
+                    save.dispatch('on_release', None)
+                    save_plan.assert_called_once_with(initial + timedelta(days=1), 'DINNER',
+                                                       self.recipe['id'], 1)
+                finally:
+                    popup.dismiss()
 
     def test_overview_reflows_and_week_days_span_the_row(self):
         overview = OverviewPanel([self.recipe], [], {}, 'en', lambda _: None, lambda: None)
