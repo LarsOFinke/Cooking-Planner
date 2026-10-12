@@ -149,6 +149,31 @@ class ApiContractTest {
     }
 
     @Test
+    void referencePricesUseAQuantityBasisAndCarryAcrossWeeks() throws Exception {
+        var mvc = MockMvcBuilders.webAppContextSetup(context).build();
+        mvc.perform(put("/api/ingredients/test-reference-rice/reference-prices?unit=g")
+            .contentType("application/json").content("{\"price\":\"1.80\",\"basisQuantity\":100}"))
+            .andExpect(status().isOk());
+        mvc.perform(get("/api/ingredients/reference-prices"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$['test-reference-rice:g'].price").value("1.80"))
+            .andExpect(jsonPath("$['test-reference-rice:g'].basisQuantity").value(100));
+        assertEquals(1, jdbc.queryForObject(
+            "SELECT count(*) FROM ingredient_price WHERE ingredient_id='test-reference-rice' " +
+            "AND week_start='*' AND amount_cents=180 AND basis_quantity=100", Integer.class));
+        mvc.perform(get("/api/ingredients/prices?week=2026-10-05"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$['test-reference-rice:g']").doesNotExist());
+        mvc.perform(get("/api/ingredients/prices?week=2026-10-12"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$['test-reference-rice:g']").doesNotExist());
+        mvc.perform(put("/api/ingredients/test-reference-rice/reference-prices?unit=g")
+            .contentType("application/json").content("{\"price\":\"2.40\",\"basisQuantity\":0}"))
+            .andExpect(status().isBadRequest());
+        mvc.perform(get("/api/ingredients/reference-prices"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$['test-reference-rice:g'].price").value("1.80"));
+    }
+
+    @Test
     void ingredientAdminEditsTranslationsAndProtectsUsedIngredients() throws Exception {
         var mvc = MockMvcBuilders.webAppContextSetup(context).build();
         mvc.perform(put("/api/admin/ingredients/test-admin-spice").contentType("application/json")

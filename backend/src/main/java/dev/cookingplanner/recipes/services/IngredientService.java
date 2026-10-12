@@ -40,6 +40,8 @@ public class IngredientService implements ApplicationRunner {
     private static final Logger log = LoggerFactory.getLogger(IngredientService.class);
     public record Match(String id, String name, Map<String, String> translations) {}
     public record PriceInput(String price) {}
+    public record ReferencePriceInput(String price, Integer basisQuantity) {}
+    public record ReferencePrice(String price, int basisQuantity) {}
     public record NewIngredient(String id, String locale, String name) {}
     public record CatalogInput(Map<String, String> translations) {}
     public record CatalogEntry(String id, Map<String, String> translations) {}
@@ -325,6 +327,39 @@ public class IngredientService implements ApplicationRunner {
         for (var row : prices.findByWeekStart(week))
             result.put(row.getIngredientId() + ':' + row.getUnit(), row.getAmount().toPlainString());
         return result;
+    }
+
+    public Map<String, ReferencePrice> referencePrices() {
+        Map<String, ReferencePrice> result = new LinkedHashMap<>();
+        for (var row : prices.findByWeekStart("*"))
+            result.put(row.getIngredientId() + ':' + row.getUnit(),
+                new ReferencePrice(row.getAmount().toPlainString(), row.getBasisQuantity()));
+        return result;
+    }
+
+    @Transactional
+    public void saveReferencePrice(String ingredientId, String unit, ReferencePriceInput input) {
+        if (ingredientId == null || ingredientId.isBlank() || unit == null || unit.isBlank() || unit.length() > 24)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingredient and unit are required");
+        var existing = prices.findByIngredientIdAndWeekStartAndUnit(ingredientId, "*", unit);
+        if (input == null || input.price() == null || input.price().isBlank()) {
+            existing.ifPresent(prices::delete);
+            return;
+        }
+        if (input.basisQuantity() == null || input.basisQuantity() <= 0 || input.basisQuantity() > 1_000_000)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Price basis must be a positive quantity");
+        BigDecimal amount;
+        try { amount = validPrice(input.price()); }
+        catch (IllegalArgumentException error) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, error.getMessage());
+        }
+        if (!ingredients.existsById(ingredientId)) ingredients.save(new IngredientEntity(ingredientId));
+        if (existing.isPresent()) {
+            existing.get().setAmount(amount);
+            existing.get().setBasisQuantity(input.basisQuantity());
+            prices.save(existing.get());
+        } else prices.save(new IngredientPriceEntity(
+            ingredientId, "*", unit, amount, input.basisQuantity()));
     }
 
     @Transactional

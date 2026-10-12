@@ -53,6 +53,15 @@ class ApiClient:
     def ingredient_prices(self, week: str) -> dict[str, str]:
         return self.request("GET", "/api/ingredients/prices?" + urlencode({"week": week}))
 
+    def reference_prices(self) -> dict[str, dict]:
+        return self.request("GET", "/api/ingredients/reference-prices")
+
+    def save_reference_price(self, key: str, price: str, basis_quantity: int) -> None:
+        ingredient_id, unit = key.rsplit(':', 1)
+        self.request("PUT", "/api/ingredients/" + quote(ingredient_id, safe="") +
+                     "/reference-prices?" + urlencode({"unit": unit}),
+                     {"price": price, "basisQuantity": basis_quantity})
+
     def save_ingredient_price(self, week: str, key: str, price: str) -> None:
         ingredient_id, unit = key.rsplit(':', 1)
         self.request("PUT", "/api/ingredients/" + quote(ingredient_id, safe="") + "/prices?" +

@@ -3,6 +3,8 @@ package dev.cookingplanner.recipes.controllers;
 import dev.cookingplanner.recipes.services.IngredientService;
 import dev.cookingplanner.recipes.services.IngredientService.Match;
 import dev.cookingplanner.recipes.services.IngredientService.PriceInput;
+import dev.cookingplanner.recipes.services.IngredientService.ReferencePrice;
+import dev.cookingplanner.recipes.services.IngredientService.ReferencePriceInput;
 import java.util.List;
 import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +34,13 @@ public class IngredientController {
 
     @GetMapping("/prices")
     public Map<String, String> prices(@RequestParam String week) { return service.prices(week); }
+
+    @GetMapping("/reference-prices")
+    public Map<String, ReferencePrice> referencePrices() { return service.referencePrices(); }
+
+    @PutMapping("/{id}/reference-prices")
+    public void saveReferencePrice(@PathVariable String id, @RequestParam String unit,
+        @RequestBody ReferencePriceInput input) { service.saveReferencePrice(id, unit, input); }
 
     @DeleteMapping("/prices")
     public void clearPrices(@RequestParam String week) { service.clearPrices(week); }

@@ -81,6 +81,15 @@ class ApiClientTest(unittest.TestCase):
             self.client.admin_ingredients('grün')
             self.assertIn('q=gr%C3%BCn', open_url.call_args.args[0].full_url)
 
+    def test_reference_price_sends_quantity_basis(self):
+        with patch('cooking_planner.api.client.urlopen') as open_url:
+            open_url.return_value.__enter__.return_value.read.return_value = b''
+            self.client.save_reference_price('rice:g', '1.80', 100)
+            request = open_url.call_args.args[0]
+            self.assertEqual('PUT', request.get_method())
+            self.assertTrue(request.full_url.endswith('/api/ingredients/rice/reference-prices?unit=g'))
+            self.assertEqual({'price': '1.80', 'basisQuantity': 100}, json.loads(request.data))
+
 
 if __name__ == '__main__':
     unittest.main()

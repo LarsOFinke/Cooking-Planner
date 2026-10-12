@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS ingredient_price (
     week_start TEXT NOT NULL,
     unit TEXT NOT NULL,
     amount_cents INTEGER NOT NULL CHECK (amount_cents >= 0),
+    basis_quantity INTEGER CHECK (basis_quantity IS NULL OR basis_quantity > 0),
     UNIQUE (ingredient_id, week_start, unit)
 );
 CREATE TABLE IF NOT EXISTS migration_marker (name TEXT PRIMARY KEY);

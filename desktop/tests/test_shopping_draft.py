@@ -126,6 +126,25 @@ class ShoppingDraftTest(unittest.TestCase):
             self.assertEqual('1.50', str(draft.price_for(start, 'rice:g')))
         self.assertEqual('0.00', normalize_price('0'))
 
+    def test_reference_price_write_failure_preserves_existing_quote(self):
+        draft = ShoppingDraft()
+        draft.use_reference_prices({'rice:g': {'price': '1.80', 'basisQuantity': 100}})
+        draft.reference_writer = lambda *_: (_ for _ in ()).throw(RuntimeError('offline'))
+        with self.assertRaisesRegex(RuntimeError, 'offline'):
+            draft.set_reference_price('rice:g', '2.00', 100)
+        self.assertEqual('3.60', str(draft.price_for('2026-10-05', 'rice:g', 200)))
+        with self.assertRaises(ValueError):
+            draft.set_reference_price('rice:g', '2.00', 0)
+
+    def test_reference_price_takes_priority_without_erasing_older_week_price(self):
+        draft = ShoppingDraft()
+        draft.set_price('2026-10-05', 'rice:g', '9.00')
+        draft.set_reference_price('rice:g', '1.80', 100)
+        self.assertEqual('3.60', str(draft.price_for('2026-10-05', 'rice:g', 200)))
+        self.assertEqual('9.00', str(draft.weekly_price_for('2026-10-05', 'rice:g')))
+        draft.set_reference_price('rice:g', '', 100)
+        self.assertEqual('9.00', str(draft.price_for('2026-10-05', 'rice:g', 200)))
+
     def test_database_prices_override_legacy_values_and_failed_writes_preserve_state(self):
         start = '2026-10-05'
         draft = ShoppingDraft()

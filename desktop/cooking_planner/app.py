@@ -50,6 +50,7 @@ class CookingPlannerApp(App):
         self.selected_id = None
         self.shopping_draft = ShoppingDraft(self.config_path.parent / 'shopping.json' if self.config_path else None)
         self.shopping_draft.price_writer = self.client.save_ingredient_price if hasattr(self.client, 'save_ingredient_price') else None
+        self.shopping_draft.reference_writer = self.client.save_reference_price if hasattr(self.client, 'save_reference_price') else None
         self.shopping_draft.price_clearer = self.client.clear_ingredient_prices if hasattr(self.client, 'clear_ingredient_prices') else None
         self.shopping_draft.ingredient_writer = (lambda ingredient_id, name:
             self.client.register_ingredient(ingredient_id, self.locale, name)) if hasattr(self.client, 'register_ingredient') else None
@@ -147,7 +148,8 @@ class CookingPlannerApp(App):
         end = (self.week_start + timedelta(days=6)).isoformat()
         def load():
             return (self.client.locales(), self.client.recipes(locale), self.client.catalog_info(locale),
-                    self.client.plans(start, end, locale), self.client.ingredient_prices(start))
+                    self.client.plans(start, end, locale), self.client.ingredient_prices(start),
+                    self.client.reference_prices())
         self._submit(load, lambda data: self._loaded(data, generation))
 
     def _loaded(self, data, generation):
@@ -156,6 +158,8 @@ class CookingPlannerApp(App):
         locales, self.recipes, self.info, self.plans = data[:4]
         if len(data) > 4:
             self.shopping_draft.use_prices(self.week_start.isoformat(), data[4])
+        if len(data) > 5:
+            self.shopping_draft.use_reference_prices(data[5])
         new_locales = tuple(locales)
         if self.locales != new_locales:
             self.locales = new_locales

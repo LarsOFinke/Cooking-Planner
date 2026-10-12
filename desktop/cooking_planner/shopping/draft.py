@@ -64,7 +64,9 @@ class ShoppingDraft:
         self.path = path
         self.weeks = {}
         self.database_prices = {}
+        self.reference_prices = {}
         self.price_writer = None
+        self.reference_writer = None
         self.price_clearer = None
         self.ingredient_writer = None
         self.recovery_notice = None
@@ -90,6 +92,15 @@ class ShoppingDraft:
     def use_prices(self, start: str, prices: dict[str, str]) -> None:
         """Use database prices for a loaded week; legacy JSON remains a migration source."""
         self.database_prices[start] = dict(prices)
+
+    def use_reference_prices(self, prices: dict[str, dict]) -> None:
+        self.reference_prices = dict(prices)
+
+    def reference_price_for(self, key: str) -> tuple[Decimal, Decimal] | None:
+        quote = self.reference_prices.get(key)
+        if quote is None:
+            return None
+        return Decimal(quote['price']), Decimal(str(quote['basisQuantity']))
 
     def selected_plan_ids(self, start: str, plans: list[dict]) -> set[str]:
         state = self.week(start)
@@ -146,10 +157,28 @@ class ShoppingDraft:
             state.setdefault('prices', {})[item_key(item)] = normalized
         self.save()
 
-    def price_for(self, start: str, key: str) -> Decimal | None:
+    def weekly_price_for(self, start: str, key: str) -> Decimal | None:
         source = self.database_prices.get(start)
         value = (source if source is not None else self.week(start).get('prices', {})).get(key)
         return Decimal(value) if value is not None else None
+
+    def price_for(self, start: str, key: str, amount=None) -> Decimal | None:
+        quote = self.reference_price_for(key)
+        if quote is not None and amount is not None:
+            price, basis = quote
+            return price * Decimal(str(amount)) / basis
+        return self.weekly_price_for(start, key)
+
+    def set_reference_price(self, key: str, price: str, basis_quantity: int) -> None:
+        normalized = normalize_price(price)
+        if not isinstance(basis_quantity, int) or not 0 < basis_quantity <= 1_000_000:
+            raise ValueError('Enter a positive price quantity')
+        if self.reference_writer is not None:
+            self.reference_writer(key, normalized or '', basis_quantity)
+        if normalized is None:
+            self.reference_prices.pop(key, None)
+        else:
+            self.reference_prices[key] = {'price': normalized, 'basisQuantity': basis_quantity}
 
     def set_price(self, start: str, key: str, price: str) -> None:
         normalized = normalize_price(price)
@@ -169,7 +198,7 @@ class ShoppingDraft:
 
     def remove_item(self, start: str, key: str) -> None:
         state = self.week(start)
-        if self.price_writer is not None and self.price_for(start, key) is not None:
+        if self.price_writer is not None and self.weekly_price_for(start, key) is not None:
             self.price_writer(start, key, '')
         state.setdefault('prices', {}).pop(key, None)
         if start in self.database_prices:

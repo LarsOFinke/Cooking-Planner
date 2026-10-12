@@ -329,7 +329,7 @@ class UiFlowTest(unittest.TestCase):
         draft.add_custom(start, 'Olive oil', '2', 'l')
         panel = ShoppingPanel([], [], draft, 'en', self.app.week_start, lambda _: None)
         rice = panel.rows.children[0]
-        self.assertEqual(['[ ]', 'Rice', '100', 'g', '', '×'],
+        self.assertEqual(['[ ]', 'Rice', '100', 'g', 'Set price', '×'],
                          [widget.text for widget in reversed(rice.children) if hasattr(widget, 'text')])
         self.assertEqual('left', rice.children[-2].halign)
         self.assertIsNotNone(rice.children[-2].text_size)
@@ -340,7 +340,7 @@ class UiFlowTest(unittest.TestCase):
         self.assertEqual('To buy', panel.rows.children[-1].children[-1].text)
         panel.toggle(item_key(next(item for item in panel.items if item['name'] == 'Rice')))
         completed = panel.rows.children[0]
-        self.assertEqual(['[x]', 'Rice', '100', 'g', '', '×'],
+        self.assertEqual(['[x]', 'Rice', '100', 'g', 'Set price', '×'],
                          [widget.text for widget in reversed(completed.children) if hasattr(widget, 'text')])
         self.assertEqual('Completed', panel.rows.children[1].children[-1].text)
         self.assertEqual('1 / 2 items to buy', panel.summary.text)
@@ -356,22 +356,34 @@ class UiFlowTest(unittest.TestCase):
         draft.add_custom(start, 'Milk', '2', 'l')
         panel = ShoppingPanel([], [], draft, 'en', self.app.week_start, lambda _: None)
         rice = next(item for item in panel.items if item['name'] == 'Rice')
-        row = panel.rows.children[0]
-        price = next(widget for widget in row.children if isinstance(widget, TextInput))
-        price.text = '2,75'
-        price.dispatch('on_text_validate')
-        self.assertEqual('2.75', str(ShoppingDraft(draft.path).price_for(start, item_key(rice))))
+        def edit_price(value):
+            dialog = SimpleNamespace(open=lambda: None, dismiss=lambda: None)
+            with patch('cooking_planner.shopping.panel.styled_popup', return_value=dialog) as popup:
+                panel.edit_price(rice)
+            body = popup.call_args.args[1]
+            def descendants(widget):
+                yield widget
+                for child in widget.children:
+                    yield from descendants(child)
+            widgets = list(descendants(body))
+            price = next(widget for widget in widgets if isinstance(widget, TextInput))
+            price.text = value
+            save = next(widget for widget in widgets if getattr(widget, 'text', '') == 'Save price')
+            save.dispatch('on_release', None)
+            return widgets
+
+        edit_price('2,75')
+        self.assertEqual('2.75', str(draft.reference_price_for(item_key(rice))[0]))
+        self.assertEqual('100', str(draft.reference_price_for(item_key(rice))[1]))
         self.assertEqual('1/2 priced · €2.75', panel.price_summary.text)
         with patch('cooking_planner.shopping.panel.Clipboard.copy') as copy:
             panel.copy()
         self.assertIn('100 g Rice · €2.75', copy.call_args.args[0])
-        price.text = '2.755'
-        price.dispatch('on_text_validate')
-        self.assertEqual('2.75', str(draft.price_for(start, item_key(rice))))
-        self.assertIn('valid euro price', panel.price_summary.text)
-        price.text = ''
-        price.dispatch('on_text_validate')
-        self.assertIsNone(draft.price_for(start, item_key(rice)))
+        widgets = edit_price('2.755')
+        self.assertEqual('2.75', str(draft.reference_price_for(item_key(rice))[0]))
+        self.assertTrue(any('valid euro price' in getattr(widget, 'text', '') for widget in widgets))
+        edit_price('')
+        self.assertIsNone(draft.price_for(start, item_key(rice), rice['amount']))
         self.assertEqual('0/2 priced · €0.00', panel.price_summary.text)
 
     def test_meal_selection_stays_open_for_multiple_choices(self):
