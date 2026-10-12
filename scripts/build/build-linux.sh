@@ -4,6 +4,7 @@ set -euo pipefail
 project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$project_root"
 
+source scripts/build/ensure-linux-deps.sh
 mvn -f backend/pom.xml package
 mkdir -p build
 cp backend/target/cooking-planner-api-0.1.0.jar build/backend.jar

@@ -1,4 +1,4 @@
-.PHONY: dev dev-windows test quality wheel linux windows images-sync images-verify
+.PHONY: dev dev-windows test quality wheel linux install-linux windows images-sync images-verify
 
 ifeq ($(OS),Windows_NT)
 dev:
@@ -23,6 +23,9 @@ wheel:
 
 linux:
 	bash scripts/build/build-linux.sh
+
+install-linux:
+	bash scripts/install/install-linux.sh
 
 windows:
 	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build/build-windows.ps1

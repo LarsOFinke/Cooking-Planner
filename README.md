@@ -36,11 +36,14 @@ Meal plans are saved to `~/.cooking-planner/plans.json` on Linux or `%USERPROFIL
 | --- | --- | --- |
 | Python wheel | `make wheel` | `dist/wheels/` |
 | Linux single file | `make linux` | `dist/linux/CookingPlanner` |
+| Linux user install | `make install-linux` | `~/.local/bin/cooking-planner` |
 | Windows single file | `make windows` on Windows | `dist/windows/CookingPlanner.exe` |
 
-The Windows build can also be started with `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build/build-windows.ps1`. Each platform build bundles the Python frontend, Spring Boot JAR, a trimmed Java runtime, and the catalog files. The one-file executable extracts bundled files to a temporary directory at startup. Build the Windows executable on Windows and the Linux executable on Linux. End users do not need a separate Python or Java installation. The build machine needs Python 3.14 by default, Java 21 with `jlink`, Maven, and access to Python packages. Linux builds can use `PYTHON_BIN` to select Python 3.11–3.13 if needed.
+The Windows build can also be started with `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build/build-windows.ps1`. Each platform build bundles the Python frontend, Spring Boot JAR, a trimmed Java runtime, and the catalog files. The one-file executable extracts bundled files to a temporary directory at startup. Build the Windows executable on Windows and the Linux executable on Linux. End users do not need a separate Python or Java installation. Builds require Python 3.11–3.14, Java 21 with `jlink`, Maven, and access to Python packages; the Linux build scripts can install missing tools on Ubuntu and Debian.
 
-On Linux, the build keeps a separate virtual environment for each selected Python version. The Python 3.14 build uses Kivy 3 and can render directly through Wayland on a Wayland desktop, avoiding the softening caused by fractional scaling of the older SDL2/XWayland build. To make the verified executable available as a terminal command, run `install -m 755 dist/linux/CookingPlanner ~/.local/bin/cooking-planner` with `~/.local/bin` on your `PATH`.
+On Ubuntu or Debian, run `make install-linux` (or `bash scripts/install/install-linux.sh` if Make is unavailable) from a fresh checkout to build and install the terminal command. The script uses APT (and prompts through `sudo` when needed) to fetch missing Maven, JDK 21, and a supported Python with `venv`; pip and Maven fetch project dependencies during the build. It installs the bundled executable to `~/.local/bin/cooking-planner`, which must be on your `PATH`. `make linux` performs the same dependency check but only builds the executable. Other Linux distributions can build when these tools are already installed.
+
+The Linux build keeps a separate virtual environment for each selected Python version. It prefers Python 3.14 when available; that build uses Kivy 3 and can render directly through Wayland, avoiding the softening caused by fractional scaling of the older SDL2/XWayland build. Set `PYTHON_BIN` to select a particular supported Python.
 
 ## Checks and scope
 
