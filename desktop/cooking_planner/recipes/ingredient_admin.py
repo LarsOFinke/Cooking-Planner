@@ -7,10 +7,12 @@ from kivy.metrics import dp
 
 from cooking_planner.ui.dialogs import confirm_popup
 from cooking_planner.ui.strings import t
-from cooking_planner.ui.theme import GOLD, MUTED, PANEL, box, button, field, label, scroll_view
+from cooking_planner.ui.theme import GOLD, MUTED, PANEL, WHITE, box, button, field, label, scroll_view
 
 
 class IngredientAdminPanel:
+    PAGE_SIZE = 40
+
     def __init__(self, locales, locale, on_recipes, on_search, on_save, on_delete, on_status,
                  selected=None):
         self.locales, self.locale = tuple(locales), locale
@@ -19,6 +21,8 @@ class IngredientAdminPanel:
         self.selected = selected
         self.generation = 0
         self.search_event = None
+        self.rows = []
+        self.page = 0
         self.root = box(spacing=7)
         header = box(False, spacing=7, size_hint_y=None, height=dp(42))
         header.add_widget(label(t(locale, 'ingredient_catalog'), 19, GOLD, 42, True))
@@ -35,7 +39,17 @@ class IngredientAdminPanel:
         self.search = field(t(locale, 'search_catalog_ingredient'), height=40)
         self.search.bind(text=lambda *_: self._schedule_search())
         left.add_widget(self.search)
+        pager = box(False, spacing=5, size_hint_y=None, height=dp(38))
+        self.previous_button = button(t(locale, 'previous'), self.previous_page, height=38)
+        self.page_label = label('', 12, WHITE, 38, True)
+        self.page_label.halign = 'center'
+        self.next_button = button(t(locale, 'next'), self.next_page, 'primary', height=38)
+        pager.add_widget(self.previous_button)
+        pager.add_widget(self.page_label)
+        pager.add_widget(self.next_button)
+        left.add_widget(pager)
         results_scroll = scroll_view(do_scroll_x=False)
+        self.results_scroll = results_scroll
         self.results = box(spacing=5, size_hint_y=None)
         self.results.bind(minimum_height=self.results.setter('height'))
         results_scroll.add_widget(self.results)
@@ -57,6 +71,7 @@ class IngredientAdminPanel:
 
     def _schedule_search(self):
         self.generation += 1
+        self.page = 0
         if self.search_event is not None:
             self.search_event.cancel()
         generation = self.generation
@@ -67,18 +82,38 @@ class IngredientAdminPanel:
     def _show_results(self, rows, generation):
         if generation != self.generation:
             return
+        self.rows = rows
+        self._render_results()
+
+    def _render_results(self):
+        total_pages = max(1, (len(self.rows) + self.PAGE_SIZE - 1) // self.PAGE_SIZE)
+        self.page = min(self.page, total_pages - 1)
+        self.page_label.text = f"{t(self.locale, 'page')} {self.page + 1} {t(self.locale, 'of')} {total_pages}"
+        self.previous_button.disabled = self.page == 0
+        self.next_button.disabled = self.page == total_pages - 1
         self.results.clear_widgets()
-        self.results.add_widget(label(t(self.locale, 'ingredient_results').format(count=len(rows)),
+        self.results.add_widget(label(t(self.locale, 'ingredient_results').format(count=len(self.rows)),
                                       13, MUTED, 28))
-        if not rows:
+        if not self.rows:
             self.results.add_widget(label(t(self.locale, 'no_ingredient_results'), 14, MUTED, 66))
-        for row in rows:
+        for row in self.rows[self.page * self.PAGE_SIZE:(self.page + 1) * self.PAGE_SIZE]:
             name = row['translations'].get(self.locale) or next(iter(row['translations'].values()), row['id'])
             choice = button(f"{name}\n{row['id']}", lambda entry=row: self.select(entry), height=54)
             choice.halign = 'left'
             choice.valign = 'middle'
             choice.bind(size=lambda widget, _: setattr(widget, 'text_size', (widget.width - dp(12), widget.height)))
             self.results.add_widget(choice)
+        self.results_scroll.scroll_y = 1
+
+    def previous_page(self):
+        if self.page > 0:
+            self.page -= 1
+            self._render_results()
+
+    def next_page(self):
+        if (self.page + 1) * self.PAGE_SIZE < len(self.rows):
+            self.page += 1
+            self._render_results()
 
     def select(self, entry):
         self.selected = entry

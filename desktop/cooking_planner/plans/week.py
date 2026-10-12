@@ -44,7 +44,7 @@ class WeekPlanner:
         meals = MEALS.get(locale, MEALS['en'])
         for offset in range(7):
             day = week_start + timedelta(days=offset)
-            card = box(False, padding=7, spacing=7, color=PANEL_LIGHT,
+            card = box(False, padding=7, spacing=7, color=PANEL_LIGHT, hover=True,
                        size_hint_y=None, height=dp(90))
             day_title = WEEKDAYS.get(locale, WEEKDAYS['en'])[day.weekday()]
             if day == date.today():

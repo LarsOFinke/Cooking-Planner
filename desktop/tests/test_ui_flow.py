@@ -3,6 +3,7 @@ import os
 import sys
 import tempfile
 import unittest
+from copy import deepcopy
 from datetime import timedelta
 from pathlib import Path
 from types import SimpleNamespace
@@ -28,6 +29,8 @@ try:
     from cooking_planner.recipes.ingredient_admin import IngredientAdminPanel
     from cooking_planner.shopping.draft import ShoppingDraft, item_key
     from cooking_planner.shopping.panel import ShoppingPanel
+    from cooking_planner.ui.theme import (GOLD, PANEL_LIGHT, HoverSurface, _mouse_moved,
+                                          box, button, tab_button, set_tab_active)
 except ImportError:
     HAS_KIVY = False
 else:
@@ -95,6 +98,74 @@ class UiFlowTest(unittest.TestCase):
         self.app.show_tab('shopping')
         self.app.show_tab('overview')
         self.assertEqual('overview', self.app.tab)
+
+    def test_hover_feedback_follows_pointer_and_active_state(self):
+        holder = box()
+        control = tab_button('Explore', lambda: None, active=True)
+        holder.add_widget(control)
+        Window.add_widget(holder)
+        try:
+            holder.do_layout()
+            _mouse_moved(Window, control.to_window(*control.center))
+            self.assertTrue(control._hovered)
+            self.assertEqual(GOLD, control._base_background)
+            set_tab_active(control, 'Explore', False)
+            self.assertEqual(PANEL_LIGHT, control._base_background)
+            control.disabled = True
+            self.assertFalse(control._hovered)
+            control.disabled = False
+            _mouse_moved(Window, (-1, -1))
+            self.assertFalse(control._hovered)
+        finally:
+            Window.remove_widget(holder)
+
+    def test_main_tabs_have_hovering_surfaces_and_controls_keep_hand_cursor(self):
+        for tab in ('overview', 'explore', 'week', 'shopping'):
+            self.app.show_tab(tab)
+            self.assertTrue(any(isinstance(widget, HoverSurface) for widget in self.app.content.walk()), tab)
+
+        holder = box()
+        card = box(False, color=PANEL_LIGHT, hover=True, size_hint=(None, None), size=(300, 80))
+        control = button('Open', lambda: None)
+        card.add_widget(control)
+        holder.add_widget(card)
+        Window.add_widget(holder)
+        try:
+            holder.do_layout()
+            card.do_layout()
+            with patch('cooking_planner.ui.theme._cursor', 'arrow'), patch.object(Window, 'set_system_cursor') as cursor:
+                _mouse_moved(Window, control.to_window(*control.center))
+                self.assertTrue(card._hovered)
+                self.assertTrue(control._hovered)
+                cursor.assert_called_with('hand')
+            _mouse_moved(Window, (-1, -1))
+            self.assertFalse(card._hovered)
+        finally:
+            Window.remove_widget(holder)
+
+    def test_catalog_notes_only_in_overview_and_recipe_pages_are_visible(self):
+        notes = [widget for widget in self.app.root_view.walk()
+                 if isinstance(widget, Button) and widget.text == 'About this catalog']
+        self.assertEqual(1, len(notes))
+        self.app.recipes = []
+        for index in range(17):
+            recipe = deepcopy(self.recipe)
+            recipe['id'] = f'recipe-{index:02d}'
+            recipe['name'] = f'Recipe {index:02d}'
+            self.app.recipes.append(recipe)
+        self.app.show_tab('explore')
+        browser = self.app.browser
+        self.assertEqual([], [widget for widget in self.app.header.walk()
+                              if isinstance(widget, Button) and widget.text == 'About this catalog'])
+        self.assertEqual('Recipe pages', browser.page_label.parent.children[-1].text)
+        self.assertEqual('Page 1 of 2', browser.page_label.text)
+        self.assertTrue(browser.previous_button.disabled)
+        self.assertFalse(browser.next_button.disabled)
+        browser.next_button.dispatch('on_release', None)
+        self.assertEqual('Page 2 of 2', browser.page_label.text)
+        self.assertFalse(browser.previous_button.disabled)
+        self.assertTrue(browser.next_button.disabled)
+        self.assertEqual(1, len(browser.rows.children))
 
     def test_recipe_tab_shows_each_instruction_as_a_separate_card(self):
         self.recipe['instructions'] = [
@@ -373,6 +444,26 @@ class AdminEditorTest(unittest.TestCase):
         panel.names['de'].text = 'Gewürz'
         panel.save()
         self.assertEqual(('new-spice', {'en': '', 'de': 'Gewürz'}), saved[-1])
+
+    def test_ingredient_catalog_pages_all_search_results(self):
+        panel = IngredientAdminPanel(('en',), 'en', lambda: None,
+                                     lambda *_: None, lambda *_: None,
+                                     lambda *_: None, lambda *_: None)
+        rows = [{'id': f'ingredient-{index:03d}',
+                 'translations': {'en': f'Ingredient {index:03d}'}} for index in range(101)]
+        panel._show_results(rows, panel.generation)
+        self.assertEqual('Page 1 of 3', panel.page_label.text)
+        self.assertEqual(41, len(panel.results.children))
+        panel.next_button.dispatch('on_release', None)
+        panel.next_button.dispatch('on_release', None)
+        self.assertEqual('Page 3 of 3', panel.page_label.text)
+        self.assertTrue(panel.next_button.disabled)
+        self.assertEqual(22, len(panel.results.children))
+        panel.results.children[0].dispatch('on_release', None)
+        self.assertEqual('ingredient-100', panel.selected['id'])
+        panel.search.text = 'Ingredient 100'
+        panel._show_results(rows[-1:], panel.generation)
+        self.assertEqual('Page 1 of 1', panel.page_label.text)
 
     def test_ingredient_search_fills_shared_id_and_localized_names(self):
         searches = []

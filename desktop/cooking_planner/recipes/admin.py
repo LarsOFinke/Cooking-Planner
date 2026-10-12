@@ -5,11 +5,10 @@ from decimal import Decimal, InvalidOperation
 
 from kivy.clock import Clock
 from kivy.metrics import dp
-from kivy.uix.togglebutton import ToggleButton
-
 from cooking_planner.ui.strings import t
 from cooking_planner.ui.theme import (GOLD, MUTED, PANEL, PANEL_LIGHT, WHITE, box, button,
-                                      field, label, scroll_view, set_tab_active, spinner, tab_button)
+                                      field, label, scroll_view, set_tab_active, spinner, tab_button,
+                                      HoverToggleButton)
 
 CHOICES = (
     ('country_code', 'admin_country'), ('region_code', 'admin_region'),
@@ -301,10 +300,10 @@ class AdminPanel:
         self._heading(self.details, 'admin_suitable_for')
         diet_row = self._row(self.details, 44)
         for value in dict.fromkeys([*diets, *selected]):
-            toggle = ToggleButton(text=diets.get(value, value), activated=value in selected,
-                                  size_hint_y=None, height=dp(42), background_normal='',
-                                  background_down='', background_color=PANEL_LIGHT, color=WHITE,
-                                  font_size=dp(13))
+            toggle = HoverToggleButton(text=diets.get(value, value), activated=value in selected,
+                                       size_hint_y=None, height=dp(42), background_normal='',
+                                       background_down='', background_color=PANEL_LIGHT, color=WHITE,
+                                       font_size=dp(13))
             self.diet_buttons[value] = toggle
             diet_row.add_widget(toggle)
         self._heading(self.details, 'admin_time_and_images')

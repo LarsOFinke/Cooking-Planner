@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.type.TypeReference;
@@ -36,12 +35,5 @@ public class JsonFileStore {
                 Files.move(temp, directory.resolve(name), StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
             } finally { Files.deleteIfExists(temp); }
         } catch (IOException e) { throw new IllegalStateException("Could not save " + name, e); }
-    }
-
-    public List<String> fileNames() {
-        if (!Files.isDirectory(directory)) return List.of();
-        try (var files = Files.list(directory)) {
-            return files.filter(Files::isRegularFile).map(path -> path.getFileName().toString()).toList();
-        } catch (IOException e) { throw new IllegalStateException("Could not list recipe catalogs", e); }
     }
 }

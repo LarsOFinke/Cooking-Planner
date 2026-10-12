@@ -79,7 +79,12 @@ public class RecipeRepository {
                 if (!entry.getValue().containsKey(locale)) continue;
                 JsonNode translated = entry.getValue().get(locale);
                 if (translated == null || translated.isNull()) raw.remove(entry.getKey());
-                else raw.put(entry.getKey(), translated);
+                else {
+                    if (!entry.getKey().equals(translated.path("id").asString())) {
+                        throw new IllegalStateException("Recipe edit ID does not match its key: " + entry.getKey());
+                    }
+                    raw.put(entry.getKey(), translated);
+                }
             }
             recipes = new ArrayList<>();
             byId = new HashMap<>();

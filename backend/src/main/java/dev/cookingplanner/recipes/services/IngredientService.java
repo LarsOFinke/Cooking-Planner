@@ -195,7 +195,6 @@ public class IngredientService implements ApplicationRunner {
             .filter(entry -> needle.isEmpty() || entry.getKey().toLowerCase().contains(needle) ||
                 entry.getValue().values().stream().anyMatch(name -> name.toLowerCase().contains(needle)))
             .sorted((left, right) -> left.getKey().compareTo(right.getKey()))
-            .limit(100)
             .map(entry -> new CatalogEntry(entry.getKey(), Map.copyOf(entry.getValue()))).toList();
     }
 

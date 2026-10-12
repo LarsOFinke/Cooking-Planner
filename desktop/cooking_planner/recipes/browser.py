@@ -13,11 +13,12 @@ from kivy.uix.popup import Popup
 from cooking_planner.recipes.images import attributions, image_file
 from cooking_planner.ui.dialogs import styled_popup
 from cooking_planner.ui.theme import (GOLD, MUTED, PANEL, PANEL_LIGHT, WHITE, box, button, field,
-                                      label, scroll_view, set_tab_active, spinner, tab_button)
+                                      label, scroll_view, set_tab_active, spinner, tab_button,
+                                      HoverImageBehavior)
 from cooking_planner.ui.strings import t
 
 
-class RecipePhoto(ButtonBehavior, Image):
+class RecipePhoto(HoverImageBehavior, ButtonBehavior, Image):
     """An image that opens the recipe's gallery when clicked."""
 
 
@@ -114,18 +115,25 @@ class RecipeBrowser:
         center = box(padding=7, spacing=5, color=PANEL, size_hint_x=0.36)
         self.result_count = label("", 14, WHITE, 27, True)
         center.add_widget(self.result_count)
+        pager = box(padding=6, spacing=4, color=PANEL_LIGHT, hover=True, size_hint_y=None, height=dp(78))
+        pager_heading = box(False, spacing=4, size_hint_y=None, height=dp(24))
+        pager_heading.add_widget(label(t(self.locale, 'recipe_pages'), 13, GOLD, 24, True))
+        self.page_label = label("", 12, WHITE, 24, True)
+        self.page_label.halign = 'right'
+        pager_heading.add_widget(self.page_label)
+        pager.add_widget(pager_heading)
+        pager_actions = box(False, spacing=6, size_hint_y=None, height=dp(40))
+        self.previous_button = button(t(self.locale, 'previous'), self.previous_page, height=40)
+        self.next_button = button(t(self.locale, 'next'), self.next_page, 'primary', height=40)
+        pager_actions.add_widget(self.previous_button)
+        pager_actions.add_widget(self.next_button)
+        pager.add_widget(pager_actions)
+        center.add_widget(pager)
         scroll = scroll_view(do_scroll_x=False)
         self.rows = box(spacing=6, size_hint_y=None)
         self.rows.bind(minimum_height=self.rows.setter("height"))
         scroll.add_widget(self.rows)
         center.add_widget(scroll)
-        pager = box(False, spacing=6, size_hint_y=None, height=dp(36))
-        pager.add_widget(button("‹", self.previous_page, size_hint_x=None, width=dp(46)))
-        self.page_label = label("", 12, MUTED, 36)
-        self.page_label.halign = "center"
-        pager.add_widget(self.page_label)
-        pager.add_widget(button("›", self.next_page, size_hint_x=None, width=dp(46)))
-        center.add_widget(pager)
         self.columns.add_widget(center)
 
     def _build_detail(self) -> None:
@@ -199,6 +207,8 @@ class RecipeBrowser:
         self.page = min(self.page, total_pages - 1)
         self.result_count.text = f"{len(filtered)} {t(self.locale, 'results')}"
         self.page_label.text = f"{t(self.locale, 'page')} {self.page + 1} {t(self.locale, 'of')} {total_pages}"
+        self.previous_button.disabled = self.page == 0
+        self.next_button.disabled = self.page == total_pages - 1
         self.rows.clear_widgets()
         if not filtered:
             self.rows.add_widget(label(t(self.locale, "no_results"), 14, MUTED, 90))
@@ -254,7 +264,7 @@ class RecipeBrowser:
             if not steps:
                 self.detail_body.add_widget(label(t(self.locale, 'no_instructions'), 15, MUTED, 85))
             for step in steps:
-                card = box(padding=8, spacing=3, color=PANEL_LIGHT, size_hint_y=None)
+                card = box(padding=8, spacing=3, color=PANEL_LIGHT, hover=True, size_hint_y=None)
                 card.bind(minimum_height=card.setter('height'))
                 card.add_widget(label(f"{t(self.locale, 'instruction_step')} {step['step']}",
                                       13, GOLD, 24, True))

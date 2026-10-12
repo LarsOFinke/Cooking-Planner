@@ -45,7 +45,7 @@ class ShoppingPanel:
         self.root.add_widget(actions)
         self.notice = label(t(locale, 'shopping_selection_help'), 13, MUTED, 30)
         self.root.add_widget(self.notice)
-        summary = box(False, padding=8, spacing=8, color=PANEL,
+        summary = box(False, padding=8, spacing=8, color=PANEL, hover=True,
                       size_hint_y=None, height=dp(46))
         self.summary = label('', 15, WHITE, 30, True)
         self.meal_summary = label('', 13, MUTED, 30)
@@ -107,11 +107,11 @@ class ShoppingPanel:
         try:
             self.draft.set_price(self.start, key, widget.text)
         except (ValueError, RuntimeError) as error:
-            widget.background_color = RED
+            widget.set_base_color(RED)
             self.price_summary.color = RED
             self.price_summary.text = str(error) if isinstance(error, RuntimeError) else t(self.locale, 'invalid_price')
             return
-        widget.background_color = PANEL
+        widget.set_base_color(PANEL)
         saved = self.draft.price_for(self.start, key)
         widget.text = '' if saved is None else format(saved, '.2f').replace('.', ',' if self.locale == 'de' else '.')
         self._update_price_summary()
@@ -148,17 +148,18 @@ class ShoppingPanel:
     def _item_row(self, item, checked):
         key = item_key(item)
         row = box(False, padding=5, spacing=5, color=(0.09, 0.18, 0.16, 1) if checked else PANEL_LIGHT,
+                  hover=True,
                   size_hint_y=None, height=dp(48))
         check = button('[x]' if checked else '[ ]', lambda: self.toggle(key),
                        height=38, size_hint_x=None, width=dp(38))
         if checked:
-            check.background_color = GREEN
+            check.set_base_color(GREEN)
             check.color = BG
         row.add_widget(check)
         name = button(item['name'], lambda: self.toggle(key), height=38,
                       size_hint_x=None, width=dp(240))
         row.bind(width=lambda _, width: setattr(name, 'width', self._name_width(width)))
-        name.background_color = (0, 0, 0, 0)
+        name.set_base_color((0, 0, 0, 0))
         name.color = MUTED if checked else WHITE
         name.halign = 'left'
         name.valign = 'middle'
@@ -180,7 +181,7 @@ class ShoppingPanel:
             '.', ',' if self.locale == 'de' else '.')
         price = field(t(self.locale, 'shopping_price_hint'), text=price_text, height=38,
                       size_hint_x=None, width=dp(100))
-        price.background_color = PANEL
+        price.set_base_color(PANEL)
         price.bind(focus=lambda widget, focused: self._save_price(key, widget) if not focused else None)
         price.bind(on_text_validate=lambda widget: self._save_price(key, widget))
         row.add_widget(price)

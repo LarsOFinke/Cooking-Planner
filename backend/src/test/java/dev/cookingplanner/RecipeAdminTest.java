@@ -125,4 +125,25 @@ class RecipeAdminTest {
         assertThrows(IllegalStateException.class, () -> recipes.findAll("en"));
         assertEquals(future, Files.readString(file));
     }
+
+    @Test
+    void mismatchedOverlayIdDoesNotRemapCatalogRecipeOrRewriteUserData() throws Exception {
+        ObjectMapper json = new ObjectMapper();
+        RecipeEditRepository edits = new RecipeEditRepository(new JsonFileStore(directory.toString(), json));
+        Path catalogs = CatalogAndPlanTest.catalogs();
+        String id = "dz-algerischer-couscous";
+        RecipeRepository recipes = repository(catalogs, json, edits);
+        ObjectNode row = (ObjectNode) recipes.raw("en", id).orElseThrow().deepCopy();
+        row.put("id", "unexpected-id");
+        byte[] catalogBefore = Files.readAllBytes(catalogs.resolve("recipes_en.json"));
+        edits.upsert(id, Map.of("en", row));
+        Path editFile = directory.resolve("recipe-edits.json");
+        byte[] editsBefore = Files.readAllBytes(editFile);
+
+        IllegalStateException error = assertThrows(IllegalStateException.class,
+            () -> repository(catalogs, json, edits).findAll("en"));
+        assertTrue(error.getMessage().contains("Recipe edit ID does not match"));
+        assertArrayEquals(editsBefore, Files.readAllBytes(editFile));
+        assertArrayEquals(catalogBefore, Files.readAllBytes(catalogs.resolve("recipes_en.json")));
+    }
 }

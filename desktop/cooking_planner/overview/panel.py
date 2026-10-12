@@ -24,7 +24,7 @@ class OverviewPanel:
         categories = len({recipe.get('categoryLabel') for recipe in recipes if recipe.get('categoryLabel')})
         for value, caption in ((len(recipes), 'recipes_count'), (categories, 'categories_count'),
                                (info.get('countryCount', 0), 'countries'), (len(plans), 'planned')):
-            tile = box(padding=7, spacing=0, color=PANEL_LIGHT)
+            tile = box(padding=7, spacing=0, color=PANEL_LIGHT, hover=True)
             tile.add_widget(label(str(value), 21, GOLD, 32, True))
             tile.add_widget(label(t(locale, caption), 12, MUTED, 24))
             metrics.add_widget(tile)
@@ -47,7 +47,7 @@ class OverviewPanel:
                                                     3 if width >= dp(900) else 2 if width >= dp(600) else 1))
         for tab, description in (('explore', 'overview_explore_help'), ('week', 'overview_week_help'),
                                  ('shopping', 'overview_shopping_help')):
-            card = box(False, padding=8, spacing=6, color=PANEL_LIGHT,
+            card = box(False, padding=8, spacing=6, color=PANEL_LIGHT, hover=True,
                        size_hint_y=None, height=dp(78))
             copy = box(spacing=0)
             copy.add_widget(label(t(locale, tab), 15, WHITE, 27, True))
@@ -58,7 +58,7 @@ class OverviewPanel:
             modules.add_widget(card)
         content.add_widget(modules)
 
-        notes = box(False, padding=10, spacing=8, color=PANEL,
+        notes = box(False, padding=10, spacing=8, color=PANEL, hover=True,
                     size_hint_y=None, height=dp(90))
         copy = box(spacing=2)
         copy.add_widget(label(t(locale, 'overview_good_to_know'), 16, GOLD, 28, True))

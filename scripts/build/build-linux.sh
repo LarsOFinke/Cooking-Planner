@@ -17,14 +17,14 @@ if (( ${#wheels[@]} != 1 )); then
 fi
 "$project_root/.build-venv/bin/python" -m pip install --no-deps --force-reinstall "${wheels[0]}"
 
-runtime_dir="build/runtime-linux"
+runtime_dir="$project_root/build/runtime-linux"
 rm -rf -- "$runtime_dir"
 jlink --add-modules ALL-MODULE-PATH --strip-debug --no-header-files --no-man-pages --output "$runtime_dir"
 mkdir -p dist/linux
 "$project_root/.build-venv/bin/python" -m PyInstaller --noconfirm --clean --onefile --windowed \
     --name CookingPlanner --distpath dist/linux --workpath build/pyinstaller-linux --specpath build \
     --add-binary "$runtime_dir:runtime" \
-    --add-data "build/backend.jar:." \
-    --add-data "data:catalogs" \
+    --add-data "$project_root/build/backend.jar:." \
+    --add-data "$project_root/data:catalogs" \
     scripts/build/frozen_entry.py
 echo "Built dist/linux/CookingPlanner"

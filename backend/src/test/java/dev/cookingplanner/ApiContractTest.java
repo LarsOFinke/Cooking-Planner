@@ -156,6 +156,8 @@ class ApiContractTest {
             .andExpect(status().isOk()).andExpect(jsonPath("$.translations.de").value("Gewürzmischung"));
         mvc.perform(get("/api/admin/ingredients?q=test-admin-spice"))
             .andExpect(status().isOk()).andExpect(jsonPath("$[0].id").value("test-admin-spice"));
+        mvc.perform(get("/api/admin/ingredients"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$[100].id").exists());
         mvc.perform(put("/api/admin/ingredients/test-admin-spice").contentType("application/json")
             .content("{\"translations\":{\"en\":\"New blend\",\"de\":\"\"}}"))
             .andExpect(status().isOk()).andExpect(jsonPath("$.translations.en").value("New blend"))
