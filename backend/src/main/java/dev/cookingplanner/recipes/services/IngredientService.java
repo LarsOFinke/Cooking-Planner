@@ -321,7 +321,7 @@ public class IngredientService implements ApplicationRunner {
     }
 
     public Map<String, String> prices(String week) {
-        LocalDate.parse(week);
+        validateWeek(week);
         Map<String, String> result = new LinkedHashMap<>();
         for (var row : prices.findByWeekStart(week))
             result.put(row.getIngredientId() + ':' + row.getUnit(), row.getAmount().toPlainString());
@@ -338,8 +338,7 @@ public class IngredientService implements ApplicationRunner {
 
     @Transactional
     public void saveReferencePrice(String ingredientId, String unit, ReferencePriceInput input) {
-        if (ingredientId == null || ingredientId.isBlank() || unit == null || unit.isBlank() || unit.length() > 24)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingredient and unit are required");
+        validatePriceKey(ingredientId, unit);
         var existing = prices.findByIngredientIdAndWeekStartAndUnit(ingredientId, "*", unit);
         if (input == null || input.price() == null || input.price().isBlank()) {
             existing.ifPresent(prices::delete);
@@ -363,9 +362,8 @@ public class IngredientService implements ApplicationRunner {
 
     @Transactional
     public void savePrice(String ingredientId, String week, String unit, PriceInput input) {
-        LocalDate.parse(week);
-        if (ingredientId == null || ingredientId.isBlank() || unit == null || unit.isBlank() || unit.length() > 24)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingredient and unit are required");
+        validateWeek(week);
+        validatePriceKey(ingredientId, unit);
         var existing = prices.findByIngredientIdAndWeekStartAndUnit(ingredientId, week, unit);
         if (input == null || input.price() == null || input.price().isBlank()) {
             existing.ifPresent(prices::delete);
@@ -385,8 +383,22 @@ public class IngredientService implements ApplicationRunner {
 
     @Transactional
     public void clearPrices(String week) {
-        LocalDate.parse(week);
+        validateWeek(week);
         prices.deleteByWeekStart(week);
+    }
+
+    private static void validateWeek(String week) {
+        try { LocalDate.parse(week); }
+        catch (DateTimeException | NullPointerException error) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Week must be an ISO date", error);
+        }
+    }
+
+    private static void validatePriceKey(String ingredientId, String unit) {
+        if (ingredientId == null || ingredientId.length() > 120 ||
+            !ingredientId.matches("[a-z0-9]+(?:-[a-z0-9]+)*") ||
+            unit == null || !unit.matches("[a-z]{1,24}"))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valid ingredient ID and unit are required");
     }
 
     private static BigDecimal validPrice(String raw) {

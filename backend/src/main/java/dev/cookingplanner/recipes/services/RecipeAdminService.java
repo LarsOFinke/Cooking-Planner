@@ -2,6 +2,7 @@ package dev.cookingplanner.recipes.services;
 
 import dev.cookingplanner.recipes.repositories.RecipeEditRepository;
 import dev.cookingplanner.recipes.repositories.RecipeRepository;
+import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -102,6 +103,7 @@ public class RecipeAdminService {
         return response;
     }
 
+    @Transactional
     public synchronized Map<String, Object> save(String id, EditInput input, boolean create) {
         if (id == null || !id.matches("[a-z0-9]+(?:-[a-z0-9]+)*") || id.length() > 100)
             throw bad("Recipe ID must use lowercase letters, numbers and hyphens");

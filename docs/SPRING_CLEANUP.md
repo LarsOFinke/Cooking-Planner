@@ -34,3 +34,9 @@ The recipe admin endpoint stores user edits as an overlay and leaves bundled cat
 - The planning popup's fixed-height form placed its date controls outside the popup at 200% scale. The form now scrolls while Save and Cancel stay visible. A Kivy event-loop check confirmed both date arrows remain inside the popup at 100% and 200%, and the selected date reaches Save.
 - Text input labels were hidden by the rounded control fill. Text inputs use their native background again so dates and other entered values remain readable. Confirmation dialogs now have enough height for their actions at 200%.
 - `make quality` passed with 57 desktop tests, 86.7% desktop line coverage, and the backend JaCoCo gate. `make images-verify` passed for all 586 catalog recipes. `make linux` built the single-file executable, and its bundled GUI and API started with both catalogs at 100% and 200% using temporary user data. Windows build and runtime verification remain open.
+
+## Backend maintenance on 2026-10-12
+
+- Price endpoints now reject malformed dates, ingredient IDs, and units with HTTP 400 before writing rows. This keeps the `ingredientId:unit` price key unambiguous while accepting the shopping UI's units.
+- Shopping aggregation loads ingredient translations once per request and reuses each planned recipe across meals. The HTTP test checks localized names, summed quantities, and recipe counts for repeated plans.
+- Recipe admin saves join ingredient updates to a database transaction, so a failed edit-file write rolls back those updates. The edit file remains the persisted recipe source; SQLite remains the ingredient-name source.

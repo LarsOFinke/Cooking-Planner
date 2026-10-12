@@ -2,6 +2,7 @@ import json
 import os
 import sys
 import tempfile
+import time
 import unittest
 from copy import deepcopy
 from datetime import date, timedelta
@@ -124,6 +125,32 @@ class UiFlowTest(unittest.TestCase):
             self.assertFalse(control._hovered)
         finally:
             Window.remove_widget(holder)
+
+    def test_mounted_main_tabs_show_hover_fill_at_both_scales(self):
+        Window.add_widget(self.app.root_view)
+        try:
+            for scale in (1.0, 2.0):
+                self.app.change_scale(scale)
+                self.app.root_view.size = Window.size
+                self.app.root_view.do_layout()
+                nav_scroll = next(widget for widget in self.app.root_view.children
+                                  if isinstance(widget, ScrollView))
+                nav_scroll.children[0].pos = nav_scroll.pos
+                nav_scroll.children[0].do_layout()
+                for name in ('Overview', 'Explore'):
+                    control = next(widget for widget in self.app.root_view.walk()
+                                   if isinstance(widget, Button) and widget.text == name)
+                    _mouse_moved(Window, control.to_window(*control.center))
+                    self.assertTrue(control._hovered, (scale, name))
+                    Clock.tick()
+                    time.sleep(0.17)
+                    Clock.tick()
+                    self.assertNotEqual(tuple(control.fill_color), control._base_background,
+                                        (scale, name))
+            _mouse_moved(Window, (-1, -1))
+        finally:
+            Window.remove_widget(self.app.root_view)
+            self.app.change_scale(1.0)
 
     def test_main_tabs_have_hovering_surfaces_and_controls_keep_hand_cursor(self):
         for tab in ('overview', 'explore', 'week', 'shopping'):

@@ -42,7 +42,8 @@ def _within_visible_area(widget, position, top):
         if node.opacity == 0:
             return False
         if node is widget or isinstance(node, ScrollView):
-            if not node.collide_point(*node.to_widget(*position)):
+            parent_position = node.parent.to_widget(*position) if node.parent is not Window else position
+            if not node.collide_point(*parent_position):
                 return False
         if node is top:
             return True

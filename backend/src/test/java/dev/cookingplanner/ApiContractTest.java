@@ -174,6 +174,47 @@ class ApiContractTest {
     }
 
     @Test
+    void priceEndpointsRejectMalformedKeysAndDatesWithoutWritingRows() throws Exception {
+        var mvc = MockMvcBuilders.webAppContextSetup(context).build();
+        mvc.perform(get("/api/ingredients/prices?week=not-a-date"))
+            .andExpect(status().isBadRequest());
+        mvc.perform(delete("/api/ingredients/prices?week=not-a-date"))
+            .andExpect(status().isBadRequest());
+        mvc.perform(put("/api/ingredients/test-invalid-price/prices?week=not-a-date&unit=g")
+            .contentType("application/json").content("{\"price\":\"1.00\"}"))
+            .andExpect(status().isBadRequest());
+        mvc.perform(put("/api/ingredients/test-invalid-price/reference-prices?unit=g:pcs")
+            .contentType("application/json").content("{\"price\":\"1.00\",\"basisQuantity\":1}"))
+            .andExpect(status().isBadRequest());
+        mvc.perform(put("/api/ingredients/test-invalid-price/prices?week=2026-10-05&unit=g:pcs")
+            .contentType("application/json").content("{\"price\":\"1.00\"}"))
+            .andExpect(status().isBadRequest());
+        mvc.perform(put("/api/ingredients/bad:id/prices?week=2026-10-05&unit=g")
+            .contentType("application/json").content("{\"price\":\"1.00\"}"))
+            .andExpect(status().isBadRequest());
+        assertEquals(0, jdbc.queryForObject(
+            "SELECT count(*) FROM ingredient WHERE id='test-invalid-price'", Integer.class));
+        assertEquals(0, jdbc.queryForObject(
+            "SELECT count(*) FROM ingredient WHERE id='bad:id'", Integer.class));
+    }
+
+    @Test
+    void shoppingAggregatesRepeatedPlansWithLocalizedIngredientNames() throws Exception {
+        var mvc = MockMvcBuilders.webAppContextSetup(context).build();
+        for (int day = 1; day <= 2; day++) {
+            mvc.perform(put("/api/plans").contentType("application/json")
+                .content("{\"date\":\"2026-11-0" + day + "\",\"mealType\":\"DINNER\"," +
+                    "\"recipeId\":\"dz-algerischer-couscous\",\"servings\":" + day + "}"))
+                .andExpect(status().isOk());
+        }
+        mvc.perform(get("/api/plans/shopping?from=2026-11-01&to=2026-11-02&locale=de"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[?(@.ingredientId == 'karotte')].name").value("Karotte"))
+            .andExpect(jsonPath("$[?(@.ingredientId == 'karotte')].amount").value(270))
+            .andExpect(jsonPath("$[?(@.ingredientId == 'karotte')].recipeCount").value(2));
+    }
+
+    @Test
     void ingredientAdminEditsTranslationsAndProtectsUsedIngredients() throws Exception {
         var mvc = MockMvcBuilders.webAppContextSetup(context).build();
         mvc.perform(put("/api/admin/ingredients/test-admin-spice").contentType("application/json")
