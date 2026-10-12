@@ -1,4 +1,4 @@
-.PHONY: dev dev-windows test quality wheel linux windows images images-sync images-verify
+.PHONY: dev dev-windows test quality wheel linux windows images-sync images-verify
 
 ifeq ($(OS),Windows_NT)
 dev:
@@ -29,10 +29,6 @@ windows:
 
 images-sync:
 	python3 scripts/images/import_local_recipe_images.py
-	python3 scripts/images/verify_recipe_images.py
-
-images: images-sync
-	python3 scripts/images/download_recipe_images.py --max-images 2
 	python3 scripts/images/verify_recipe_images.py
 
 images-verify:

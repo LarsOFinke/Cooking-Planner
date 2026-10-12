@@ -1,55 +1,15 @@
 """Catalog-backed recipe editor; writes are handled by the backend API."""
 
 from copy import deepcopy
-from decimal import Decimal, InvalidOperation
-
 from kivy.clock import Clock
 from kivy.metrics import dp
+from cooking_planner.recipes.admin_payload import (FormError, RecipeFormSnapshot,
+                                                    build_submission, option_labels)
+from cooking_planner.recipes.admin_schema import CHOICES, LABELS, TIMES, new_recipe_template, translation_template
 from cooking_planner.ui.strings import t
 from cooking_planner.ui.theme import (GOLD, MUTED, PANEL, PANEL_LIGHT, WHITE, box, button,
                                       field, label, scroll_view, set_tab_active, spinner, tab_button,
                                       HoverToggleButton)
-
-CHOICES = (
-    ('country_code', 'admin_country'), ('region_code', 'admin_region'),
-    ('continent_code', 'admin_continent'), ('category', 'category'),
-    ('difficulty', 'difficulty'), ('effort', 'effort'),
-    ('diet_type', 'diet'), ('data_source', 'admin_data_source_label'),
-)
-LABELS = {
-    'country_code': 'country', 'region_code': 'region', 'continent_code': 'continent',
-    'category': 'category_label', 'difficulty': 'difficulty_label',
-    'effort': 'effort_label', 'diet_type': 'diet_type_label', 'data_source': 'data_source_label',
-}
-TIMES = (('prep_minutes', 'admin_prep_minutes'), ('cook_minutes', 'admin_cook_minutes'),
-         ('total_minutes', 'admin_total_minutes'))
-
-
-def new_recipe_template(recipe_id):
-    return {
-        'id': recipe_id, 'name': '', 'country': '', 'country_code': '', 'region': '', 'continent': '',
-        'category': 'main', 'difficulty': 'medium', 'effort': 'medium', 'data_source': 'user_entry',
-        'prep_minutes': 0, 'cook_minutes': 0, 'total_minutes': 0, 'diet_type': 'omnivore',
-        'suitable_for': ['flexitarian', 'omnivore'],
-        'ingredients': [{'name': '', 'ingredient_id': 'ingredient-id', 'amount': 1, 'unit': 'g'}],
-        'region_code': '', 'continent_code': '', 'category_label': '', 'difficulty_label': '',
-        'effort_label': '', 'diet_type_label': '', 'suitable_for_labels': [],
-        'data_source_label': '', 'image_folder': f'recipe_images/{recipe_id}', 'images': [],
-        'instructions': {'steps': []},
-    }
-
-
-def translation_template(recipe):
-    translated = deepcopy(recipe)
-    for key in ('name', *LABELS.values()):
-        translated[key] = ''
-    translated['suitable_for_labels'] = []
-    for ingredient in translated['ingredients']:
-        ingredient['name'] = ''
-    for step in translated.get('instructions', {}).get('steps', []):
-        step['text'] = ''
-    return translated
-
 
 class AdminPanel:
     def __init__(self, records, locales, locale, on_select, on_save, on_delete, on_reload, on_status,
@@ -160,10 +120,7 @@ class AdminPanel:
         parent.add_widget(label(t(self.locale, key), 17, GOLD, 30, True))
 
     def _options(self, key, locale):
-        choices = {item['value']: item['label'] for item in self.options.get(locale, {}).get(key, [])}
-        if key == 'data_source':
-            choices.setdefault('user_entry', t(locale, 'admin_user_entry'))
-        return choices
+        return option_labels(self.options, key, locale)
 
     def _set_choice(self, widget, key, value):
         choices = self._options(key, self.edit_locale)
@@ -193,28 +150,7 @@ class AdminPanel:
         self.actions.clear_widgets()
         self.shared_inputs, self.locale_inputs, self.locale_choices = {}, {}, {}
         self.ingredient_rows = []
-        self.status_page = box(spacing=8, size_hint_y=None)
-        self.status_page.bind(minimum_height=self.status_page.setter('height'))
-        self._heading(self.status_page, 'admin_status')
-        stats = box(False, spacing=7, size_hint_y=None, height=dp(64))
-        for value, caption in ((len(self.records), 'recipes_count'),
-                               (len(self.locales), 'admin_languages')):
-            tile = box(padding=7, spacing=0, color=PANEL_LIGHT)
-            tile.add_widget(label(str(value), 20, GOLD, 29, True))
-            tile.add_widget(label(t(self.locale, caption), 12, MUTED, 22))
-            stats.add_widget(tile)
-        self.status_page.add_widget(stats)
-        status_card = box(padding=9, spacing=3, color=PANEL_LIGHT,
-                          size_hint_y=None, height=dp(80))
-        status_card.add_widget(label(t(self.locale, 'admin_latest_status'), 14, GOLD, 24, True))
-        self.status_text = label(self.status_message, 14, WHITE, 42)
-        status_card.add_widget(self.status_text)
-        self.status_page.add_widget(status_card)
-        self.page_titles = {'status': 'admin_status_short'}
-        self.page_tabs = {'status': tab_button(t(self.locale, 'admin_status_short'),
-                                               lambda: self._show_page('status'), self.page == 'status',
-                                               height=38)}
-        self.toolbar.add_widget(self.page_tabs['status'])
+        self._render_status_page()
         if not self.creating and self.entry is None:
             self.select_page = box(padding=10, color=PANEL_LIGHT,
                                    size_hint_y=None, height=dp(80))
@@ -251,6 +187,43 @@ class AdminPanel:
         self.ingredients_page.bind(minimum_height=self.ingredients_page.setter('height'))
         self.recipe_page = box(spacing=10, size_hint_y=None)
         self.recipe_page.bind(minimum_height=self.recipe_page.setter('height'))
+        self._render_recipe_page(source_document)
+        self._render_details_page(recipe_id, source, source_document)
+        self._render_ingredients_page(source_document)
+        self._change_language(source)
+        self._show_page(self.page)
+        self.actions.add_widget(button(t(self.locale, 'admin_create' if self.creating else 'admin_update'),
+                                       self.save, 'primary', height=40))
+        self.actions.add_widget(button(t(self.locale, 'admin_reset'), self.reset, height=40))
+        if not self.creating:
+            self.actions.add_widget(button(t(self.locale, 'admin_delete'),
+                                           lambda: self.on_delete(self.entry['id']), 'danger', height=40))
+
+    def _render_status_page(self):
+        self.status_page = box(spacing=8, size_hint_y=None)
+        self.status_page.bind(minimum_height=self.status_page.setter('height'))
+        self._heading(self.status_page, 'admin_status')
+        stats = box(False, spacing=7, size_hint_y=None, height=dp(64))
+        for value, caption in ((len(self.records), 'recipes_count'),
+                               (len(self.locales), 'admin_languages')):
+            tile = box(padding=7, spacing=0, color=PANEL_LIGHT)
+            tile.add_widget(label(str(value), 20, GOLD, 29, True))
+            tile.add_widget(label(t(self.locale, caption), 12, MUTED, 22))
+            stats.add_widget(tile)
+        self.status_page.add_widget(stats)
+        status_card = box(padding=9, spacing=3, color=PANEL_LIGHT,
+                          size_hint_y=None, height=dp(80))
+        status_card.add_widget(label(t(self.locale, 'admin_latest_status'), 14, GOLD, 24, True))
+        self.status_text = label(self.status_message, 14, WHITE, 42)
+        status_card.add_widget(self.status_text)
+        self.status_page.add_widget(status_card)
+        self.page_titles = {'status': 'admin_status_short'}
+        self.page_tabs = {'status': tab_button(t(self.locale, 'admin_status_short'),
+                                               lambda: self._show_page('status'), self.page == 'status',
+                                               height=38)}
+        self.toolbar.add_widget(self.page_tabs['status'])
+
+    def _render_recipe_page(self, source_document):
         self.recipe_title = label('', 15, GOLD, 26, True)
         self.recipe_page.add_widget(self.recipe_title)
         self.step_rows = []
@@ -265,6 +238,8 @@ class AdminPanel:
             self._add_step(step, texts)
         self.recipe_page.add_widget(button(t(self.locale, 'admin_add_step'), self.add_step,
                                            size_hint_x=None, width=dp(180)))
+
+    def _render_details_page(self, recipe_id, source, source_document):
         self._heading(self.details, 'admin_details')
         identity = self._row(self.details)
         self.id_input = self._cell(identity, t(self.locale, 'admin_id'), field(text=recipe_id))
@@ -314,6 +289,8 @@ class AdminPanel:
         images = '\n'.join(source_document.get('images', []))
         self.shared_inputs['images'] = self._cell(self.details, t(self.locale, 'admin_images'),
                                                    field(text=images, multiline=True, height=dp(65)), 94)
+
+    def _render_ingredients_page(self, source_document):
         self._heading(self.ingredients_page, 'admin_ingredients')
         self.ingredient_search = field(t(self.locale, 'admin_search_ingredient'), height=38)
         self.ingredient_search.bind(text=lambda *_: self._schedule_ingredient_search())
@@ -331,14 +308,6 @@ class AdminPanel:
             self._add_ingredient(ingredient, names)
         self.ingredients_page.add_widget(button(t(self.locale, 'admin_add_ingredient'), self.add_ingredient,
                                                 size_hint_x=None, width=dp(200)))
-        self._change_language(source)
-        self._show_page(self.page)
-        self.actions.add_widget(button(t(self.locale, 'admin_create' if self.creating else 'admin_update'),
-                                       self.save, 'primary', height=40))
-        self.actions.add_widget(button(t(self.locale, 'admin_reset'), self.reset, height=40))
-        if not self.creating:
-            self.actions.add_widget(button(t(self.locale, 'admin_delete'),
-                                           lambda: self.on_delete(self.entry['id']), 'danger', height=40))
 
     def _show_page(self, page):
         self.page = page
@@ -502,110 +471,30 @@ class AdminPanel:
         for index, entry in enumerate(self.step_rows, 1):
             entry['title'].text = f"{t(self.locale, 'instruction_step')} {index}"
 
-    def _instructions(self, ingredients):
-        if len(self.step_rows) > 50:
-            self.on_status(t(self.locale, 'admin_add_step') + ': 50')
-            return None
-        valid_ids = {entry['shared']['ingredient_id'].text.strip() for entry, _ in ingredients}
-        localized = {code: [] for code in self.locales}
-        for index, entry in enumerate(self.step_rows, 1):
-            ids = [item.strip() for item in entry['ids'].text.split(',') if item.strip()]
-            if any(item not in valid_ids for item in ids):
-                self.on_status(t(self.locale, 'admin_step_ingredients'))
-                return None
-            for code in self.locales:
-                text = entry['texts'][code].text.strip()
-                if (self.locale_choices[code].text == t(self.locale, 'admin_translate')
-                        and (not text or len(text) > 2000)):
-                    self.on_status(f"{code.upper()}: {t(self.locale, 'admin_step_text')} {index}")
-                    return None
-                localized[code].append({'step': index, 'text': text, 'ingredient_ids': ids})
-        return localized
-
-    def _shared_values(self):
-        values = {}
-        for key, title in CHOICES:
-            values[key] = self._value(self.shared_inputs[key])
-            if not values[key] and key not in ('country_code', 'region_code', 'continent_code'):
-                self.on_status(f"{t(self.locale, title)}: {t(self.locale, 'admin_select_option')}")
-                return None
-        for key, title in TIMES:
-            try:
-                values[key] = int(self.shared_inputs[key].text.strip())
-            except ValueError:
-                self.on_status(f"{t(self.locale, title)}: {t(self.locale, 'admin_whole_number')}")
-                return None
-        values['suitable_for'] = [code for code, widget in self.diet_buttons.items() if widget.activated]
-        values['images'] = [line.strip() for line in self.shared_inputs['images'].text.splitlines() if line.strip()]
-        return values
-
-    def _ingredients(self):
-        if not self.ingredient_rows:
-            self.on_status(t(self.locale, 'admin_need_ingredient'))
-            return None
-        rows = []
-        for entry in self.ingredient_rows:
-            try:
-                amount = Decimal(entry['shared']['amount'].text.strip())
-                if not amount.is_finite() or amount <= 0 or amount > 1_000_000_000:
-                    raise InvalidOperation
-            except InvalidOperation:
-                self.on_status(f"{t(self.locale, 'admin_amount')}: {t(self.locale, 'admin_positive_number')}")
-                return None
-            rows.append((entry, int(amount) if amount == amount.to_integral_value() else float(amount)))
-        return rows
-
-    def _label_for(self, locale, key, value):
-        options = self._options(key, locale)
-        if value in options:
-            return options[value]
-        document = self.documents[locale]
-        label_key = LABELS.get(key)
-        if label_key and document.get(key) == value and document.get(label_key):
-            return document[label_key]
-        return value
-
     def save(self):
-        recipe_id = self.id_input.text.strip()
-        source = self.source.text.lower()
-        if not recipe_id:
-            self.on_status(t(self.locale, 'admin_missing_id'))
+        snapshot = RecipeFormSnapshot(
+            recipe_id=self.id_input.text, source=self.source.text, locale=self.locale,
+            locales=self.locales,
+            choices={code: widget.text for code, widget in self.locale_choices.items()},
+            shared_choices={key: self._value(self.shared_inputs[key]) for key, _ in CHOICES},
+            times={key: self.shared_inputs[key].text for key, _ in TIMES},
+            diets=[code for code, widget in self.diet_buttons.items() if widget.activated],
+            images=self.shared_inputs['images'].text,
+            ingredients=[{'original': entry['original'],
+                          'ingredient_id': entry['shared']['ingredient_id'].text,
+                          'amount': entry['shared']['amount'].text,
+                          'unit': entry['shared']['unit'].text,
+                          'names': {code: widget.text for code, widget in entry['names'].items()}}
+                         for entry in self.ingredient_rows],
+            steps=[{'ingredient_ids': entry['ids'].text,
+                    'texts': {code: widget.text for code, widget in entry['texts'].items()}}
+                   for entry in self.step_rows],
+            names={code: widgets['name'].text for code, widgets in self.locale_inputs.items()},
+            documents=self.documents, options=self.options,
+        )
+        try:
+            recipe_id, source, translations = build_submission(snapshot)
+        except FormError as error:
+            self.on_status(str(error))
             return
-        if self.locale_choices[source].text != t(self.locale, 'admin_translate'):
-            self.on_status(t(self.locale, 'admin_source_required'))
-            return
-        for code, choice in self.locale_choices.items():
-            if choice.text == t(self.locale, 'admin_choose'):
-                self.on_status(f"{code.upper()}: {t(self.locale, 'admin_choose_language')}")
-                return
-        shared = self._shared_values()
-        ingredients = self._ingredients()
-        if shared is None or ingredients is None:
-            return
-        instructions = self._instructions(ingredients)
-        if instructions is None:
-            return
-        translations = {}
-        for code, choice in self.locale_choices.items():
-            if choice.text == t(self.locale, 'admin_omit'):
-                translations[code] = None
-                continue
-            row = deepcopy(self.documents[code])
-            row.update(shared)
-            row['id'] = recipe_id
-            row['image_folder'] = f'recipe_images/{recipe_id}'
-            row['name'] = self.locale_inputs[code]['name'].text.strip()
-            for key, label_key in LABELS.items():
-                row[label_key] = self._label_for(code, key, shared[key])
-            row['suitable_for_labels'] = [self._label_for(code, 'suitable_for', value)
-                                          for value in shared['suitable_for']]
-            row['ingredients'] = []
-            for entry, amount in ingredients:
-                item = deepcopy(entry['original'])
-                item.update({'ingredient_id': entry['shared']['ingredient_id'].text.strip(),
-                             'amount': amount, 'unit': entry['shared']['unit'].text.strip(),
-                             'name': entry['names'][code].text.strip()})
-                row['ingredients'].append(item)
-            row['instructions'] = {'steps': instructions[code]}
-            translations[code] = row
         self.on_save(recipe_id, source, translations, self.creating)

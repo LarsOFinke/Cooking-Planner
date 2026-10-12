@@ -14,7 +14,6 @@ data/recipe_images/dz-algerischer-couscous/image_02.jpg
 Die Schreibweise muss `image_01`, `image_02`, `image_03` verwenden; dieselbe Nummer darf nicht mit zwei Dateiendungen vorkommen. Anschließend:
 
 ```bash
-python3 -m pip install -r scripts/images/requirements-images.txt
 make images-sync
 ```
 
@@ -26,6 +25,4 @@ Für lokal hinzugefügte Dateien legt der Import `data/recipe_images/LOCAL_IMAGE
 
 `IMAGE_ATTRIBUTIONS.csv` und `.md` werden aus diesen Angaben erzeugt. Die App zeigt den Status oder den Urhebernachweis beim Bild an. `make images-verify` zählt offene Rechte; für eine Veröffentlichung müssen sie geklärt sein.
 
-## Zusätzliche Commons-Bilder
-
-`make images` übernimmt zuerst lokale Bilder und sucht danach höchstens zwei Bilder je Gericht auf Wikimedia Commons. Der Downloader kann per `--max-images 3` bis zu drei Bilder ergänzen. Er akzeptiert nur erkannte CC0-, CC-BY-, CC-BY-SA- oder Gemeinfrei-Metadaten und speichert Quellen und Lizenzlinks. Prüfe jeden automatischen Treffer vor Veröffentlichung anhand der verlinkten Originaldatei. Ohne Internetverbindung bleiben bereits eingebundene lokale Bilder erhalten.
+Alle 586 Rezepte haben bereits ein lokales Bild. Weitere Bilder können mit `make images-sync` eingebunden werden; der frühere automatische Wikimedia-Downloader wird dafür nicht benötigt. Alle vorhandenen Bildnachweise stehen derzeit auf `pending` und müssen vor einer Veröffentlichung geprüft werden.

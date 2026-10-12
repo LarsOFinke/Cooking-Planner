@@ -23,7 +23,7 @@ The recipe admin endpoint stores user edits as an overlay and leaves bundled cat
 
 ## Cleanup check on 2026-10-12
 
-- `make quality` passed: 13 backend tests, the JaCoCo gate (93.5% backend line coverage), and 83.4% desktop line coverage. All 46 desktop tests also passed using the Kivy development environment with a display.
+- `make quality` passed: 13 backend tests, the JaCoCo gate (93.5% backend line coverage), and 84.3% desktop line coverage. All 48 desktop tests also passed using the Kivy development environment with a display.
 - A closed-app backup and restore into a fresh temporary data directory recovered a saved plan, recipe edit, shopping draft item, and SQLite price. Bundled catalogs stayed outside both data directories.
 - `make linux` built `dist/linux/CookingPlanner` after correcting the PyInstaller asset paths. The packaged app and bundled backend launched on the local display at 100% and 200% scale with temporary user data, and both bundled catalog languages loaded. A separate real Kivy event-loop check confirmed hover behavior across Overview, Explore, Week, and Shopping at both scales. Visual review, the packaged navigation and Exit workflow, and the Windows build and runtime checks remain open.
 - Catalogs are validated across available locales at startup before ingredient seeding. The backend remains bound to `127.0.0.1`; the admin endpoints have no authentication, so the service must remain local only. No plan or edit file format changed in this cleanup.

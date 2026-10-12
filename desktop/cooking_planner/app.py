@@ -125,8 +125,9 @@ class CookingPlannerApp(App):
         if self.tab == 'shopping' and hasattr(self, 'shopping_panel'):
             self.shopping_panel.set_status(message)
 
-    def _submit(self, work, success):
-        self._status('…')
+    def _submit(self, work, success, show_status=True):
+        if show_status:
+            self._status('…')
         future = self.worker.submit(work)
         def done(result):
             try:
@@ -225,16 +226,7 @@ class CookingPlannerApp(App):
         self._submit(load, loaded)
 
     def search_ingredients(self, locale, query, on_result):
-        future = self.worker.submit(lambda: self.client.ingredients(locale, query))
-        def done(result):
-            try:
-                matches = result.result()
-            except Exception as error:
-                message = str(error)
-                Clock.schedule_once(lambda *_: self._report_error(message), 0)
-                return
-            Clock.schedule_once(lambda *_: on_result(matches), 0)
-        future.add_done_callback(done)
+        self._submit(lambda: self.client.ingredients(locale, query), on_result, show_status=False)
 
     def show_ingredient_admin(self):
         self.admin_mode = 'ingredients'
