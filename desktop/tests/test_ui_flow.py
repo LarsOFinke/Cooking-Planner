@@ -334,8 +334,8 @@ class UiFlowTest(unittest.TestCase):
             week.scroll.width = width
             self.assertEqual(overview_cols, overview.modules.cols)
             self.assertEqual(7, len(week.days.children))
-            self.assertTrue(all(day.orientation == 'horizontal' for day in week.days.children))
-            self.assertTrue(all(len(day.children) == 4 for day in week.days.children))
+            self.assertTrue(all(day.orientation == 'vertical' for day in week.days.children))
+            self.assertTrue(all(len(day.children[0].children) == 3 for day in week.days.children))
         for width, columns in ((dp(350), 1), (dp(600), 2), (dp(900), 4)):
             overview.metrics.width = width
             self.assertEqual(columns, overview.metrics.cols)
@@ -343,6 +343,30 @@ class UiFlowTest(unittest.TestCase):
         self.assertGreaterEqual(week.days.width, dp(650))
         week.root.children[-1].width = dp(400)
         self.assertEqual('vertical', week.root.children[-1].orientation)
+
+    def test_week_shows_day_cost_for_all_planned_recipes(self):
+        day = self.app.week_start.isoformat()
+        recipes = [
+            {'id': 'one', 'ingredients': [
+                {'ingredientId': 'rice', 'unit': 'g', 'amount': 100},
+                {'ingredientId': 'oil', 'unit': 'ml', 'amount': 10}]},
+            {'id': 'two', 'ingredients': [
+                {'ingredientId': 'rice', 'unit': 'g', 'amount': 200},
+                {'ingredientId': 'spice', 'unit': 'g', 'amount': 5}]},
+        ]
+        plans = [{'id': 1, 'date': day, 'mealType': 'BREAKFAST', 'recipeId': 'one',
+                  'recipeTitle': 'One', 'servings': 2},
+                 {'id': 2, 'date': day, 'mealType': 'DINNER', 'recipeId': 'two',
+                  'recipeTitle': 'Two', 'servings': 1}]
+        draft = ShoppingDraft()
+        draft.set_reference_price('rice:g', '1.80', 100)
+        draft.set_reference_price('oil:ml', '2.20', 100)
+        draft.toggle_plan(day, 2)
+        week = WeekPlanner(self.app.week_start, plans, 'en', lambda _: None,
+                           lambda: None, lambda *_: None, lambda _: None, recipes, draft)
+        texts = [widget.text for widget in week.root.walk() if hasattr(widget, 'text')]
+        self.assertIn('Day estimate: €7.64', texts)
+        self.assertIn('3/4 ingredients priced', texts)
         self.app.header.width = dp(400)
         self.assertEqual('vertical', self.app.header.orientation)
         self.app.header.width = dp(700)

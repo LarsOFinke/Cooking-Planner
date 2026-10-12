@@ -118,7 +118,9 @@ STRINGS = {
         "enter_fullscreen": "Fullscreen", "leave_fullscreen": "Windowed",
         "week_total": "servings this week", "shopping_items": "items to buy", "no_country": "Global", "shown": "shown",
         "week_price_estimate": "Est. {amount} · {priced}/{total} ingredients priced",
-        "day_price_estimate": "Est. {amount} · {priced}/{total}",
+        "day_price_estimate": "Day estimate: {amount}",
+        "day_price_unavailable": "Day estimate unavailable",
+        "day_price_coverage": "{priced}/{total} ingredients priced",
     },
     "de": {
         "tagline": "Gerichte aus aller Welt, entspannt geplant",
@@ -237,7 +239,9 @@ STRINGS = {
         "enter_fullscreen": "Vollbild", "leave_fullscreen": "Fensteransicht",
         "week_total": "Portionen diese Woche", "shopping_items": "Einkäufe", "no_country": "Global", "shown": "angezeigt",
         "week_price_estimate": "Ca. {amount} · {priced}/{total} Zutaten bepreist",
-        "day_price_estimate": "Ca. {amount} · {priced}/{total}",
+        "day_price_estimate": "Tagesschätzung: {amount}",
+        "day_price_unavailable": "Keine Tagesschätzung verfügbar",
+        "day_price_coverage": "{priced}/{total} Zutaten mit Preis",
     },
 }
 

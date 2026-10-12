@@ -1,4 +1,4 @@
-"""Allocate priced shopping ingredients to the planned meals that use them."""
+"""Estimate ingredient costs for the recipes planned on each day."""
 
 from collections import defaultdict
 from decimal import Decimal
@@ -7,30 +7,27 @@ from cooking_planner.shopping.draft import item_key
 
 
 def planned_costs(start, plans, recipes, draft):
-    """Return dated partial totals and coverage for selected planned meals.
+    """Return dated partial totals and coverage for all planned recipes.
 
     Reference prices cover their saved basis quantity. Older week prices cover
-    the displayed shopping quantity and are split among the planned meals.
-    Unpriced, removed, and excluded ingredients do not contribute a cost.
+    the week's planned quantity and are split among its meals. Shopping list
+    selections do not change the cost of recipes that remain on the plan.
     """
-    selected = draft.selected_plan_ids(start, plans)
-    listed = {item_key(item): item for item in draft.items(start, plans, recipes)}
     by_recipe = {recipe['id']: recipe for recipe in recipes}
+    planned = [(plan, by_recipe[plan['recipeId']]) for plan in plans
+               if plan['recipeId'] in by_recipe]
+    quantities = defaultdict(lambda: Decimal('0'))
+    for plan, recipe in planned:
+        for ingredient in recipe['ingredients']:
+            quantities[item_key(ingredient)] += (Decimal(str(ingredient['amount']))
+                                                 * Decimal(str(plan['servings'])))
     totals = defaultdict(lambda: Decimal('0'))
     coverage = defaultdict(lambda: [0, 0])
-    for plan in plans:
-        if str(plan['id']) not in selected:
-            continue
-        recipe = by_recipe.get(plan['recipeId'])
-        if recipe is None:
-            continue
+    for plan, recipe in planned:
         day = plan['date']
         for ingredient in recipe['ingredients']:
             key = item_key(ingredient)
             coverage[day][1] += 1
-            item = listed.get(key)
-            if item is None:
-                continue
             quantity = Decimal(str(ingredient['amount'])) * Decimal(str(plan['servings']))
             reference = draft.reference_price_for(key)
             if reference is not None:
@@ -41,9 +38,8 @@ def planned_costs(start, plans, recipes, draft):
             price = draft.weekly_price_for(start, key)
             if price is None:
                 continue
-            listed_quantity = Decimal(str(item['amount']))
-            if listed_quantity <= 0:
+            if quantities[key] <= 0:
                 continue
-            totals[day] += price * quantity / listed_quantity
+            totals[day] += price * quantity / quantities[key]
             coverage[day][0] += 1
     return {day: (totals[day], *counts) for day, counts in coverage.items()}

@@ -53,26 +53,39 @@ class WeekPlanner:
         meals = MEALS.get(locale, MEALS['en'])
         for offset in range(7):
             day = week_start + timedelta(days=offset)
-            card = box(False, padding=7, spacing=7, color=PANEL_LIGHT, hover=True,
-                       size_hint_y=None, height=dp(90))
+            day_key = day.isoformat()
+            day_plans = [plan for plan in plans if plan['date'] == day_key]
+            card = box(padding=7, spacing=4, color=PANEL_LIGHT, hover=True,
+                       size_hint_y=None, height=dp(118))
+            day_header = box(False, spacing=9, size_hint_y=None, height=dp(40))
             day_title = WEEKDAYS.get(locale, WEEKDAYS['en'])[day.weekday()]
             if day == date.today():
                 day_title += '  •'
-            day_column = box(spacing=2, size_hint_x=None, width=dp(130))
-            day_heading = label(day_title, 15, GOLD if day == date.today() else WHITE, 26, True)
+            day_column = box(spacing=0, size_hint_x=None, width=dp(150))
+            day_heading = label(day_title, 15, GOLD if day == date.today() else WHITE, 22, True)
             day_heading.shorten = True
             day_column.add_widget(day_heading)
-            day_column.add_widget(label(f'{day:%d.%m}', 12, MUTED, 20))
-            if day.isoformat() in costs and costs[day.isoformat()][1]:
-                amount, counted, available = costs[day.isoformat()]
-                day_column.add_widget(label(t(locale, 'day_price_estimate').format(
-                    amount=self._money(amount, locale), priced=counted, total=available),
-                    11, MUTED, 20))
-            card.add_widget(day_column)
+            day_column.add_widget(label(f'{day:%d.%m}', 12, MUTED, 18))
+            day_header.add_widget(day_column)
+            if day_plans:
+                amount, counted, available = costs.get(day_key, (Decimal('0'), 0, 0))
+                summary = box(spacing=0)
+                title = (t(locale, 'day_price_estimate').format(amount=self._money(amount, locale))
+                         if counted else t(locale, 'day_price_unavailable'))
+                estimate = label(title, 15, GOLD if counted else MUTED, 22, True)
+                estimate.shorten = True
+                summary.add_widget(estimate)
+                coverage = label(t(locale, 'day_price_coverage').format(
+                    priced=counted, total=available), 11, MUTED, 18)
+                coverage.shorten = True
+                summary.add_widget(coverage)
+                day_header.add_widget(summary)
+            card.add_widget(day_header)
+            meal_row = box(False, spacing=7, size_hint_y=None, height=dp(57))
             for meal_code, meal_name in meals.items():
-                plan = by_slot.get((day.isoformat(), meal_code))
+                plan = by_slot.get((day_key, meal_code))
                 slot = box(spacing=3)
-                slot.add_widget(label(meal_name, 12, MUTED, 20))
+                slot.add_widget(label(meal_name, 12, MUTED, 16))
                 row = box(False, spacing=4, size_hint_y=None, height=dp(38))
                 if plan:
                     name = f"{plan['recipeTitle']} · {plan['servings']}"
@@ -91,7 +104,8 @@ class WeekPlanner:
                                           lambda current_day=day, current_meal=meal_code: on_pick(current_day, current_meal),
                                           height=38))
                 slot.add_widget(row)
-                card.add_widget(slot)
+                meal_row.add_widget(slot)
+            card.add_widget(meal_row)
             days.add_widget(card)
         scroll.add_widget(days)
         self.root.add_widget(scroll)
