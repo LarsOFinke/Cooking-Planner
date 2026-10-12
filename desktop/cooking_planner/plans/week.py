@@ -34,11 +34,20 @@ class WeekPlanner:
         controls.add_widget(button(t(locale, 'today'), on_today))
         controls.add_widget(button('›', lambda: on_shift(7), size_hint_x=None, width=dp(34)))
         header.add_widget(controls)
+        def layout_header(_, width):
+            compact = width < dp(460)
+            header.orientation = 'vertical' if compact else 'horizontal'
+            header.height = dp(150 if compact else 68)
+            controls.size_hint_x = 1 if compact else None
+            controls.width = width if compact else dp(160)
+        header.bind(width=layout_header)
+        layout_header(header, header.width)
         self.root.add_widget(header)
 
-        scroll = scroll_view(do_scroll_x=False)
-        days = box(spacing=7, padding=1, size_hint_y=None)
+        scroll = scroll_view(do_scroll_x=True)
+        days = box(spacing=7, padding=1, size_hint_x=None, size_hint_y=None)
         self.scroll, self.days = scroll, days
+        scroll.bind(width=lambda _, width: setattr(days, 'width', max(width, dp(650))))
         days.bind(minimum_height=days.setter('height'))
         by_slot = {(plan['date'], plan['mealType']): plan for plan in plans}
         meals = MEALS.get(locale, MEALS['en'])

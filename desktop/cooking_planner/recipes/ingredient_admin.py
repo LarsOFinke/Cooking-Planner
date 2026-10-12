@@ -8,7 +8,8 @@ from kivy.metrics import dp
 from cooking_planner.pricing import normalize_price
 from cooking_planner.ui.dialogs import confirm_popup
 from cooking_planner.ui.strings import t
-from cooking_planner.ui.theme import GOLD, MUTED, PANEL, WHITE, box, button, field, label, scroll_view, spinner
+from cooking_planner.ui.theme import (GOLD, MUTED, PANEL, WHITE, box, button, field, label,
+                                      scroll_view, set_tab_active, spinner, tab_button)
 
 
 class IngredientAdminPanel:
@@ -22,19 +23,24 @@ class IngredientAdminPanel:
         self.reference_prices = dict(reference_prices or {})
         self.on_save_price = on_save_price
         self.selected = selected
+        self.editor_tab = 'details'
         self.generation = 0
         self.search_event = None
         self.rows = []
         self.page = 0
         self.root = box(spacing=7)
-        header = box(False, spacing=7, size_hint_y=None, height=dp(42))
+        header_scroll = scroll_view(do_scroll_y=False, size_hint_y=None, height=dp(42))
+        header = box(False, spacing=7, size_hint_x=None, size_hint_y=None, height=dp(42))
+        header_scroll.bind(width=lambda _, width: setattr(header, 'width', max(width, dp(510))))
         header.add_widget(label(t(locale, 'ingredient_catalog'), 19, GOLD, 42, True))
         header.add_widget(button(t(locale, 'admin_recipes'), on_recipes,
                                  size_hint_x=None, width=dp(150), height=40))
         header.add_widget(button(t(locale, 'new_ingredient'), self.new, 'primary',
                                  size_hint_x=None, width=dp(160), height=40))
-        self.root.add_widget(header)
+        header_scroll.add_widget(header)
+        self.root.add_widget(header_scroll)
         horizontal = scroll_view(do_scroll_y=False)
+        self.horizontal = horizontal
         columns = box(False, spacing=7, size_hint_x=None)
         horizontal.bind(width=lambda _, width: setattr(columns, 'width', max(width, dp(790))))
         horizontal.add_widget(columns)
@@ -58,11 +64,34 @@ class IngredientAdminPanel:
         results_scroll.add_widget(self.results)
         left.add_widget(results_scroll)
         columns.add_widget(left)
-        right_scroll = scroll_view(do_scroll_x=False, size_hint_x=0.62)
+        right = box(spacing=5, size_hint_x=0.62)
+        tabs = box(False, spacing=5, size_hint_y=None, height=dp(38))
+        self.list_button = button(t(locale, 'ingredient_list_tab'),
+                                  lambda: setattr(self.horizontal, 'scroll_x', 0),
+                                  size_hint_x=None, width=0, height=38)
+        self.list_button.opacity = 0
+        self.list_button.disabled = True
+        tabs.add_widget(self.list_button)
+        self.details_tab = tab_button(t(locale, 'ingredient_details_tab'),
+                                      lambda: self.show_editor_tab('details'), True, height=38)
+        tabs.add_widget(self.details_tab)
+        if on_save_price is not None:
+            self.pricing_tab = tab_button(t(locale, 'ingredient_pricing_tab'),
+                                          lambda: self.show_editor_tab('pricing'), height=38)
+            tabs.add_widget(self.pricing_tab)
+        right.add_widget(tabs)
+        right_scroll = scroll_view(do_scroll_x=False)
         self.editor = box(padding=12, spacing=9, color=PANEL, size_hint_y=None)
         self.editor.bind(minimum_height=self.editor.setter('height'))
         right_scroll.add_widget(self.editor)
-        columns.add_widget(right_scroll)
+        right.add_widget(right_scroll)
+        columns.add_widget(right)
+        def layout_list_action(_, width):
+            narrow = width < dp(790)
+            self.list_button.width = dp(80) if narrow else 0
+            self.list_button.opacity = int(narrow)
+            self.list_button.disabled = not narrow
+        horizontal.bind(width=layout_list_action)
         self.root.add_widget(horizontal)
         self.status = label('', 13, MUTED, 28)
         self.root.add_widget(self.status)
@@ -80,7 +109,8 @@ class IngredientAdminPanel:
         generation = self.generation
         self.search_event = Clock.schedule_once(
             lambda *_: self.on_search(self.search.text.strip(),
-                                     lambda rows: self._show_results(rows, generation)), 0.2)
+                                     lambda rows: self._show_results(rows, generation))
+            if self.root.parent is not None else None, 0.2)
 
     def _show_results(self, rows, generation):
         if generation != self.generation:
@@ -121,13 +151,23 @@ class IngredientAdminPanel:
     def select(self, entry):
         self.selected = entry
         self._render_editor()
+        self.horizontal.scroll_x = 1
 
     def new(self):
         self.selected = None
+        self.editor_tab = 'details'
         self._render_editor(new=True)
+        self.horizontal.scroll_x = 1
 
     def reset(self):
         self._render_editor(new=self.selected is None)
+
+    def show_editor_tab(self, tab):
+        if tab == 'pricing' and (self.selected is None or self.on_save_price is None):
+            return
+        self.editor_tab = tab
+        self._render_editor()
+        self.horizontal.scroll_x = 1
 
     def _cell(self, title, widget):
         cell = box(spacing=3, size_hint_y=None, height=dp(76))
@@ -137,10 +177,19 @@ class IngredientAdminPanel:
 
     def _render_editor(self, new=False):
         self.editor.clear_widgets()
+        set_tab_active(self.details_tab, t(self.locale, 'ingredient_details_tab'),
+                       self.editor_tab == 'details')
+        if self.on_save_price is not None:
+            self.pricing_tab.disabled = self.selected is None
+            set_tab_active(self.pricing_tab, t(self.locale, 'ingredient_pricing_tab'),
+                           self.editor_tab == 'pricing')
         if self.selected is None and not new:
             self.editor.add_widget(label(t(self.locale, 'select_ingredient'), 16, MUTED, 80))
             return
         entry = self.selected or {'id': '', 'translations': {}}
+        if self.editor_tab == 'pricing':
+            self._render_price_editor(entry['id'])
+            return
         self.editor.add_widget(label(t(self.locale, 'new_ingredient' if new else 'edit_ingredient'),
                                      18, GOLD, 36, True))
         self.id_input = field(t(self.locale, 'admin_ingredient_id'), text=entry['id'])
@@ -160,8 +209,6 @@ class IngredientAdminPanel:
             actions.add_widget(button(t(self.locale, 'delete_ingredient'), self.confirm_delete,
                                       'danger', height=42))
         self.editor.add_widget(actions)
-        if not new and self.on_save_price is not None:
-            self._render_price_editor(entry['id'])
 
     def _render_price_editor(self, ingredient_id):
         self.editor.add_widget(label(t(self.locale, 'admin_reference_price'), 17, GOLD, 36, True))
@@ -177,8 +224,11 @@ class IngredientAdminPanel:
         self._cell(t(self.locale, 'shopping_price_basis'), self.price_basis)
         self.price_unit.bind(text=lambda *_: self._show_price_for_unit(ingredient_id))
         self._show_price_for_unit(ingredient_id)
-        self.editor.add_widget(button(t(self.locale, 'shopping_save_price'), self.save_price,
-                                      'primary', height=42))
+        actions = box(False, spacing=8, size_hint_y=None, height=dp(42))
+        actions.add_widget(button(t(self.locale, 'shopping_save_price'), self.save_price,
+                                  'primary', height=42))
+        actions.add_widget(button(t(self.locale, 'admin_reset'), self.reset, height=42))
+        self.editor.add_widget(actions)
 
     def _show_price_for_unit(self, ingredient_id):
         unit = self.price_unit.text
@@ -208,7 +258,7 @@ class IngredientAdminPanel:
 
     def update_prices(self, prices):
         self.reference_prices = dict(prices)
-        if self.selected is not None:
+        if self.selected is not None and self.editor_tab == 'pricing':
             self._show_price_for_unit(self.selected['id'])
 
     def save(self):

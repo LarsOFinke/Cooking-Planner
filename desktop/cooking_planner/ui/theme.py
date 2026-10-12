@@ -97,15 +97,37 @@ class HoverColorBehavior:
         Animation(background_color=target, duration=0.14, t='out_quad').start(self)
 
 
-class HoverButton(HoverColorBehavior, Button):
+class RoundedControlBehavior:
+    fill_color = ListProperty(PANEL_LIGHT)
+
+    def __init__(self, **kwargs):
+        color = tuple(kwargs.pop('background_color', PANEL_LIGHT))
+        kwargs['background_color'] = (0, 0, 0, 0)
+        super().__init__(**kwargs)
+        self._base_background = color
+        self.fill_color = color
+        with self.canvas.before:
+            tint = Color(*color)
+            shape = RoundedRectangle(pos=self.pos, size=self.size, radius=[dp(9)])
+        self.bind(fill_color=lambda _, value: setattr(tint, 'rgba', value),
+                  pos=lambda instance, _: setattr(shape, 'pos', instance.pos),
+                  size=lambda instance, _: setattr(shape, 'size', instance.size))
+
+    def _animate_background(self):
+        Animation.cancel_all(self, 'fill_color')
+        target = _hover_color(self._base_background) if self._hovered else self._base_background
+        Animation(fill_color=target, duration=0.14, t='out_quad').start(self)
+
+
+class HoverButton(RoundedControlBehavior, HoverColorBehavior, Button):
     pass
 
 
-class HoverSpinner(HoverColorBehavior, Spinner):
+class HoverSpinner(RoundedControlBehavior, HoverColorBehavior, Spinner):
     pass
 
 
-class HoverSpinnerOption(HoverColorBehavior, SpinnerOption):
+class HoverSpinnerOption(RoundedControlBehavior, HoverColorBehavior, SpinnerOption):
     def __init__(self, **kwargs):
         kwargs.setdefault('background_normal', '')
         kwargs.setdefault('background_down', '')
@@ -114,11 +136,11 @@ class HoverSpinnerOption(HoverColorBehavior, SpinnerOption):
         super().__init__(**kwargs)
 
 
-class HoverTextInput(HoverColorBehavior, TextInput):
+class HoverTextInput(RoundedControlBehavior, HoverColorBehavior, TextInput):
     hover_cursor = 'ibeam'
 
 
-class HoverToggleButton(HoverColorBehavior, ToggleButton):
+class HoverToggleButton(RoundedControlBehavior, HoverColorBehavior, ToggleButton):
     pass
 
 

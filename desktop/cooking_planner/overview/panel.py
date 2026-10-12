@@ -20,7 +20,13 @@ class OverviewPanel:
         hero.add_widget(label(t(locale, 'overview_intro'), 13, MUTED, 30))
         content.add_widget(hero)
 
-        metrics = box(False, spacing=7, size_hint_y=None, height=dp(72))
+        metrics = GridLayout(cols=4, spacing=dp(7), row_default_height=dp(72),
+                             row_force_default=True, size_hint_y=None, height=dp(72))
+        self.metrics = metrics
+        def layout_metrics(_, width):
+            metrics.cols = 4 if width >= dp(750) else 2 if width >= dp(400) else 1
+            metrics.height = dp(72 * (4 // metrics.cols)) + dp(7 * (4 // metrics.cols - 1))
+        metrics.bind(width=layout_metrics)
         categories = len({recipe.get('categoryLabel') for recipe in recipes if recipe.get('categoryLabel')})
         for value, caption in ((len(recipes), 'recipes_count'), (categories, 'categories_count'),
                                (info.get('countryCount', 0), 'countries'), (len(plans), 'planned')):
@@ -64,8 +70,17 @@ class OverviewPanel:
         copy.add_widget(label(t(locale, 'overview_good_to_know'), 16, GOLD, 28, True))
         copy.add_widget(label(t(locale, 'overview_catalog_note'), 13, WHITE, 42))
         notes.add_widget(copy)
-        notes.add_widget(button(t(locale, 'data_notes'), on_notes,
-                                size_hint_x=None, width=dp(130), height=38))
+        notes_action = button(t(locale, 'data_notes'), on_notes,
+                              size_hint_x=None, width=dp(130), height=38)
+        notes.add_widget(notes_action)
+        def layout_notes(_, width):
+            compact = width < dp(480)
+            notes.orientation = 'vertical' if compact else 'horizontal'
+            notes.height = dp(140 if compact else 90)
+            notes_action.size_hint_x = 1 if compact else None
+            notes_action.width = width if compact else dp(130)
+        notes.bind(width=layout_notes)
+        layout_notes(notes, notes.width)
         content.add_widget(notes)
 
         scroll.add_widget(content)

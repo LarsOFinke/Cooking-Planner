@@ -72,8 +72,11 @@ class CookingPlannerApp(App):
         header = box(False, spacing=10, size_hint_y=None, height=dp(48))
         self.header = header
         heading = box(spacing=0)
-        heading.add_widget(label('COOKING PLANNER', 19, GOLD, 27, True))
-        heading.add_widget(label(t(self.locale, 'tagline'), 11, MUTED, 18))
+        title = label('COOKING PLANNER', 19, GOLD, 27, True)
+        tagline = label(t(self.locale, 'tagline'), 11, MUTED, 18)
+        title.shorten = tagline.shorten = True
+        heading.add_widget(title)
+        heading.add_widget(tagline)
         header.add_widget(heading)
         controls = box(False, spacing=4, size_hint_x=None, width=dp(261))
         self.header_controls = controls
@@ -91,6 +94,14 @@ class CookingPlannerApp(App):
         self.window_button.font_size = dp(14)
         controls.add_widget(self.window_button)
         header.add_widget(controls)
+        def layout_header(_, width):
+            compact = width < dp(530)
+            header.orientation = 'vertical' if compact else 'horizontal'
+            header.height = dp(96 if compact else 48)
+            controls.size_hint_x = 1 if compact else None
+            controls.width = width if compact else dp(261)
+        header.bind(width=layout_header)
+        layout_header(header, header.width)
         root.add_widget(header)
         nav_scroll = ScrollView(size_hint_y=None, height=dp(42), do_scroll_y=False)
         nav = box(False, spacing=8, size_hint=(None, None), height=dp(42))

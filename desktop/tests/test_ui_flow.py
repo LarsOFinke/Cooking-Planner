@@ -54,7 +54,8 @@ def sample_recipe():
 class UiFlowTest(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
-        self.app = CookingPlannerApp(object(), config_path=Path(self.temp.name) / 'client.cfg')
+        self.app = CookingPlannerApp(object(), startup_error='test',
+                                     config_path=Path(self.temp.name) / 'client.cfg')
         self.app.build()
         recipe = sample_recipe()
         self.app._loaded((['en'], [recipe], {'countryCount': 1, 'dataset': 'Sample'}, []),
@@ -62,6 +63,9 @@ class UiFlowTest(unittest.TestCase):
         self.recipe = recipe
 
     def tearDown(self):
+        panel = getattr(self.app, 'admin_panel', None)
+        if isinstance(panel, IngredientAdminPanel) and panel.search_event is not None:
+            panel.search_event.cancel()
         self.app.worker.shutdown(wait=True, cancel_futures=True)
         self.temp.cleanup()
 
@@ -230,6 +234,7 @@ class UiFlowTest(unittest.TestCase):
         self.app.ingredient_admin_entry = {
             'id': ingredient['ingredientId'], 'translations': {'en': ingredient['name']}}
         self.app._render_tab()
+        self.app.admin_panel.show_editor_tab('pricing')
         with patch.object(self.app, '_submit', side_effect=lambda work, done: done(work())):
             self.app.save_admin_price(ingredient['ingredientId'], ingredient['unit'], '1.80', 100)
         self.assertEqual([(key, '1.80', 100)], saved)
@@ -301,6 +306,31 @@ class UiFlowTest(unittest.TestCase):
             self.assertEqual(7, len(week.days.children))
             self.assertTrue(all(day.orientation == 'horizontal' for day in week.days.children))
             self.assertTrue(all(len(day.children) == 4 for day in week.days.children))
+        for width, columns in ((dp(350), 1), (dp(600), 2), (dp(900), 4)):
+            overview.metrics.width = width
+            self.assertEqual(columns, overview.metrics.cols)
+        week.scroll.width = dp(400)
+        self.assertGreaterEqual(week.days.width, dp(650))
+        week.root.children[-1].width = dp(400)
+        self.assertEqual('vertical', week.root.children[-1].orientation)
+        self.app.header.width = dp(400)
+        self.assertEqual('vertical', self.app.header.orientation)
+        self.app.header.width = dp(700)
+        self.assertEqual('horizontal', self.app.header.orientation)
+
+    def test_shopping_columns_and_summary_remain_readable_at_large_scale(self):
+        draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
+        draft.add_custom(self.app.week_start.isoformat(), 'Rice', '100', 'g')
+        panel = ShoppingPanel([], [], draft, 'en', self.app.week_start, lambda _: None)
+        panel.scroll.width = dp(400)
+        self.assertGreaterEqual(panel.rows.width, dp(530))
+        summary = panel.price_summary.parent
+        summary.width = dp(400)
+        self.assertEqual(0, panel.meal_summary.width)
+        self.assertEqual('1/1 items', panel.summary.text)
+        summary.width = dp(800)
+        self.assertEqual(1, panel.meal_summary.size_hint_x)
+        self.assertIn('items to buy', panel.summary.text)
 
     def test_shopping_dialog_adds_multiple_items_without_reopening(self):
         draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')

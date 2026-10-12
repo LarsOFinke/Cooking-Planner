@@ -16,6 +16,7 @@ try:
         raise ImportError('No display')
     from kivy.clock import Clock
     from kivy.core.window import Window
+    from kivy.metrics import dp
     from cooking_planner.recipes.admin import AdminPanel
     from cooking_planner.recipes.ingredient_admin import IngredientAdminPanel
 except ImportError:
@@ -52,6 +53,11 @@ class AdminEditorTest(unittest.TestCase):
         panel = IngredientAdminPanel(('en',), 'en', lambda: None,
                                      lambda *_: None, lambda *_: None,
                                      lambda *_: None, lambda *_: None)
+        header_scroll = panel.root.children[-1]
+        header_scroll.width = dp(400)
+        self.assertGreaterEqual(header_scroll.children[0].width, dp(510))
+        panel.horizontal.width = dp(400)
+        self.assertFalse(panel.list_button.disabled)
         rows = [{'id': f'ingredient-{index:03d}',
                  'translations': {'en': f'Ingredient {index:03d}'}} for index in range(101)]
         panel._show_results(rows, panel.generation)
@@ -64,6 +70,9 @@ class AdminEditorTest(unittest.TestCase):
         self.assertEqual(22, len(panel.results.children))
         panel.results.children[0].dispatch('on_release', None)
         self.assertEqual('ingredient-100', panel.selected['id'])
+        self.assertEqual(1, panel.horizontal.scroll_x)
+        panel.list_button.dispatch('on_release', None)
+        self.assertEqual(0, panel.horizontal.scroll_x)
         panel.search.text = 'Ingredient 100'
         panel._show_results(rows[-1:], panel.generation)
         self.assertEqual('Page 1 of 1', panel.page_label.text)
@@ -76,6 +85,8 @@ class AdminEditorTest(unittest.TestCase):
                                      reference_prices={'rice:g': {'price': '1.80', 'basisQuantity': 100}},
                                      on_save_price=lambda *args: saved.append(args))
         panel.select({'id': 'rice', 'translations': {'en': 'Rice'}})
+        panel.show_editor_tab('pricing')
+        self.assertTrue(panel.pricing_tab.bold)
         self.assertEqual('1.80', panel.price_input.text)
         self.assertEqual('100 g', panel.price_basis.text)
         panel.price_input.text = '2,50'
@@ -98,8 +109,12 @@ class AdminEditorTest(unittest.TestCase):
         self.assertEqual(('rice', 'ml', '', 100), saved[-1])
         panel.update_prices({'milk:ml': {'price': '2.20', 'basisQuantity': 100}})
         panel.select({'id': 'milk', 'translations': {'en': 'Milk'}})
+        self.assertEqual('pricing', panel.editor_tab)
         self.assertEqual('ml', panel.price_unit.text)
         self.assertEqual('2.20', panel.price_input.text)
+        panel.new()
+        self.assertEqual('details', panel.editor_tab)
+        self.assertTrue(panel.pricing_tab.disabled)
 
     def test_ingredient_search_fills_shared_id_and_localized_names(self):
         searches = []

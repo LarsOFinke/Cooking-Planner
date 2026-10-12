@@ -135,7 +135,9 @@ class RecipeBrowser:
     def _build_detail(self) -> None:
         detail = box(padding=7, spacing=5, color=PANEL, size_hint_x=0.64)
         header = box(False, spacing=6, size_hint_y=None, height=dp(36))
-        tabs = box(False, spacing=5)
+        tabs_scroll = scroll_view(do_scroll_y=False)
+        tabs = box(False, spacing=5, size_hint_x=None)
+        tabs_scroll.bind(width=lambda _, width: setattr(tabs, 'width', max(width, dp(320))))
         self.detail_tabs = {}
         for tab, key in (('overview', 'detail_overview'), ('ingredients', 'admin_ingredients'),
                          ('recipe', 'admin_recipe_tab')):
@@ -143,7 +145,8 @@ class RecipeBrowser:
                                  tab == self.detail_tab, height=36)
             self.detail_tabs[tab] = control
             tabs.add_widget(control)
-        header.add_widget(tabs)
+        tabs_scroll.add_widget(tabs)
+        header.add_widget(tabs_scroll)
         header.add_widget(button(t(self.locale, "plan_this"), self._plan_selected, "primary",
                                  size_hint_x=None, width=dp(112), height=36))
         detail.add_widget(header)

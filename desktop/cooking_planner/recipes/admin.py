@@ -24,7 +24,9 @@ class AdminPanel:
         self.status_message = status_message or t(locale, 'ready')
         self.entry, self.creating, self.page = None, False, 'details'
         self.root = box(spacing=6)
-        header = box(False, spacing=7, size_hint_y=None, height=dp(42))
+        header_scroll = scroll_view(do_scroll_y=False, size_hint_y=None, height=dp(42))
+        header = box(False, spacing=7, size_hint_x=None, size_hint_y=None, height=dp(42))
+        header_scroll.bind(width=lambda _, width: setattr(header, 'width', max(width, dp(650))))
         header.add_widget(label(t(locale, 'admin'), 19, GOLD, 42, True))
         header.add_widget(button(t(locale, 'admin_new'), self.new, 'primary',
                                  size_hint_x=None, width=dp(130), height=40))
@@ -33,7 +35,8 @@ class AdminPanel:
                                      size_hint_x=None, width=dp(170), height=40))
         header.add_widget(button(t(locale, 'refresh'), on_reload,
                                  size_hint_x=None, width=dp(95), height=40))
-        self.root.add_widget(header)
+        header_scroll.add_widget(header)
+        self.root.add_widget(header_scroll)
         horizontal = scroll_view(do_scroll_y=False)
         self.horizontal = horizontal
         columns = box(False, spacing=6, size_hint_x=None)
@@ -89,12 +92,14 @@ class AdminPanel:
         self.page = 'details'
         self._render_list()
         self._render_form()
+        self.horizontal.scroll_x = 1
 
     def new(self):
         self.entry, self.creating = None, True
         self.page = 'details'
         self._render_list()
         self._render_form()
+        self.horizontal.scroll_x = 1
 
     def reset(self):
         self._render_form()

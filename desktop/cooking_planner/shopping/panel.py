@@ -37,7 +37,11 @@ class ShoppingPanel:
         primary.add_widget(button(t(locale, 'add_week_short'), self.add_all, height=40))
         self.more_button = button(t(locale, 'more_actions'), self.toggle_actions, height=40)
         primary.add_widget(self.more_button)
-        actions.add_widget(primary)
+        primary_scroll = scroll_view(do_scroll_y=False, size_hint_y=None, height=dp(40))
+        primary.size_hint_x = None
+        primary_scroll.bind(width=lambda _, width: setattr(primary, 'width', max(width, dp(570))))
+        primary_scroll.add_widget(primary)
+        actions.add_widget(primary_scroll)
         secondary = box(False, spacing=5, size_hint_y=None, height=0, opacity=0, disabled=True)
         self.more_row = secondary
         secondary.add_widget(button(t(locale, 'reset_checks'), self.reset, height=40))
@@ -45,6 +49,7 @@ class ShoppingPanel:
         actions.add_widget(secondary)
         self.root.add_widget(actions)
         self.notice = label(t(locale, 'shopping_selection_help'), 13, MUTED, 30)
+        self.notice.shorten = True
         self.root.add_widget(self.notice)
         summary = box(False, padding=8, spacing=8, color=PANEL, hover=True,
                       size_hint_y=None, height=dp(46))
@@ -54,12 +59,23 @@ class ShoppingPanel:
         summary.add_widget(self.summary)
         summary.add_widget(self.meal_summary)
         summary.add_widget(self.price_summary)
+        self.compact_summary = False
+        def layout_summary(_, width):
+            compact = width < dp(650)
+            self.compact_summary = compact
+            self.meal_summary.size_hint_x = None if compact else 1
+            self.meal_summary.width = 0 if compact else width / 3
+            self.meal_summary.opacity = 0 if compact else 1
+            self.notice.height = dp(22 if compact else 30)
+            self._render_summary()
+        summary.bind(width=layout_summary)
         self.root.add_widget(summary)
-        scroll = scroll_view(do_scroll_x=False)
+        scroll = scroll_view(do_scroll_x=True)
         self.scroll = scroll
         self.compact_list = False
         scroll.bind(height=self._resize_items)
-        self.rows = box(spacing=5, size_hint_y=None)
+        self.rows = box(spacing=5, size_hint_x=None, size_hint_y=None)
+        scroll.bind(width=lambda _, width: setattr(self.rows, 'width', max(width, dp(530))))
         self.rows.bind(minimum_height=self.rows.setter('height'))
         scroll.add_widget(self.rows)
         self.root.add_widget(scroll)
@@ -101,8 +117,22 @@ class ShoppingPanel:
                   if (price := self.draft.price_for(self.start, item_key(item), item['amount'])) is not None]
         total = sum(prices, Decimal('0'))
         self.price_summary.color = GOLD
-        self.price_summary.text = t(self.locale, 'shopping_prices_summary').format(
+        key = 'shopping_prices_compact' if self.compact_summary else 'shopping_prices_summary'
+        self.price_summary.text = t(self.locale, key).format(
             count=len(prices), total=len(self.items), amount=self._money(total))
+
+    def _render_summary(self):
+        state = self.draft.week(self.start)
+        checked = set(state['checked'])
+        remaining = sum(item_key(item) not in checked for item in self.items)
+        selected = len(self.draft.selected_plan_ids(self.start, self.plans))
+        if self.compact_summary:
+            self.summary.text = t(self.locale, 'shopping_items_compact').format(
+                remaining=remaining, total=len(self.items))
+        else:
+            self.summary.text = f"{remaining} / {len(self.items)} {t(self.locale, 'shopping_items')}"
+        self.meal_summary.text = f"{selected} {t(self.locale, 'selected_meal' if selected == 1 else 'selected_meals')}"
+        self._update_price_summary()
 
     def _section(self, title, count):
         heading = box(False, spacing=6, size_hint_y=None, height=dp(30))
@@ -178,11 +208,7 @@ class ShoppingPanel:
         state = self.draft.week(self.start)
         checked = set(state['checked'])
         self.rows.clear_widgets()
-        remaining = sum(item_key(item) not in checked for item in self.items)
-        selected = len(self.draft.selected_plan_ids(self.start, self.plans))
-        self.summary.text = f"{remaining} / {len(self.items)} {t(self.locale, 'shopping_items')}"
-        self.meal_summary.text = f"{selected} {t(self.locale, 'selected_meal' if selected == 1 else 'selected_meals')}"
-        self._update_price_summary()
+        self._render_summary()
         if not self.items:
             self.rows.add_widget(label(t(self.locale, 'empty_shopping_draft'), 17, MUTED, 80))
             return
