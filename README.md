@@ -40,6 +40,8 @@ Meal plans are saved to `~/.cooking-planner/plans.json` on Linux or `%USERPROFIL
 
 The Windows build can also be started with `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build/build-windows.ps1`. Each platform build bundles the Python frontend, Spring Boot JAR, a trimmed Java runtime, and the catalog files. The one-file executable extracts bundled files to a temporary directory at startup. Build the Windows executable on Windows and the Linux executable on Linux. End users do not need a separate Python or Java installation. The build machine needs Python 3.14 by default, Java 21 with `jlink`, Maven, and access to Python packages. Linux builds can use `PYTHON_BIN` to select Python 3.11–3.13 if needed.
 
+On Linux, the build keeps a separate virtual environment for each selected Python version. The Python 3.14 build uses Kivy 3 and can render directly through Wayland on a Wayland desktop, avoiding the softening caused by fractional scaling of the older SDL2/XWayland build. To make the verified executable available as a terminal command, run `install -m 755 dist/linux/CookingPlanner ~/.local/bin/cooking-planner` with `~/.local/bin` on your `PATH`.
+
 ## Checks and scope
 
 `scripts/development/` contains local setup and launch scripts, `scripts/build/` contains packaging entry points, `scripts/quality/` contains checks, and `scripts/images/` contains recipe image tools. The root `Makefile` provides the usual commands for each group.
