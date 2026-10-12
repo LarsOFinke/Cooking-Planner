@@ -16,14 +16,14 @@ from kivy.uix.togglebutton import ToggleButton
 
 from cooking_planner.ui.clipboard import get_clipboard
 
-BG = (0.047, 0.078, 0.106, 1)
-PANEL = (0.078, 0.125, 0.159, 1)
-PANEL_LIGHT = (0.105, 0.165, 0.198, 1)
-GOLD = (0.91, 0.72, 0.37, 1)
-WHITE = (0.94, 0.95, 0.92, 1)
-MUTED = (0.66, 0.73, 0.72, 1)
-GREEN = (0.52, 0.78, 0.62, 1)
-RED = (0.87, 0.45, 0.42, 1)
+BG = (0.055, 0.071, 0.090, 1)
+PANEL = (0.086, 0.106, 0.129, 1)
+PANEL_LIGHT = (0.133, 0.157, 0.180, 1)
+GOLD = (0.45, 0.84, 0.72, 1)
+WHITE = (0.95, 0.96, 0.97, 1)
+MUTED = (0.68, 0.73, 0.76, 1)
+GREEN = (0.48, 0.81, 0.62, 1)
+RED = (0.91, 0.49, 0.48, 1)
 
 _hover_widgets = WeakSet()
 _hover_bound = False
@@ -216,7 +216,7 @@ def button(text, callback=None, kind="secondary", height=42, **kwargs) -> Button
     foreground = BG if kind == "primary" else WHITE
     widget = HoverButton(text=text, size_hint_y=None, height=dp(height), background_normal="",
                          background_down="", background_color=background, color=foreground,
-                         font_size=dp(15), **kwargs)
+                         font_size=dp(14), **kwargs)
     if callback is not None:
         widget.bind(on_release=lambda *_: callback())
     return widget
@@ -228,7 +228,7 @@ def set_tab_active(widget: Button, text: str, active: bool) -> None:
     widget.set_base_color(GOLD if active else PANEL_LIGHT)
     widget.color = BG if active else MUTED
     widget.bold = active
-    widget.font_size = dp(16 if active else 15)
+    widget.font_size = dp(14)
 
 
 def tab_button(text: str, callback, active=False, **kwargs) -> Button:

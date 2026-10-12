@@ -82,8 +82,8 @@ class UiFlowTest(unittest.TestCase):
         self.assertIsNotNone(browser.filter_dialog.parent)
         browser.toggle_filters()
         self.assertFalse(browser.filters_open)
-        self.assertIs(self.app.admin_button.parent, self.app.root_view.children[0])
-        self.assertIs(self.app.admin_button, self.app.root_view.children[0].children[0])
+        self.assertIn(self.app.admin_button, self.app.root_view.walk())
+        self.assertFalse(self.app.admin_button.bold)
         self.assertEqual([self.recipe], browser._filtered())
         browser.filters['category'][0].text = 'Missing category'
         self.assertEqual('Filters (1)', browser.filter_toggle.text)

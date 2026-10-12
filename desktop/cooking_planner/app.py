@@ -18,7 +18,7 @@ from cooking_planner.recipes.admin import AdminPanel
 from cooking_planner.recipes.ingredient_admin import IngredientAdminPanel
 from cooking_planner.shopping.draft import ShoppingDraft
 from cooking_planner.shopping.panel import ShoppingPanel
-from cooking_planner.ui.theme import BG, GOLD, MUTED, PANEL, box, button, label, spinner, tab_button
+from cooking_planner.ui.theme import BG, MUTED, WHITE, box, button, label, spinner, tab_button
 from cooking_planner.ui.strings import t
 from cooking_planner.plans.week import WeekPlanner
 
@@ -68,17 +68,17 @@ class CookingPlannerApp(App):
         return self.root_view
 
     def _build_shell(self):
-        root = box(padding=14, spacing=10)
-        header = box(False, spacing=10, size_hint_y=None, height=dp(48))
+        root = box(padding=16, spacing=10)
+        header = box(False, spacing=12, size_hint_y=None, height=dp(56))
         self.header = header
         heading = box(spacing=0)
-        title = label('COOKING PLANNER', 19, GOLD, 27, True)
-        tagline = label(t(self.locale, 'tagline'), 11, MUTED, 18)
+        title = label('Cooking Planner', 23, WHITE, 34, True)
+        tagline = label(t(self.locale, 'tagline'), 12, MUTED, 19)
         title.shorten = tagline.shorten = True
         heading.add_widget(title)
         heading.add_widget(tagline)
         header.add_widget(heading)
-        controls = box(False, spacing=4, size_hint_x=None, width=dp(261))
+        controls = box(False, spacing=6, size_hint_x=None, width=dp(261))
         self.header_controls = controls
         languages = spinner(self.locale.upper(), (item.upper() for item in self.locales),
                             size_hint_x=None, width=dp(61))
@@ -97,37 +97,41 @@ class CookingPlannerApp(App):
         def layout_header(_, width):
             compact = width < dp(530)
             header.orientation = 'vertical' if compact else 'horizontal'
-            header.height = dp(96 if compact else 48)
+            header.height = dp(108 if compact else 56)
             controls.size_hint_x = 1 if compact else None
             controls.width = width if compact else dp(261)
         header.bind(width=layout_header)
         layout_header(header, header.width)
         root.add_widget(header)
-        nav_scroll = ScrollView(size_hint_y=None, height=dp(42), do_scroll_y=False)
-        nav = box(False, spacing=8, size_hint=(None, None), height=dp(42))
-        nav_scroll.bind(width=lambda _, width: setattr(nav, 'width', max(width, dp(500))))
-        for tab in ('overview', 'explore', 'week', 'shopping'):
-            control = tab_button(t(self.locale, 'nav_' + tab), lambda selected=tab: self.show_tab(selected),
+        nav_scroll = ScrollView(size_hint_y=None, height=dp(44), do_scroll_y=False)
+        nav = box(False, spacing=7, size_hint=(None, None), height=dp(44))
+        nav_scroll.bind(width=lambda _, width: setattr(nav, 'width', max(width, dp(650))))
+        for tab in ('overview', 'explore', 'week', 'shopping', 'admin'):
+            name = t(self.locale, 'admin' if tab == 'admin' else 'nav_' + tab)
+            control = tab_button(name, lambda selected=tab: self.show_tab(selected),
                                  tab == self.tab, height=42)
+            if tab == 'admin':
+                self.admin_button = control
             nav.add_widget(control)
         nav_scroll.add_widget(nav)
         root.add_widget(nav_scroll)
-        self.content = box(color=PANEL, padding=10)
+        self.content = box()
         root.add_widget(self.content)
-        footer = box(False, size_hint_y=None, height=dp(36))
-        self.exit_button = button(t(self.locale, 'exit'), self.stop, 'danger',
-                                  size_hint_x=None, width=dp(100))
+        footer = box(False, spacing=10, size_hint_y=None, height=dp(36))
+        self.status_label = label(self.status_message, 12, MUTED, 36)
+        self.status_label.shorten = True
+        footer.add_widget(self.status_label)
+        self.exit_button = button(t(self.locale, 'exit'), self.stop,
+                                  size_hint_x=None, width=dp(90), height=36)
         footer.add_widget(self.exit_button)
-        footer.add_widget(box(False))
-        self.admin_button = tab_button(t(self.locale, 'admin'), lambda: self.show_tab('admin'),
-                                       self.tab == 'admin', size_hint_x=None, width=dp(170), height=36)
-        footer.add_widget(self.admin_button)
         root.add_widget(footer)
         self._render_tab()
         return root
 
     def _status(self, message):
         self.status_message = str(message)
+        if hasattr(self, 'status_label'):
+            self.status_label.text = self.status_message
         if self.tab == 'admin' and hasattr(self, 'admin_panel'):
             self.admin_panel.set_status(self.status_message)
 
