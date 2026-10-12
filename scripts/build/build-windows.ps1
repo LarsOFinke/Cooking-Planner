@@ -6,16 +6,13 @@ function Assert-Success([string]$Step) {
     if ($LASTEXITCODE -ne 0) { throw "$Step failed with exit code $LASTEXITCODE" }
 }
 
-& mvn -f backend/pom.xml package
+. (Join-Path $PSScriptRoot 'ensure-windows-deps.ps1')
+& $mavenCommand -f backend/pom.xml package
 Assert-Success 'Maven package'
 New-Item -ItemType Directory -Path build -Force | Out-Null
 Copy-Item 'backend/target/cooking-planner-api-0.1.0.jar' 'build/backend.jar' -Force
 
-if ($env:PYTHON_BIN) {
-    & $env:PYTHON_BIN -m venv .build-venv
-} else {
-    & py -3.14 -m venv .build-venv
-}
+& $pythonCommand @pythonArguments -m venv .build-venv
 Assert-Success 'Python virtual environment'
 $python = Join-Path $projectRoot '.build-venv\Scripts\python.exe'
 & $python -m pip install -r desktop/requirements-build.txt

@@ -1,4 +1,4 @@
-.PHONY: dev dev-windows test quality wheel linux install-linux windows images-sync images-verify
+.PHONY: dev dev-windows test quality wheel linux install-linux windows install-windows images-sync images-verify
 
 ifeq ($(OS),Windows_NT)
 dev:
@@ -29,6 +29,9 @@ install-linux:
 
 windows:
 	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build/build-windows.ps1
+
+install-windows:
+	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install/install-windows.ps1
 
 images-sync:
 	python3 scripts/images/import_local_recipe_images.py
