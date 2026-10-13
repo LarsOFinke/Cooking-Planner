@@ -13,30 +13,19 @@ if ($env:DEV_PYTHON) {
     $managedVenv = $true
     $python = Join-Path $projectRoot '.venv-dev-windows\Scripts\python.exe'
     if (-not (Test-Path $python)) {
-        if ($env:PYTHON_BIN) {
-            & $env:PYTHON_BIN -m venv .venv-dev-windows
-            Assert-Success 'Python virtual environment'
-        } else {
-            $created = $false
-            foreach ($version in @('3.14', '3.13', '3.12', '3.11')) {
-                & py "-$version" -m venv .venv-dev-windows 2>$null
-                if ($LASTEXITCODE -eq 0) { $created = $true; break }
-            }
-            if (-not $created) { throw 'Python 3.11–3.14 is required. Set PYTHON_BIN or DEV_PYTHON.' }
-        }
+        . (Join-Path $projectRoot 'scripts/build/windows/ensure-windows-deps.ps1')
+        & $pythonCommand @pythonArguments -m venv .venv-dev-windows
+        Assert-Success 'Python virtual environment'
     }
 }
 
-& $python -c 'import kivy, sys; assert (sys.version_info[:2] < (3, 14) and kivy.__version__ == "2.3.1") or (sys.version_info[:2] == (3, 14) and kivy.__version__.startswith("3."))' *> $null
+& $python -c 'import kivy, sqlalchemy, fastapi, uvicorn, sys; assert (sys.version_info[:2] < (3, 14) and kivy.__version__ == "2.3.1") or (sys.version_info[:2] == (3, 14) and kivy.__version__.startswith("3."))' *> $null
 if ($LASTEXITCODE -ne 0) {
     if (-not $managedVenv) { throw 'DEV_PYTHON must point to Python with a compatible Kivy version installed.' }
-    & $python scripts/development/install-desktop-deps.py
+    & $python scripts/development/install-python-deps.py
     Assert-Success 'Kivy installation'
 }
 
-$mavenArgs = @('-f', 'backend/pom.xml', '-DskipTests', 'package')
-if ($env:MAVEN_REPO) { $mavenArgs += "-Dmaven.repo.local=$env:MAVEN_REPO" }
-& mvn @mavenArgs
-Assert-Success 'Backend build'
-& $python desktop/main.py
+$env:PYTHONPATH = "$(Join-Path $projectRoot 'src/frontend');$(Join-Path $projectRoot 'src/backend')"
+& $python src/frontend/main.py
 Assert-Success 'Desktop app'

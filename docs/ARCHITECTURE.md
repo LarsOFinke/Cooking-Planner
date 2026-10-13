@@ -1,71 +1,40 @@
 # Architecture
 
 ```text
-Kivy views -> ApiClient -> Spring Boot controllers -> services -> repositories
-                                                    |               |
-                                      catalog JSON + edits     plans.json + SQLite
-                                        (base read only)        (user data)
+Kivy views -> ApiClient -> loopback FastAPI routes -> Python feature stores
+                                               |             |
+                                        catalog JSON       plans.json + SQLite
+                                        + edit overlay     + shopping.json
 ```
 
-The feature modules own their controllers, entities, mappers, services, and repositories. The desktop views know the HTTP contract and have no direct dependency on Java or catalog file parsing. Recipe IDs are stable strings shared by the locale catalogs. A language switch refreshes recipe names and planned meal titles while preserving selections by ID.
+The frontend and backend are separate Python packages under `src/frontend` and `src/backend`. Kivy views depend on `ApiClient`, which preserves the existing HTTP contract. `api/backend.py` starts Uvicorn in an app-owned thread and stops it on exit. The server binds only to `127.0.0.1`; a per-launch token prevents a different process on the same port from being mistaken for the app's server. The Kivy main thread never performs the bulk catalog load; app requests use worker threads and schedule UI updates on the Kivy event loop.
 
-## Desktop packages
-
-`desktop/cooking_planner` keeps the Kivy application and startup launcher at its root. The remaining modules are grouped by the work they own:
+## Feature ownership
 
 | Package | Responsibility |
 | --- | --- |
-| `api` | HTTP client and lifecycle of the local Spring process |
-| `recipes` | Browsing, recipe admin, recipe dialogs, locale filenames, and local images |
-| `plans` | Week view and meal planning dialog |
-| `shopping` | Persisted weekly draft and shopping view |
-| `overview` | Overview tab |
-| `ui` | Shared Kivy controls, confirmation dialog, and translations |
+| `cooking_planner.recipes`, `.plans`, `.shopping` | Kivy feature views and shopping draft |
+| `cooking_planner.api` | HTTP client and local backend lifecycle |
+| `cooking_planner_backend.routes` | HTTP controllers grouped by recipe, plan, and ingredient paths |
+| `cooking_planner_backend.recipes.service` and `.mapper` | Catalog behavior, admin overlays, and recipe DTO mapping |
+| `cooking_planner_backend.ingredients.service` | Ingredient translations, search, prices |
+| `cooking_planner_backend.plans.service` | Meal-plan persistence and shopping aggregation |
+| `cooking_planner_backend.entities` | One SQLAlchemy model per file |
+| `cooking_planner_backend.repositories` | SQLite sessions and atomic JSON file operations |
+| `cooking_planner_backend.app` | FastAPI composition and HTTP error mapping |
 
-`paths.py` resolves catalog and bundled file locations for the launcher and recipe images. Feature views receive data and callbacks from `app.py`; only `api/client.py` calls the backend. Both source and frozen entry points call `launcher.py`, which configures Kivy before loading the app. The wheel discovers every `cooking_planner` subpackage.
+## Storage and compatibility
 
-## Storage
+Catalogs use `data/recipes_<language>.json` and are never written by the app. They are validated for version, language, count, IDs, and required recipe content before ingredient seeding. Recipes retain stable IDs across translations and plans. Admin changes use `recipe-edits.json` version 1, the same overlay shape as the earlier backend. A short-lived `recipe-edits.pending.json` records the before and after overlay around a SQLAlchemy transaction. On restart, a SQLite commit marker chooses which overlay to keep, so interrupted edits do not leave the file and translated ingredient names at different revisions.
 
-The catalog repository discovers `recipes_<language>.json` in `data/` (or `COOKING_PLANNER_CATALOG_DIR`). It validates schema `1.1.0` or `1.2.0`, language suffix, recipe count, and unique IDs, then caches each file until its modification time or the edit revision changes. Version 1.2 adds localized, numbered instruction steps linked to ingredient IDs. Base catalogs are never written by the admin API. Additions, translations, intentional omissions, and deletion markers are stored together in the atomically replaced `recipe-edits.json` under the user data directory. Shared fields and step ingredient references are copied from the edit's source language to every included translation; step text remains localized. Recipe IDs remain stable, so existing meal plans are preserved when a recipe is deleted, although its title becomes "Missing recipe" and it contributes no shopping ingredients. Deleted IDs cannot be reused. The plan repository stores date, meal slot, recipe ID, and servings in `plans.json` under the same user data directory. Settings such as the UI scale and port live in `client.cfg` and environment variables.
+`plans.json` keeps date, meal slot, recipe ID, servings, and stable random positive plan ID. Missing or deleted recipes remain on the plan with a “Missing recipe” title and no derived shopping ingredients. `shopping.json` keeps weekly meal and ingredient choices, custom items, and checked purchases. Its `pending` list records idempotent ingredient and price writes before calling the backend. Successful writes are removed from the list; interrupted writes replay on the next app launch.
 
-SQLite `cooking-planner.db` stores ingredient identity, `(ingredient_id, locale)` translations, and prices in separate tables with foreign keys and unique constraints. The single `ingredient_price` table holds reusable reference prices with a positive basis quantity and `week_start='*'`, alongside older week-specific prices with a null basis. Prices use integer cents. Spring Data JPA reads and writes the tables; idempotent SQL creates them, an additive column upgrade preserves existing price rows, and Hibernate validates their shape at startup. Existing catalogs and recipe edits seed missing translations without overwriting saved database names. Existing `shopping.json` prices are imported once without changing the file; new price writes go only to SQLite. Backend plans and recipes determine planned ingredient quantities. The desktop projects selected plans into the shopping list, while meal exclusions, ingredient exclusions, custom items, and checked purchases remain in `shopping.json`. Removing a planned ingredient hides its grouped row until it is included again. New plans receive random positive IDs instead of reusing the highest deleted ID, so old meal exclusions do not hide a different new plan. Amounts and times are catalog estimates. No nutrition, allergen certification, accounts, or cloud sync are included.
-Admin's Ingredient catalog edits reusable reference prices. Explore, Shopping, and Week read those prices; Explore estimates each ingredient and a recipe total per serving from reference prices. The Week planner applies reference prices to every planned recipe's ingredient quantities and servings. For legacy week prices it allocates the saved price across that week's planned quantity of the ingredient. It shows partial day and week cost estimates with priced ingredient coverage; Shopping list selections and removals do not change a planned recipe's estimate. Custom shopping items are not assigned to meals.
+SQLAlchemy uses the existing `cooking-planner.db` tables: `ingredient`, `ingredient_translation`, `ingredient_price`, and `migration_marker`. Prices remain integer cents. A positive `basis_quantity` and `week_start='*'` denote a reusable reference price; older week prices retain a null basis. A missing basis column is added without replacing existing rows. Existing `shopping.json` prices are imported once without changing that file. Saved ingredient names are not overwritten by catalog seeding.
 
-## API
+Settings remain in `client.cfg`, and all writable files remain under `COOKING_PLANNER_DATA_DIR` or the platform default. Close the app before copying them for backup.
 
-| Method | Path | Purpose |
-| --- | --- | --- |
-| GET | `/api/health` | Process health |
-| GET | `/api/recipes/locales` | Available filename suffixes |
-| GET | `/api/recipes?locale=en` | Localized catalog |
-| GET | `/api/recipes/info?locale=en` | Catalog notes and counts |
-| GET | `/api/recipes/{id}?locale=en` | One localized recipe |
-| GET | `/api/admin/recipes` | IDs and available translated names |
-| GET | `/api/admin/recipes/{id}` | Raw JSON for each language, with `null` for omissions |
-| POST | `/api/admin/recipes/{id}` | Add a recipe and choose each language |
-| PUT | `/api/admin/recipes/{id}` | Edit a recipe across languages |
-| DELETE | `/api/admin/recipes/{id}` | Hide a recipe in every language |
-| GET | `/api/plans?from=YYYY-MM-DD&to=YYYY-MM-DD&locale=en` | Localized weekly plans |
-| PUT | `/api/plans` | Assign a recipe and servings to a day and meal slot |
-| DELETE | `/api/plans/{id}` | Remove a planned meal |
-| GET | `/api/plans/shopping?from=YYYY-MM-DD&to=YYYY-MM-DD&locale=en` | Aggregated ingredients |
-| GET | `/api/ingredients?locale=en&q=name` | Search localized database ingredients and return translations |
-| GET | `/api/admin/ingredients?q=name` | Search ingredient IDs and localized names |
-| GET | `/api/admin/ingredients/{id}` | Read all saved translations for an ingredient |
-| PUT | `/api/admin/ingredients/{id}` | Create or update localized ingredient names |
-| DELETE | `/api/admin/ingredients/{id}` | Delete an unused ingredient |
-| GET | `/api/ingredients/prices?week=YYYY-MM-DD` | Weekly saved shopping prices |
-| GET | `/api/ingredients/reference-prices` | Reusable prices per ingredient, unit, and basis quantity |
-| PUT | `/api/ingredients/{id}/reference-prices?unit=g` | Set or clear a reusable price |
-| PUT | `/api/ingredients/{id}/prices?week=YYYY-MM-DD&unit=g` | Set or clear a weekly item price |
-| DELETE | `/api/ingredients/prices?week=YYYY-MM-DD` | Clear a week's prices |
+## API and mobile direction
 
-`PUT /api/plans` accepts `date`, `mealType` (`BREAKFAST`, `LUNCH`, `DINNER`), `recipeId`, and `servings` (1–20). The API is bound to loopback for the desktop app.
+The HTTP endpoints retain the desktop client's recipe, admin, plan, ingredient, and price paths. The backend is hosted inside the same Python process, so packaging no longer needs Java. FastAPI and SQLAlchemy are separate from the Kivy views; an Android or iOS entry point can reuse the backend package. Mobile work still needs platform data-directory wiring, dependency recipes, app lifecycle checks, and device builds. Android and iOS compatibility has not been verified by the desktop checks.
 
-Admin POST and PUT accept `sourceLocale` and a `translations` object with one entry per available language. Each entry is a raw recipe object or `null` for an intentional omission. Names and ingredient names are translated per language; IDs, codes, amounts, units, timing, and image references follow the source locale. The admin API uses the same loopback-only, single-user boundary as the rest of the app; it has no separate account system.
-
-## Packaging and iOS
-
-The platform scripts build a Python wheel, Spring Boot JAR, and `jlink` runtime, then package them with PyInstaller and the catalog data. Python executables are platform-specific, so Windows and Linux require separate native builds. The files extract at launch; `plans.json`, `recipe-edits.json`, `shopping.json`, `cooking-planner.db`, and `client.cfg` live in the user data directory.
-
-Kivy has an iOS packaging route through `kivy-ios`, but a bundled local Java process is a desktop design. An iOS version would require a reachable backend or an on-device plan store behind the client interface. This V1 bundle is for Windows and Linux.
+The desktop distribution workflow builds a Python wheel and PyInstaller executable. Linux wraps that executable in an AppImage; Windows wraps it in an Inno Setup installer. The user data directory is outside the bundled files.

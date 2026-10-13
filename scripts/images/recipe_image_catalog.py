@@ -17,7 +17,7 @@ def read_catalog(root, *, allow_existing_refs=False):
         raise ValueError('Expected 586 shared recipe IDs across both locale files')
     if any(recipe.get('images') for recipe in de['recipes'] + en['recipes']):
         if not allow_existing_refs:
-            raise ValueError('Image references exist but image_catalog.json is missing; run make images-sync first')
+            raise ValueError('Image references exist but image_catalog.json is missing; run the image import script first')
         for recipe_id in german:
             if german[recipe_id].get('images', []) != english[recipe_id].get('images', []):
                 raise ValueError(f'Locale image references differ for {recipe_id}')

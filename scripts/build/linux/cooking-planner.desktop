@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Cooking Planner
+Exec=CookingPlanner
+Icon=cooking-planner
+Categories=Utility;
+Terminal=false

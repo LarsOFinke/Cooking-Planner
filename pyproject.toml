@@ -3,23 +3,26 @@ requires = ["setuptools>=75", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "cooking-planner-desktop"
+name = "cooking-planner"
 version = "0.1.0"
-description = "Kivy desktop client for Cooking Planner"
+description = "Kivy frontend and Python backend for Cooking Planner"
 requires-python = ">=3.11,<3.15"
 dependencies = [
     "Kivy==2.3.1; python_version < '3.14'",
     "Kivy>=3.0.0.dev0; python_version >= '3.14'",
+    "SQLAlchemy>=2.0,<3",
+    "fastapi>=0.115,<0.116",
+    "uvicorn>=0.30,<1",
 ]
 
 [project.scripts]
 cooking-planner = "cooking_planner.launcher:main"
 
 [tool.setuptools]
-package-dir = {"" = "desktop"}
+package-dir = {"cooking_planner" = "src/frontend/cooking_planner", "cooking_planner_backend" = "src/backend/cooking_planner_backend"}
 
 [tool.setuptools.packages.find]
-where = ["desktop"]
+where = ["src/frontend", "src/backend"]
 include = ["cooking_planner*"]
 
 [tool.ruff]

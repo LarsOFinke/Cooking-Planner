@@ -14,15 +14,16 @@ data/recipe_images/dz-algerischer-couscous/image_02.jpg
 Die Schreibweise muss `image_01`, `image_02`, `image_03` verwenden; dieselbe Nummer darf nicht mit zwei Dateiendungen vorkommen. Anschließend:
 
 ```bash
-make images-sync
+python3 scripts/images/import_local_recipe_images.py
+python3 scripts/images/verify_recipe_images.py
 ```
 
-`make images-sync` prüft Rezept-ID, Bildnummer, Dateiformat und Dubletten. Es schreibt nur Referenzen auf tatsächlich vorhandene Dateien in beide JSON-Dateien, entfernt leere Bildplatzhalter und erzeugt den gemeinsamen Bildkatalog. Wiederholtes Ausführen ist möglich. `make images-verify` prüft Dateiinhalte, alle Referenzen, die gemeinsame Reihenfolge und die Bildnachweise.
+Das Importskript prüft Rezept-ID, Bildnummer, Dateiformat und Dubletten. Es schreibt nur Referenzen auf tatsächlich vorhandene Dateien in beide JSON-Dateien, entfernt leere Bildplatzhalter und erzeugt den gemeinsamen Bildkatalog. Wiederholtes Ausführen ist möglich. Das Prüfsript prüft Dateiinhalte, alle Referenzen, die gemeinsame Reihenfolge und die Bildnachweise.
 
 ## Rechte und Urhebernachweise
 
-Für lokal hinzugefügte Dateien legt der Import `data/recipe_images/LOCAL_IMAGE_CREDITS.json` an. Neue Bilder erhalten zunächst `rights_status: "pending"`; Urheber oder Lizenz werden nicht geraten. Trage für jede Datei `author`, `license` und bei externen Bildern `source_url` sowie gegebenenfalls `license_url` ein. Setze `rights_status` danach auf `approved` für eine ausdrücklich erteilte Projektnutzung oder `licensed` für eine überprüfte Lizenz und führe `make images-sync` erneut aus. Ändert sich die Bilddatei, setzt der Import ihren Rechte-Status vorsichtshalber wieder auf `pending`.
+Für lokal hinzugefügte Dateien legt der Import `data/recipe_images/LOCAL_IMAGE_CREDITS.json` an. Neue Bilder erhalten zunächst `rights_status: "pending"`; Urheber oder Lizenz werden nicht geraten. Trage für jede Datei `author`, `license` und bei externen Bildern `source_url` sowie gegebenenfalls `license_url` ein. Setze `rights_status` danach auf `approved` für eine ausdrücklich erteilte Projektnutzung oder `licensed` für eine überprüfte Lizenz und führe `python3 scripts/images/import_local_recipe_images.py` erneut aus. Ändert sich die Bilddatei, setzt der Import ihren Rechte-Status vorsichtshalber wieder auf `pending`.
 
-`IMAGE_ATTRIBUTIONS.csv` und `.md` werden aus diesen Angaben erzeugt. Die App zeigt den Status oder den Urhebernachweis beim Bild an. `make images-verify` zählt offene Rechte; für eine Veröffentlichung müssen sie geklärt sein.
+`IMAGE_ATTRIBUTIONS.csv` und `.md` werden aus diesen Angaben erzeugt. Die App zeigt den Status oder den Urhebernachweis beim Bild an. `python3 scripts/images/verify_recipe_images.py` zählt offene Rechte; für eine Veröffentlichung müssen sie geklärt sein.
 
-Alle 586 Rezepte haben bereits ein lokales Bild. Weitere Bilder können mit `make images-sync` eingebunden werden; der frühere automatische Wikimedia-Downloader wird dafür nicht benötigt. Alle vorhandenen Bildnachweise stehen derzeit auf `pending` und müssen vor einer Veröffentlichung geprüft werden.
+Alle 586 Rezepte haben bereits ein lokales Bild. Weitere Bilder können mit dem Importskript eingebunden werden; der frühere automatische Wikimedia-Downloader wird dafür nicht benötigt. Alle vorhandenen Bildnachweise stehen derzeit auf `pending` und müssen vor einer Veröffentlichung geprüft werden.

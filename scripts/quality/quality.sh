@@ -12,15 +12,14 @@ if [[ -z "$quality_python" ]]; then
         quality_python=python3
     fi
 fi
-"$quality_python" -m compileall -q desktop/cooking_planner desktop/tests scripts
+"$quality_python" -m compileall -q src/frontend/cooking_planner src/backend/cooking_planner_backend src/tests scripts
 if command -v ruff >/dev/null 2>&1; then
-    ruff check desktop scripts
+    ruff check src scripts
 elif "$quality_python" -m ruff --version >/dev/null 2>&1; then
-    "$quality_python" -m ruff check desktop scripts
+    "$quality_python" -m ruff check src scripts
 else
-    echo "Ruff is required for make quality. Install desktop/requirements-dev.txt in a Python environment." >&2
+    echo "Ruff is required for make quality. Install src/requirements-dev.txt in a Python environment." >&2
     exit 1
 fi
 git diff --check
 "$quality_python" scripts/quality/python-coverage.py
-make test

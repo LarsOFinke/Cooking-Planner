@@ -1,4 +1,11 @@
-.PHONY: dev dev-windows test quality wheel linux install-linux windows install-windows images-sync images-verify
+.PHONY: help dev test quality compile-linux compile-windows linux windows
+
+help:
+	@echo 'make dev              Run the app from source'
+	@echo 'make test             Run Python tests'
+	@echo 'make quality          Run syntax, Ruff, tests, and coverage'
+	@echo 'make compile-linux    Build the Linux AppImage on Linux'
+	@echo 'make compile-windows  Build the Windows installer on Windows'
 
 ifeq ($(OS),Windows_NT)
 dev:
@@ -8,34 +15,14 @@ dev:
 	bash scripts/development/dev.sh
 endif
 
-dev-windows:
-	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/development/dev-windows.ps1
-
 test:
-	mvn -f backend/pom.xml $(if $(MAVEN_REPO),-Dmaven.repo.local=$(MAVEN_REPO),) verify
-	python3 -m unittest discover -s desktop/tests
+	bash scripts/quality/test.sh
 
 quality:
 	bash scripts/quality/quality.sh
 
-wheel:
-	bash scripts/build/build-wheel.sh
+compile-linux linux:
+	bash scripts/build/linux/build-linux.sh
 
-linux:
-	bash scripts/build/build-linux.sh
-
-install-linux:
-	bash scripts/install/install-linux.sh
-
-windows:
-	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build/build-windows.ps1
-
-install-windows:
-	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install/install-windows.ps1
-
-images-sync:
-	python3 scripts/images/import_local_recipe_images.py
-	python3 scripts/images/verify_recipe_images.py
-
-images-verify:
-	python3 scripts/images/verify_recipe_images.py
+compile-windows windows:
+	powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build/windows/build-windows.ps1

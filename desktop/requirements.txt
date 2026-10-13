@@ -1,2 +1,0 @@
-Kivy==2.3.1; python_version < "3.14"
-Kivy>=3.0.0.dev0; python_version >= "3.14"

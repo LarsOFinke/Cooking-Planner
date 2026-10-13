@@ -30,17 +30,12 @@ else
     fi
 fi
 
-if ! "$dev_python" -c 'import kivy, sys; assert (sys.version_info[:2] < (3, 14) and kivy.__version__ == "2.3.1") or (sys.version_info[:2] == (3, 14) and kivy.__version__.startswith("3."))' >/dev/null 2>&1; then
+if ! "$dev_python" -c 'import kivy, sqlalchemy, fastapi, uvicorn, sys; assert (sys.version_info[:2] < (3, 14) and kivy.__version__ == "2.3.1") or (sys.version_info[:2] == (3, 14) and kivy.__version__.startswith("3."))' >/dev/null 2>&1; then
     if [[ "$managed_venv" == false ]]; then
         echo "DEV_PYTHON must point to Python with a compatible Kivy version installed." >&2
         exit 1
     fi
-    "$dev_python" scripts/development/install-desktop-deps.py
+    "$dev_python" scripts/development/install-python-deps.py
 fi
 
-maven_args=(-f backend/pom.xml -DskipTests package)
-if [[ -n "${MAVEN_REPO:-}" ]]; then
-    maven_args+=("-Dmaven.repo.local=$MAVEN_REPO")
-fi
-mvn "${maven_args[@]}"
-exec "$dev_python" desktop/main.py
+PYTHONPATH=src/frontend:src/backend exec "$dev_python" src/frontend/main.py
