@@ -16,7 +16,6 @@ from cooking_planner.recipes.AdminActions import AdminActions
 from cooking_planner.shopping.ShoppingDraft import ShoppingDraft
 from cooking_planner.ui.theme import BG, set_tab_active
 from cooking_planner.ui.strings import t
-from cooking_planner.paths import on_android
 
 
 class CookingPlannerApp(AppShell, AdminActions, App):
@@ -59,8 +58,6 @@ class CookingPlannerApp(AppShell, AdminActions, App):
 
     def build(self):
         Metrics.density = self.base_density * self.ui_scale
-        if not on_android():
-            Window.minimum_width, Window.minimum_height = 900, 650
         self.window_fullscreen = bool(Window.fullscreen)
         Window.clearcolor = BG
         self.root_view = self._build_shell()

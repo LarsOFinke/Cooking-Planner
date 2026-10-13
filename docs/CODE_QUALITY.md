@@ -1,6 +1,6 @@
 # Code quality and tests
 
-Run `make quality` from the repository root. It checks Python syntax, Ruff, whitespace, frontend and backend tests, and separate 60% source-line coverage floors. The coverage run requires Kivy and a display. `QUALITY_PYTHON` selects another Python environment with the packages from `src/requirements.txt` and `src/requirements-dev.txt` installed.
+Run `make quality` from the repository root. It checks Python syntax, one PascalCase file per production class, Ruff, whitespace, frontend and backend tests, and separate 60% source-line coverage floors. The coverage run requires Kivy and a display. `QUALITY_PYTHON` selects another Python environment with the packages from `src/requirements.txt` and `src/requirements-dev.txt` installed.
 
 Backend tests cover the real HTTP contract, catalog localization, plan and shopping persistence, admin overlays, ingredient names, prices, Java-era SQLite schema upgrades, legacy shopping-price import, and interrupted recipe-edit recovery. Frontend tests cover navigation, filters, scaling, planning controls, shopping drafts, background write durability, admin forms, API client serialization, and backend startup. Tests that write user data use temporary directories; bundled catalogs remain read only.
 

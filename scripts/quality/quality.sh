@@ -13,6 +13,7 @@ if [[ -z "$quality_python" ]]; then
     fi
 fi
 "$quality_python" -m compileall -q src/frontend/cooking_planner src/backend/cooking_planner_backend src/tests scripts
+"$quality_python" scripts/quality/check-class-files.py
 if command -v ruff >/dev/null 2>&1; then
     ruff check src scripts
 elif "$quality_python" -m ruff --version >/dev/null 2>&1; then
