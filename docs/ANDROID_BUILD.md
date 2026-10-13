@@ -1,0 +1,9 @@
+# Android APK build
+
+`make compile-android` builds an arm64 debug APK at `dist/android/CookingPlanner-arm64-v8a-debug.apk`. It stages the Python frontend, backend, read-only recipe catalogs, and local images under `build/android/source`; Buildozer downloads and compiles the Android dependencies. The staged tree and Buildozer cache are generated files.
+
+Build on Linux with Python 3.14, JDK 17, Rust (`rustup`, `rustc`, `cargo`), `git`, `zip`, `unzip`, `autoconf`, `automake`, `pkg-config`, and `cmake`. The full system-package list is in the [Buildozer installation guide](https://buildozer.readthedocs.io/en/latest/installation/). On Ubuntu 26.04, that guide's Android instructions provide the required packages and Rust setup. Set `ANDROID_PYTHON` if Python 3.14 is not named `python3.14` on your machine. Buildozer runs from `.build-venv-android`; the script installs its host prerequisites there. The first build requires network access and several gigabytes of free disk space.
+
+The Android spec targets API 36, supports Android 10 and newer, and builds for `arm64-v8a`. It pins Pydantic to the version matching python-for-android's `pydantic-core` recipe. The app runs its FastAPI server on loopback inside the APK and stores writable data in Android app-private storage. Uninstalling the app removes that storage, so export user data before uninstalling. The package identifier is `org.cookingplanner.cookingplanner`; keep it stable for upgrades.
+
+To inspect a build, run `make compile-android`, then install the APK with `adb install -r dist/android/CookingPlanner-arm64-v8a-debug.apk`. Launch Cooking Planner on the device and check `adb logcat` if startup fails. Check both languages, images, planning, shopping, restart persistence, and pause/resume. A debug APK is for testing; distribution through an app store needs a release build, signing, and device validation. Existing image-rights review still applies before public distribution.

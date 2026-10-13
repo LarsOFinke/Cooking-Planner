@@ -4,8 +4,8 @@ from copy import deepcopy
 from decimal import Decimal, InvalidOperation
 
 from cooking_planner.recipes.admin_schema import CHOICES, LABELS, TIMES
-from cooking_planner.recipes.form_error import FormError
-from cooking_planner.recipes.form_snapshot import RecipeFormSnapshot as RecipeFormSnapshot
+from cooking_planner.recipes.FormError import FormError
+from cooking_planner.recipes.RecipeFormSnapshot import RecipeFormSnapshot as RecipeFormSnapshot
 from cooking_planner.ui.strings import t
 
 

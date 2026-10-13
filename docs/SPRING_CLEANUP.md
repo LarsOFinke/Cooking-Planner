@@ -1,0 +1,7 @@
+# Spring cleanup audit
+
+Use `loc-rank --top 20 src` to identify files worth inspecting. Line count alone does not justify splitting a cohesive feature. The current pass moved shell and tab construction from `CookingPlannerApp.py` to `AppShell.py`, and shopping draft validation and atomic file handling from `ShoppingDraft.py` to `shopping/persistence.py`. Those responsibilities now have one clear home while the public behavior and JSON format stay the same.
+
+The performance pass coalesces rapid refresh requests so only the current request and the latest pending state consume worker time. Repeated clicks on the active tab keep its existing widgets; returning to Admin reuses its loaded catalog until an explicit refresh or edit. Scheduled list, row, and search work is cancelled when its panel is replaced. Recipe search text is built once when the browser opens instead of being rebuilt for every filter change. Catalogs remain read only and user drafts still save synchronously for crash recovery.
+
+`test_ui_flow.py` is still the largest file because its tests share a live Kivy fixture and exercise interactions across features. `RecipeStore.py`, `ShoppingDraft.py`, and several editor views remain substantial but each owns a cohesive feature. Split them only when a specific responsibility or bottleneck calls for it. Generated `build/` and `dist/` contents, virtual environments, and Kivy caches are ignored; they are not source files.

@@ -18,8 +18,8 @@ try:
     from kivy.clock import Clock
     from kivy.core.window import Window
     from kivy.metrics import dp
-    from cooking_planner.recipes.admin import AdminPanel
-    from cooking_planner.recipes.ingredient_admin import IngredientAdminPanel
+    from cooking_planner.recipes.AdminPanel import AdminPanel
+    from cooking_planner.recipes.IngredientAdminPanel import IngredientAdminPanel
 except ImportError:
     HAS_KIVY = False
 else:
@@ -125,7 +125,7 @@ class AdminEditorTest(unittest.TestCase):
                                searches.append((locale, query, callback)))
         panel.new()
         panel._show_page('ingredients')
-        with patch('cooking_planner.recipes.admin.Clock.schedule_once',
+        with patch('cooking_planner.recipes.AdminPanel.Clock.schedule_once',
                    side_effect=lambda callback, delay: callback()):
             panel.ingredient_search.text = 'carr'
         self.assertEqual(('en', 'carr'), searches[-1][:2])

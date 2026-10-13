@@ -10,6 +10,7 @@ target/
 dist/
 /build/
 *.spec
+!scripts/build/android/buildozer.spec
 *.db
 *.db-*
 .idea/

@@ -8,7 +8,7 @@ from copy import deepcopy
 from datetime import date, timedelta
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'frontend'))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
@@ -26,13 +26,13 @@ try:
     from kivy.uix.spinner import Spinner
     from kivy.uix.popup import Popup
     from kivy.uix.scrollview import ScrollView
-    from cooking_planner.app import CookingPlannerApp
-    from cooking_planner.overview.panel import OverviewPanel
-    from cooking_planner.plans.week import WeekPlanner
-    from cooking_planner.recipes.admin import AdminPanel
-    from cooking_planner.recipes.ingredient_admin import IngredientAdminPanel
-    from cooking_planner.shopping.draft import ShoppingDraft, item_key
-    from cooking_planner.shopping.panel import ShoppingPanel
+    from cooking_planner.CookingPlannerApp import CookingPlannerApp
+    from cooking_planner.overview.OverviewPanel import OverviewPanel
+    from cooking_planner.plans.WeekPlanner import WeekPlanner
+    from cooking_planner.recipes.AdminPanel import AdminPanel
+    from cooking_planner.recipes.IngredientAdminPanel import IngredientAdminPanel
+    from cooking_planner.shopping.ShoppingDraft import ShoppingDraft, item_key
+    from cooking_planner.shopping.ShoppingPanel import ShoppingPanel
     from cooking_planner.ui.theme import (GOLD, PANEL_LIGHT, HoverSurface, _mouse_moved,
                                           box, button, tab_button, set_tab_active)
 except ImportError:
@@ -304,7 +304,7 @@ class UiFlowTest(unittest.TestCase):
         self.assertTrue(panel.rows.children[0].children[-1].text.startswith('[x]'))
         panel.reset()
         self.assertTrue(panel.rows.children[0].children[-1].text.startswith('[ ]'))
-        with patch('cooking_planner.shopping.panel.Clipboard.copy') as copy:
+        with patch('cooking_planner.shopping.ShoppingPanel.Clipboard.copy') as copy:
             panel.copy()
         copy.assert_called_once_with('100 g Rice')
         self.assertFalse(draft.week(start)['checked'])
@@ -318,7 +318,7 @@ class UiFlowTest(unittest.TestCase):
         self.app.change_scale(2.0)
         self.assertIn('scale = 2.0', (Path(self.temp.name) / 'client.cfg').read_text())
         fake_window = SimpleNamespace(fullscreen=False)
-        with patch('cooking_planner.app.Window', fake_window):
+        with patch('cooking_planner.CookingPlannerApp.Window', fake_window):
             self.app.toggle_window()
             self.assertIs(True, fake_window.fullscreen)
             self.assertEqual('Windowed', self.app.window_button.text)
@@ -419,7 +419,7 @@ class UiFlowTest(unittest.TestCase):
         panel = ShoppingPanel([], [], draft, 'en', self.app.week_start, lambda _: None)
         dismissed = []
         dialog = SimpleNamespace(open=lambda: None, dismiss=lambda: dismissed.append(True))
-        with patch('cooking_planner.shopping.panel.styled_popup', return_value=dialog) as popup:
+        with patch('cooking_planner.shopping.ShoppingPanel.styled_popup', return_value=dialog) as popup:
             panel.add_item()
         body = popup.call_args.args[1]
         form = body.children[1].children[0]
@@ -452,7 +452,7 @@ class UiFlowTest(unittest.TestCase):
                               lambda locale, query, done:
                                   (searches.append((locale, query)), done([{'id': 'karotte', 'name': 'Carrot'}])))
         dialog = SimpleNamespace(open=lambda: None, dismiss=lambda: None)
-        with patch('cooking_planner.shopping.panel.styled_popup', return_value=dialog) as popup:
+        with patch('cooking_planner.shopping.ShoppingPanel.styled_popup', return_value=dialog) as popup:
             panel.add_item()
         body = popup.call_args.args[1]
         form = body.children[1].children[0]
@@ -460,7 +460,7 @@ class UiFlowTest(unittest.TestCase):
                     and widget.hint_text == 'Item name')
         suggestions = next(widget for widget in form.children if widget.height == 0
                            and hasattr(widget, 'children'))
-        with patch('cooking_planner.shopping.panel.Clock.schedule_once',
+        with patch('cooking_planner.shopping.ShoppingPanel.Clock.schedule_once',
                    side_effect=lambda callback, delay:
                        (callback(), SimpleNamespace(cancel=lambda: None))[1]):
             name.text = 'carr'
@@ -509,7 +509,7 @@ class UiFlowTest(unittest.TestCase):
         rice_row = next(row for row in panel.rows.children
                         if any(getattr(widget, 'text', '') == 'Rice' for widget in row.children))
         self.assertTrue(any(getattr(widget, 'text', '') == '€2.75' for widget in rice_row.children))
-        with patch('cooking_planner.shopping.panel.Clipboard.copy') as copy:
+        with patch('cooking_planner.shopping.ShoppingPanel.Clipboard.copy') as copy:
             panel.copy()
         self.assertIn('100 g Rice · €2.75', copy.call_args.args[0])
 
@@ -524,7 +524,7 @@ class UiFlowTest(unittest.TestCase):
         self.assertEqual('0 meals selected', panel.meal_summary.text)
         dismissed = []
         dialog = SimpleNamespace(open=lambda: None, dismiss=lambda: dismissed.append(True))
-        with patch('cooking_planner.shopping.panel.styled_popup', return_value=dialog) as popup:
+        with patch('cooking_planner.shopping.ShoppingPanel.styled_popup', return_value=dialog) as popup:
             panel.choose_meals()
         body = popup.call_args.args[1]
         meal = body.children[1].children[0].children[0]
@@ -541,6 +541,68 @@ class UiFlowTest(unittest.TestCase):
         done.dispatch('on_release', None)
         self.assertEqual([True], dismissed)
 
+    def test_add_day_picker_restores_meals_after_clear(self):
+        draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
+        start = self.app.week_start.isoformat()
+        plan = {'id': 9, 'date': start, 'recipeId': self.recipe['id'],
+                'recipeTitle': self.recipe['name'], 'servings': 2}
+        draft.clear(start, [plan])
+        panel = ShoppingPanel([plan], [self.recipe], draft, 'en', self.app.week_start, lambda _: None)
+        dialog = SimpleNamespace(open=lambda: None, dismiss=lambda: None)
+        with patch('cooking_planner.shopping.ShoppingPanel.styled_popup', return_value=dialog) as popup:
+            panel.choose_day()
+        body = popup.call_args.args[1]
+        body.children[-2].dispatch('on_release', None)
+        self.assertEqual({'9'}, draft.selected_plan_ids(start, [plan]))
+        self.assertTrue(panel.items)
+        self.assertEqual('1 meal selected', panel.meal_summary.text)
+
+    def test_week_refresh_reuses_catalog_without_refetching_all_recipes(self):
+        calls = []
+        self.app.client = SimpleNamespace(
+            locales=lambda: calls.append('locales') or ['en'],
+            recipes=lambda _: calls.append('recipes') or [self.recipe],
+            catalog_info=lambda _: calls.append('info') or {},
+            plans=lambda *args: calls.append('plans') or [],
+            ingredient_prices=lambda _: calls.append('prices') or {},
+            reference_prices=lambda: calls.append('reference') or {},
+        )
+        self.app._submit = lambda work, success, show_status=True, finished=None: (success(work()), finished())
+        self.app.week_start += timedelta(days=7)
+        self.app.refresh()
+        self.assertEqual(['plans', 'prices', 'reference'], calls)
+
+    def test_rapid_week_changes_coalesce_refresh_requests(self):
+        submitted = []
+        starts = []
+        self.app.client = SimpleNamespace(
+            plans=lambda start, *_: starts.append(start) or [],
+            ingredient_prices=lambda _: {}, reference_prices=lambda: {},
+        )
+        self.app._submit = lambda work, success, show_status=True, finished=None: submitted.append((work, success, finished))
+        self.app.refresh()
+        self.app.week_start += timedelta(days=7)
+        self.app.refresh()
+        self.app.week_start += timedelta(days=7)
+        self.app.refresh()
+        self.assertEqual(1, len(submitted))
+        submitted[0][0]()
+        submitted[0][2]()
+        self.assertEqual(2, len(submitted))
+        submitted[1][0]()
+        self.assertEqual(self.app.week_start.isoformat(), starts[-1])
+        self.assertEqual(2, len(starts))
+        submitted[1][2]()
+        self.assertFalse(self.app._refresh_running)
+
+    def test_returning_to_admin_reuses_loaded_catalog(self):
+        self.app._admin_loaded = True
+        self.app.load_admin = Mock()
+        self.app.show_tab('admin')
+        self.app.show_tab('overview')
+        self.app.show_tab('admin')
+        self.app.load_admin.assert_not_called()
+
     def test_planned_ingredient_can_be_excluded_and_restored_in_picker(self):
         draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
         start = self.app.week_start.isoformat()
@@ -550,7 +612,7 @@ class UiFlowTest(unittest.TestCase):
                 'recipeTitle': 'Simple', 'servings': 2}
         panel = ShoppingPanel([plan], [recipe], draft, 'en', self.app.week_start, lambda _: None)
         dialog = SimpleNamespace(open=lambda: None, dismiss=lambda: None)
-        with patch('cooking_planner.shopping.panel.styled_popup', return_value=dialog) as popup:
+        with patch('cooking_planner.shopping.ShoppingPanel.styled_popup', return_value=dialog) as popup:
             panel.choose_items()
         rows = popup.call_args.args[1].children[1].children[0]
         rows.children[0].dispatch('on_release', None)

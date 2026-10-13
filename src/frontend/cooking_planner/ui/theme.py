@@ -13,13 +13,13 @@ from kivy.uix.textinput import TextInput
 from cooking_planner.ui.clipboard import get_clipboard
 from cooking_planner.ui.hover_state import _mouse_moved as _mouse_moved
 from cooking_planner.ui.palette import BG, PANEL, PANEL_LIGHT, GOLD, WHITE, MUTED, GREEN as GREEN, RED
-from cooking_planner.ui.widgets.hover_button import HoverButton
-from cooking_planner.ui.widgets.hover_spinner import HoverSpinner
-from cooking_planner.ui.widgets.hover_spinner_option import HoverSpinnerOption
-from cooking_planner.ui.widgets.hover_text_input import HoverTextInput
-from cooking_planner.ui.widgets.hover_toggle_button import HoverToggleButton as HoverToggleButton
-from cooking_planner.ui.widgets.hover_surface import HoverSurface
-from cooking_planner.ui.widgets.hover_image_behavior import HoverImageBehavior as HoverImageBehavior
+from cooking_planner.ui.widgets.HoverButton import HoverButton
+from cooking_planner.ui.widgets.HoverSpinner import HoverSpinner
+from cooking_planner.ui.widgets.HoverSpinnerOption import HoverSpinnerOption
+from cooking_planner.ui.widgets.HoverTextInput import HoverTextInput
+from cooking_planner.ui.widgets.HoverToggleButton import HoverToggleButton as HoverToggleButton
+from cooking_planner.ui.widgets.HoverSurface import HoverSurface
+from cooking_planner.ui.widgets.HoverImageBehavior import HoverImageBehavior as HoverImageBehavior
 
 
 def surface(widget, color=PANEL, radius=12) -> None:

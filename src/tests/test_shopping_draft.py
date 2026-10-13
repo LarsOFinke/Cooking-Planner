@@ -8,10 +8,40 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'frontend'))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
 
 from cooking_planner.pricing import normalize_price
-from cooking_planner.shopping.draft import ShoppingDraft, item_key
+from cooking_planner.shopping.ShoppingDraft import ShoppingDraft, item_key
 
 
 class ShoppingDraftTest(unittest.TestCase):
+    def test_add_day_restores_only_selected_days_meals_after_clear(self):
+        start = '2026-10-05'
+        plans = [{'id': 1, 'date': start}, {'id': 2, 'date': start},
+                 {'id': 3, 'date': '2026-10-06'}]
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'shopping.json'
+            draft = ShoppingDraft(path)
+            draft.clear(start, plans)
+            self.assertEqual(set(), draft.selected_plan_ids(start, plans))
+            self.assertEqual(2, draft.add_day(start, plans, start))
+            self.assertEqual({'1', '2'}, ShoppingDraft(path).selected_plan_ids(start, plans))
+            self.assertEqual(0, draft.add_day(start, plans, '2026-10-07'))
+
+    def test_pending_writes_are_durable_before_background_flush(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'shopping.json'
+            draft = ShoppingDraft(path)
+            scheduled = []
+            written = []
+            draft.pending_scheduler = scheduled.append
+            draft.ingredient_writer = lambda ingredient_id, name, locale: written.append(ingredient_id)
+            draft.add_custom('2026-10-05', 'Milk', '1', 'l')
+            draft.add_custom('2026-10-05', 'Eggs', '2', 'pcs')
+            self.assertEqual([], written)
+            self.assertEqual(1, len(scheduled))
+            self.assertEqual(2, len(ShoppingDraft(path).pending))
+            scheduled[0]()
+            self.assertEqual(2, len(written))
+            self.assertEqual([], ShoppingDraft(path).pending)
+
     def test_import_select_remove_and_persist_week(self):
         recipes = [{'id': 'rice-dish', 'ingredients': [
             {'ingredientId': 'rice', 'name': 'Rice', 'amount': 100, 'unit': 'g'}]}]

@@ -5,12 +5,13 @@ from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from cooking_planner_backend.ingredients.service import IngredientStore
-from cooking_planner_backend.plans.service import PlanStore
-from cooking_planner_backend.recipes.service import RecipeStore
-from cooking_planner_backend.errors import ConflictError
-from cooking_planner_backend.repositories.storage import Storage
-from cooking_planner_backend.routes import ingredient_controller, plan_controller, recipe_controller
+from cooking_planner_backend.ingredients.IngredientStore import IngredientStore
+from cooking_planner_backend.plans.PlanStore import PlanStore
+from cooking_planner_backend.recipes.RecipeStore import RecipeStore
+from cooking_planner_backend.ConflictError import ConflictError
+from cooking_planner_backend.repositories.Storage import Storage
+from cooking_planner_backend.routes import (admin_ingredients, admin_recipes, ingredients as ingredient_routes,
+                                            plans as plan_routes, prices, recipes as recipe_routes, shopping)
 
 
 def create_app(data_dir: Path, catalog_dir: Path, instance_token: str = '') -> FastAPI:
@@ -37,7 +38,11 @@ def create_app(data_dir: Path, catalog_dir: Path, instance_token: str = '') -> F
     def health():
         return {'status': 'ok', 'instanceToken': instance_token}
 
-    app.include_router(recipe_controller.router(recipes))
-    app.include_router(plan_controller.router(plans))
-    app.include_router(ingredient_controller.router(ingredients))
+    app.include_router(recipe_routes.router(recipes))
+    app.include_router(admin_recipes.router(recipes))
+    app.include_router(shopping.router(plans))
+    app.include_router(plan_routes.router(plans))
+    app.include_router(ingredient_routes.router(ingredients))
+    app.include_router(prices.router(ingredients))
+    app.include_router(admin_ingredients.router(ingredients))
     return app

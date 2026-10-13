@@ -9,7 +9,7 @@ from unittest.mock import MagicMock, patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'frontend'))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
 
-from cooking_planner.api.backend import BackendLauncher
+from cooking_planner.api.BackendLauncher import BackendLauncher
 
 
 class BackendLauncherTest(unittest.TestCase):
@@ -23,11 +23,11 @@ class BackendLauncherTest(unittest.TestCase):
             server.config.app = app
             thread = MagicMock()
             thread.is_alive.return_value = True
-            with patch('cooking_planner.api.backend.socket.create_connection', side_effect=ConnectionRefusedError), \
-                 patch('cooking_planner.api.backend.catalog_directory', return_value=catalog), \
-                 patch('cooking_planner.api.backend.create_app', return_value=app) as create, \
-                 patch('cooking_planner.api.backend.uvicorn.Server', return_value=server), \
-                 patch('cooking_planner.api.backend.Thread', return_value=thread), \
+            with patch('cooking_planner.api.BackendLauncher.socket.create_connection', side_effect=ConnectionRefusedError), \
+                 patch('cooking_planner.api.BackendLauncher.catalog_directory', return_value=catalog), \
+                 patch('cooking_planner.api.BackendLauncher.create_app', return_value=app) as create, \
+                 patch('cooking_planner.api.BackendLauncher.uvicorn.Server', return_value=server), \
+                 patch('cooking_planner.api.BackendLauncher.Thread', return_value=thread), \
                  patch.object(launcher, '_healthy', return_value=True):
                 launcher.start()
                 create.assert_called_once_with(launcher.data_dir, catalog, launcher.instance_token)
@@ -39,8 +39,8 @@ class BackendLauncherTest(unittest.TestCase):
 
     def test_occupied_port_is_rejected_before_starting_backend(self):
         launcher = BackendLauncher(8765, Path('/tmp/cooking-planner-test-data'))
-        with patch('cooking_planner.api.backend.socket.create_connection') as connect, \
-             patch('cooking_planner.api.backend.create_app') as create:
+        with patch('cooking_planner.api.BackendLauncher.socket.create_connection') as connect, \
+             patch('cooking_planner.api.BackendLauncher.create_app') as create:
             with self.assertRaisesRegex(RuntimeError, 'already in use'):
                 launcher.start()
             connect.assert_called_once()
@@ -51,7 +51,7 @@ class BackendLauncherTest(unittest.TestCase):
         for token, expected in (('other-instance', False), (launcher.instance_token, True)):
             response = io.BytesIO(json.dumps({'status': 'ok', 'instanceToken': token}).encode())
             response.status = 200
-            with patch('cooking_planner.api.backend.urlopen', return_value=response):
+            with patch('cooking_planner.api.BackendLauncher.urlopen', return_value=response):
                 self.assertEqual(expected, launcher._healthy())
 
 

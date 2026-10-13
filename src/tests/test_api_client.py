@@ -9,7 +9,7 @@ from urllib.error import HTTPError, URLError
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'frontend'))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
 
-from cooking_planner.api.client import ApiClient
+from cooking_planner.api.ApiClient import ApiClient
 
 
 class ApiClientTest(unittest.TestCase):
@@ -17,7 +17,7 @@ class ApiClientTest(unittest.TestCase):
         self.client = ApiClient('http://127.0.0.1:8765/')
 
     def test_locale_and_shopping_queries_are_encoded(self):
-        with patch('cooking_planner.api.client.urlopen') as open_url:
+        with patch('cooking_planner.api.ApiClient.urlopen') as open_url:
             open_url.return_value.__enter__.return_value.read.return_value = b'["de","en"]'
             self.assertEqual(['de', 'en'], self.client.locales())
             request = open_url.call_args.args[0]
@@ -27,7 +27,7 @@ class ApiClientTest(unittest.TestCase):
             self.assertIn('locale=de', open_url.call_args.args[0].full_url)
 
     def test_save_plan_sends_json_with_stable_recipe_id(self):
-        with patch('cooking_planner.api.client.urlopen') as open_url:
+        with patch('cooking_planner.api.ApiClient.urlopen') as open_url:
             open_url.return_value.__enter__.return_value.read.return_value = b'{"id":7}'
             result = self.client.save_plan('2026-10-10', 'DINNER', 'dz-algerischer-couscous', 3)
             request = open_url.call_args.args[0]
@@ -38,7 +38,7 @@ class ApiClientTest(unittest.TestCase):
             self.assertEqual({'id': 7}, result)
 
     def test_empty_delete_and_useful_connection_errors(self):
-        with patch('cooking_planner.api.client.urlopen') as open_url:
+        with patch('cooking_planner.api.ApiClient.urlopen') as open_url:
             open_url.return_value.__enter__.return_value.read.return_value = b''
             self.assertIsNone(self.client.delete_plan(5))
             self.assertEqual('DELETE', open_url.call_args.args[0].get_method())
@@ -50,7 +50,7 @@ class ApiClientTest(unittest.TestCase):
                 self.client.recipes('en')
 
     def test_admin_recipe_save_sends_all_language_choices(self):
-        with patch('cooking_planner.api.client.urlopen') as open_url:
+        with patch('cooking_planner.api.ApiClient.urlopen') as open_url:
             open_url.return_value.__enter__.return_value.read.return_value = b'{"id":"new-dish"}'
             result = self.client.save_recipe('new-dish', 'en', {'en': {'name': 'New dish'}, 'de': None}, True)
             request = open_url.call_args.args[0]
@@ -65,14 +65,14 @@ class ApiClientTest(unittest.TestCase):
                 self.client.save_recipe('new-dish', 'en', {'en': {}, 'de': {}}, True)
 
     def test_admin_options_are_loaded_from_backend(self):
-        with patch('cooking_planner.api.client.urlopen') as open_url:
+        with patch('cooking_planner.api.ApiClient.urlopen') as open_url:
             open_url.return_value.__enter__.return_value.read.return_value = b'{"en":{"category":[]}}'
             self.assertEqual({'en': {'category': []}}, self.client.admin_options())
             self.assertEqual('http://127.0.0.1:8765/api/admin/recipes/options',
                              open_url.call_args.args[0].full_url)
 
     def test_ingredient_admin_sends_localized_names(self):
-        with patch('cooking_planner.api.client.urlopen') as open_url:
+        with patch('cooking_planner.api.ApiClient.urlopen') as open_url:
             open_url.return_value.__enter__.return_value.read.return_value = b'{"id":"rice"}'
             self.client.save_admin_ingredient('rice', {'en': 'Rice', 'de': 'Reis'})
             request = open_url.call_args.args[0]
@@ -83,7 +83,7 @@ class ApiClientTest(unittest.TestCase):
             self.assertIn('q=gr%C3%BCn', open_url.call_args.args[0].full_url)
 
     def test_reference_price_sends_quantity_basis(self):
-        with patch('cooking_planner.api.client.urlopen') as open_url:
+        with patch('cooking_planner.api.ApiClient.urlopen') as open_url:
             open_url.return_value.__enter__.return_value.read.return_value = b''
             self.client.save_reference_price('rice:g', '1.80', 100)
             request = open_url.call_args.args[0]

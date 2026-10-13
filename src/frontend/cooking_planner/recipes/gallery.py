@@ -1,11 +1,11 @@
 """Full-window recipe photo viewer and its clickable thumbnails."""
 
 from kivy.metrics import dp
-from kivy.uix.image import Image
+from kivy.uix.image import AsyncImage
 from kivy.uix.popup import Popup
 
 from cooking_planner.recipes.images import attributions
-from cooking_planner.recipes.photo import RecipePhoto
+from cooking_planner.recipes.RecipePhoto import RecipePhoto
 from cooking_planner.ui.strings import t
 from cooking_planner.ui.theme import MUTED, WHITE, box, button, label, scroll_view
 
@@ -24,7 +24,7 @@ def open_gallery(recipe, photos, index, locale):
     previous = button('‹', lambda: select(index_state['value'] - 1),
                       size_hint_x=None, width=dp(52))
     viewer.add_widget(previous)
-    image = Image(fit_mode='contain')
+    image = AsyncImage(fit_mode='contain')
     viewer.add_widget(image)
     following = button('›', lambda: select(index_state['value'] + 1),
                        size_hint_x=None, width=dp(52))

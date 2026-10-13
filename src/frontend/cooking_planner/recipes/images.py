@@ -2,6 +2,7 @@
 
 import csv
 import re
+from functools import lru_cache
 from pathlib import Path
 
 from cooking_planner.paths import catalog_directory
@@ -27,5 +28,10 @@ def attributions() -> dict[str, dict]:
     source = catalog_directory() / "recipe_images" / "IMAGE_ATTRIBUTIONS.csv"
     if not source.is_file():
         return {}
+    return _read_attributions(source, source.stat().st_mtime_ns)
+
+
+@lru_cache(maxsize=4)
+def _read_attributions(source: Path, _stamp: int) -> dict[str, dict]:
     with source.open(encoding="utf-8-sig", newline="") as file:
         return {"recipe_images/" + row["image_path"]: row for row in csv.DictReader(file)}

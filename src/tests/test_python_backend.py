@@ -13,7 +13,7 @@ from fastapi.testclient import TestClient
 
 from cooking_planner_backend.app import create_app
 from cooking_planner_backend.recipes.mapper import map_recipe
-from cooking_planner_backend.entities.marker import Marker
+from cooking_planner_backend.entities.Marker import Marker
 
 
 ROOT = Path(__file__).resolve().parents[2]

@@ -7,7 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'frontend'))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
 
 from cooking_planner.plans.costs import planned_costs
-from cooking_planner.shopping.draft import ShoppingDraft
+from cooking_planner.shopping.ShoppingDraft import ShoppingDraft
 
 
 class PlannedCostsTest(unittest.TestCase):

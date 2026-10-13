@@ -3,7 +3,7 @@
 from collections import defaultdict
 from decimal import Decimal
 
-from cooking_planner.shopping.draft import item_key
+from cooking_planner.shopping.ShoppingDraft import item_key
 
 
 def planned_costs(start, plans, recipes, draft):
