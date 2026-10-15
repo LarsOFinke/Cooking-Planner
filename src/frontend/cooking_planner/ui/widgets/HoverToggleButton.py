@@ -6,4 +6,13 @@ from cooking_planner.ui.widgets.RoundedControlBehavior import RoundedControlBeha
 
 
 class HoverToggleButton(RoundedControlBehavior, HoverColorBehavior, ToggleButton):
-    pass
+    def __init__(self, selected=False, **kwargs):
+        super().__init__(**kwargs)
+        if hasattr(self, 'activated'):
+            self.activated = selected
+        else:
+            self.state = 'down' if selected else 'normal'
+
+    @property
+    def selected(self):
+        return bool(self.activated) if hasattr(self, 'activated') else self.state == 'down'

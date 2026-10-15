@@ -254,7 +254,7 @@ class AdminPanel(AdminFormPages):
             choices={code: widget.text for code, widget in self.locale_choices.items()},
             shared_choices={key: self._value(self.shared_inputs[key]) for key, _ in CHOICES},
             times={key: self.shared_inputs[key].text for key, _ in TIMES},
-            diets=[code for code, widget in self.diet_buttons.items() if widget.activated],
+            diets=[code for code, widget in self.diet_buttons.items() if widget.selected],
             images=self.shared_inputs['images'].text,
             ingredients=[{'original': entry['original'],
                           'ingredient_id': entry['shared']['ingredient_id'].text,

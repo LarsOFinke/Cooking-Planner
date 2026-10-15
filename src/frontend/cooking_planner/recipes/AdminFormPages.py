@@ -182,7 +182,7 @@ class AdminFormPages:
         self._heading(self.details, 'admin_suitable_for')
         diet_row = self._row(self.details, 44)
         for value in dict.fromkeys([*diets, *selected]):
-            toggle = HoverToggleButton(text=diets.get(value, value), activated=value in selected,
+            toggle = HoverToggleButton(text=diets.get(value, value), selected=value in selected,
                                        size_hint_y=None, height=dp(42), background_normal='',
                                        background_down='', background_color=PANEL_LIGHT, color=WHITE,
                                        font_size=dp(13))

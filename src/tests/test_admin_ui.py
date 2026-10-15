@@ -18,6 +18,7 @@ try:
     from kivy.clock import Clock
     from kivy.core.window import Window
     from kivy.metrics import dp
+    from kivy_events import release
     from cooking_planner.recipes.AdminPanel import AdminPanel
     from cooking_planner.recipes.IngredientAdminPanel import IngredientAdminPanel
 except ImportError:
@@ -38,7 +39,7 @@ class AdminEditorTest(unittest.TestCase):
         panel.search.text = 'carr'
         panel._show_results([{'id': 'karotte', 'translations': {'en': 'Carrot', 'de': 'Karotte'}}],
                             panel.generation)
-        panel.results.children[0].dispatch('on_release', None)
+        release(panel.results.children[0])
         panel.names['en'].text = 'Garden carrot'
         panel.save()
         self.assertEqual(('karotte', {'en': 'Garden carrot', 'de': 'Karotte'}), saved[-1])
@@ -64,15 +65,15 @@ class AdminEditorTest(unittest.TestCase):
         panel._show_results(rows, panel.generation)
         self.assertEqual('Page 1 of 3', panel.page_label.text)
         self.assertEqual(41, len(panel.results.children))
-        panel.next_button.dispatch('on_release', None)
-        panel.next_button.dispatch('on_release', None)
+        release(panel.next_button)
+        release(panel.next_button)
         self.assertEqual('Page 3 of 3', panel.page_label.text)
         self.assertTrue(panel.next_button.disabled)
         self.assertEqual(22, len(panel.results.children))
-        panel.results.children[0].dispatch('on_release', None)
+        release(panel.results.children[0])
         self.assertEqual('ingredient-100', panel.selected['id'])
         self.assertEqual(1, panel.horizontal.scroll_x)
-        panel.list_button.dispatch('on_release', None)
+        release(panel.list_button)
         self.assertEqual(0, panel.horizontal.scroll_x)
         panel.search.text = 'Ingredient 100'
         panel._show_results(rows[-1:], panel.generation)
@@ -131,7 +132,7 @@ class AdminEditorTest(unittest.TestCase):
         self.assertEqual(('en', 'carr'), searches[-1][:2])
         searches[-1][2]([{'id': 'karotte', 'name': 'Carrot',
                           'translations': {'en': 'Carrot', 'de': 'Karotte'}}])
-        panel.ingredient_matches.children[0].dispatch('on_release', None)
+        release(panel.ingredient_matches.children[0])
         self.assertEqual('karotte', panel.ingredient_rows[0]['shared']['ingredient_id'].text)
         self.assertEqual('Carrot', panel.ingredient_rows[0]['names']['en'].text)
         self.assertEqual('Karotte', panel.ingredient_rows[0]['names']['de'].text)

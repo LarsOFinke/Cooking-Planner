@@ -26,6 +26,7 @@ try:
     from kivy.uix.spinner import Spinner
     from kivy.uix.popup import Popup
     from kivy.uix.scrollview import ScrollView
+    from kivy_events import release
     from cooking_planner.CookingPlannerApp import CookingPlannerApp
     from cooking_planner.overview.OverviewPanel import OverviewPanel
     from cooking_planner.plans.WeekPlanner import WeekPlanner
@@ -195,7 +196,7 @@ class UiFlowTest(unittest.TestCase):
         self.assertEqual('Page 1 of 2', browser.page_label.text)
         self.assertTrue(browser.previous_button.disabled)
         self.assertFalse(browser.next_button.disabled)
-        browser.next_button.dispatch('on_release', None)
+        release(browser.next_button)
         self.assertEqual('Page 2 of 2', browser.page_label.text)
         self.assertFalse(browser.previous_button.disabled)
         self.assertTrue(browser.next_button.disabled)
@@ -343,11 +344,11 @@ class UiFlowTest(unittest.TestCase):
                     self.assertIs(date_input.parent.parent,
                                   popup.content.children[1].children[0])
                     initial = date.fromisoformat(date_input.text)
-                    arrows['›'].dispatch('on_release', None)
+                    release(arrows['›'])
                     self.assertEqual((initial + timedelta(days=1)).isoformat(), date_input.text)
                     save = next(widget for widget in popup.walk()
                                 if isinstance(widget, Button) and widget.text == 'Save to plan')
-                    save.dispatch('on_release', None)
+                    release(save)
                     save_plan.assert_called_once_with(initial + timedelta(days=1), 'DINNER',
                                                        self.recipe['id'], 1)
                 finally:
@@ -435,13 +436,13 @@ class UiFlowTest(unittest.TestCase):
         more = next(widget for widget in actions.children if widget.text == 'Add another')
         done = next(widget for widget in actions.children if widget.text == 'Add item')
         name.text, amount.text, unit.text = 'Milk', '2', 'l'
-        more.dispatch('on_release', None)
+        release(more)
         self.assertEqual('', name.text)
         self.assertEqual(1, len(panel.items))
         self.assertIsNone(draft.price_for(panel.start, item_key(panel.items[0])))
         self.assertFalse(dismissed)
         name.text, amount.text, unit.text = 'Eggs', '6', 'pcs'
-        done.dispatch('on_release', None)
+        release(done)
         self.assertEqual({'Milk', 'Eggs'}, {item['name'] for item in panel.items})
         self.assertEqual([True], dismissed)
 
@@ -465,9 +466,9 @@ class UiFlowTest(unittest.TestCase):
                        (callback(), SimpleNamespace(cancel=lambda: None))[1]):
             name.text = 'carr'
         self.assertEqual([('en', 'carr')], searches)
-        suggestions.children[0].dispatch('on_release', None)
+        release(suggestions.children[0])
         done = next(widget for widget in body.children[0].children if widget.text == 'Add item')
-        done.dispatch('on_release', None)
+        release(done)
         self.assertEqual('karotte', panel.items[0]['ingredientId'])
 
     def test_shopping_items_have_aligned_fields_and_completed_section(self):
@@ -528,17 +529,17 @@ class UiFlowTest(unittest.TestCase):
             panel.choose_meals()
         body = popup.call_args.args[1]
         meal = body.children[1].children[0].children[0]
-        meal.dispatch('on_release', None)
+        release(meal)
         self.assertEqual([], dismissed)
         self.assertEqual({'9'}, draft.selected_plan_ids(start, [plan]))
         self.assertEqual('1 meal selected', panel.meal_summary.text)
         self.assertTrue(panel.items)
-        body.children[0].children[1].dispatch('on_release', None)
+        release(body.children[0].children[1])
         self.assertFalse(panel.items)
-        body.children[0].children[2].dispatch('on_release', None)
+        release(body.children[0].children[2])
         self.assertTrue(panel.items)
         done = body.children[0].children[0]
-        done.dispatch('on_release', None)
+        release(done)
         self.assertEqual([True], dismissed)
 
     def test_add_day_picker_restores_meals_after_clear(self):
@@ -552,7 +553,7 @@ class UiFlowTest(unittest.TestCase):
         with patch('cooking_planner.shopping.ShoppingPanel.styled_popup', return_value=dialog) as popup:
             panel.choose_day()
         body = popup.call_args.args[1]
-        body.children[-2].dispatch('on_release', None)
+        release(body.children[-2])
         self.assertEqual({'9'}, draft.selected_plan_ids(start, [plan]))
         self.assertTrue(panel.items)
         self.assertEqual('1 meal selected', panel.meal_summary.text)
@@ -615,9 +616,9 @@ class UiFlowTest(unittest.TestCase):
         with patch('cooking_planner.shopping.ShoppingPanel.styled_popup', return_value=dialog) as popup:
             panel.choose_items()
         rows = popup.call_args.args[1].children[1].children[0]
-        rows.children[0].dispatch('on_release', None)
+        release(rows.children[0])
         self.assertFalse(panel.items)
-        rows.children[0].dispatch('on_release', None)
+        release(rows.children[0])
         self.assertEqual('200', str(panel.items[0]['amount']))
 
     def test_admin_requires_a_choice_for_each_language(self):
