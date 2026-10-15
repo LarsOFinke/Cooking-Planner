@@ -35,7 +35,7 @@ if ! "$dev_python" -c 'import kivy, sqlalchemy, fastapi, uvicorn, sys; assert (s
         echo "DEV_PYTHON must point to Python with a compatible Kivy version installed." >&2
         exit 1
     fi
-    "$dev_python" scripts/development/install-python-deps.py
+    "$dev_python" scripts/development/install-python-deps.py --dev
 fi
 
 PYTHONPATH=src/frontend:src/backend exec "$dev_python" src/frontend/main.py

@@ -24,7 +24,8 @@ def main() -> None:
                 "-r", "src/requirements.txt")
         else:
             pip("install", "-r", "src/requirements.txt")
-        pip("install", "-r", "src/requirements-dev.txt")
+        if '--dev' in sys.argv[1:]:
+            pip("install", "-r", "src/requirements-dev.txt")
     except subprocess.CalledProcessError:
         raise SystemExit("Kivy installation failed. Python 3.14 needs access to the Kivy nightly wheel index; "
                          "check your network connection and rerun make dev.") from None

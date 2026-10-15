@@ -3,15 +3,27 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'frontend'))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
 
 from cooking_planner.pricing import normalize_price
 from cooking_planner.shopping.ShoppingDraft import ShoppingDraft, item_key
+from cooking_planner.shopping.persistence import save_draft
 
 
 class ShoppingDraftTest(unittest.TestCase):
+    def test_interrupted_shopping_save_keeps_previous_file(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'shopping.json'
+            path.write_text('previous contents', encoding='utf-8')
+            with patch('cooking_planner.shopping.persistence.os.replace', side_effect=OSError('interrupted')):
+                with self.assertRaises(OSError):
+                    save_draft(path, {}, [])
+            self.assertEqual('previous contents', path.read_text(encoding='utf-8'))
+            self.assertEqual([], list(path.parent.glob('shopping.json.*.tmp')))
+
     def test_add_day_restores_only_selected_days_meals_after_clear(self):
         start = '2026-10-05'
         plans = [{'id': 1, 'date': start}, {'id': 2, 'date': start},

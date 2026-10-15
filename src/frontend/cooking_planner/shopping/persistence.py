@@ -1,6 +1,7 @@
 """Validate and atomically store a shopping draft without replacing invalid data."""
 
 import json
+import os
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from shutil import copyfileobj
@@ -73,7 +74,20 @@ def load_draft(path: Path) -> tuple[dict, list, str | None]:
 
 def save_draft(path: Path, weeks: dict, pending: list) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix('.tmp')
-    temporary.write_text(json.dumps({'version': 1, 'weeks': weeks, 'pending': pending},
-                                    ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    temporary.replace(path)
+    temporary = path.with_name(f'{path.name}.{uuid4().hex}.tmp')
+    try:
+        with temporary.open('w', encoding='utf-8') as output:
+            json.dump({'version': 1, 'weeks': weeks, 'pending': pending}, output,
+                      ensure_ascii=False, indent=2)
+            output.write('\n')
+            output.flush()
+            os.fsync(output.fileno())
+        os.replace(temporary, path)
+        if os.name == 'posix':
+            directory = os.open(path.parent, os.O_RDONLY)
+            try:
+                os.fsync(directory)
+            finally:
+                os.close(directory)
+    finally:
+        temporary.unlink(missing_ok=True)
