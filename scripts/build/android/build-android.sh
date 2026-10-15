@@ -30,6 +30,7 @@ if [[ ! -x "$venv/bin/python" ]]; then
     "$python_bin" -m venv "$venv"
 fi
 "$venv/bin/python" -m pip install -r scripts/build/android/requirements-host.txt
+export PATH="$venv/bin:$PATH"
 "$venv/bin/python" scripts/build/android/stage.py
 
 build_dir="$project_root/build/android"

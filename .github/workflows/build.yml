@@ -39,8 +39,12 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
+      - name: Install build display
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb libgl1 libmtdev1t64
       - name: Build AppImage
-        run: make compile-linux
+        run: xvfb-run -a make compile-linux
         env:
           PYTHON_BIN: python
       - uses: actions/upload-artifact@v4

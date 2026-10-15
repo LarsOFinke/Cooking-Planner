@@ -29,12 +29,13 @@ if (-not $wheel) { throw 'Cooking Planner wheel not found' }
 Invoke-BuildStep -Step 5 -Name 'Install app wheel' -Log 'build/logs/windows-wheel-install.log' `
     -Command @($python, '-m', 'pip', 'install', '--no-deps', '--force-reinstall', $wheel.FullName)
 New-Item -ItemType Directory -Path dist/windows -Force | Out-Null
+$catalogData = Join-Path $projectRoot 'data'
 Invoke-BuildStep -Step 6 -Name 'Build bundled Windows executable' -Log 'build/logs/windows-executable.log' `
     -Command @($python, '-m', 'PyInstaller', '--noconfirm', '--onefile', '--windowed', `
                '--name', 'CookingPlanner', '--distpath', 'dist/windows', `
                '--workpath', 'build/pyinstaller-windows', '--specpath', 'build', `
                '--collect-submodules', 'sqlalchemy.dialects.sqlite', `
-               '--collect-submodules', 'uvicorn', '--add-data', 'data;catalogs', `
+               '--collect-submodules', 'uvicorn', '--add-data', "$catalogData;catalogs", `
                'scripts/build/common/frozen_entry.py')
 
 $iscc = Get-Command ISCC.exe -ErrorAction SilentlyContinue
