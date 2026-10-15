@@ -38,19 +38,24 @@ Invoke-BuildStep -Step 6 -Name 'Build bundled Windows executable' -Log 'build/lo
                '--collect-submodules', 'uvicorn', '--add-data', "$catalogData;catalogs", `
                'scripts/build/common/frozen_entry.py')
 
-$iscc = Get-Command ISCC.exe -ErrorAction SilentlyContinue
-if (-not $iscc) {
-    $iscc = Get-Item "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe", `
-                     "$env:ProgramFiles\Inno Setup 6\ISCC.exe" -ErrorAction SilentlyContinue |
-        Select-Object -First 1
+function Find-InnoCompiler {
+    foreach ($path in @("${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+                        "$env:ProgramFiles\Inno Setup 6\ISCC.exe")) {
+        if (Test-Path $path -PathType Leaf) { return $path }
+    }
+    $command = Get-Command ISCC.exe -ErrorAction SilentlyContinue
+    if ($command) { return $command.Source }
+    return $null
 }
+
+$iscc = Find-InnoCompiler
 if (-not $iscc) {
     Install-WinGetPackage 'JRSoftware.InnoSetup'
-    $iscc = Get-Item "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe", `
-                     "$env:ProgramFiles\Inno Setup 6\ISCC.exe" -ErrorAction SilentlyContinue |
-        Select-Object -First 1
+    $iscc = Find-InnoCompiler
 }
 if (-not $iscc) { throw 'Inno Setup 6 compiler (ISCC.exe) is required.' }
-Invoke-BuildStep -Step 7 -Name 'Build Windows installer' -Log 'build/logs/windows-installer.log' `
-    -Command @($iscc.FullName, 'scripts/build/windows/cooking-planner.iss')
+Write-Host "[7/7] Build Windows installer with $iscc"
+& $iscc 'scripts/build/windows/cooking-planner.iss'
+if ($LASTEXITCODE -ne 0) { throw "Build Windows installer failed with exit code $LASTEXITCODE" }
+Write-Host '[7/7] Build Windows installer done'
 Write-Host 'Built dist/windows/CookingPlanner-Setup.exe'
