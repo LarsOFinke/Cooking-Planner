@@ -15,7 +15,7 @@ SolidCompression=yes
 UninstallDisplayIcon={app}\CookingPlanner.exe
 
 [Files]
-Source: "..\..\..\dist\windows\CookingPlanner.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\..\dist\windows\CookingPlanner\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{autoprograms}\Cooking Planner"; Filename: "{app}\CookingPlanner.exe"

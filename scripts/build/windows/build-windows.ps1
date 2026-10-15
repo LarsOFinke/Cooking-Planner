@@ -31,7 +31,7 @@ Invoke-BuildStep -Step 5 -Name 'Install app wheel' -Log 'build/logs/windows-whee
 New-Item -ItemType Directory -Path dist/windows -Force | Out-Null
 $catalogData = Join-Path $projectRoot 'data'
 Invoke-BuildStep -Step 6 -Name 'Build bundled Windows executable' -Log 'build/logs/windows-executable.log' `
-    -Command @($python, '-m', 'PyInstaller', '--noconfirm', '--onefile', '--windowed', `
+    -Command @($python, '-m', 'PyInstaller', '--noconfirm', '--onedir', '--windowed', `
                '--name', 'CookingPlanner', '--distpath', 'dist/windows', `
                '--workpath', 'build/pyinstaller-windows', '--specpath', 'build', `
                '--collect-submodules', 'sqlalchemy.dialects.sqlite', `
