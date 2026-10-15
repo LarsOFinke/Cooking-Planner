@@ -18,7 +18,11 @@ os.environ.setdefault('KIVY_NO_FILELOG', '1')
 
 def run_tests():
     suite = unittest.defaultTestLoader.discover(str(ROOT / 'src' / 'tests'))
-    return unittest.TextTestRunner(stream=io.StringIO()).run(suite)
+    output = io.StringIO()
+    result = unittest.TextTestRunner(stream=output).run(suite)
+    if not result.wasSuccessful():
+        print(output.getvalue(), file=sys.stderr)
+    return result
 
 
 def main() -> int:
