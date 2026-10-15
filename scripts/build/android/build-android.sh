@@ -26,9 +26,8 @@ if [[ "$java_version" != *'17.'* ]]; then
 fi
 
 venv="$project_root/.build-venv-android"
-if [[ ! -x "$venv/bin/python" ]]; then
-    "$python_bin" -m venv "$venv"
-fi
+# python-for-android installs host tools with pip --user; the user site must be visible.
+"$python_bin" -m venv --system-site-packages "$venv"
 "$venv/bin/python" -m pip install -r scripts/build/android/requirements-host.txt
 export PATH="$venv/bin:$PATH"
 "$venv/bin/python" scripts/build/android/stage.py
