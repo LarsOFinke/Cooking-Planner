@@ -74,6 +74,8 @@ jobs:
         env:
           PYTHON_BIN: python
           COOKING_PLANNER_BUILD_VERBOSE: '1'
+          # PyInstaller scans Kivy imports on a runner without usable OpenGL.
+          KIVY_WINDOW: mock
       - uses: actions/upload-artifact@v4
         with:
           name: cooking-planner-windows-x86_64
