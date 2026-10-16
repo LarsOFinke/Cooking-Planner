@@ -29,10 +29,17 @@ def default_data_dir() -> Path:
     return Path.home() / '.cooking-planner'
 
 
+def prepare_data_directory(data_dir: Path, default_location: bool) -> None:
+    data_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
+    if default_location and os.name == 'posix':
+        data_dir.chmod(0o700)
+
+
 def main() -> None:
     config = ConfigParser()
     configured_data_dir = os.getenv('COOKING_PLANNER_DATA_DIR')
     data_dir = Path(configured_data_dir) if configured_data_dir else default_data_dir()
+    prepare_data_directory(data_dir, not configured_data_dir)
     config.read(data_dir / "client.cfg")
     port = int(os.getenv("COOKING_PLANNER_PORT", config.get("backend", "port", fallback="8765")))
     launcher = BackendLauncher(port, data_dir)

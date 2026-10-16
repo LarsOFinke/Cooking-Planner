@@ -17,7 +17,7 @@ from cooking_planner_backend.entities.Translation import Translation  # noqa: F4
 class Storage:
     def __init__(self, data_dir: Path):
         self.data_dir = Path(data_dir)
-        self.data_dir.mkdir(parents=True, exist_ok=True)
+        self.data_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
         self.lock = RLock()
         self.engine = create_engine(f'sqlite:///{self.data_dir / "cooking-planner.db"}',
                                     connect_args={'check_same_thread': False})
