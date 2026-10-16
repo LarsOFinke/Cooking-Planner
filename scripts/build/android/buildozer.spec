@@ -9,6 +9,7 @@ requirements = python3,kivy==2.3.1,sqlite3,libffi,openssl,sqlalchemy==2.0.30,pyd
 orientation = portrait,landscape
 fullscreen = 0
 android.permissions = INTERNET
+android.allow_backup = False
 android.api = 36
 android.minapi = 29
 android.ndk = 29

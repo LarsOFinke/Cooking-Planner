@@ -6,12 +6,13 @@ from threading import Thread
 import time
 from pathlib import Path
 from urllib.error import URLError
-from urllib.request import Request, urlopen
+from urllib.request import Request
 from uuid import uuid4
 
 import uvicorn
 
 from cooking_planner.paths import catalog_directory
+from cooking_planner.api.local_http import open_local
 from cooking_planner_backend.app import create_app
 
 
@@ -27,7 +28,7 @@ class BackendLauncher:
         try:
             request = Request(f'http://127.0.0.1:{self.port}/api/health',
                               headers={'X-Cooking-Planner-Token': self.instance_token})
-            with urlopen(request, timeout=1) as response:
+            with open_local(request, timeout=1) as response:
                 health = json.load(response)
                 return response.status == 200 and health.get('status') == 'ok'
         except (OSError, URLError, ValueError, AttributeError):

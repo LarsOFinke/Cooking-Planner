@@ -2,7 +2,9 @@ import json
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.parse import quote
-from urllib.request import Request, urlopen
+from urllib.request import Request
+
+from cooking_planner.api.local_http import open_local
 
 
 class ApiClient:
@@ -16,7 +18,7 @@ class ApiClient:
                           headers={"Content-Type": "application/json",
                                    "X-Cooking-Planner-Token": self.token})
         try:
-            with urlopen(request, timeout=10) as response:
+            with open_local(request, timeout=10) as response:
                 data = response.read()
                 return json.loads(data) if data else None
         except HTTPError as error:

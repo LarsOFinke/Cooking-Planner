@@ -120,6 +120,8 @@ jobs:
         run: make compile-android
         env:
           ANDROID_PYTHON: python
+      - name: Verify APK privacy settings
+        run: python scripts/build/android/verify-package.py dist/android/CookingPlanner-arm64-v8a-debug.apk
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: cooking-planner-android-arm64-v8a-debug

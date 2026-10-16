@@ -1,10 +1,12 @@
 import json
+import os
 import sqlite3
 import sys
 import tempfile
 import unittest
 from copy import deepcopy
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'frontend'))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
@@ -53,6 +55,15 @@ class PythonBackendTest(unittest.TestCase):
             'date': '2026-10-12', 'mealType': 'LUNCH', 'recipeId': recipe_id, 'servings': 2}).status_code)
         self.assertFalse((self.data / 'plans.json').exists())
         self.assertEqual({'status': 'ok'}, self.client.get('/api/health').json())
+
+    def test_local_api_disables_telemetry_even_if_environment_enables_it(self):
+        with patch.dict(os.environ, {'FASTAPI_OTEL_AUTO_CONFIGURE': 'true'}):
+            app = create_app(self.root / 'telemetry-test', self.catalogs, 'test-token')
+        try:
+            self.assertFalse(app._native_telemetry.enabled())
+            self.assertFalse(app._telemetry['auto_configure'])
+        finally:
+            app.state.storage.close()
 
     def test_catalogs_locales_and_plan_shopping_survive_reopen(self):
         self.assertEqual(['de', 'en'], self.client.get('/api/recipes/locales').json())

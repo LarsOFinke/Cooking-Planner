@@ -50,7 +50,7 @@ class BackendLauncherTest(unittest.TestCase):
         launcher = BackendLauncher(8765, Path('/tmp/cooking-planner-test-data'))
         response = io.BytesIO(json.dumps({'status': 'ok'}).encode())
         response.status = 200
-        with patch('cooking_planner.api.BackendLauncher.urlopen', return_value=response) as open_url:
+        with patch('cooking_planner.api.BackendLauncher.open_local', return_value=response) as open_url:
             self.assertTrue(launcher._healthy())
             self.assertEqual(launcher.instance_token,
                              open_url.call_args.args[0].get_header('X-cooking-planner-token'))

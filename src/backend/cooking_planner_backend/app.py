@@ -22,7 +22,9 @@ def create_app(data_dir: Path, catalog_dir: Path, instance_token: str) -> FastAP
     recipes = RecipeStore(storage, catalog_dir)
     ingredients = IngredientStore(storage, recipes)
     plans = PlanStore(storage, recipes)
-    app = FastAPI(title='Cooking Planner local API', docs_url=None, redoc_url=None, openapi_url=None)
+    app = FastAPI(title='Cooking Planner local API', docs_url=None, redoc_url=None, openapi_url=None,
+                  telemetry={'tracing': False, 'metrics': False, 'logs': False,
+                             'operation_spans': False, 'auto_configure': False})
     app.state.storage = storage
 
     @app.middleware('http')
