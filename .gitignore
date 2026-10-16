@@ -15,4 +15,7 @@ dist/
 *.db-*
 .idea/
 .kivy/
+.env
+.env.*
+!.env.example
 

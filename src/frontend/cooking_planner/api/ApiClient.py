@@ -8,9 +8,10 @@ from cooking_planner.api.local_http import open_local
 
 
 class ApiClient:
-    def __init__(self, base_url: str = "http://127.0.0.1:8765", token: str = '') -> None:
+    def __init__(self, base_url: str, token: str, timeout: float = 10.0) -> None:
         self.base_url = base_url.rstrip("/")
         self.token = token
+        self.timeout = timeout
 
     def request(self, method: str, path: str, payload: object | None = None) -> object:
         body = None if payload is None else json.dumps(payload).encode("utf-8")
@@ -18,7 +19,7 @@ class ApiClient:
                           headers={"Content-Type": "application/json",
                                    "X-Cooking-Planner-Token": self.token})
         try:
-            with open_local(request, timeout=10) as response:
+            with open_local(request, timeout=self.timeout) as response:
                 data = response.read()
                 return json.loads(data) if data else None
         except HTTPError as error:

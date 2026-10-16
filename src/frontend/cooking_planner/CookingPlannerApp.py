@@ -21,7 +21,7 @@ from cooking_planner.ui.strings import t
 class CookingPlannerApp(AppShell, AdminActions, App):
     title = 'Cooking Planner'
 
-    def __init__(self, client, startup_error=None, config_path=None, ui_scale=1.0, **kwargs):
+    def __init__(self, client, startup_error=None, config_path=None, ui_scale=1.0, ui_locale='en', **kwargs):
         super().__init__(**kwargs)
         self.client = client
         self.startup_error = startup_error
@@ -29,8 +29,8 @@ class CookingPlannerApp(AppShell, AdminActions, App):
         self.ui_scale = ui_scale
         self.base_density = Metrics.density
         self.worker = ThreadPoolExecutor(max_workers=2)
-        self.locale = 'en'
-        self.locales = ('en',)
+        self.locale = ui_locale
+        self.locales = (ui_locale,)
         self.tab = 'overview'
         self.week_start = date.today() - timedelta(days=date.today().weekday())
         self.recipes = []
@@ -49,6 +49,7 @@ class CookingPlannerApp(AppShell, AdminActions, App):
         self._stopping = False
         self.selected_id = None
         self.shopping_draft = ShoppingDraft(self.config_path.parent / 'shopping.json' if self.config_path else None)
+        self.shopping_draft.locale = self.locale
         self.shopping_draft.price_writer = self.client.save_ingredient_price if hasattr(self.client, 'save_ingredient_price') else None
         self.shopping_draft.price_clearer = self.client.clear_ingredient_prices if hasattr(self.client, 'clear_ingredient_prices') else None
         self.shopping_draft.ingredient_writer = (lambda ingredient_id, name, locale:
@@ -183,6 +184,7 @@ class CookingPlannerApp(AppShell, AdminActions, App):
             return
         self.locale = locale
         self.shopping_draft.locale = locale
+        self._save_preference('locale', locale)
         self._rebuild_shell()
         self.refresh()
 
@@ -200,16 +202,20 @@ class CookingPlannerApp(AppShell, AdminActions, App):
         # setter treats Kivy's older 'auto' option as False.
         Window.fullscreen = not bool(Window.fullscreen)
         self.window_fullscreen = bool(Window.fullscreen)
+        self._save_preference('fullscreen', 'true' if self.window_fullscreen else 'false')
         self.window_button.text = t(self.locale, 'leave_fullscreen' if self.window_fullscreen else 'enter_fullscreen')
 
     def _save_scale(self):
+        self._save_preference('scale', str(self.ui_scale))
+
+    def _save_preference(self, key, value):
         if self.config_path is None:
             return
         config = ConfigParser()
         config.read(self.config_path)
         if not config.has_section('ui'):
             config.add_section('ui')
-        config.set('ui', 'scale', str(self.ui_scale))
+        config.set('ui', key, value)
         self.config_path.parent.mkdir(parents=True, exist_ok=True)
         temporary = self.config_path.with_suffix('.tmp')
         with temporary.open('w', encoding='utf-8') as file:

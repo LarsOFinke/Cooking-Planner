@@ -1,25 +1,13 @@
 import os
+import re
 import sys
-from configparser import ConfigParser
+from configparser import ConfigParser, Error as ConfigError
 from pathlib import Path
 
-from cooking_planner.paths import on_android
+from cooking_planner.paths import catalog_directory, on_android
 
 if not on_android():
     os.environ.setdefault("KIVY_DESKTOP_PATH_ID", "CookingPlanner")
-
-from kivy.config import Config  # noqa: E402
-
-if not on_android():
-    Config.set("graphics", "minimum_width", "900")
-    Config.set("graphics", "minimum_height", "650")
-    Config.set("graphics", "width", "1280")
-    Config.set("graphics", "height", "820")
-
-from cooking_planner.api.ApiClient import ApiClient  # noqa: E402
-from cooking_planner.api.BackendLauncher import BackendLauncher  # noqa: E402
-from cooking_planner.CookingPlannerApp import CookingPlannerApp  # noqa: E402
-
 
 def default_data_dir() -> Path:
     if on_android():
@@ -35,14 +23,59 @@ def prepare_data_directory(data_dir: Path, default_location: bool) -> None:
         data_dir.chmod(0o700)
 
 
+def bounded_number(config: ConfigParser, section: str, key: str, default: int | float,
+                   minimum: int | float, maximum: int | float) -> int | float:
+    try:
+        value = config.getint(section, key) if isinstance(default, int) else config.getfloat(section, key)
+    except (ConfigError, ValueError, TypeError):
+        return default
+    return value if minimum <= value <= maximum else default
+
+
+def preferred_locale(config: ConfigParser) -> str:
+    available = sorted(path.stem[-2:] for path in catalog_directory().glob('recipes_??.json')
+                       if re.fullmatch(r'recipes_[a-z]{2}\.json', path.name))
+    preferred = config.get('ui', 'locale', fallback='en').lower()
+    return preferred if preferred in available else ('en' if 'en' in available else (available[0] if available else 'en'))
+
+
+def fullscreen_enabled(config: ConfigParser) -> bool:
+    try:
+        return config.getboolean('ui', 'fullscreen', fallback=False)
+    except (ConfigError, ValueError):
+        return False
+
+
 def main() -> None:
     config = ConfigParser()
     configured_data_dir = os.getenv('COOKING_PLANNER_DATA_DIR')
     data_dir = Path(configured_data_dir) if configured_data_dir else default_data_dir()
     prepare_data_directory(data_dir, not configured_data_dir)
     config.read(data_dir / "client.cfg")
-    port = int(os.getenv("COOKING_PLANNER_PORT", config.get("backend", "port", fallback="8765")))
-    launcher = BackendLauncher(port, data_dir)
+    port = bounded_number(config, 'backend', 'port', 8765, 1, 65535)
+    if os.getenv('COOKING_PLANNER_PORT'):
+        port = int(os.environ['COOKING_PLANNER_PORT'])
+        if not 1 <= port <= 65535:
+            raise ValueError('COOKING_PLANNER_PORT must be between 1 and 65535')
+    request_timeout = bounded_number(config, 'backend', 'request_timeout', 10.0, 1.0, 120.0)
+    startup_timeout = bounded_number(config, 'backend', 'startup_timeout', 60.0, 5.0, 300.0)
+    log_level = os.getenv('COOKING_PLANNER_LOG_LEVEL', 'warning').lower()
+    if log_level not in ('error', 'warning', 'info', 'debug'):
+        raise ValueError('COOKING_PLANNER_LOG_LEVEL must be error, warning, info, or debug')
+    if not on_android():
+        from kivy.config import Config
+
+        Config.set('graphics', 'minimum_width', '900')
+        Config.set('graphics', 'minimum_height', '650')
+        Config.set('graphics', 'width', str(bounded_number(config, 'ui', 'window_width', 1280, 900, 3840)))
+        Config.set('graphics', 'height', str(bounded_number(config, 'ui', 'window_height', 820, 650, 2160)))
+        Config.set('graphics', 'fullscreen', '1' if fullscreen_enabled(config) else '0')
+
+    from cooking_planner.api.ApiClient import ApiClient
+    from cooking_planner.api.BackendLauncher import BackendLauncher
+    from cooking_planner.CookingPlannerApp import CookingPlannerApp
+
+    launcher = BackendLauncher(port, data_dir, startup_timeout=startup_timeout, log_level=log_level)
     try:
         startup_error = None
         try:
@@ -50,10 +83,11 @@ def main() -> None:
         except (OSError, RuntimeError) as error:
             startup_error = str(error)
             print(f'Local backend startup failed: {startup_error}', file=sys.stderr)
-        scale = config.getfloat("ui", "scale", fallback=1.0)
+        scale = bounded_number(config, 'ui', 'scale', 1.0, 1.0, 2.0)
         if scale not in (1.0, 1.25, 1.5, 1.75, 2.0):
             scale = 1.0
-        CookingPlannerApp(ApiClient(f"http://127.0.0.1:{port}", launcher.instance_token), startup_error=startup_error,
-                          config_path=data_dir / "client.cfg", ui_scale=scale).run()
+        CookingPlannerApp(ApiClient(f"http://127.0.0.1:{port}", launcher.instance_token, timeout=request_timeout),
+                          startup_error=startup_error, config_path=data_dir / "client.cfg", ui_scale=scale,
+                          ui_locale=preferred_locale(config)).run()
     finally:
         launcher.stop()

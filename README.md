@@ -35,6 +35,8 @@ On Android, these writable files live in app-private storage and the catalogs an
 
 The default user data directory is `~/.cooking-planner` on Linux and `%USERPROFILE%\.cooking-planner` on Windows. Set `COOKING_PLANNER_DATA_DIR` to move it. Set `COOKING_PLANNER_CATALOG_DIR` for a different source catalog directory. The backend port comes from `COOKING_PLANNER_PORT` or `<data directory>/client.cfg` (see [example](src/frontend/client.cfg.example)). Close the app before backing up all five user files.
 
+`client.cfg` also accepts `[ui] locale`, `window_width`, `window_height`, and `fullscreen` for startup, plus `[backend] request_timeout` and `startup_timeout` in seconds. Language, scale, and fullscreen controls save their choices there. Missing, invalid, or out-of-range values use built-in defaults; window size is limited to 900–3840 by 650–2160, request timeout to 1–120 seconds, and startup timeout to 5–300 seconds. Desktop window settings are ignored on Android. `COOKING_PLANNER_LOG_LEVEL` can set Uvicorn to `error`, `warning` (default), `info`, or `debug` for diagnosis; request access logs remain disabled. Environment values override matching `client.cfg` values where an override exists. The app does not automatically load a `.env` file.
+
 Each supplied recipe has a local image. Image maintenance is separate from the everyday Makefile: run `python3 scripts/images/import_local_recipe_images.py` to import replacements and `python3 scripts/images/verify_recipe_images.py` to check references and credits. See [recipe images](docs/RECIPE_IMAGES.md). All 586 existing image rights remain pending and must be reviewed before publication.
 
 ## Architecture and checks

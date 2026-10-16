@@ -1,5 +1,11 @@
 [backend]
 port = 8765
+request_timeout = 10
+startup_timeout = 60
 
 [ui]
 scale = 1.0
+locale = en
+window_width = 1280
+window_height = 820
+fullscreen = false

@@ -4,6 +4,7 @@ import sys
 import tempfile
 import time
 import unittest
+from configparser import ConfigParser
 from copy import deepcopy
 from datetime import date, timedelta
 from pathlib import Path
@@ -107,6 +108,16 @@ class UiFlowTest(unittest.TestCase):
         self.app.show_tab('shopping')
         self.app.show_tab('overview')
         self.assertEqual('overview', self.app.tab)
+
+    def test_language_choice_persists_and_shopping_uses_it(self):
+        self.app.locales = ('en', 'de')
+        with patch.object(self.app, '_rebuild_shell'), patch.object(self.app, 'refresh'):
+            self.app.change_locale('de')
+        self.assertEqual('de', self.app.locale)
+        self.assertEqual('de', self.app.shopping_draft.locale)
+        config = ConfigParser()
+        config.read(self.app.config_path)
+        self.assertEqual('de', config.get('ui', 'locale'))
 
     def test_hover_feedback_follows_pointer_and_active_state(self):
         holder = box()
@@ -323,9 +334,11 @@ class UiFlowTest(unittest.TestCase):
             self.app.toggle_window()
             self.assertIs(True, fake_window.fullscreen)
             self.assertEqual('Windowed', self.app.window_button.text)
+            self.assertIn('fullscreen = true', (Path(self.temp.name) / 'client.cfg').read_text())
             self.app.toggle_window()
             self.assertIs(False, fake_window.fullscreen)
             self.assertEqual('Fullscreen', self.app.window_button.text)
+            self.assertIn('fullscreen = false', (Path(self.temp.name) / 'client.cfg').read_text())
 
     def test_planning_dialog_day_controls_and_save_at_both_scales(self):
         for scale in (1.0, 2.0):
