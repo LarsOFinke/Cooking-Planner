@@ -1,4 +1,4 @@
-git+https://github.com/kivy/buildozer.git
-legacy-cgi
-setuptools
+git+https://github.com/kivy/buildozer.git@a153097b3c534bea8a17da2abf1369d67c8cbfcb
+legacy-cgi==2.6.4
+setuptools==84.0.0
 cython==0.29.34

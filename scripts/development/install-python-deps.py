@@ -16,10 +16,11 @@ def main() -> None:
     if not (3, 11) <= sys.version_info[:2] <= (3, 14):
         raise SystemExit("Python 3.11–3.14 is required.")
     try:
+        pip("install", "--upgrade", "pip==26.2.1")
         if sys.version_info[:2] == (3, 14):
             # Kivy's stable release has no CPython 3.14 wheel. Its nightly line does.
             pip("install", "--pre", "--no-deps", "--index-url", NIGHTLY_INDEX,
-                "Kivy>=3.0.0.dev0")
+                "Kivy==3.0.0.dev0")
             pip("install", "--pre", "--extra-index-url", NIGHTLY_INDEX,
                 "-r", "src/requirements.txt")
         else:

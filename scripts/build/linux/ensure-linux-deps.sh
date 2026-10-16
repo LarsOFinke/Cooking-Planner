@@ -8,7 +8,7 @@ supports_python() {
 if [[ -n "${PYTHON_BIN:-}" ]]; then
     supports_python "$PYTHON_BIN" || { echo 'PYTHON_BIN must be Python 3.11–3.14 with venv.' >&2; return 1; }
 else
-    for candidate in python3.14 python3.13 python3.12 python3.11 python3; do
+    for candidate in python3.13 python3.12 python3.11 python3.14 python3; do
         if command -v "$candidate" >/dev/null 2>&1 && supports_python "$candidate"; then
             PYTHON_BIN="$(command -v "$candidate")"
             break

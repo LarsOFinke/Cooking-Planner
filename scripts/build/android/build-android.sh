@@ -28,6 +28,7 @@ fi
 venv="$project_root/.build-venv-android"
 # python-for-android installs host tools with pip --user; the user site must be visible.
 "$python_bin" -m venv --system-site-packages "$venv"
+"$venv/bin/python" -m pip install --upgrade pip==26.2.1
 "$venv/bin/python" -m pip install -r scripts/build/android/requirements-host.txt
 export PATH="$venv/bin:$PATH"
 "$venv/bin/python" scripts/build/android/stage.py

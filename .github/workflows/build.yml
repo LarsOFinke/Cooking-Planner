@@ -14,15 +14,20 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.13'
       - name: Install display and Python dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y xvfb libgl1 libmtdev1t64
-          python -m pip install -r src/requirements.txt -r src/requirements-dev.txt
+          python -m pip install --upgrade pip==26.2.1
+          python -m pip install -r src/requirements.txt -r src/requirements-dev.txt -r src/requirements-build.txt
+      - name: Audit Python dependencies
+        run: python -m pip_audit --strict
       - name: Check code and tests
         run: xvfb-run -a make quality
         env:
@@ -35,8 +40,10 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.13'
       - name: Install build display
@@ -47,7 +54,7 @@ jobs:
         run: xvfb-run -a make compile-linux
         env:
           PYTHON_BIN: python
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: cooking-planner-linux-x86_64
           path: dist/linux/CookingPlanner-x86_64.AppImage
@@ -60,13 +67,15 @@ jobs:
     runs-on: windows-2022
     timeout-minutes: 90
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.13'
       - name: Install Inno Setup
         shell: pwsh
-        run: choco install innosetup --no-progress -y
+        run: choco install innosetup --version=6.7.1 --no-progress -y
       - name: Build Windows installer
         shell: pwsh
         timeout-minutes: 30
@@ -76,7 +85,7 @@ jobs:
           COOKING_PLANNER_BUILD_VERBOSE: '1'
           # PyInstaller scans Kivy imports on a runner without usable OpenGL.
           KIVY_WINDOW: mock
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: cooking-planner-windows-x86_64
           path: dist/windows/CookingPlanner-Setup.exe
@@ -89,11 +98,13 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.14'
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
           distribution: temurin
           java-version: '17'
@@ -109,7 +120,7 @@ jobs:
         run: make compile-android
         env:
           ANDROID_PYTHON: python
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: cooking-planner-android-arm64-v8a-debug
           path: dist/android/CookingPlanner-arm64-v8a-debug.apk

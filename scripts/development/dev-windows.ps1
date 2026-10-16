@@ -19,7 +19,7 @@ if ($env:DEV_PYTHON) {
     }
 }
 
-& $python -c 'import kivy, sqlalchemy, fastapi, uvicorn, sys; assert (sys.version_info[:2] < (3, 14) and kivy.__version__ == "2.3.1") or (sys.version_info[:2] == (3, 14) and kivy.__version__.startswith("3."))' *> $null
+& $python scripts/development/check-python-deps.py *> $null
 if ($LASTEXITCODE -ne 0) {
     if (-not $managedVenv) { throw 'DEV_PYTHON must point to Python with a compatible Kivy version installed.' }
     & $python scripts/development/install-python-deps.py --dev

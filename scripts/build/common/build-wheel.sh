@@ -15,6 +15,7 @@ if [[ ! -x "$build_python" ]]; then
 else
     echo '[1/4] Build environment reused'
 fi
+"$build_python" -m pip install --upgrade pip==26.2.1
 "${progress[@]}" --step 2 --total 4 --name 'Install build tools' \
     --log build/logs/wheel-tools.log -- "$build_python" -m pip install -r src/requirements-build.txt
 "${progress[@]}" --step 3 --total 4 --name 'Install app dependencies' \

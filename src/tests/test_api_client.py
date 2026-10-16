@@ -14,7 +14,7 @@ from cooking_planner.api.ApiClient import ApiClient
 
 class ApiClientTest(unittest.TestCase):
     def setUp(self):
-        self.client = ApiClient('http://127.0.0.1:8765/')
+        self.client = ApiClient('http://127.0.0.1:8765/', 'test-token')
 
     def test_locale_and_shopping_queries_are_encoded(self):
         with patch('cooking_planner.api.ApiClient.urlopen') as open_url:
@@ -22,6 +22,7 @@ class ApiClientTest(unittest.TestCase):
             self.assertEqual(['de', 'en'], self.client.locales())
             request = open_url.call_args.args[0]
             self.assertEqual('http://127.0.0.1:8765/api/recipes/locales', request.full_url)
+            self.assertEqual('test-token', request.get_header('X-cooking-planner-token'))
             open_url.return_value.__enter__.return_value.read.return_value = b'[]'
             self.assertEqual([], self.client.shopping('2026-10-10', '2026-10-16', 'de'))
             self.assertIn('locale=de', open_url.call_args.args[0].full_url)

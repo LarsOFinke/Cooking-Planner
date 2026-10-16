@@ -46,7 +46,7 @@ def main() -> None:
         scale = config.getfloat("ui", "scale", fallback=1.0)
         if scale not in (1.0, 1.25, 1.5, 1.75, 2.0):
             scale = 1.0
-        CookingPlannerApp(ApiClient(f"http://127.0.0.1:{port}"), startup_error=startup_error,
+        CookingPlannerApp(ApiClient(f"http://127.0.0.1:{port}", launcher.instance_token), startup_error=startup_error,
                           config_path=data_dir / "client.cfg", ui_scale=scale).run()
     finally:
         launcher.stop()

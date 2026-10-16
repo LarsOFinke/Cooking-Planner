@@ -21,13 +21,13 @@ function Find-Python {
         return @{ Command = $env:PYTHON_BIN; Arguments = @() }
     }
     if (Get-Command py.exe -ErrorAction SilentlyContinue) {
-        foreach ($version in @('3.14', '3.13', '3.12', '3.11')) {
+        foreach ($version in @('3.13', '3.12', '3.11', '3.14')) {
             if (Test-Python 'py.exe' @("-$version")) {
                 return @{ Command = 'py.exe'; Arguments = @("-$version") }
             }
         }
     }
-    foreach ($command in @('python3.14.exe', 'python3.13.exe', 'python3.12.exe', 'python3.11.exe', 'python.exe')) {
+    foreach ($command in @('python3.13.exe', 'python3.12.exe', 'python3.11.exe', 'python3.14.exe', 'python.exe')) {
         if ((Get-Command $command -ErrorAction SilentlyContinue) -and (Test-Python $command @())) {
             return @{ Command = $command; Arguments = @() }
         }

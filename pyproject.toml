@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=75", "wheel"]
+requires = ["setuptools==84.0.0", "wheel==0.48.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -9,10 +9,11 @@ description = "Kivy frontend and Python backend for Cooking Planner"
 requires-python = ">=3.11,<3.15"
 dependencies = [
     "Kivy==2.3.1; python_version < '3.14'",
-    "Kivy>=3.0.0.dev0; python_version >= '3.14'",
-    "SQLAlchemy>=2.0,<3",
-    "fastapi>=0.115,<0.116",
-    "uvicorn>=0.30,<1",
+    "Kivy==3.0.0.dev0; python_version >= '3.14'",
+    "SQLAlchemy==2.1.4",
+    "fastapi==0.143.2",
+    "starlette==1.8.0",
+    "uvicorn==0.54.0",
 ]
 
 [project.scripts]

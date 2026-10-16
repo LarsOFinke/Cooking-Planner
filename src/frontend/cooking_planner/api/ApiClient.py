@@ -6,13 +6,15 @@ from urllib.request import Request, urlopen
 
 
 class ApiClient:
-    def __init__(self, base_url: str = "http://127.0.0.1:8765") -> None:
+    def __init__(self, base_url: str = "http://127.0.0.1:8765", token: str = '') -> None:
         self.base_url = base_url.rstrip("/")
+        self.token = token
 
     def request(self, method: str, path: str, payload: object | None = None) -> object:
         body = None if payload is None else json.dumps(payload).encode("utf-8")
         request = Request(self.base_url + path, data=body, method=method,
-                          headers={"Content-Type": "application/json"})
+                          headers={"Content-Type": "application/json",
+                                   "X-Cooking-Planner-Token": self.token})
         try:
             with urlopen(request, timeout=10) as response:
                 data = response.read()

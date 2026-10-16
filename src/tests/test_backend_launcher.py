@@ -48,11 +48,12 @@ class BackendLauncherTest(unittest.TestCase):
 
     def test_health_requires_matching_instance_token(self):
         launcher = BackendLauncher(8765, Path('/tmp/cooking-planner-test-data'))
-        for token, expected in (('other-instance', False), (launcher.instance_token, True)):
-            response = io.BytesIO(json.dumps({'status': 'ok', 'instanceToken': token}).encode())
-            response.status = 200
-            with patch('cooking_planner.api.BackendLauncher.urlopen', return_value=response):
-                self.assertEqual(expected, launcher._healthy())
+        response = io.BytesIO(json.dumps({'status': 'ok'}).encode())
+        response.status = 200
+        with patch('cooking_planner.api.BackendLauncher.urlopen', return_value=response) as open_url:
+            self.assertTrue(launcher._healthy())
+            self.assertEqual(launcher.instance_token,
+                             open_url.call_args.args[0].get_header('X-cooking-planner-token'))
 
 
 if __name__ == '__main__':

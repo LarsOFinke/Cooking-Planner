@@ -6,7 +6,7 @@ from threading import Thread
 import time
 from pathlib import Path
 from urllib.error import URLError
-from urllib.request import urlopen
+from urllib.request import Request, urlopen
 from uuid import uuid4
 
 import uvicorn
@@ -25,10 +25,11 @@ class BackendLauncher:
 
     def _healthy(self) -> bool:
         try:
-            with urlopen(f'http://127.0.0.1:{self.port}/api/health', timeout=1) as response:
+            request = Request(f'http://127.0.0.1:{self.port}/api/health',
+                              headers={'X-Cooking-Planner-Token': self.instance_token})
+            with urlopen(request, timeout=1) as response:
                 health = json.load(response)
-                return (response.status == 200 and health.get('status') == 'ok' and
-                        health.get('instanceToken') == self.instance_token)
+                return response.status == 200 and health.get('status') == 'ok'
         except (OSError, URLError, ValueError, AttributeError):
             return False
 

@@ -13,7 +13,7 @@ else
     if [[ ! -x "$dev_python" ]]; then
         python_bin="${PYTHON_BIN:-}"
         if [[ -z "$python_bin" ]]; then
-            for candidate in python3 python3.14 python3.13 python3.12 python3.11; do
+            for candidate in python3.13 python3.12 python3.11 python3.14 python3; do
                 if command -v "$candidate" >/dev/null 2>&1; then
                     if "$candidate" -c 'import sys; assert (3, 11) <= sys.version_info[:2] <= (3, 14)' >/dev/null 2>&1; then
                         python_bin="$candidate"
@@ -30,7 +30,7 @@ else
     fi
 fi
 
-if ! "$dev_python" -c 'import kivy, sqlalchemy, fastapi, uvicorn, sys; assert (sys.version_info[:2] < (3, 14) and kivy.__version__ == "2.3.1") or (sys.version_info[:2] == (3, 14) and kivy.__version__.startswith("3."))' >/dev/null 2>&1; then
+if ! "$dev_python" scripts/development/check-python-deps.py; then
     if [[ "$managed_venv" == false ]]; then
         echo "DEV_PYTHON must point to Python with a compatible Kivy version installed." >&2
         exit 1

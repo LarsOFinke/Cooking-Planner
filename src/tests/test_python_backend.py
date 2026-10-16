@@ -39,8 +39,20 @@ class PythonBackendTest(unittest.TestCase):
 
     def _open(self):
         self.app = create_app(self.data, self.catalogs, 'test-token')
-        self.client = TestClient(self.app)
+        self.client = TestClient(self.app, headers={'X-Cooking-Planner-Token': 'test-token'})
         self.addCleanup(self.app.state.storage.close)
+
+    def test_local_api_rejects_requests_without_launch_token(self):
+        stranger = TestClient(self.app)
+        wrong_token = TestClient(self.app, headers={'X-Cooking-Planner-Token': 'other-process'})
+        recipe_id = self.rows['en']['id']
+        self.assertEqual(403, stranger.get('/api/health').status_code)
+        self.assertEqual(403, wrong_token.get('/api/recipes?locale=en').status_code)
+        self.assertEqual(403, stranger.get('/api/recipes?locale=en').status_code)
+        self.assertEqual(403, stranger.put('/api/plans', json={
+            'date': '2026-10-12', 'mealType': 'LUNCH', 'recipeId': recipe_id, 'servings': 2}).status_code)
+        self.assertFalse((self.data / 'plans.json').exists())
+        self.assertEqual({'status': 'ok'}, self.client.get('/api/health').json())
 
     def test_catalogs_locales_and_plan_shopping_survive_reopen(self):
         self.assertEqual(['de', 'en'], self.client.get('/api/recipes/locales').json())
