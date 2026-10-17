@@ -55,11 +55,14 @@ def label(text, size=16, color=WHITE, height=32, bold=False, **kwargs) -> Label:
 
 
 def button(text, callback=None, kind="secondary", height=42, **kwargs) -> Button:
-    background = GOLD if kind == "primary" else (RED if kind == "danger" else PANEL_LIGHT)
-    foreground = BG if kind == "primary" else WHITE
+    background = GOLD if kind == "primary" else (RED if kind == "danger" else
+                 PANEL if kind in ("outline", "danger_outline") else PANEL_LIGHT)
+    foreground = BG if kind == "primary" else (GOLD if kind == "outline" else
+                 RED if kind == "danger_outline" else WHITE)
+    outline = GOLD if kind == "outline" else RED if kind == "danger_outline" else None
     widget = HoverButton(text=text, size_hint_y=None, height=dp(height), background_normal="",
                          background_down="", background_color=background, color=foreground,
-                         font_size=dp(14), **kwargs)
+                         outline_color=outline, font_size=dp(14), **kwargs)
     if callback is not None:
         widget.bind(on_release=lambda *_: callback())
     return widget

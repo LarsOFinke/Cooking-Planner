@@ -3,6 +3,7 @@ from datetime import timedelta
 
 from kivy.clock import Clock
 from kivy.metrics import dp
+from kivy.uix.gridlayout import GridLayout
 
 from cooking_planner.ui.dialogs import confirm_popup, styled_popup
 from cooking_planner.shopping.dialogs import open_add_item_dialog
@@ -32,25 +33,20 @@ class ShoppingPanel(ShoppingRendering):
         header.add_widget(label(t(locale, 'shopping'), 19, GOLD, 42, True))
         header.add_widget(button(t(locale, 'copy'), self.copy, size_hint_x=None, width=dp(120)))
         self.root.add_widget(header)
-        actions = box(spacing=5, size_hint_y=None, height=dp(45))
+        actions = GridLayout(cols=3, spacing=dp(5), size_hint_y=None,
+                             row_default_height=dp(40), row_force_default=True)
         self.actions = actions
-        primary = box(False, spacing=5, size_hint_y=None, height=dp(40))
-        primary.add_widget(button(t(locale, 'add_item'), self.add_item, 'primary', height=40))
-        primary.add_widget(button(t(locale, 'shopping_add_day'), self.choose_day, height=40))
-        primary.add_widget(button(t(locale, 'clear_all'), self.confirm_clear, 'danger', height=40))
-        primary.add_widget(button(t(locale, 'shopping_from_plan'), self.choose_meals, height=40))
-        primary.add_widget(button(t(locale, 'shopping_choose_items'), self.choose_items, height=40))
-        self.more_button = button(t(locale, 'more_actions'), self.toggle_actions, height=40)
-        primary.add_widget(self.more_button)
-        primary_scroll = scroll_view(do_scroll_y=False, size_hint_y=None, height=dp(40))
-        primary.size_hint_x = None
-        primary_scroll.bind(width=lambda _, width: setattr(primary, 'width', max(width, dp(940))))
-        primary_scroll.add_widget(primary)
-        actions.add_widget(primary_scroll)
-        secondary = box(False, spacing=5, size_hint_y=None, height=0, opacity=0, disabled=True)
-        self.more_row = secondary
-        secondary.add_widget(button(t(locale, 'reset_checks'), self.reset, height=40))
-        actions.add_widget(secondary)
+        actions.add_widget(button(t(locale, 'add_item'), self.add_item, 'primary', height=40))
+        actions.add_widget(button(t(locale, 'shopping_from_plan'), self.choose_meals, height=40))
+        actions.add_widget(button(t(locale, 'shopping_choose_items'), self.choose_items, height=40))
+        actions.add_widget(button(t(locale, 'shopping_add_day'), self.choose_day, height=40))
+        actions.add_widget(button(t(locale, 'reset_checks'), self.reset, height=40))
+        actions.add_widget(button(t(locale, 'clear_all'), self.confirm_clear, 'danger', height=40))
+        def layout_actions(_, width):
+            actions.cols = 3 if width >= dp(600) else 2
+            actions.height = dp(85 if actions.cols == 3 else 130)
+        actions.bind(width=layout_actions)
+        layout_actions(actions, actions.width)
         self.root.add_widget(actions)
         self.notice = label(t(locale, 'shopping_selection_help'), 13, MUTED, 30)
         self.notice.shorten = True
@@ -74,8 +70,16 @@ class ShoppingPanel(ShoppingRendering):
             self._render_summary()
         summary.bind(width=layout_summary)
         self.root.add_widget(summary)
+        heading_scroll = scroll_view(do_scroll_x=False, do_scroll_y=False,
+                                     size_hint_y=None, height=dp(25), bar_width=0)
+        self.heading_scroll = heading_scroll
+        heading = self._column_header()
+        heading_scroll.bind(width=lambda _, width: setattr(heading, 'width', max(width, dp(530))))
+        heading_scroll.add_widget(heading)
+        self.root.add_widget(heading_scroll)
         scroll = scroll_view(do_scroll_x=True)
         self.scroll = scroll
+        scroll.bind(scroll_x=lambda _, position: setattr(heading_scroll, 'scroll_x', position))
         self.compact_list = False
         scroll.bind(height=self._resize_items)
         self.rows = box(spacing=5, size_hint_x=None, size_hint_y=None)
@@ -87,14 +91,6 @@ class ShoppingPanel(ShoppingRendering):
 
     def set_status(self, message):
         self.notice.text = str(message)
-
-    def toggle_actions(self):
-        expanded = self.more_row.height == 0
-        self.more_row.height = dp(40) if expanded else 0
-        self.more_row.opacity = int(expanded)
-        self.more_row.disabled = not expanded
-        self.actions.height = dp(90 if expanded else 45)
-        self.more_button.text = t(self.locale, 'less_actions' if expanded else 'more_actions')
 
     def _resize_items(self, _, height):
         compact = height < dp(150)
@@ -134,7 +130,7 @@ class ShoppingPanel(ShoppingRendering):
         dialog = styled_popup(t(self.locale, 'shopping_add_day'), body, 0.62, 0.78)
 
         def select(day):
-            count = self.draft.add_day(self.start, self.plans, day.isoformat())
+            count = self.draft.add_day(self.start, self.plans, day.isoformat(), self.recipes)
             if count:
                 self._changed()
                 self.notice.text = t(self.locale, 'shopping_day_added').format(day=day_label(day, self.locale))
@@ -167,21 +163,35 @@ class ShoppingPanel(ShoppingRendering):
                 recipe = by_id.get(plan['recipeId'])
                 count = len(recipe['ingredients']) if recipe else 0
                 meal = MEALS.get(self.locale, MEALS['en']).get(plan.get('mealType'), '')
-                title = (f"{'✓' if str(plan['id']) in selected else '○'}  {plan['date']} · {meal} · "
+                is_selected = str(plan['id']) in selected
+                action = t(self.locale, 'shopping_refresh_meal' if is_selected else 'shopping_add_meal')
+                title = (f"{action} · {plan['date']} · {meal} · "
                          f"{plan['recipeTitle']} · {plan['servings']} {t(self.locale, 'servings').lower()} "
                          f"· {count} {t(self.locale, 'ingredients_count').lower()}")
-                rows.add_widget(self._choice_button(title, lambda plan_id=plan['id']: choose(plan_id)))
+                row = box(False, spacing=5, size_hint_y=None, height=dp(46))
+                row.add_widget(self._choice_button(title, lambda plan_id=plan['id']: choose(plan_id)))
+                if is_selected:
+                    row.add_widget(button(t(self.locale, 'remove'),
+                                          lambda plan_id=plan['id']: remove(plan_id),
+                                          'danger_outline', height=46, size_hint_x=None, width=dp(94)))
+                rows.add_widget(row)
             if not self.plans:
                 rows.add_widget(label(t(self.locale, 'empty_week'), 16, MUTED, 70))
 
         def choose(plan_id):
+            self.draft.add_plan(self.start, plan_id, self.plans, self.recipes)
+            self._changed()
+            render_choices()
+            self.notice.text = t(self.locale, 'shopping_selection_updated')
+
+        def remove(plan_id):
             self.draft.toggle_plan(self.start, plan_id)
             self._changed()
             render_choices()
             self.notice.text = t(self.locale, 'shopping_selection_updated')
 
         def select_all(selected):
-            self.draft.select_all_plans(self.start, self.plans, selected)
+            self.draft.select_all_plans(self.start, self.plans, selected, self.recipes)
             self._changed()
             render_choices()
             self.notice.text = t(self.locale, 'shopping_selection_updated')
@@ -267,6 +277,7 @@ class ShoppingPanel(ShoppingRendering):
         try:
             self.draft.clear(self.start, self.plans)
         except RuntimeError as error:
+            self._changed()
             self.set_status(str(error))
             self.on_status(str(error))
             return

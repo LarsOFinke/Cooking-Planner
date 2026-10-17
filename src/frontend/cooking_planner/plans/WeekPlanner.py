@@ -29,17 +29,19 @@ class WeekPlanner:
             heading.add_widget(label(t(locale, 'week_price_estimate').format(
                 amount=money, priced=priced, total=possible), 11, GOLD, 18))
         header.add_widget(heading)
-        controls = box(False, spacing=5, size_hint_x=None, width=dp(160))
-        controls.add_widget(button('‹', lambda: on_shift(-7), size_hint_x=None, width=dp(34)))
-        controls.add_widget(button(t(locale, 'today'), on_today))
-        controls.add_widget(button('›', lambda: on_shift(7), size_hint_x=None, width=dp(34)))
+        controls = box(False, spacing=5, size_hint_x=None, width=dp(180))
+        controls.add_widget(button('‹', lambda: on_shift(-7), 'outline',
+                                   size_hint_x=None, width=dp(40)))
+        controls.add_widget(button(t(locale, 'today'), on_today, 'primary'))
+        controls.add_widget(button('›', lambda: on_shift(7), 'outline',
+                                   size_hint_x=None, width=dp(40)))
         header.add_widget(controls)
         def layout_header(_, width):
             compact = width < dp(460)
             header.orientation = 'vertical' if compact else 'horizontal'
             header.height = dp(150 if compact else 68)
             controls.size_hint_x = 1 if compact else None
-            controls.width = width if compact else dp(160)
+            controls.width = width if compact else dp(180)
         header.bind(width=layout_header)
         layout_header(header, header.width)
         self.root.add_widget(header)
@@ -55,8 +57,8 @@ class WeekPlanner:
             day = week_start + timedelta(days=offset)
             day_key = day.isoformat()
             day_plans = [plan for plan in plans if plan['date'] == day_key]
-            card = box(padding=7, spacing=4, color=PANEL_LIGHT, hover=True,
-                       size_hint_y=None, height=dp(118))
+            card = box(padding=9, spacing=7, color=PANEL_LIGHT, hover=True,
+                       size_hint_y=None, height=dp(142))
             day_header = box(False, spacing=9, size_hint_y=None, height=dp(40))
             day_title = WEEKDAYS.get(locale, WEEKDAYS['en'])[day.weekday()]
             if day == date.today():
@@ -81,10 +83,10 @@ class WeekPlanner:
                 summary.add_widget(coverage)
                 day_header.add_widget(summary)
             card.add_widget(day_header)
-            meal_row = box(False, spacing=7, size_hint_y=None, height=dp(57))
+            meal_row = box(False, spacing=7, size_hint_y=None, height=dp(68))
             for meal_code, meal_name in meals.items():
                 plan = by_slot.get((day_key, meal_code))
-                slot = box(spacing=3)
+                slot = box(padding=5, spacing=3, color=PANEL)
                 slot.add_widget(label(meal_name, 12, MUTED, 16))
                 row = box(False, spacing=4, size_hint_y=None, height=dp(38))
                 if plan:
@@ -97,12 +99,12 @@ class WeekPlanner:
                     entry.bind(size=lambda widget, _: setattr(widget, 'text_size',
                                                               (widget.width - dp(12), widget.height)))
                     row.add_widget(entry)
-                    row.add_widget(button('×', lambda current_plan=plan: on_remove(current_plan), 'danger', 38,
-                                          size_hint_x=None, width=dp(32)))
+                    row.add_widget(button('×', lambda current_plan=plan: on_remove(current_plan),
+                                          'danger_outline', 38, size_hint_x=None, width=dp(36)))
                 else:
                     row.add_widget(button('+  ' + t(locale, 'pick'),
                                           lambda current_day=day, current_meal=meal_code: on_pick(current_day, current_meal),
-                                          height=38))
+                                          'outline', height=38))
                 slot.add_widget(row)
                 meal_row.add_widget(slot)
             card.add_widget(meal_row)

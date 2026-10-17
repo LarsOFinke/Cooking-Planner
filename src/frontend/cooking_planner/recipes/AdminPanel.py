@@ -28,13 +28,15 @@ class AdminPanel(AdminFormPages):
         self._list_event = None
 
     def __init__(self, records, locales, locale, on_select, on_save, on_delete, on_reload, on_status,
-                 options=None, status_message=None, ingredient_catalog=None, on_ingredient_admin=None):
+                 options=None, status_message=None, ingredient_catalog=None, on_ingredient_admin=None,
+                 user_data_dir=None):
         self.records, self.locales, self.locale = records, tuple(locales), locale
         self.on_select, self.on_save = on_select, on_save
         self.on_delete, self.on_reload, self.on_status = on_delete, on_reload, on_status
         self.options = options or {}
         self.ingredient_catalog = [row for row in (ingredient_catalog or []) if row.get('translations')]
         self.ingredient_catalog_by_id = {row['id']: row for row in self.ingredient_catalog}
+        self.user_data_dir = user_data_dir
         self._list_event = None
         self._list_search = Clock.create_trigger(lambda *_: self._render_list(), 0.18)
         self.status_message = status_message or t(locale, 'ready')
@@ -74,8 +76,10 @@ class AdminPanel(AdminFormPages):
         self.toolbar = box(False, spacing=5, size_hint_y=None, height=dp(38))
         right.add_widget(self.toolbar)
         editor_scroll = scroll_view(do_scroll_x=False)
+        self.editor_scroll = editor_scroll
         self.form = box(padding=8, color=PANEL, size_hint_y=None)
-        self.form.bind(minimum_height=self.form.setter('height'))
+        self.form.bind(minimum_height=lambda *_: self._size_form())
+        editor_scroll.bind(height=lambda *_: self._size_form())
         editor_scroll.add_widget(self.form)
         right.add_widget(editor_scroll)
         self.actions = box(False, spacing=6, size_hint_y=None, height=dp(40))
@@ -83,6 +87,9 @@ class AdminPanel(AdminFormPages):
         columns.add_widget(right)
         self._render_list()
         self._render_form()
+
+    def _size_form(self):
+        self.form.height = max(self.form.minimum_height, self.editor_scroll.height)
 
     def _render_list(self):
         self._list_search.cancel()
@@ -290,7 +297,7 @@ class AdminPanel(AdminFormPages):
                 selected = ingredient in step['selected']
                 control = button(f"{'✓' if selected else '○'}  {name} · {amount} {unit}",
                                  lambda row=ingredient, item=step: self._toggle_step_ingredient(item, row),
-                                 height=36)
+                                 'secondary' if selected else 'outline', height=40)
                 if selected:
                     control.set_base_color((0.09, 0.36, 0.25, 1))
                 step['choices'].add_widget(control)
@@ -298,7 +305,8 @@ class AdminPanel(AdminFormPages):
     def save(self):
         if self.creating:
             name = self.locale_inputs[self.source.text.lower()]['name'].text.strip()
-            base = self._slug(name)
+            country = self._slug(self._value(self.shared_inputs['country_code']))
+            base = '-'.join(part for part in (country, self._slug(name)) if part) if name else ''
             existing = {record['id'] for record in self.records}
             candidate = base
             suffix = 2
@@ -306,6 +314,7 @@ class AdminPanel(AdminFormPages):
                 candidate = f'{base}-{suffix}'
                 suffix += 1
             self.id_input.text = candidate
+        image_references, image_uploads = self.image_editor.values(self.id_input.text)
         snapshot = RecipeFormSnapshot(
             recipe_id=self.id_input.text, source=self.source.text, locale=self.locale,
             locales=self.locales,
@@ -313,7 +322,7 @@ class AdminPanel(AdminFormPages):
             shared_choices={key: self._value(self.shared_inputs[key]) for key, _ in CHOICES},
             times={key: self.shared_inputs[key].text for key, _ in TIMES},
             diets=[code for code, widget in self.diet_buttons.items() if widget.selected],
-            images=self.shared_inputs['images'].text,
+            images='\n'.join(image_references),
             ingredients=[{'original': entry['original'],
                           'ingredient_id': entry['shared']['ingredient_id'].text,
                           'amount': entry['shared']['amount'].text,
@@ -332,4 +341,4 @@ class AdminPanel(AdminFormPages):
         except FormError as error:
             self.on_status(str(error))
             return
-        self.on_save(recipe_id, source, translations, self.creating)
+        self.on_save(recipe_id, source, translations, self.creating, image_uploads)

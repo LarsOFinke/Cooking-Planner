@@ -1,4 +1,5 @@
 import json
+import base64
 import os
 import sqlite3
 import sys
@@ -172,6 +173,50 @@ class PythonBackendTest(unittest.TestCase):
         edits = json.loads((self.data / 'recipe-edits.json').read_text())
         self.assertEqual(self.rows['en']['ingredients'][0]['name'],
                          edits['upserts']['catalog-only-dish']['en']['ingredients'][0]['name'])
+
+    def test_recipe_image_upload_uses_user_data_and_rejects_duplicates(self):
+        source = deepcopy(self.rows['en'])
+        source['id'] = 'country-dish'
+        source['name'] = 'Country dish'
+        source['image_folder'] = 'recipe_images/country-dish'
+        source['images'] = ['recipe_images/country-dish/image_01-aaaaaaaaaaaa.png']
+        photo = base64.b64decode(
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScL/nwAAAABJRU5ErkJggg==')
+        endpoint = '/api/admin/recipes/country-dish'
+        payload = {'sourceLocale': 'en', 'translations': {'en': source, 'de': None},
+                   'imageUploads': [{'reference': source['images'][0],
+                                     'data': base64.b64encode(photo).decode('ascii')}]}
+        response = self.client.post(endpoint, json=payload)
+        self.assertEqual(201, response.status_code, response.text)
+        saved = self.data / 'recipe_images/country-dish/image_01-aaaaaaaaaaaa.png'
+        self.assertEqual(photo, saved.read_bytes())
+        self.assertFalse((self.catalogs / 'recipe_images/country-dish').exists())
+        duplicate = 'recipe_images/country-dish/image_02-bbbbbbbbbbbb.png'
+        source['images'].append(duplicate)
+        payload['imageUploads'] = [{'reference': duplicate, 'data': base64.b64encode(photo).decode('ascii')}]
+        response = self.client.put(endpoint, json=payload)
+        self.assertEqual(400, response.status_code, response.text)
+        self.assertFalse((self.data / 'recipe_images/country-dish/image_02-bbbbbbbbbbbb.png').exists())
+        self.assertEqual([source['images'][0]], self.client.get(endpoint).json()['translations']['en']['images'])
+        source['images'] = []
+        payload['imageUploads'] = []
+        self.assertEqual(200, self.client.put(endpoint, json=payload).status_code)
+        self.assertFalse(saved.exists())
+
+    def test_recipe_duplicate_uses_name_and_origin(self):
+        source = deepcopy(self.rows['en'])
+        source['id'] = 'same-dish-other-origin'
+        source['image_folder'] = 'recipe_images/same-dish-other-origin'
+        source['images'] = []
+        endpoint = '/api/admin/recipes/same-dish-other-origin'
+        payload = {'sourceLocale': 'en', 'translations': {'en': source, 'de': None}}
+        duplicate = self.client.post(endpoint, json=payload)
+        self.assertEqual(409, duplicate.status_code, duplicate.text)
+        self.assertFalse((self.data / 'recipe-edits.json').exists())
+        source['country_code'] = 'zz'
+        source['country'] = 'Another country'
+        distinct = self.client.post(endpoint, json=payload)
+        self.assertEqual(201, distinct.status_code, distinct.text)
 
     def test_legacy_price_import_does_not_modify_shopping_file(self):
         key = self.rows['en']['ingredients'][0]['ingredient_id'] + ':g'

@@ -20,11 +20,13 @@ def router(recipes):
 
     @api.post('/api/admin/recipes/{recipe_id}', status_code=201)
     def create_recipe(recipe_id: str, body: dict):
-        return recipes.save(recipe_id, body.get('sourceLocale'), body.get('translations'), True)
+        return recipes.save(recipe_id, body.get('sourceLocale'), body.get('translations'), True,
+                            body.get('imageUploads'))
 
     @api.put('/api/admin/recipes/{recipe_id}')
     def update_recipe(recipe_id: str, body: dict):
-        return recipes.save(recipe_id, body.get('sourceLocale'), body.get('translations'), False)
+        return recipes.save(recipe_id, body.get('sourceLocale'), body.get('translations'), False,
+                            body.get('imageUploads'))
 
     @api.delete('/api/admin/recipes/{recipe_id}', status_code=204)
     def delete_recipe(recipe_id: str):

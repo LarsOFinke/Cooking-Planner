@@ -20,7 +20,9 @@ try:
     if not HAS_DISPLAY:
         raise ImportError('No display')
     from kivy.core.window import Window
+    from kivy.base import EventLoop
     from kivy.clock import Clock
+    from kivy.input.motionevent import MotionEvent
     from kivy.metrics import dp
     from kivy.uix.button import Button
     from kivy.uix.textinput import TextInput
@@ -35,12 +37,25 @@ try:
     from cooking_planner.recipes.IngredientAdminPanel import IngredientAdminPanel
     from cooking_planner.shopping.ShoppingDraft import ShoppingDraft, item_key
     from cooking_planner.shopping.ShoppingPanel import ShoppingPanel
-    from cooking_planner.ui.theme import (GOLD, PANEL_LIGHT, HoverSurface, _mouse_moved,
+    from cooking_planner.ui.theme import (BG, GOLD, GREEN, PANEL_LIGHT, HoverSurface, _mouse_moved,
                                           box, button, tab_button, set_tab_active)
 except ImportError:
     HAS_KIVY = False
 else:
     HAS_KIVY = True
+
+
+if HAS_KIVY:
+    class PointerTouch(MotionEvent):
+        def __init__(self, x, y):
+            super().__init__('shopping-test', 1,
+                             {'x': x / (Window.width - 1), 'y': y / (Window.height - 1)},
+                             is_touch=True, type_id='touch')
+            self.profile = ['pos']
+
+        def depack(self, args):
+            self.sx, self.sy = args['x'], args['y']
+            super().depack(args)
 
 
 def sample_recipe():
@@ -333,7 +348,7 @@ class UiFlowTest(unittest.TestCase):
         self.assertEqual('1.80', self.app.admin_panel.price_input.text)
         self.assertEqual('1.80', str(self.app.shopping_draft.reference_price_for(key)[0]))
 
-    def test_saved_plan_opens_its_week_and_drives_shopping(self):
+    def test_saved_plan_opens_its_week_without_auto_filling_shopping(self):
         day = self.app.week_start + timedelta(days=8)
         self.app.show_tab('explore')
         with patch.object(self.app, '_submit', side_effect=lambda work, success: success({'id': 7})), \
@@ -347,12 +362,35 @@ class UiFlowTest(unittest.TestCase):
         self.app._loaded((['en'], [self.recipe], {'countryCount': 1}, [plan]), self.app.generation)
         shopping = self.app.shopping_draft.items(self.app.week_start.isoformat(),
                                                  self.app.plans, self.app.recipes)
+        self.assertEqual([], shopping)
+        self.app.shopping_draft.add_all(self.app.week_start.isoformat(), self.app.plans)
+        shopping = self.app.shopping_draft.items(self.app.week_start.isoformat(),
+                                                 self.app.plans, self.app.recipes)
         self.assertEqual({str(item['ingredientId']) for item in self.recipe['ingredients']},
                          {item['ingredientId'] for item in shopping})
         first = self.recipe['ingredients'][0]
         self.assertEqual(first['amount'] * 3,
                          next(item['amount'] for item in shopping
                               if item['ingredientId'] == first['ingredientId']))
+
+    def test_shopping_toolbar_receives_real_pointer_events(self):
+        callbacks = {name: Mock() for name in
+                     ('add_item', 'choose_meals', 'choose_items', 'choose_day', 'reset', 'confirm_clear')}
+        with patch.multiple(ShoppingPanel, **callbacks):
+            panel = ShoppingPanel([], [], ShoppingDraft(), 'en', self.app.week_start, lambda _: None)
+            Window.add_widget(panel.root)
+            try:
+                panel.root.size = Window.size
+                panel.root.do_layout()
+                panel.actions.do_layout()
+                for control, callback in zip(reversed(panel.actions.children), callbacks.values()):
+                    x, y = control.to_window(*control.center)
+                    touch = PointerTouch(x, y)
+                    EventLoop.post_dispatch_input('begin', touch)
+                    EventLoop.post_dispatch_input('end', touch)
+                    callback.assert_called_once()
+            finally:
+                Window.remove_widget(panel.root)
 
     def test_shopping_checks_and_scale_persistence(self):
         draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
@@ -369,13 +407,11 @@ class UiFlowTest(unittest.TestCase):
             panel.copy()
         copy.assert_called_once_with('100 g Rice')
         self.assertFalse(draft.week(start)['checked'])
-        self.assertEqual(dp(45), panel.actions.height)
-        panel.toggle_actions()
-        self.assertEqual(dp(90), panel.actions.height)
-        self.assertFalse(panel.more_row.disabled)
-        panel.toggle_actions()
-        self.assertEqual(dp(45), panel.actions.height)
-        self.assertTrue(panel.more_row.disabled)
+        self.assertEqual(6, len(panel.actions.children))
+        panel.actions.width = dp(700)
+        self.assertEqual((3, dp(85)), (panel.actions.cols, panel.actions.height))
+        panel.actions.width = dp(400)
+        self.assertEqual((2, dp(130)), (panel.actions.cols, panel.actions.height))
         self.app.change_scale(2.0)
         self.assertIn('scale = 2.0', (Path(self.temp.name) / 'client.cfg').read_text())
         fake_window = SimpleNamespace(fullscreen=False)
@@ -468,7 +504,15 @@ class UiFlowTest(unittest.TestCase):
         draft.add_custom(self.app.week_start.isoformat(), 'Rice', '100', 'g')
         panel = ShoppingPanel([], [], draft, 'en', self.app.week_start, lambda _: None)
         panel.scroll.width = dp(400)
+        panel.heading_scroll.width = dp(400)
         self.assertGreaterEqual(panel.rows.width, dp(530))
+        self.assertGreaterEqual(panel.heading_scroll.children[0].width, dp(530))
+        self.assertIs(panel.heading_scroll.parent, panel.root)
+        self.assertIs(panel.scroll.parent, panel.root)
+        panel.scroll.scroll_x = 1
+        self.assertEqual(1, panel.heading_scroll.scroll_x)
+        self.assertTrue(any(getattr(widget, 'text', '') == 'Est. price'
+                            for widget in panel.heading_scroll.walk()))
         summary = panel.price_summary.parent
         summary.width = dp(400)
         self.assertEqual(0, panel.meal_summary.width)
@@ -542,6 +586,9 @@ class UiFlowTest(unittest.TestCase):
         rice = panel.rows.children[0]
         self.assertEqual(['Buy', 'Rice', '100', 'g', '—', '×'],
                          [widget.text for widget in reversed(rice.children) if hasattr(widget, 'text')])
+        self.assertEqual(GOLD, rice.children[-1]._base_background)
+        self.assertEqual(BG, tuple(rice.children[-1].color))
+        self.assertTrue(rice.children[-1].bold)
         self.assertEqual('left', rice.children[-2].halign)
         self.assertIsNotNone(rice.children[-2].text_size)
         rice.width = dp(1000)
@@ -553,6 +600,7 @@ class UiFlowTest(unittest.TestCase):
         completed = panel.rows.children[0]
         self.assertEqual(['Bought', 'Rice', '100', 'g', '—', '×'],
                          [widget.text for widget in reversed(completed.children) if hasattr(widget, 'text')])
+        self.assertEqual(GREEN, completed.children[-1]._base_background)
         self.assertEqual('Completed', panel.rows.children[1].children[-1].text)
         self.assertEqual('1 / 2 items to buy', panel.summary.text)
         panel.scroll.height = dp(120)
@@ -585,6 +633,9 @@ class UiFlowTest(unittest.TestCase):
         plan = {'id': 9, 'date': start, 'recipeId': self.recipe['id'],
                 'recipeTitle': self.recipe['name'], 'servings': 2}
         draft.clear(start, [plan])
+        ingredient_key = item_key(self.recipe['ingredients'][0])
+        for ingredient in self.recipe['ingredients']:
+            draft.set_item_included(start, item_key(ingredient), False)
         panel = ShoppingPanel([plan], [self.recipe], draft, 'en', self.app.week_start,
                               lambda _: None)
         self.assertEqual('0 meals selected', panel.meal_summary.text)
@@ -593,16 +644,26 @@ class UiFlowTest(unittest.TestCase):
         with patch('cooking_planner.shopping.ShoppingPanel.styled_popup', return_value=dialog) as popup:
             panel.choose_meals()
         body = popup.call_args.args[1]
-        meal = body.children[1].children[0].children[0]
+        choices = body.children[1].children[0]
+        meal = choices.children[0].children[-1]
         release(meal)
         self.assertEqual([], dismissed)
         self.assertEqual({'9'}, draft.selected_plan_ids(start, [plan]))
         self.assertEqual('1 meal selected', panel.meal_summary.text)
-        self.assertTrue(panel.items)
+        self.assertEqual(len(self.recipe['ingredients']), len(panel.items))
+        self.assertEqual([], draft.week(start)['excluded'])
+        draft.set_item_included(start, ingredient_key, False)
+        release(choices.children[0].children[-1])
+        self.assertEqual({'9'}, draft.selected_plan_ids(start, [plan]))
+        self.assertNotIn(ingredient_key, draft.week(start)['excluded'])
+        release(choices.children[0].children[0])
+        self.assertFalse(panel.items)
         release(body.children[0].children[1])
         self.assertFalse(panel.items)
+        draft.set_item_included(start, ingredient_key, False)
         release(body.children[0].children[2])
         self.assertTrue(panel.items)
+        self.assertNotIn(ingredient_key, draft.week(start)['excluded'])
         done = body.children[0].children[0]
         release(done)
         self.assertEqual([True], dismissed)
@@ -613,6 +674,8 @@ class UiFlowTest(unittest.TestCase):
         plan = {'id': 9, 'date': start, 'recipeId': self.recipe['id'],
                 'recipeTitle': self.recipe['name'], 'servings': 2}
         draft.clear(start, [plan])
+        for ingredient in self.recipe['ingredients']:
+            draft.set_item_included(start, item_key(ingredient), False)
         panel = ShoppingPanel([plan], [self.recipe], draft, 'en', self.app.week_start, lambda _: None)
         dialog = SimpleNamespace(open=lambda: None, dismiss=lambda: None)
         with patch('cooking_planner.shopping.ShoppingPanel.styled_popup', return_value=dialog) as popup:
@@ -620,8 +683,26 @@ class UiFlowTest(unittest.TestCase):
         body = popup.call_args.args[1]
         release(body.children[-2])
         self.assertEqual({'9'}, draft.selected_plan_ids(start, [plan]))
-        self.assertTrue(panel.items)
+        self.assertEqual(len(self.recipe['ingredients']), len(panel.items))
+        self.assertEqual([], draft.week(start)['excluded'])
         self.assertEqual('1 meal selected', panel.meal_summary.text)
+
+    def test_shopping_clear_button_keeps_later_week_plans_out(self):
+        start = self.app.week_start.isoformat()
+        plan = {'id': 9, 'date': start, 'recipeId': self.recipe['id'],
+                'recipeTitle': self.recipe['name'], 'servings': 2}
+        draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
+        draft.add_all(start, [plan])
+        panel = ShoppingPanel([plan], [self.recipe], draft, 'en', self.app.week_start,
+                              lambda _: None)
+        self.assertTrue(panel.items)
+        with patch('cooking_planner.shopping.ShoppingPanel.confirm_popup') as confirm:
+            panel.confirm_clear()
+        confirm.call_args.args[2]()
+        self.assertEqual([], panel.items)
+        later = {'id': 10, 'date': start, 'recipeId': self.recipe['id'],
+                 'recipeTitle': self.recipe['name'], 'servings': 1}
+        self.assertEqual([], ShoppingDraft(draft.path).items(start, [plan, later], [self.recipe]))
 
     def test_week_refresh_reuses_catalog_without_refetching_all_recipes(self):
         calls = []
@@ -729,6 +810,7 @@ class UiFlowTest(unittest.TestCase):
             {'ingredientId': 'rice', 'name': 'Rice', 'amount': 100, 'unit': 'g'}]}
         plan = {'id': 8, 'date': start, 'mealType': 'DINNER', 'recipeId': 'simple',
                 'recipeTitle': 'Simple', 'servings': 2}
+        draft.add_all(start, [plan])
         panel = ShoppingPanel([plan], [recipe], draft, 'en', self.app.week_start, lambda _: None)
         dialog = SimpleNamespace(open=lambda: None, dismiss=lambda: None)
         with patch('cooking_planner.shopping.ShoppingPanel.styled_popup', return_value=dialog) as popup:

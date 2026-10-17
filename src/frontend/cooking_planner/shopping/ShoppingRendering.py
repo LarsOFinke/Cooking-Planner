@@ -71,7 +71,8 @@ class ShoppingRendering:
         return control
 
     def _column_header(self):
-        heading = box(False, padding=5, spacing=5, size_hint_y=None, height=dp(25))
+        heading = box(False, padding=5, spacing=5, color=PANEL_LIGHT,
+                      size_hint_x=None, size_hint_y=None, height=dp(25))
         heading.add_widget(label('', 12, MUTED, 25, size_hint_x=None, width=dp(90)))
         name = label(t(self.locale, 'shopping_item_label'), 12, MUTED, 25,
                      size_hint_x=None, width=dp(240))
@@ -89,7 +90,7 @@ class ShoppingRendering:
                                  size_hint_x=None, width=dp(100)))
         heading.add_widget(box(False))
         heading.add_widget(label('', 12, MUTED, 25, size_hint_x=None, width=dp(38)))
-        self.rows.add_widget(heading)
+        return heading
 
     def _item_row(self, item, checked):
         key = item_key(item)
@@ -97,7 +98,10 @@ class ShoppingRendering:
                   hover=True,
                   size_hint_y=None, height=dp(48))
         check = button(t(self.locale, 'shopping_bought' if checked else 'shopping_mark_bought'),
-                       lambda: self.toggle(key), height=38, size_hint_x=None, width=dp(90))
+                       lambda: self.toggle(key), 'secondary' if checked else 'primary',
+                       height=38, size_hint_x=None, width=dp(90))
+        check.bold = True
+        check.font_size = dp(15)
         if checked:
             check.set_base_color(GREEN)
             check.color = BG
@@ -148,15 +152,12 @@ class ShoppingRendering:
         entries = []
         if pending:
             if not self.compact_list:
-                entries.extend((('section', (t(self.locale, 'shopping_to_buy'), len(pending))),
-                                ('header', None)))
+                entries.append(('section', (t(self.locale, 'shopping_to_buy'), len(pending))))
             for item in pending:
                 entries.append(('item', (item, False)))
         if completed:
             if not self.compact_list:
                 entries.append(('section', (t(self.locale, 'shopping_completed'), len(completed))))
-                if not pending:
-                    entries.append(('header', None))
             for item in completed:
                 entries.append(('item', (item, True)))
 
@@ -164,8 +165,6 @@ class ShoppingRendering:
             for kind, payload in entries[:12]:
                 if kind == 'section':
                     self._section(*payload)
-                elif kind == 'header':
-                    self._column_header()
                 else:
                     self.rows.add_widget(self._item_row(*payload))
             del entries[:12]

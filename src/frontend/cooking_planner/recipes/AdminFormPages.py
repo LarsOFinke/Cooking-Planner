@@ -2,7 +2,9 @@
 
 from copy import deepcopy
 from kivy.metrics import dp
+from kivy.uix.widget import Widget
 from cooking_planner.recipes.admin_payload import option_labels
+from cooking_planner.recipes.RecipeImageEditor import RecipeImageEditor
 from cooking_planner.recipes.admin_schema import CHOICES, LABELS, TIMES, new_recipe_template, translation_template
 from cooking_planner.ui.strings import t
 from cooking_planner.ui.theme import (GOLD, MUTED, PANEL_LIGHT, WHITE, box, button,
@@ -148,7 +150,7 @@ class AdminFormPages:
                      for code in self.locales}
             self._add_step(step, texts)
         self.recipe_page.add_widget(button(t(self.locale, 'admin_add_step'), self.add_step,
-                                           size_hint_x=None, width=dp(180)))
+                                           'outline', size_hint_x=None, width=dp(180)))
 
     def _render_details_page(self, recipe_id, source, source_document):
         self._heading(self.details, 'admin_details')
@@ -201,9 +203,23 @@ class AdminFormPages:
         for key, title in TIMES:
             self.shared_inputs[key] = self._cell(times, t(self.locale, title),
                                                   field(text=str(source_document.get(key, 0))))
-        images = '\n'.join(source_document.get('images', []))
-        self.shared_inputs['images'] = self._cell(self.details, t(self.locale, 'admin_images'),
-                                                   field(text=images, multiline=True, height=dp(65)), 94)
+        self.image_editor = RecipeImageEditor(self.locale, recipe_id,
+                                               source_document.get('images', []), self.user_data_dir)
+        self.details.add_widget(self.image_editor.root)
+        for code, widgets in self.locale_inputs.items():
+            widgets['name'].bind(text=lambda *_: self._update_image_context())
+        for key in ('country_code', 'region_code', 'continent_code'):
+            self.shared_inputs[key].bind(text=lambda *_: self._update_image_context())
+        self._update_image_context()
+
+    def _update_image_context(self):
+        name = self.locale_inputs[self.edit_locale]['name'].text.strip() or t(self.locale, 'admin_unnamed_recipe')
+        parts = [name]
+        for key in ('country_code', 'region_code', 'continent_code'):
+            code = self._value(self.shared_inputs[key])
+            if code:
+                parts.append(self._options(key, self.edit_locale).get(code, code))
+        self.image_editor.context.text = ' · '.join(parts)
 
     def _render_ingredients_page(self, source_document):
         self._heading(self.ingredients_page, 'admin_ingredients')
@@ -217,7 +233,7 @@ class AdminFormPages:
             names = catalog.get('translations', {})
             self._add_ingredient(ingredient, names)
         self.ingredients_page.add_widget(button(t(self.locale, 'admin_choose_ingredient'), self.add_ingredient,
-                                                size_hint_x=None, width=dp(200)))
+                                                'outline', size_hint_x=None, width=dp(200)))
 
     def _show_page(self, page):
         self.page = page
@@ -233,6 +249,8 @@ class AdminFormPages:
         else:
             pages['details'] = self.select_page
         self.form.add_widget(pages[page])
+        self.form.add_widget(Widget())
+        self.editor_scroll.scroll_y = 1
         if page == 'recipe':
             self._refresh_step_ingredients()
         self.actions.height = dp(40) if page != 'status' and (self.creating or self.entry) else 0
@@ -244,6 +262,7 @@ class AdminFormPages:
         self.edit_locale = code
         self.recipe_title.text = (self.locale_inputs[code]['name'].text.strip()
                                   or t(self.locale, 'admin_unnamed_recipe'))
+        self._update_image_context()
         for language, section in self.name_sections.items():
             section.height = dp(72) if language == code else 0
             section.opacity = 1 if language == code else 0

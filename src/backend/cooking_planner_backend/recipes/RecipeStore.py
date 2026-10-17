@@ -13,6 +13,7 @@ from cooking_planner_backend.entities.Marker import Marker
 from cooking_planner_backend.entities.Translation import Translation
 from cooking_planner_backend.ConflictError import ConflictError
 from cooking_planner_backend.recipes.mapper import map_recipe
+from cooking_planner_backend.recipes.RecipeImageStore import RecipeImageStore, IMAGE_NAME
 from cooking_planner_backend.repositories.json_files import read_json, write_json
 
 
@@ -31,6 +32,7 @@ class RecipeStore:
         self.catalog_dir = Path(catalog_dir)
         self.edit_path = storage.data_dir / 'recipe-edits.json'
         self.pending_path = storage.data_dir / 'recipe-edits.pending.json'
+        self.images = RecipeImageStore(storage.data_dir, self.catalog_dir)
         self._cache = {}
         self._recover()
         self._seed()
@@ -197,8 +199,8 @@ class RecipeStore:
         if (not isinstance(row.get('suitable_for'), list) or not isinstance(row.get('images'), list) or
                 row['image_folder'] != f'recipe_images/{recipe_id}' or len(row['images']) > 3):
             raise ValueError('Invalid recipe images or diets')
-        if any(not re.fullmatch(rf'recipe_images/{re.escape(recipe_id)}/image_0[1-3]\.(webp|png|jpg|jpeg)', path)
-               for path in row['images']):
+        if any(not isinstance(path, str) or not path.startswith(f'recipe_images/{recipe_id}/') or
+               not IMAGE_NAME.fullmatch(path.rsplit('/', 1)[-1]) for path in row['images']):
             raise ValueError('Invalid recipe image path')
         ingredients = row.get('ingredients')
         if not isinstance(ingredients, list) or not 1 <= len(ingredients) <= 100:
@@ -247,7 +249,7 @@ class RecipeStore:
         self._validate_shared(source['id'], row)
         return row
 
-    def save(self, recipe_id, source_locale, translations, create):
+    def save(self, recipe_id, source_locale, translations, create, image_uploads=None):
         with self.storage.lock:
             if not isinstance(recipe_id, str) or len(recipe_id) > 100 or not ID.fullmatch(recipe_id):
                 raise ValueError('Recipe ID must use lowercase letters, numbers and hyphens')
@@ -283,32 +285,56 @@ class RecipeStore:
             source = canonical[source_locale]
             rows = {locale: None if canonical[locale] is None else
                     self._synchronize(source, canonical[locale], locale) for locale in locales}
+            origin = (source.get('country_code') or '', source.get('region_code') or '')
+            for locale, row in rows.items():
+                if row is None:
+                    continue
+                name = ' '.join(row['name'].casefold().split())
+                for existing_id, existing in self._catalog(locale)[1].items():
+                    if existing_id == recipe_id:
+                        continue
+                    existing_origin = (existing.get('country_code') or '', existing.get('region_code') or '')
+                    if (existing_origin == origin and
+                            ' '.join(existing['name'].casefold().split()) == name):
+                        raise ConflictError('A recipe with this name and origin already exists')
+            previous = next((row for locale in locales
+                             if (row := self._catalog(locale)[1].get(recipe_id)) is not None), None)
+            before_images = previous.get('images', []) if previous else []
             next_edits = deepcopy(old)
             next_edits['upserts'][recipe_id] = rows
             if recipe_id in next_edits['deleted']:
                 next_edits['deleted'].remove(recipe_id)
             marker = 'recipe-edit-' + uuid4().hex
-            write_json(self.pending_path, {'marker': marker, 'before': old, 'after': next_edits})
+            created = self.images.stage(recipe_id, source['images'], image_uploads or [])
             try:
+                write_json(self.pending_path, {'marker': marker, 'before': old, 'after': next_edits})
                 write_json(self.edit_path, next_edits)
                 with self.storage.session() as session:
                     session.add(Marker(name=marker))
             except BaseException:
-                write_json(self.edit_path, old)
-                self.pending_path.unlink(missing_ok=True)
-                self._cache.clear()
+                try:
+                    write_json(self.edit_path, old)
+                    self.pending_path.unlink(missing_ok=True)
+                finally:
+                    self._cache.clear()
+                    self.images.remove(created)
                 raise
             self.pending_path.unlink()
             self._cache.clear()
+            self.images.prune(recipe_id, before_images, source['images'])
             return self.admin_get(recipe_id)
 
     def delete(self, recipe_id):
         with self.storage.lock:
             if recipe_id not in self.ids():
                 raise LookupError('Recipe not found')
+            previous = next((row for locale in self.locales()
+                             if (row := self._catalog(locale)[1].get(recipe_id)) is not None), None)
             edits = self._edits()
             edits['upserts'].pop(recipe_id, None)
             if recipe_id not in edits['deleted']:
                 edits['deleted'].append(recipe_id)
             write_json(self.edit_path, edits)
             self._cache.clear()
+            if previous:
+                self.images.prune(recipe_id, previous.get('images', []), [])

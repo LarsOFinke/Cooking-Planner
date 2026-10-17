@@ -33,7 +33,7 @@ class ShoppingDraft:
             self.weeks, self.pending, self.recovery_notice = load_draft(path)
 
     def week(self, start: str) -> dict:
-        return self.weeks.setdefault(start, {'plans': [], 'excludedPlans': [], 'excluded': [],
+        return self.weeks.setdefault(start, {'plans': [], 'selectionMode': 'explicit', 'excluded': [],
                                              'custom': [], 'checked': [], 'prices': {}})
 
     def use_prices(self, start: str, prices: dict[str, str]) -> None:
@@ -51,15 +51,16 @@ class ShoppingDraft:
 
     def selected_plan_ids(self, start: str, plans: list[dict]) -> set[str]:
         state = self.week(start)
-        if 'excludedPlans' not in state:
-            # Old drafts stored an explicit selection. Preserve a nonempty
-            # selection once, then include future plans automatically.
-            selected = set(state['plans'])
-            state['excludedPlans'] = ([str(plan['id']) for plan in plans
-                                       if str(plan['id']) not in selected] if selected else [])
+        available = {str(plan['id']) for plan in plans}
+        if state.get('selectionMode') != 'explicit':
+            # Older drafts could implicitly include every plan except excludedPlans.
+            # Only persisted positive selections can be migrated without making
+            # newly planned meals appear in Shopping on the first read.
+            state['plans'] = sorted(set(state['plans']) & available)
+            state.pop('excludedPlans', None)
+            state['selectionMode'] = 'explicit'
             self.save()
-        excluded = set(state['excludedPlans'])
-        return {str(plan['id']) for plan in plans if str(plan['id']) not in excluded}
+        return set(state['plans']) & available
 
     def save(self) -> None:
         if self.path is None:
@@ -117,33 +118,69 @@ class ShoppingDraft:
 
     def add_all(self, start: str, plans: list[dict]) -> None:
         state = self.week(start)
-        state['excludedPlans'] = []
+        state['plans'] = [str(plan['id']) for plan in plans]
+        state['selectionMode'] = 'explicit'
+        state.pop('excludedPlans', None)
         state['excluded'] = []
         state['checked'] = []
         self.save()
 
-    def add_day(self, start: str, plans: list[dict], day: str) -> int:
+    @staticmethod
+    def _restore_plan_ingredients(state: dict, plans: list[dict], recipes: list[dict],
+                                  plan_ids: set[str]) -> None:
+        if not recipes or not state['excluded']:
+            return
+        by_id = {recipe['id']: recipe for recipe in recipes}
+        included = {item_key(item)
+                    for plan in plans if str(plan['id']) in plan_ids
+                    for item in by_id.get(plan.get('recipeId'), {}).get('ingredients', [])}
+        state['excluded'] = [key for key in state['excluded'] if key not in included]
+
+    def add_day(self, start: str, plans: list[dict], day: str,
+                recipes: list[dict] | None = None) -> int:
         """Include every planned meal on one selected date."""
         if not any(plan['date'] == day for plan in plans):
             return 0
         self.selected_plan_ids(start, plans)
-        excluded = self.week(start)['excludedPlans']
-        chosen = {str(plan['id']) for plan in plans if plan['date'] == day}
-        self.week(start)['excludedPlans'] = [plan_id for plan_id in excluded if plan_id not in chosen]
+        chosen = [str(plan['id']) for plan in plans if plan['date'] == day]
+        state = self.week(start)
+        state['plans'] = sorted(set(state['plans']) | set(chosen))
+        self._restore_plan_ingredients(state, plans, recipes or [], set(chosen))
         self.save()
         return len(chosen)
 
-    def toggle_plan(self, start: str, plan_id: int) -> None:
-        excluded = self.week(start).setdefault('excludedPlans', [])
+    def toggle_plan(self, start: str, plan_id: int, plans: list[dict] | None = None,
+                    recipes: list[dict] | None = None) -> None:
+        state = self.week(start)
+        selected = state['plans']
         key = str(plan_id)
-        if key in excluded:
-            excluded.remove(key)
+        if key in selected:
+            selected.remove(key)
         else:
-            excluded.append(key)
+            selected.append(key)
+            self._restore_plan_ingredients(state, plans or [], recipes or [], {key})
         self.save()
 
-    def select_all_plans(self, start: str, plans: list[dict], selected: bool) -> None:
-        self.week(start)['excludedPlans'] = [] if selected else [str(plan['id']) for plan in plans]
+    def add_plan(self, start: str, plan_id: int, plans: list[dict], recipes: list[dict]) -> None:
+        """Import one meal, or restore its ingredients if it was already selected."""
+        self.selected_plan_ids(start, plans)
+        key = str(plan_id)
+        if not any(str(plan['id']) == key for plan in plans):
+            return
+        state = self.week(start)
+        if key not in state['plans']:
+            state['plans'].append(key)
+        self._restore_plan_ingredients(state, plans, recipes, {key})
+        self.save()
+
+    def select_all_plans(self, start: str, plans: list[dict], selected: bool,
+                         recipes: list[dict] | None = None) -> None:
+        state = self.week(start)
+        state['plans'] = [str(plan['id']) for plan in plans] if selected else []
+        if selected:
+            self._restore_plan_ingredients(state, plans, recipes or [], set(state['plans']))
+        state['selectionMode'] = 'explicit'
+        state.pop('excludedPlans', None)
         self.save()
 
     def set_item_included(self, start: str, key: str, included: bool) -> None:
@@ -256,8 +293,8 @@ class ShoppingDraft:
     def clear(self, start: str, plans: list[dict] | None = None) -> None:
         old_prices = list(self.database_prices.get(start, self.week(start).get('prices', {})))
         self.database_prices.pop(start, None)
-        self.weeks[start] = {'plans': [], 'excludedPlans': [str(plan['id']) for plan in (plans or [])],
-                             'excluded': [], 'custom': [], 'checked': [], 'prices': {}}
+        self.weeks[start] = {'plans': [], 'selectionMode': 'explicit', 'excluded': [],
+                             'custom': [], 'checked': [], 'prices': {}}
         if self.price_clearer is not None:
             self._queue({'kind': 'clear_prices', 'week': start})
         elif self.price_writer is not None:

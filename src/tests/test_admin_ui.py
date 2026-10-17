@@ -1,8 +1,10 @@
 """Recipe and ingredient administration UI behavior."""
 
 import json
+import base64
 import os
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -138,7 +140,7 @@ class AdminEditorTest(unittest.TestCase):
                            lambda _: None, lambda: None, lambda _: None)
         panel._show_page('status')
         panel.set_status('Backend ready')
-        self.assertIs(panel.status_page, panel.form.children[0])
+        self.assertIn(panel.status_page, panel.form.children)
         self.assertEqual('Backend ready', panel.status_text.text)
 
     def test_catalog_choices_change_labels_without_losing_codes(self):
@@ -160,10 +162,10 @@ class AdminEditorTest(unittest.TestCase):
                            lambda _: None, lambda: None, lambda _: None, options,
                            ingredient_catalog=catalog)
         panel.show_recipe({'id': english['id'], 'translations': {'en': english, 'de': german}})
-        self.assertIs(panel.details, panel.form.children[0])
+        self.assertIn(panel.details, panel.form.children)
         self.assertTrue(panel.page_tabs['details'].bold)
         panel._show_page('recipe')
-        self.assertIs(panel.recipe_page, panel.form.children[0])
+        self.assertIn(panel.recipe_page, panel.form.children)
         self.assertTrue(panel.page_tabs['recipe'].bold)
         self.assertFalse(panel.page_tabs['details'].bold)
         self.assertEqual(english['name'], panel.recipe_title.text)
@@ -176,7 +178,7 @@ class AdminEditorTest(unittest.TestCase):
         panel.language.text = 'DE'
         self.assertEqual('Suppe · soup', category.text)
         panel._show_page('ingredients')
-        self.assertIs(panel.ingredients_page, panel.form.children[0])
+        self.assertIn(panel.ingredients_page, panel.form.children)
         panel.save()
         self.assertEqual('soup', saved[0][2]['en']['category'])
         self.assertEqual('Soup', saved[0][2]['en']['category_label'])
@@ -256,6 +258,35 @@ class AdminEditorTest(unittest.TestCase):
         self.assertIs(first['card'], panel.steps_container.children[0])
         panel._remove_step(first)
         self.assertEqual([], panel.step_rows)
+
+    def test_recipe_images_use_picker_slots_and_country_specific_id(self):
+        catalog = [{'id': 'apple', 'translations': {'en': 'Apple'}}]
+        saved = []
+        options = {'en': {'country_code': [{'value': 'at', 'label': 'Austria'}]}}
+        panel = AdminPanel([], ('en',), 'en', lambda _: None,
+                           lambda *args: saved.append(args), lambda _: None,
+                           lambda: None, lambda _: None, options,
+                           ingredient_catalog=catalog)
+        panel.new()
+        panel.locale_inputs['en']['name'].text = 'Apple pie'
+        panel.shared_inputs['country_code'].text = 'Austria · at'
+        panel._select_ingredient(catalog[0])
+        photo = base64.b64decode(
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScL/nwAAAABJRU5ErkJggg==')
+        with tempfile.TemporaryDirectory() as temporary:
+            first = Path(temporary) / 'first.png'
+            second = Path(temporary) / 'second.png'
+            first.write_bytes(photo)
+            second.write_bytes(photo)
+            self.assertTrue(panel.image_editor.select(1, first))
+            self.assertFalse(panel.image_editor.select(2, second))
+            self.assertIn('already selected', panel.image_editor.notice.text)
+            panel.save()
+        self.assertEqual('at-apple-pie', saved[0][0])
+        self.assertIn('Austria', panel.image_editor.context.text)
+        self.assertEqual(1, len(saved[0][4]))
+        self.assertTrue(saved[0][4][0]['reference'].startswith(
+            'recipe_images/at-apple-pie/image_01-'))
 
 
 

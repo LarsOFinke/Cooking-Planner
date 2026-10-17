@@ -37,6 +37,47 @@ class ShoppingDraftTest(unittest.TestCase):
             self.assertEqual({'1', '2'}, ShoppingDraft(path).selected_plan_ids(start, plans))
             self.assertEqual(0, draft.add_day(start, plans, '2026-10-07'))
 
+    def test_clear_stays_empty_when_week_plan_changes(self):
+        start = '2026-10-05'
+        recipes = [{'id': 'dish', 'ingredients': [
+            {'ingredientId': 'rice', 'name': 'Rice', 'amount': 100, 'unit': 'g'}]}]
+        plans = [{'id': 1, 'recipeId': 'dish', 'servings': 2}]
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'shopping.json'
+            draft = ShoppingDraft(path)
+            draft.add_all(start, plans)
+            draft.add_custom(start, 'Milk', '1', 'l')
+            draft.clear(start, plans)
+            plans.append({'id': 2, 'recipeId': 'dish', 'servings': 1})
+            restored = ShoppingDraft(path)
+            self.assertEqual([], restored.items(start, plans, recipes))
+            self.assertEqual(set(), restored.selected_plan_ids(start, plans))
+
+    def test_explicit_meal_import_restores_its_excluded_ingredients(self):
+        start = '2026-10-05'
+        plans = [{'id': 1, 'date': start, 'recipeId': 'rice', 'servings': 2},
+                 {'id': 2, 'date': '2026-10-06', 'recipeId': 'beans', 'servings': 1}]
+        recipes = [{'id': 'rice', 'ingredients': [
+            {'ingredientId': 'rice', 'name': 'Rice', 'amount': 100, 'unit': 'g'}]},
+            {'id': 'beans', 'ingredients': [
+                {'ingredientId': 'beans', 'name': 'Beans', 'amount': 50, 'unit': 'g'}]}]
+        draft = ShoppingDraft()
+        draft.week(start)['excluded'] = ['rice:g', 'beans:g']
+        self.assertEqual(1, draft.add_day(start, plans, start, recipes))
+        self.assertEqual(['Rice'], [item['name'] for item in draft.items(start, plans, recipes)])
+        self.assertEqual(['beans:g'], draft.week(start)['excluded'])
+        draft.toggle_plan(start, 2, plans, recipes)
+        self.assertEqual({'Rice', 'Beans'}, {item['name'] for item in draft.items(start, plans, recipes)})
+        draft.set_item_included(start, 'rice:g', False)
+        draft.add_plan(start, 1, plans, recipes)
+        self.assertEqual({'1', '2'}, draft.selected_plan_ids(start, plans))
+        self.assertEqual([], draft.week(start)['excluded'])
+        draft.set_item_included(start, 'rice:g', False)
+        draft.select_all_plans(start, plans, True, recipes)
+        self.assertEqual([], draft.week(start)['excluded'])
+        self.assertEqual('200', str(next(item['amount'] for item in draft.items(start, plans, recipes)
+                                         if item['name'] == 'Rice')))
+
     def test_pending_writes_are_durable_before_background_flush(self):
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / 'shopping.json'
@@ -62,6 +103,8 @@ class ShoppingDraftTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / 'shopping.json'
             draft = ShoppingDraft(path)
+            self.assertEqual(set(), draft.selected_plan_ids('2026-10-05', plans))
+            draft.add_all('2026-10-05', plans)
             self.assertEqual({'1', '2'}, draft.selected_plan_ids('2026-10-05', plans))
             self.assertEqual('500', str(draft.items('2026-10-05', plans, recipes)[0]['amount']))
             draft.toggle_plan('2026-10-05', 2)
@@ -72,7 +115,7 @@ class ShoppingDraftTest(unittest.TestCase):
             self.assertEqual('Milk', ShoppingDraft(path).items('2026-10-05', plans, recipes)[0]['name'])
             draft.add_custom('2026-10-05', 'Eggs', '6', 'pcs')
             self.assertEqual(2, len(draft.items('2026-10-05', plans, recipes)))
-            self.assertEqual('500', str(draft.items('2026-10-12', plans, recipes)[0]['amount']))
+            self.assertEqual([], draft.items('2026-10-12', plans, recipes))
             draft.add_all('2026-10-05', plans)
             self.assertEqual(3, len(draft.items('2026-10-05', plans, recipes)))
             custom = next(item for item in draft.items('2026-10-05', plans, recipes) if item['name'] == 'Milk')
@@ -83,14 +126,18 @@ class ShoppingDraftTest(unittest.TestCase):
             draft.add_all('2026-10-05', plans)
             self.assertEqual('500', str(draft.items('2026-10-05', plans, recipes)[0]['amount']))
 
-    def test_new_plan_is_included_and_duplicate_manual_names_remain_separate(self):
+    def test_new_plan_requires_explicit_import_and_duplicate_manual_names_remain_separate(self):
         recipes = [{'id': 'dish', 'ingredients': [
             {'ingredientId': 'rice', 'name': 'Rice', 'amount': 100, 'unit': 'g'}]}]
         start = '2026-10-05'
         draft = ShoppingDraft()
         plans = [{'id': 1, 'recipeId': 'dish', 'servings': 1}]
+        self.assertEqual([], draft.items(start, plans, recipes))
+        draft.add_all(start, plans)
         self.assertEqual('100', str(draft.items(start, plans, recipes)[0]['amount']))
         plans.append({'id': 2, 'recipeId': 'dish', 'servings': 2})
+        self.assertEqual('100', str(draft.items(start, plans, recipes)[0]['amount']))
+        draft.toggle_plan(start, 2)
         self.assertEqual('300', str(draft.items(start, plans, recipes)[0]['amount']))
         draft.toggle_plan(start, 1)
         self.assertEqual('200', str(draft.items(start, plans, recipes)[0]['amount']))
@@ -108,6 +155,7 @@ class ShoppingDraftTest(unittest.TestCase):
         recipes = [{'id': 'dish', 'ingredients': [
             {'ingredientId': 'karotte', 'name': 'Carrot', 'amount': 100, 'unit': 'g'}]}]
         plans = [{'id': 1, 'recipeId': 'dish', 'servings': 1}]
+        draft.add_all(start, plans)
         draft.add_custom(start, 'Carrot', '50', 'g', ingredient_id='karotte')
         draft.add_custom(start, 'Carrot', '25', 'g', ingredient_id='karotte')
         items = draft.items(start, plans, recipes)
@@ -122,6 +170,7 @@ class ShoppingDraftTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / 'shopping.json'
             draft = ShoppingDraft(path)
+            draft.add_all(start, plans)
             draft.add_custom(start, 'Rice', '50', 'g', ingredient_id='rice')
             self.assertEqual('250', str(draft.items(start, plans, recipes)[0]['amount']))
             draft.remove_item(start, 'rice:g')
@@ -156,8 +205,20 @@ class ShoppingDraftTest(unittest.TestCase):
             draft = ShoppingDraft(path)
             plans = [{'id': 1}, {'id': 2}]
             self.assertEqual({'1'}, draft.selected_plan_ids(start, plans))
-            self.assertEqual(['2'], ShoppingDraft(path).week(start)['excludedPlans'])
-            self.assertEqual({'1', '3'}, draft.selected_plan_ids(start, [*plans, {'id': 3}]))
+            self.assertEqual(['1'], ShoppingDraft(path).week(start)['plans'])
+            self.assertEqual({'1'}, draft.selected_plan_ids(start, [*plans, {'id': 3}]))
+
+    def test_legacy_implicit_selection_never_imports_week_plans(self):
+        start = '2026-10-05'
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'shopping.json'
+            path.write_text(json.dumps({'version': 1, 'weeks': {start: {
+                'plans': [], 'excludedPlans': ['2'], 'excluded': [], 'custom': [], 'checked': []}}}))
+            draft = ShoppingDraft(path)
+            plans = [{'id': 1}, {'id': 2}]
+            self.assertEqual(set(), draft.selected_plan_ids(start, plans))
+            self.assertEqual(set(), ShoppingDraft(path).selected_plan_ids(start, [*plans, {'id': 3}]))
+            self.assertEqual('explicit', ShoppingDraft(path).week(start)['selectionMode'])
 
     def test_manual_item_validation(self):
         draft = ShoppingDraft()
@@ -177,6 +238,7 @@ class ShoppingDraftTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / 'shopping.json'
             draft = ShoppingDraft(path)
+            draft.add_all(start, plans)
             draft.add_custom(start, 'Milk', '2', 'l', '3,50')
             milk = next(item for item in draft.items(start, plans, recipes) if item['name'] == 'Milk')
             self.assertEqual('3.50', str(draft.price_for(start, item_key(milk))))

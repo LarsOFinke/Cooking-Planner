@@ -108,7 +108,8 @@ class AppShell:
                                   self.show_tab, self.show_notes)
         elif self.tab == 'explore':
             panel = RecipeBrowser(self.recipes, self.locale, self.plan_recipe, self._selected_recipe,
-                                  self.shopping_draft.reference_price_for, self.cooking_progress)
+                                  self.shopping_draft.reference_price_for, self.cooking_progress,
+                                  self.config_path.parent if self.config_path else None)
             self.browser = panel
             if self.selected_id:
                 panel.select_id(self.selected_id)
@@ -131,7 +132,8 @@ class AppShell:
             panel = AdminPanel(self.admin_records, self.locales, self.locale, self.select_admin_recipe,
                                self.save_admin_recipe, self.delete_admin_recipe, self.load_admin, self._status,
                                getattr(self, 'admin_options', {}), self.status_message,
-                               getattr(self, 'admin_ingredient_catalog', []), self.show_ingredient_admin)
+                               getattr(self, 'admin_ingredient_catalog', []), self.show_ingredient_admin,
+                               self.config_path.parent if self.config_path else None)
             self.admin_panel = panel
             if self.admin_entry:
                 panel.show_recipe(self.admin_entry)

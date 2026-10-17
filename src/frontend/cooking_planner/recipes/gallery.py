@@ -47,8 +47,8 @@ def open_gallery(recipe, photos, index, locale):
         image.source = str(photo)
         counter.text = f"{index_state['value'] + 1} / {len(photos)}"
         credit = attributions().get(reference, {})
-        credit_text.text = (t(locale, 'rights_pending') if credit.get('rights_status') == 'pending'
-                            else f"{credit.get('author', '')} · {credit.get('license', '')}" if credit else '')
+        credit_text.text = (t(locale, 'rights_pending') if not credit or credit.get('rights_status') == 'pending'
+                            else f"{credit.get('author', '')} · {credit.get('license', '')}")
 
     for number, (_, photo) in enumerate(photos):
         thumb = RecipePhoto(source=str(photo), size_hint=(None, None),

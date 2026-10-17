@@ -91,9 +91,13 @@ class ApiClient:
     def admin_recipe(self, recipe_id: str) -> dict:
         return self.request("GET", "/api/admin/recipes/" + quote(recipe_id, safe=""))
 
-    def save_recipe(self, recipe_id: str, source_locale: str, translations: dict, create: bool) -> dict:
+    def save_recipe(self, recipe_id: str, source_locale: str, translations: dict, create: bool,
+                    image_uploads=None) -> dict:
+        payload = {"sourceLocale": source_locale, "translations": translations}
+        if image_uploads:
+            payload["imageUploads"] = image_uploads
         return self.request("POST" if create else "PUT", "/api/admin/recipes/" + quote(recipe_id, safe=""),
-                            {"sourceLocale": source_locale, "translations": translations})
+                            payload)
 
     def delete_recipe(self, recipe_id: str) -> None:
         self.request("DELETE", "/api/admin/recipes/" + quote(recipe_id, safe=""))

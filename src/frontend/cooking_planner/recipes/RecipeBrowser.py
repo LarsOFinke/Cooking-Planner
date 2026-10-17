@@ -18,7 +18,7 @@ class RecipeBrowser(RecipeFilters):
     PAGE_SIZE = 16
 
     def __init__(self, recipes: list[dict], locale: str, on_plan, on_select=None,
-                 reference_price_for=None, cooking_progress=None) -> None:
+                 reference_price_for=None, cooking_progress=None, user_data_dir=None) -> None:
         self.recipes = recipes
         self._search_index = [
             (recipe, " ".join((recipe["name"], recipe["country"], recipe["region"],
@@ -31,6 +31,7 @@ class RecipeBrowser(RecipeFilters):
         self.on_select = on_select
         self.reference_price_for = reference_price_for
         self.cooking_progress = cooking_progress if cooking_progress is not None else {}
+        self.user_data_dir = user_data_dir
         self.page = 0
         self.selected_id = recipes[0]["id"] if recipes else None
         self.image_index = 0
@@ -216,7 +217,7 @@ class RecipeBrowser(RecipeFilters):
             self.detail_body.add_widget(self._cost_summary(recipe))
             return
         photos = [(reference, photo) for reference in recipe.get("images", [])
-                  if (photo := image_file(recipe["id"], reference)) is not None]
+                  if (photo := image_file(recipe["id"], reference, self.user_data_dir)) is not None]
         summary = box(False, spacing=7, size_hint_y=None, height=dp(92))
         if photos:
             self.image_index %= len(photos)
@@ -245,14 +246,13 @@ class RecipeBrowser(RecipeFilters):
                 controls.add_widget(button("›", lambda: self._change_image(1), size_hint_x=None, width=dp(46)))
                 self.detail_body.add_widget(controls)
             credit = attributions().get(reference)
-            if credit:
-                if credit.get('rights_status') == 'pending':
-                    self.detail_body.add_widget(label(t(self.locale, 'rights_pending'), 11, MUTED, 30))
-                else:
-                    details = f"Foto: {credit['author']} · {credit['license']}"
-                    if credit.get('modifications'):
-                        details += f" · {credit['modifications']}"
-                    self.detail_body.add_widget(label(details, 11, MUTED, 30))
+            if not credit or credit.get('rights_status') == 'pending':
+                self.detail_body.add_widget(label(t(self.locale, 'rights_pending'), 11, MUTED, 30))
+            else:
+                details = f"Foto: {credit['author']} · {credit['license']}"
+                if credit.get('modifications'):
+                    details += f" · {credit['modifications']}"
+                self.detail_body.add_widget(label(details, 11, MUTED, 30))
                 if credit.get('source_url'):
                     self.detail_body.add_widget(button(t(self.locale, 'image_source'),
                                                        lambda url=credit['source_url']: webbrowser.open(url), height=32))

@@ -7,10 +7,10 @@ from pathlib import Path
 
 from cooking_planner.paths import catalog_directory
 
-PHOTO_NAME = re.compile(r'image_\d{2}\.(?:jpg|jpeg|png|webp)', re.IGNORECASE)
+PHOTO_NAME = re.compile(r'image_0[1-3](?:-[0-9a-f]{12})?\.(?:jpg|jpeg|png|webp)', re.IGNORECASE)
 
 
-def image_file(recipe_id: str, reference: str) -> Path | None:
+def image_file(recipe_id: str, reference: str, user_data_dir: Path | None = None) -> Path | None:
     """Reject arbitrary paths from API data and resolve a local recipe image."""
     if not recipe_id or any(character not in "abcdefghijklmnopqrstuvwxyz0123456789-" for character in recipe_id):
         return None
@@ -20,6 +20,11 @@ def image_file(recipe_id: str, reference: str) -> Path | None:
     filename = reference[len(prefix):]
     if not PHOTO_NAME.fullmatch(filename):
         return None
+    if re.search(r'-[0-9a-f]{12}\.', filename, re.IGNORECASE):
+        if user_data_dir is None:
+            return None
+        target = Path(user_data_dir) / "recipe_images" / recipe_id / filename
+        return target if target.is_file() else None
     target = catalog_directory() / "recipe_images" / recipe_id / filename
     return target if target.is_file() else None
 

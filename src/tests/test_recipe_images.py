@@ -27,6 +27,30 @@ class RecipeImagesTest(unittest.TestCase):
                 self.assertIsNone(image_file('../some-dish', 'recipe_images/../some-dish/image_01.jpg'))
                 self.assertIsNone(image_file('some-dish', 'recipe_images/some-dish/image_03.png'))
 
+    def test_imported_image_resolves_only_inside_its_recipe_directory(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            data = Path(temporary) / 'user'
+            photo = data / 'recipe_images/some-dish/image_01-aaaaaaaaaaaa.png'
+            photo.parent.mkdir(parents=True)
+            photo.write_bytes(b'photo')
+            reference = 'recipe_images/some-dish/image_01-aaaaaaaaaaaa.png'
+            self.assertEqual(photo, image_file('some-dish', reference, data))
+            self.assertIsNone(image_file('other-dish', reference, data))
+            self.assertIsNone(image_file('../some-dish', reference, data))
+
+    def test_user_file_cannot_shadow_a_bundled_image(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            bundled = root / 'catalog/recipe_images/some-dish/image_01.png'
+            user = root / 'user/recipe_images/some-dish/image_01.png'
+            bundled.parent.mkdir(parents=True)
+            user.parent.mkdir(parents=True)
+            bundled.write_bytes(b'bundled')
+            user.write_bytes(b'user')
+            with patch.dict(os.environ, {'COOKING_PLANNER_CATALOG_DIR': str(root / 'catalog')}):
+                self.assertEqual(bundled, image_file('some-dish',
+                    'recipe_images/some-dish/image_01.png', root / 'user'))
+
     def test_attributions_are_read_from_active_catalog(self):
         with tempfile.TemporaryDirectory() as temporary:
             source = Path(temporary) / 'recipe_images' / 'IMAGE_ATTRIBUTIONS.csv'

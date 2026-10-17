@@ -1,5 +1,8 @@
 """Admin API actions used by the Kivy application."""
 
+import base64
+from pathlib import Path
+
 from cooking_planner.ui.dialogs import confirm_popup
 from cooking_planner.ui.strings import t
 
@@ -72,13 +75,22 @@ class AdminActions:
                 self.admin_panel.show_recipe(entry)
         self._submit(lambda: self.client.admin_recipe(recipe_id), loaded)
 
-    def save_admin_recipe(self, recipe_id, source_locale, translations, create):
+    def save_admin_recipe(self, recipe_id, source_locale, translations, create, image_uploads=None):
+        def save():
+            uploads = []
+            for item in image_uploads or []:
+                path = Path(item['path'])
+                if not path.is_file() or path.stat().st_size > 8_000_000:
+                    raise ValueError(t(self.locale, 'admin_invalid_image'))
+                uploads.append({'reference': item['reference'],
+                                'data': base64.b64encode(path.read_bytes()).decode('ascii')})
+            return self.client.save_recipe(recipe_id, source_locale, translations, create, uploads)
         def saved(entry):
             self.admin_entry = entry
             self._catalog_cache.clear()
             self.refresh()
             self.load_admin()
-        self._submit(lambda: self.client.save_recipe(recipe_id, source_locale, translations, create), saved)
+        self._submit(save, saved)
 
     def delete_admin_recipe(self, recipe_id):
         def delete():

@@ -20,6 +20,12 @@ python3 scripts/images/verify_recipe_images.py
 
 Das Importskript prüft Rezept-ID, Bildnummer, Dateiformat und Dubletten. Es schreibt nur Referenzen auf tatsächlich vorhandene Dateien in beide JSON-Dateien, entfernt leere Bildplatzhalter und erzeugt den gemeinsamen Bildkatalog. Wiederholtes Ausführen ist möglich. Das Prüfsript prüft Dateiinhalte, alle Referenzen, die gemeinsame Reihenfolge und die Bildnachweise.
 
+## Bilder im Admin-Bereich
+
+Für neue oder bearbeitete Rezepte lassen sich bis zu drei Fotos über die Dateiauswahl mit Vorschau hinzufügen, austauschen oder entfernen. Die App zeigt den Rezeptnamen und die ausgewählte Herkunft neben den Bildplätzen. Bei neuen Rezepten fließt der Ländercode, sofern gewählt, in die Rezept-ID ein; Gerichte mit demselben Namen aus verschiedenen Ländern erhalten so getrennte Bildordner. Die App erkennt gleiche Bildinhalte bereits bei der Auswahl und der Backend-Service prüft sie erneut beim Speichern.
+
+Diese Fotos werden unter dem konfigurierten Benutzerdatenordner in `recipe_images/<rezept-id>/image_0N-<kennung>.<format>` gespeichert. Der Dateiname erhält eine eindeutige Kennung, damit ein vorhandenes Foto beim Austauschen nicht überschrieben wird. Die Referenzen stehen im Rezept-Overlay `recipe-edits.json`. Beim Entfernen eines Fotos oder Rezepts löscht die App nur dessen importierte Benutzerdateien; der gebündelte Katalog bleibt unverändert. Für diese Benutzerfotos liegen noch keine Urheber- oder Lizenzangaben vor, daher zeigt die Galerie den Rechte-Status als offen an.
+
 ## Rechte und Urhebernachweise
 
 Für lokal hinzugefügte Dateien legt der Import `data/recipe_images/LOCAL_IMAGE_CREDITS.json` an. Neue Bilder erhalten zunächst `rights_status: "pending"`; Urheber oder Lizenz werden nicht geraten. Trage für jede Datei `author`, `license` und bei externen Bildern `source_url` sowie gegebenenfalls `license_url` ein. Setze `rights_status` danach auf `approved` für eine ausdrücklich erteilte Projektnutzung oder `licensed` für eine überprüfte Lizenz und führe `python3 scripts/images/import_local_recipe_images.py` erneut aus. Ändert sich die Bilddatei, setzt der Import ihren Rechte-Status vorsichtshalber wieder auf `pending`.
