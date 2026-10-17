@@ -1,7 +1,5 @@
-from kivy.uix.scrollview import ScrollView
-
 from cooking_planner.ui.dialogs import styled_popup
-from cooking_planner.ui.theme import GOLD, MUTED, WHITE, box, button, field, label
+from cooking_planner.ui.theme import GOLD, MUTED, WHITE, box, button, field, label, scroll_view
 from cooking_planner.ui.strings import t
 
 
@@ -13,7 +11,7 @@ def picker_popup(recipes: list[dict], locale: str, on_select) -> None:
     body.add_widget(count)
     rows = box(spacing=5, size_hint_y=None)
     rows.bind(minimum_height=rows.setter("height"))
-    scroll = ScrollView(do_scroll_x=False)
+    scroll = scroll_view(do_scroll_x=False)
     scroll.add_widget(rows)
     body.add_widget(scroll)
     dialog = styled_popup(t(locale, "pick"), body, 0.68, 0.8)
@@ -44,6 +42,6 @@ def notes_popup(info: dict, locale: str) -> None:
         paragraph = label(text, 14, MUTED, max(80, 26 * ((len(text) // 65) + 1)))
         paragraph.valign = "top"
         body.add_widget(paragraph)
-    scroll = ScrollView(do_scroll_x=False)
+    scroll = scroll_view(do_scroll_x=False)
     scroll.add_widget(body)
     styled_popup(t(locale, "data_notes"), scroll, 0.7, 0.8).open()

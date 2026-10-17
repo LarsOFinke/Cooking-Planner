@@ -1,7 +1,6 @@
 """Build the application shell and its feature-owned tab views."""
 
 from kivy.metrics import dp
-from kivy.uix.scrollview import ScrollView
 
 from cooking_planner.overview.OverviewPanel import OverviewPanel
 from cooking_planner.plans.WeekPlanner import WeekPlanner
@@ -10,7 +9,7 @@ from cooking_planner.recipes.IngredientAdminPanel import IngredientAdminPanel
 from cooking_planner.recipes.RecipeBrowser import RecipeBrowser
 from cooking_planner.shopping.ShoppingPanel import ShoppingPanel
 from cooking_planner.ui.strings import t
-from cooking_planner.ui.theme import MUTED, WHITE, box, button, label, spinner, tab_button
+from cooking_planner.ui.theme import MUTED, WHITE, box, button, label, scroll_view, spinner, tab_button
 
 
 class AppShell:
@@ -50,7 +49,7 @@ class AppShell:
         header.bind(width=layout_header)
         layout_header(header, header.width)
         root.add_widget(header)
-        nav_scroll = ScrollView(size_hint_y=None, height=dp(44), do_scroll_y=False)
+        nav_scroll = scroll_view(size_hint_y=None, height=dp(44), do_scroll_y=False)
         nav = box(False, spacing=7, size_hint=(None, None), height=dp(44))
         nav_scroll.bind(width=lambda _, width: setattr(nav, 'width', max(width, dp(650))))
         self.nav_buttons = {}
@@ -96,7 +95,7 @@ class AppShell:
                                   self.show_tab, self.show_notes)
         elif self.tab == 'explore':
             panel = RecipeBrowser(self.recipes, self.locale, self.plan_recipe, self._selected_recipe,
-                                  self.shopping_draft.reference_price_for)
+                                  self.shopping_draft.reference_price_for, self.cooking_progress)
             self.browser = panel
             if self.selected_id:
                 panel.select_id(self.selected_id)

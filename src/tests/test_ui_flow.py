@@ -213,7 +213,7 @@ class UiFlowTest(unittest.TestCase):
         self.assertTrue(browser.next_button.disabled)
         self.assertEqual(1, len(browser.rows.children))
 
-    def test_recipe_tab_shows_each_instruction_as_a_separate_card(self):
+    def test_recipe_steps_and_measured_ingredients_can_be_checked(self):
         self.recipe['instructions'] = [
             {'step': 1, 'text': 'Prepare the carrots.', 'ingredientIds': ['karotte']},
             {'step': 2, 'text': 'Cook until tender.', 'ingredientIds': []},
@@ -221,9 +221,30 @@ class UiFlowTest(unittest.TestCase):
         self.app.show_tab('explore')
         browser = self.app.browser
         browser._show_detail_tab('recipe')
-        self.assertEqual(4, len(browser.detail_body.children))
-        self.assertEqual('Step 1', browser.detail_body.children[-3].children[-1].text)
-        self.assertEqual('Step 2', browser.detail_body.children[-4].children[-1].text)
+        cards = list(reversed(browser.detail_body.children[:2]))
+        first, second = cards
+        heading = first.children[-1]
+        ingredient = first.children[0]
+        self.assertEqual('○  Step 1', heading.text)
+        self.assertEqual('○  Step 2', second.children[-1].text)
+        self.assertIn('90 g  ·  Carrot', ingredient.text)
+        self.assertEqual('0/2 steps done', browser.detail_body.children[-2].text)
+        release(ingredient)
+        self.assertTrue(ingredient.text.startswith('✓'))
+        self.assertEqual('0/2 steps done', browser.detail_body.children[-2].text)
+        release(heading)
+        self.assertIn('Step 1  ·  Done', heading.text)
+        self.assertEqual('1/2 steps done', browser.detail_body.children[-2].text)
+        self.assertEqual((0.11, 0.27, 0.21, 1), first._base_background)
+        self.app.show_tab('week')
+        self.app.show_tab('explore')
+        browser = self.app.browser
+        browser._show_detail_tab('recipe')
+        first = browser.detail_body.children[-4]
+        self.assertTrue(first.children[0].text.startswith('✓'))
+        self.assertIn('Done', first.children[-1].text)
+        release(first.children[-1])
+        self.assertEqual('0/2 steps done', browser.detail_body.children[-2].text)
 
     def test_recipe_photo_opens_window_sized_gallery(self):
         self.app.show_tab('explore')

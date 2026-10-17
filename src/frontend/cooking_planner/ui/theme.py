@@ -40,7 +40,7 @@ def box(vertical=True, padding=0, spacing=0, color=None, hover=False, **kwargs) 
 
 
 def scroll_view(**kwargs) -> ScrollView:
-    view = ScrollView(effect_cls=ScrollEffect, scroll_wheel_distance=dp(22), **kwargs)
+    view = ScrollView(effect_cls=ScrollEffect, scroll_wheel_distance=dp(88), **kwargs)
     for effect in (view.effect_x, view.effect_y):
         if effect is not None:
             effect.friction = 0.18

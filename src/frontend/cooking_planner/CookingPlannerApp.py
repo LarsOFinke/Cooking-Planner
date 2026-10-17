@@ -48,6 +48,7 @@ class CookingPlannerApp(AppShell, AdminActions, App):
         self._refresh_pending = False
         self._stopping = False
         self.selected_id = None
+        self.cooking_progress = {}
         self.shopping_draft = ShoppingDraft(self.config_path.parent / 'shopping.json' if self.config_path else None)
         self.shopping_draft.locale = self.locale
         self.shopping_draft.price_writer = self.client.save_ingredient_price if hasattr(self.client, 'save_ingredient_price') else None
