@@ -1,4 +1,4 @@
-"""Domain errors translated by the HTTP layer."""
+"""Domain error for a change that conflicts with saved user data."""
 
 
 class ConflictError(ValueError):

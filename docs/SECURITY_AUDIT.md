@@ -1,5 +1,14 @@
 # Security audit — 2026-10-16
 
+## Architecture update — 2026-10-17
+
+The app now calls local Python stores directly. The FastAPI server, Uvicorn, loopback
+client, token, and related runtime dependencies have been removed. Android no longer
+requests the `INTERNET` permission, and its package check rejects any application
+permission. The findings below describe the earlier HTTP architecture and remain as
+historical evidence. New Linux, Windows, and Android artifacts still need their own
+runtime and manifest checks before release.
+
 This review covers application dependencies, packaging tools, CI actions, and access to the local API. It does not certify an installed artifact or the rights to publish bundled images.
 
 Evidence: the [last successful CI run](https://github.com/LarsOFinke/Cooking-Planner/actions/runs/38761630159), [GitHub's Node 20 retirement notice](https://github.blog/changelog/2026-09-23-node-20-is-no-longer-available-in-github-actions/), and the [Starlette advisory database](https://github.com/advisories?query=ecosystem%3Apip+starlette). Version availability was checked against PyPI release metadata on the audit date.

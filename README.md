@@ -1,8 +1,8 @@
 # Cooking Planner
 
-Cooking Planner is a local Windows/Linux desktop app for browsing English and German recipes, planning meals, estimating costs, and preparing a shopping list. The Kivy frontend talks over loopback HTTP to a separate Python FastAPI backend. SQLAlchemy stores ingredient names and prices in SQLite. The backend runs in a thread owned by the app, so there is no separate runtime or service to install.
+Cooking Planner is a local Windows/Linux desktop app for browsing English and German recipes, planning meals, estimating costs, and preparing a shopping list. The Kivy app calls local Python services directly. SQLAlchemy stores ingredient names and prices in SQLite; no network service or firewall exception is needed.
 
-The source tree keeps the UI in `src/frontend/cooking_planner`, API and data logic in `src/backend/cooking_planner_backend`, and tests in `src/tests`. Build scripts live in `scripts/build/linux`, `scripts/build/windows`, `scripts/build/android`, and `scripts/build/common`; development, quality, image, and install scripts have their own directories. See the [script entry points](scripts/README.md) for ownership and checks.
+The source tree keeps the UI in `src/frontend/cooking_planner`, local services and data logic in `src/backend/cooking_planner_backend`, and tests in `src/tests`. Build scripts live in `scripts/build/linux`, `scripts/build/windows`, `scripts/build/android`, and `scripts/build/common`; development, quality, image, and install scripts have their own directories. See the [script entry points](scripts/README.md) for ownership and checks.
 
 ## Run and build
 
@@ -33,14 +33,14 @@ Bundled catalogs are `data/recipes_<language>.json`. The supplied English and Ge
 
 On Android, these writable files live in app-private storage and the catalogs and images remain read-only APK assets.
 
-The default user data directory is `~/.cooking-planner` on Linux and `%USERPROFILE%\.cooking-planner` on Windows. Set `COOKING_PLANNER_DATA_DIR` to move it. Set `COOKING_PLANNER_CATALOG_DIR` for a different source catalog directory. The backend port comes from `COOKING_PLANNER_PORT` or `<data directory>/client.cfg` (see [example](src/frontend/client.cfg.example)). Close the app before backing up all five user files.
+The default user data directory is `~/.cooking-planner` on Linux and `%USERPROFILE%\.cooking-planner` on Windows. Set `COOKING_PLANNER_DATA_DIR` to move it. Set `COOKING_PLANNER_CATALOG_DIR` for a different source catalog directory. Settings live in `<data directory>/client.cfg` (see [example](src/frontend/client.cfg.example)). Close the app before backing up all five user files.
 
-`client.cfg` also accepts `[ui] locale`, `window_width`, `window_height`, and `fullscreen` for startup, plus `[backend] request_timeout` and `startup_timeout` in seconds. Language, scale, and fullscreen controls save their choices there. Missing, invalid, or out-of-range values use built-in defaults; window size is limited to 900–3840 by 650–2160, request timeout to 1–120 seconds, and startup timeout to 5–300 seconds. Desktop window settings are ignored on Android. `COOKING_PLANNER_LOG_LEVEL` can set Uvicorn to `error`, `warning` (default), `info`, or `debug` for diagnosis; request access logs remain disabled. Environment values override matching `client.cfg` values where an override exists. The app does not automatically load a `.env` file.
+`client.cfg` accepts `[ui] scale`, `locale`, `window_width`, `window_height`, and `fullscreen`. Language, scale, and fullscreen controls save their choices there. Missing, invalid, or out-of-range values use built-in defaults; window size is limited to 900–3840 by 650–2160. Desktop window settings are ignored on Android. Older `[backend]` settings are ignored. The app does not automatically load a `.env` file.
 
 Each supplied recipe has a local image. Image maintenance is separate from the everyday Makefile: run `python3 scripts/images/import_local_recipe_images.py` to import replacements and `python3 scripts/images/verify_recipe_images.py` to check references and credits. See [recipe images](docs/RECIPE_IMAGES.md). All 586 existing image rights remain pending and must be reviewed before publication.
 
 ## Architecture and checks
 
-The frontend imports only its HTTP client and backend launcher. The backend package owns recipe, ingredient, plan, and storage behavior. Startup loads overview counts and plans first, then fetches the recipe catalog and prices. Feature views are built when opened, and the frontend caches only the active language's catalog. FastAPI binds to `127.0.0.1` and requires a random per-launch token on every request, including health checks. The token protects the local API from unrelated local processes; the service must remain on loopback. See [architecture](docs/ARCHITECTURE.md), [code quality](docs/CODE_QUALITY.md), and [security audit](docs/SECURITY_AUDIT.md).
+The frontend calls `LocalPlanner`, which owns the recipe, ingredient, plan, and storage services. Startup loads overview counts and plans first, then loads the recipe catalog and prices. Feature views are built when opened, and the frontend caches only the active language's catalog. User data remains in the configured local directory; the app opens no HTTP listener. See [architecture](docs/ARCHITECTURE.md), [code quality](docs/CODE_QUALITY.md), and [security audit](docs/SECURITY_AUDIT.md).
 
 `make quality` requires Kivy and a display for desktop coverage. It runs separate frontend/backend coverage floors. The source app's Kivy event loop should be checked at 100% and 200% scale with every main tab open after UI changes. The Android build and device checks use their own workflow; the desktop commands do not produce an APK or iOS app.

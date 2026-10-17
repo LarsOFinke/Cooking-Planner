@@ -1,13 +1,13 @@
 # Architecture
 
 ```text
-Kivy views -> ApiClient -> loopback FastAPI routes -> Python feature stores
-                                               |             |
-                                        catalog JSON       plans.json + SQLite
-                                        + edit overlay     + shopping.json
+Kivy views -> LocalPlanner -> Python feature stores
+                                 |             |
+                          catalog JSON       plans.json + SQLite
+                          + edit overlay     + shopping.json
 ```
 
-The frontend and backend are separate Python packages under `src/frontend` and `src/backend`. Kivy views depend on `ApiClient`, which preserves the existing HTTP contract. `api/BackendLauncher.py` starts Uvicorn in an app-owned thread and stops it on exit. The server binds only to `127.0.0.1`; a random per-launch token in the `X-Cooking-Planner-Token` header authorizes every request, including the health check. The health response does not disclose the token. App requests and queued shopping writes use worker threads, with UI updates scheduled on the Kivy event loop. Startup shows the overview from small catalog counts and current plans before fetching the full recipe catalog and prices. Feature views are built on demand and inactive panels are released; the frontend keeps only the active locale's recipe catalog, reuses it across week changes, and invalidates it after admin edits. The app coalesces rapid refresh requests to the latest state. The browser builds its searchable text once per view. Shopping rows render in frame-sized batches, and recipe images load asynchronously.
+The frontend and backend are separate Python packages under `src/frontend` and `src/backend`. The launcher creates one `LocalPlanner` and passes it to the Kivy app. It calls the recipe, ingredient, and plan stores in process; no socket or HTTP server starts. Data work and queued shopping writes stay on worker threads, with UI updates scheduled on the Kivy event loop. The launcher closes SQLite storage after outstanding worker tasks finish. Startup shows the overview from small catalog counts and current plans before loading the full recipe catalog and prices. Feature views are built on demand and inactive panels are released; the frontend keeps only the active locale's recipe catalog, reuses it across week changes, and invalidates it after admin edits. The app coalesces rapid refresh requests to the latest state. The browser builds its searchable text once per view. Shopping rows render in frame-sized batches, and recipe images load asynchronously.
 
 ## Feature ownership
 
@@ -16,18 +16,16 @@ The frontend and backend are separate Python packages under `src/frontend` and `
 | `cooking_planner.recipes`, `.plans`, `.shopping` | Kivy feature views and shopping draft |
 | `cooking_planner.AppShell` | Main shell and feature tab construction |
 | `cooking_planner.shopping.persistence` | Shopping draft validation, recovery copies, and atomic JSON writes |
-| `cooking_planner.api` | HTTP client and local backend lifecycle |
-| `cooking_planner_backend.routes` | HTTP controllers separated into recipe, admin recipe, ingredient, admin ingredient, price, plan, and shopping modules |
+| `cooking_planner_backend.LocalPlanner` | Local operations and storage lifecycle used by the UI |
 | `cooking_planner_backend.recipes.RecipeStore` and `.mapper` | Catalog behavior, admin overlays, and recipe DTO mapping |
 | `cooking_planner_backend.ingredients.IngredientStore` | Ingredient translations, search, prices |
 | `cooking_planner_backend.plans.PlanStore` | Meal-plan persistence and shopping aggregation |
 | `cooking_planner_backend.entities` | One SQLAlchemy model per file |
 | `cooking_planner_backend.repositories` | SQLite sessions and atomic JSON file operations |
-| `cooking_planner_backend.app` | FastAPI composition and HTTP error mapping |
 
 ## Storage and compatibility
 
-Catalogs use `data/recipes_<language>.json` and are never written by the app. They are validated for version, language, count, IDs, and required recipe content before ingredient seeding. Recipes retain stable IDs across translations and plans. Admin changes use `recipe-edits.json` version 1, the same overlay shape as the earlier backend. Recipe edits require ingredient IDs already present in SQLite and use SQLite translations for their saved names. New recipe IDs include the selected country code when present, which distinguishes recipes with the same dish name and different origins. The image picker sends selected local photos through the admin API; `RecipeImageStore` validates their type, size, recipe-specific reference, and content duplicates before writing them under the configured user data directory's `recipe_images/<recipe-id>/` folder. The bundled image catalog stays read only. A short-lived `recipe-edits.pending.json` records the before and after overlay around a SQLAlchemy marker transaction. On restart, that marker chooses which overlay to keep after an interrupted edit.
+Catalogs use `data/recipes_<language>.json` and are never written by the app. They are validated for version, language, count, IDs, and required recipe content before ingredient seeding. Recipes retain stable IDs across translations and plans. Admin changes use `recipe-edits.json` version 1, the same overlay shape as the earlier backend. Recipe edits require ingredient IDs already present in SQLite and use SQLite translations for their saved names. New recipe IDs include the selected country code when present, which distinguishes recipes with the same dish name and different origins. The image picker passes selected photo bytes to `RecipeImageStore`; it validates type, size, recipe-specific reference, and content duplicates before writing them under the configured user data directory's `recipe_images/<recipe-id>/` folder. The bundled image catalog stays read only. A short-lived `recipe-edits.pending.json` records the before and after overlay around a SQLAlchemy marker transaction. On restart, that marker chooses which overlay to keep after an interrupted edit.
 
 `plans.json` keeps date, meal slot, recipe ID, servings, and stable random positive plan ID. Missing or deleted recipes remain on the plan with a “Missing recipe” title and no derived shopping ingredients. `shopping.json` keeps an explicit set of selected plan IDs per week, ingredient choices, custom items, and checked purchases. New or changed Week plans do not enter Shopping until selected there. Legacy drafts retain explicitly saved plan IDs; implicit selections are cleared during migration so later Week changes cannot add Shopping items. Clearing Shopping leaves the Week plan intact and keeps later plans out of that list. The `pending` list records idempotent ingredient and price writes before calling the backend. Successful writes are removed from the list; interrupted writes replay on the next app launch.
 
@@ -35,8 +33,8 @@ SQLAlchemy uses the existing `cooking-planner.db` tables: `ingredient`, `ingredi
 
 Settings remain in `client.cfg`, and all writable files remain under `COOKING_PLANNER_DATA_DIR` or the platform default. Close the app before copying them for backup.
 
-## API and mobile direction
+## Local service and mobile direction
 
-The HTTP endpoints retain the desktop client's recipe, admin, plan, ingredient, and price paths. The backend is hosted inside the same Python process, so packaging no longer needs Java. FastAPI and SQLAlchemy are separate from the Kivy views. The Android entry point uses the same frontend and backend packages, stages the catalogs and images as read-only APK assets, and writes plans, settings, and SQLite data to app-private storage. Buildozer and python-for-android supply the Android dependency recipes. Device compatibility still requires APK installation and runtime checks; iOS remains unbuilt.
+`LocalPlanner` exposes recipe, admin, plan, ingredient, and price operations to the Kivy app. Validation and persistence remain in feature stores and repositories. The Android entry point uses the same frontend and backend packages, stages the catalogs and images as read-only APK assets, and writes plans, settings, and SQLite data to app-private storage. Buildozer and python-for-android supply the Android dependency recipes. Device compatibility still requires APK installation and runtime checks; iOS remains unbuilt.
 
 The desktop distribution workflow builds a Python wheel and PyInstaller executable. Linux wraps that executable in an AppImage; Windows wraps it in an Inno Setup installer. Android builds a separate Kivy APK through Buildozer. The user data directory is outside the bundled files on every platform.

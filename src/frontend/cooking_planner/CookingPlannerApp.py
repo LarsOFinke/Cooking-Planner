@@ -297,7 +297,7 @@ class CookingPlannerApp(AppShell, AdminActions, App):
 
     def on_stop(self):
         self._stopping = True
-        self.worker.shutdown(wait=False, cancel_futures=True)
+        self.worker.shutdown(wait=True, cancel_futures=True)
 
     def on_pause(self):
         return True

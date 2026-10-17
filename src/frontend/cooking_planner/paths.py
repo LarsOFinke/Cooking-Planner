@@ -1,4 +1,4 @@
-"""Locations shared by the backend launcher and local recipe images."""
+"""Locations shared by local storage and recipe images."""
 
 import os
 import sys

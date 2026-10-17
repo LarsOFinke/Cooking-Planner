@@ -1,4 +1,4 @@
-"""Catalog-backed recipe editor; writes are handled by the backend API."""
+"""Catalog-backed recipe editor; writes use local backend services."""
 
 from copy import deepcopy
 import re

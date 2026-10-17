@@ -20,7 +20,7 @@ wheel="$("$build_python" scripts/build/common/wheel_path.py)"
     --log build/logs/linux-executable.log -- \
     "$build_python" -m PyInstaller --noconfirm --onefile --windowed \
     --name CookingPlanner --distpath dist/linux --workpath build/pyinstaller-linux --specpath build \
-    --collect-submodules sqlalchemy.dialects.sqlite --collect-submodules uvicorn \
+    --collect-submodules sqlalchemy.dialects.sqlite \
     --add-data "$project_root/data:catalogs" scripts/build/common/frozen_entry.py
 "${progress[@]}" --step 4 --total 4 --name 'Build Linux AppImage' \
     --log build/logs/linux-appimage.log -- bash scripts/build/linux/package-linux.sh

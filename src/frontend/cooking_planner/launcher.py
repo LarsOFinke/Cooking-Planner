@@ -52,16 +52,6 @@ def main() -> None:
     data_dir = Path(configured_data_dir) if configured_data_dir else default_data_dir()
     prepare_data_directory(data_dir, not configured_data_dir)
     config.read(data_dir / "client.cfg")
-    port = bounded_number(config, 'backend', 'port', 8765, 1, 65535)
-    if os.getenv('COOKING_PLANNER_PORT'):
-        port = int(os.environ['COOKING_PLANNER_PORT'])
-        if not 1 <= port <= 65535:
-            raise ValueError('COOKING_PLANNER_PORT must be between 1 and 65535')
-    request_timeout = bounded_number(config, 'backend', 'request_timeout', 10.0, 1.0, 120.0)
-    startup_timeout = bounded_number(config, 'backend', 'startup_timeout', 60.0, 5.0, 300.0)
-    log_level = os.getenv('COOKING_PLANNER_LOG_LEVEL', 'warning').lower()
-    if log_level not in ('error', 'warning', 'info', 'debug'):
-        raise ValueError('COOKING_PLANNER_LOG_LEVEL must be error, warning, info, or debug')
     if not on_android():
         from kivy.config import Config
 
@@ -71,23 +61,23 @@ def main() -> None:
         Config.set('graphics', 'height', str(bounded_number(config, 'ui', 'window_height', 820, 650, 2160)))
         Config.set('graphics', 'fullscreen', '1' if fullscreen_enabled(config) else '0')
 
-    from cooking_planner.api.ApiClient import ApiClient
-    from cooking_planner.api.BackendLauncher import BackendLauncher
+    from cooking_planner_backend.LocalPlanner import LocalPlanner
     from cooking_planner.CookingPlannerApp import CookingPlannerApp
 
-    launcher = BackendLauncher(port, data_dir, startup_timeout=startup_timeout, log_level=log_level)
+    planner = None
     try:
         startup_error = None
         try:
-            launcher.start()
-        except (OSError, RuntimeError) as error:
+            planner = LocalPlanner(data_dir, catalog_directory())
+        except (OSError, RuntimeError, ValueError) as error:
             startup_error = str(error)
-            print(f'Local backend startup failed: {startup_error}', file=sys.stderr)
+            print(f'Local planner startup failed: {startup_error}', file=sys.stderr)
         scale = bounded_number(config, 'ui', 'scale', 1.0, 1.0, 2.0)
         if scale not in (1.0, 1.25, 1.5, 1.75, 2.0):
             scale = 1.0
-        CookingPlannerApp(ApiClient(f"http://127.0.0.1:{port}", launcher.instance_token, timeout=request_timeout),
+        CookingPlannerApp(planner,
                           startup_error=startup_error, config_path=data_dir / "client.cfg", ui_scale=scale,
                           ui_locale=preferred_locale(config)).run()
     finally:
-        launcher.stop()
+        if planner is not None:
+            planner.close()

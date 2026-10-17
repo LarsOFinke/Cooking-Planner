@@ -1,4 +1,4 @@
-"""Manage the SQLite ingredient catalog through the admin HTTP API."""
+"""Manage the SQLite ingredient catalog through local backend services."""
 
 import re
 

@@ -54,6 +54,20 @@ class AndroidPackagingTest(unittest.TestCase):
             self.assertTrue((destination / 'catalogs/recipes_en.json').is_file())
             self.assertTrue((destination / 'catalogs/recipe_images/sample/image_01.jpg').is_file())
 
+    def test_apk_check_requires_no_permissions_and_disables_backup(self):
+        spec = importlib.util.spec_from_file_location('android_verify', ROOT / 'scripts/build/android/verify-package.py')
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        manifest = 'A: android:allowBackup(0x01010280)=(type 0x12)0x0\n'
+        with patch.object(module, 'find_aapt', return_value='aapt'), \
+             patch.object(module.subprocess, 'check_output', side_effect=['package: name=app\n', manifest]):
+            module.verify(Path('/tmp/example.apk'))
+        with patch.object(module, 'find_aapt', return_value='aapt'), \
+             patch.object(module.subprocess, 'check_output', side_effect=[
+                 "uses-permission: name='android.permission.INTERNET'\n", manifest]):
+            with self.assertRaisesRegex(RuntimeError, 'Unexpected Android permissions'):
+                module.verify(Path('/tmp/example.apk'))
+
 
 if __name__ == '__main__':
     unittest.main()

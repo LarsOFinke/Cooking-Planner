@@ -1,7 +1,5 @@
 """Validate and store user recipe photos outside the read-only catalog."""
 
-import base64
-import binascii
 import hashlib
 import re
 from pathlib import Path
@@ -52,14 +50,8 @@ class RecipeImageStore:
                 target = self._user_file(recipe_id, reference)
                 if not UPLOADED_NAME.fullmatch(target.name):
                     raise ValueError('Uploaded images need a unique image name')
-                encoded = item.get('data')
-                if not isinstance(encoded, str) or len(encoded) > (MAX_IMAGE_BYTES * 4 // 3) + 8:
-                    raise ValueError('Image is too large')
-                try:
-                    data = base64.b64decode(encoded, validate=True)
-                except binascii.Error as error:
-                    raise ValueError('Invalid image upload') from error
-                if len(data) > MAX_IMAGE_BYTES:
+                data = item.get('data')
+                if not isinstance(data, bytes) or len(data) > MAX_IMAGE_BYTES:
                     raise ValueError('Image is too large')
                 kind = image_type(data)
                 if target.suffix.lower().lstrip('.') not in (('jpg', 'jpeg') if kind == 'jpeg' else (kind,)):

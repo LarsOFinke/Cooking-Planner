@@ -24,12 +24,12 @@ def verify(apk: Path) -> None:
     aapt = find_aapt()
     badging = subprocess.check_output([aapt, 'dump', 'badging', str(apk)], text=True)
     permissions = set(re.findall(r"^uses-permission: name='([^']+)'", badging, re.MULTILINE))
-    if permissions != {'android.permission.INTERNET'}:
+    if permissions:
         raise RuntimeError(f'Unexpected Android permissions: {sorted(permissions)}')
     manifest = subprocess.check_output([aapt, 'dump', 'xmltree', str(apk), 'AndroidManifest.xml'], text=True)
     if not re.search(r'android:allowBackup\([^\n]+\)=\(type 0x12\)0x0(?:\s|$)', manifest):
         raise RuntimeError('Android application backups must be disabled')
-    print(f'APK manifest verified: only INTERNET permission; allowBackup=false ({apk})')
+    print(f'APK manifest verified: no application permissions; allowBackup=false ({apk})')
 
 
 if __name__ == '__main__':

@@ -13,12 +13,12 @@ from cooking_planner.launcher import bounded_number, fullscreen_enabled, preferr
 class StartupConfigTest(unittest.TestCase):
     def test_numbers_use_defaults_for_missing_invalid_and_out_of_range_values(self):
         config = ConfigParser()
-        self.assertEqual(10.0, bounded_number(config, 'backend', 'request_timeout', 10.0, 1.0, 120.0))
-        config['backend'] = {'request_timeout': '30.5', 'port': '99999'}
-        self.assertEqual(30.5, bounded_number(config, 'backend', 'request_timeout', 10.0, 1.0, 120.0))
-        self.assertEqual(8765, bounded_number(config, 'backend', 'port', 8765, 1, 65535))
-        config['backend']['request_timeout'] = 'nope'
-        self.assertEqual(10.0, bounded_number(config, 'backend', 'request_timeout', 10.0, 1.0, 120.0))
+        self.assertEqual(1.0, bounded_number(config, 'ui', 'scale', 1.0, 1.0, 2.0))
+        config['ui'] = {'scale': '1.5', 'window_width': '99999'}
+        self.assertEqual(1.5, bounded_number(config, 'ui', 'scale', 1.0, 1.0, 2.0))
+        self.assertEqual(1280, bounded_number(config, 'ui', 'window_width', 1280, 900, 3840))
+        config['ui']['scale'] = 'nope'
+        self.assertEqual(1.0, bounded_number(config, 'ui', 'scale', 1.0, 1.0, 2.0))
 
     def test_locale_uses_available_catalog_and_fullscreen_is_validated(self):
         with tempfile.TemporaryDirectory() as temp:
