@@ -2,6 +2,8 @@ $ErrorActionPreference = 'Stop'
 $projectRoot = (Resolve-Path (Join-Path $PSScriptRoot '../../..')).Path
 Set-Location $projectRoot
 . (Join-Path $PSScriptRoot 'ensure-windows-deps.ps1')
+& $pythonCommand @pythonArguments scripts/images/verify_recipe_images.py
+if ($LASTEXITCODE -ne 0) { throw 'Bundled recipe images did not pass verification' }
 
 function Invoke-BuildStep([int]$Step, [string]$Name, [string]$Log, [string[]]$Command) {
     & $pythonCommand @pythonArguments scripts/build/common/progress.py --step $Step --total 7 `
@@ -24,10 +26,10 @@ Invoke-BuildStep -Step 3 -Name 'Install app dependencies' -Log 'build/logs/windo
 if ($LASTEXITCODE -ne 0) { throw 'Wheel build cleanup failed' }
 Invoke-BuildStep -Step 4 -Name 'Build Python wheel' -Log 'build/logs/windows-wheel.log' `
     -Command @($python, '-m', 'build', '--wheel', '--no-isolation', '--outdir', 'dist/wheels', '.')
-$wheel = Get-ChildItem 'dist/wheels/cooking_planner-0.1.0-*.whl' | Select-Object -First 1
-if (-not $wheel) { throw 'Cooking Planner wheel not found' }
+$wheel = (& $python scripts/build/common/wheel_path.py).Trim()
+if ($LASTEXITCODE -ne 0) { throw 'Current Cooking Planner wheel not found' }
 Invoke-BuildStep -Step 5 -Name 'Install app wheel' -Log 'build/logs/windows-wheel-install.log' `
-    -Command @($python, '-m', 'pip', 'install', '--no-deps', '--force-reinstall', $wheel.FullName)
+    -Command @($python, '-m', 'pip', 'install', '--no-deps', '--force-reinstall', $wheel)
 New-Item -ItemType Directory -Path dist/windows -Force | Out-Null
 $catalogData = Join-Path $projectRoot 'data'
 Invoke-BuildStep -Step 6 -Name 'Build bundled Windows executable' -Log 'build/logs/windows-executable.log' `
@@ -55,7 +57,9 @@ if (-not $iscc) {
 }
 if (-not $iscc) { throw 'Inno Setup 6 compiler (ISCC.exe) is required.' }
 Write-Host "[7/7] Build Windows installer with $iscc"
-& $iscc 'scripts/build/windows/cooking-planner.iss'
+$version = (& $python scripts/build/common/project_version.py).Trim()
+if ($LASTEXITCODE -ne 0) { throw 'Project version could not be read' }
+& $iscc "/DAppVersion=$version" 'scripts/build/windows/cooking-planner.iss'
 if ($LASTEXITCODE -ne 0) { throw "Build Windows installer failed with exit code $LASTEXITCODE" }
 Write-Host '[7/7] Build Windows installer done'
 Write-Host 'Built dist/windows/CookingPlanner-Setup.exe'

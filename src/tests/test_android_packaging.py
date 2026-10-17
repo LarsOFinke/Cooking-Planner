@@ -42,8 +42,12 @@ class AndroidPackagingTest(unittest.TestCase):
             (root / 'src/backend/cooking_planner_backend/__init__.py').write_text('')
             (root / 'data/recipes_en.json').write_text('{}')
             (root / 'data/recipe_images/sample/image_01.jpg').write_bytes(b'image')
+            (root / 'pyproject.toml').write_text('[project]\nversion = "1.2.3"\n')
+            (root / 'scripts/build/android').mkdir(parents=True)
+            (root / 'scripts/build/android/buildozer.spec').write_text('[app]\nversion = 0.0.0\n')
             destination = Path(temp) / 'staged'
             self.assertEqual(destination, module.stage(root, destination))
+            self.assertIn('version = 1.2.3', (destination.parent / 'buildozer.spec').read_text())
             self.assertTrue((destination / 'main.py').is_file())
             self.assertTrue((destination / 'cooking_planner/__init__.py').is_file())
             self.assertTrue((destination / 'cooking_planner_backend/__init__.py').is_file())

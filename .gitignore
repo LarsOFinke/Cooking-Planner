@@ -9,6 +9,7 @@ __pycache__/
 target/
 dist/
 /build/
+data/.image-import-recovery/
 *.spec
 !scripts/build/android/buildozer.spec
 *.db

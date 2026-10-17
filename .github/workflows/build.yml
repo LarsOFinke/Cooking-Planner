@@ -23,7 +23,7 @@ jobs:
       - name: Install display and Python dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb libgl1 libmtdev1t64
+          sudo apt-get install -y xvfb libgl1 libmtdev1t64 shellcheck
           python -m pip install --upgrade pip==26.2.1
           python -m pip install -r src/requirements.txt -r src/requirements-dev.txt -r src/requirements-build.txt
       - name: Audit Python dependencies
@@ -33,6 +33,10 @@ jobs:
         env:
           QUALITY_PYTHON: python
           KIVY_NO_FILELOG: '1'
+      - name: Check Bash scripts
+        run: find scripts -name '*.sh' -print0 | xargs -0 shellcheck -x
+      - name: Verify bundled recipe images
+        run: python scripts/images/verify_recipe_images.py
 
   linux:
     if: github.event_name != 'pull_request'
@@ -61,9 +65,26 @@ jobs:
           if-no-files-found: error
           compression-level: 0
 
+  windows-scripts:
+    runs-on: windows-2022
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Parse PowerShell scripts
+        shell: pwsh
+        run: |
+          Get-ChildItem scripts -Recurse -Filter '*.ps1' | ForEach-Object {
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$tokens, [ref]$errors) | Out-Null
+            if ($errors) { throw "PowerShell syntax errors in $($_.FullName): $errors" }
+          }
+
   windows:
     if: github.event_name != 'pull_request'
-    needs: quality
+    needs: [quality, windows-scripts]
     runs-on: windows-2022
     timeout-minutes: 90
     steps:
@@ -120,8 +141,6 @@ jobs:
         run: make compile-android
         env:
           ANDROID_PYTHON: python
-      - name: Verify APK privacy settings
-        run: python scripts/build/android/verify-package.py dist/android/CookingPlanner-arm64-v8a-debug.apk
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: cooking-planner-android-arm64-v8a-debug

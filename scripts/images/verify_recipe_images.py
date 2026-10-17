@@ -1,43 +1,27 @@
 """Validate both locale references, real picture files and rights records."""
 
 import csv
-import hashlib
 import json
-import re
-import struct
 from pathlib import Path
+
+from image_file import PHOTO_NAME, check_photo
 
 DATA = Path(__file__).resolve().parents[2] / 'data'
 IMAGES = DATA / 'recipe_images'
-PHOTO_NAME = re.compile(r'image_([0-9]{2})\.(jpg|jpeg|png|webp)')
 
 
 def load(locale):
     document = json.loads((DATA / f'recipes_{locale}.json').read_text(encoding='utf-8'))
     recipes = document['recipes']
     ids = [recipe['id'] for recipe in recipes]
-    if len(ids) != 586 or len(set(ids)) != 586:
-        raise ValueError(f'{locale}: expected 586 unique recipe IDs')
+    if not ids or len(ids) != len(set(ids)):
+        raise ValueError(f'{locale}: expected nonempty unique recipe IDs')
     return document, {recipe['id']: recipe for recipe in recipes}
 
 
-def check_photo(target: Path) -> str:
-    data = target.read_bytes()
-    if len(data) < 1024:
-        raise ValueError(f'Empty or tiny image: {target}')
-    if target.suffix in ('.jpg', '.jpeg'):
-        valid = data.startswith(b'\xff\xd8\xff') and data.endswith(b'\xff\xd9')
-    elif target.suffix == '.png':
-        valid = data.startswith(b'\x89PNG\r\n\x1a\n') and b'IEND' in data[-32:]
-    else:
-        valid = (data.startswith(b'RIFF') and data[8:12] == b'WEBP'
-                 and struct.unpack('<I', data[4:8])[0] + 8 == len(data))
-    if not valid:
-        raise ValueError(f'Invalid image content: {target}')
-    return hashlib.sha256(data).hexdigest()
-
-
 def main():
+    if (DATA / '.image-import-recovery').exists():
+        raise ValueError('Interrupted image import: rerun the importer before packaging')
     de_doc, german = load('de')
     en_doc, english = load('en')
     if set(german) != set(english):
@@ -130,7 +114,7 @@ def main():
     empty_dirs = [path for path in IMAGES.iterdir() if path.is_dir() and not any(path.iterdir())] if IMAGES.exists() else []
     if empty_dirs:
         raise ValueError(f'{len(empty_dirs)} empty image directories remain')
-    print(f'{covered}/586 Rezepte mit Bildern; {len(referenced)} unterschiedliche Bilddateien; '
+    print(f'{covered}/{len(english)} Rezepte mit Bildern; {len(referenced)} unterschiedliche Bilddateien; '
           f'{pending} Bildrechte offen.')
     return 0
 

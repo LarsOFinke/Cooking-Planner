@@ -2,7 +2,7 @@
 
 Cooking Planner is a local Windows/Linux desktop app for browsing English and German recipes, planning meals, estimating costs, and preparing a shopping list. The Kivy frontend talks over loopback HTTP to a separate Python FastAPI backend. SQLAlchemy stores ingredient names and prices in SQLite. The backend runs in a thread owned by the app, so there is no separate runtime or service to install.
 
-The source tree keeps the UI in `src/frontend/cooking_planner`, API and data logic in `src/backend/cooking_planner_backend`, and tests in `src/tests`. Build scripts live in `scripts/build/linux`, `scripts/build/windows`, `scripts/build/android`, and `scripts/build/common`; development, quality, image, and install scripts have their own directories.
+The source tree keeps the UI in `src/frontend/cooking_planner`, API and data logic in `src/backend/cooking_planner_backend`, and tests in `src/tests`. Build scripts live in `scripts/build/linux`, `scripts/build/windows`, `scripts/build/android`, and `scripts/build/common`; development, quality, image, and install scripts have their own directories. See the [script entry points](scripts/README.md) for ownership and checks.
 
 ## Run and build
 

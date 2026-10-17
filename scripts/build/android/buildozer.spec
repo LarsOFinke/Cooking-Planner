@@ -2,7 +2,7 @@
 title = Cooking Planner
 package.name = cookingplanner
 package.domain = org.cookingplanner
-version = 0.1.0
+version = __PROJECT_VERSION__
 source.dir = source
 source.include_exts = py,json,csv,webp,png,jpg,jpeg
 requirements = python3,kivy==2.3.1,sqlite3,libffi,openssl,sqlalchemy==2.0.30,pydantic-core==2.41.4,pydantic==2.12.3,fastapi==0.143.2,starlette==1.8.0,uvicorn==0.54.0,android

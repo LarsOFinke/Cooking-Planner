@@ -13,6 +13,7 @@ python_bin="${ANDROID_PYTHON:-python3.14}"
     echo 'ANDROID_PYTHON must be Python 3.14 with venv support.' >&2
     exit 1
 }
+"$python_bin" scripts/images/verify_recipe_images.py
 for required in git zip unzip java javac autoconf automake pkg-config cmake rustup rustc cargo; do
     command -v "$required" >/dev/null 2>&1 || {
         echo "Missing Android build prerequisite: $required. See docs/ANDROID_BUILD.md." >&2
@@ -34,8 +35,11 @@ export PATH="$venv/bin:$PATH"
 "$venv/bin/python" scripts/build/android/stage.py
 
 build_dir="$project_root/build/android"
-cp scripts/build/android/buildozer.spec "$build_dir/buildozer.spec"
 cd "$build_dir"
+for old_apk in bin/*-debug.apk; do
+    [[ -e "$old_apk" ]] || continue
+    rm -- "$old_apk"
+done
 "$venv/bin/buildozer" -v android debug
 
 shopt -s nullglob
@@ -46,4 +50,6 @@ if (( ${#artifacts[@]} != 1 )); then
 fi
 mkdir -p "$project_root/dist/android"
 cp "${artifacts[0]}" "$project_root/dist/android/CookingPlanner-arm64-v8a-debug.apk"
+cd "$project_root"
+"$venv/bin/python" scripts/build/android/verify-package.py dist/android/CookingPlanner-arm64-v8a-debug.apk
 echo 'Built dist/android/CookingPlanner-arm64-v8a-debug.apk'

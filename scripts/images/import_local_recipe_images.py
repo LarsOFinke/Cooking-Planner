@@ -4,33 +4,15 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
-import re
-import struct
 from pathlib import Path
 
-from recipe_image_catalog import read_catalog, synchronize_locales, write_attributions, write_json
+from image_file import PHOTO_NAME, check_photo
+from recipe_image_catalog import (attribution_documents, commit_documents, json_bytes, locale_documents,
+                                  read_catalog, recover_documents)
 
 ROOT = Path(__file__).resolve().parents[2] / 'data' / 'recipe_images'
-NAME = re.compile(r'image_([0-9]{2})\.(jpg|jpeg|png|webp)')
 CREDIT_FIELDS = ('author', 'license', 'source_url', 'license_url', 'credit')
-
-
-def check_file(path: Path) -> str:
-    data = path.read_bytes()
-    if len(data) < 1024:
-        raise ValueError(f'Bild zu klein oder leer: {path}')
-    if path.suffix.lower() in ('.jpg', '.jpeg'):
-        valid = data.startswith(b'\xff\xd8\xff') and data.endswith(b'\xff\xd9')
-    elif path.suffix.lower() == '.png':
-        valid = data.startswith(b'\x89PNG\r\n\x1a\n') and b'IEND' in data[-32:]
-    else:
-        valid = (data.startswith(b'RIFF') and data[8:12] == b'WEBP'
-                 and struct.unpack('<I', data[4:8])[0] + 8 == len(data))
-    if not valid:
-        raise ValueError(f'Dateiinhalt passt nicht zur Bildendung: {path}')
-    return hashlib.sha256(data).hexdigest()
 
 
 def scan(root: Path, ids: set[str]) -> dict[str, list[tuple[Path, str]]]:
@@ -46,13 +28,13 @@ def scan(root: Path, ids: set[str]) -> dict[str, list[tuple[Path, str]]]:
             raise ValueError(f'Unbekannte Rezept-ID als Bildordner: {folder.name}')
         numbered = {}
         for path in folder.iterdir():
-            match = NAME.fullmatch(path.name) if path.is_file() else None
+            match = PHOTO_NAME.fullmatch(path.name) if path.is_file() else None
             if match is None:
                 raise ValueError(f'Nicht unterstützte Datei in Rezeptordner: {path}')
             number = int(match.group(1))
             if number in numbered:
                 raise ValueError(f'Doppelte Bildnummer in {folder}')
-            numbered[number] = (path, check_file(path))
+            numbered[number] = (path, check_photo(path))
         if numbered:
             if sorted(numbered) != list(range(1, len(numbered) + 1)) or len(numbered) > 3:
                 raise ValueError(f'{folder}: 1–3 fortlaufende Bildnummern ab image_01 erforderlich')
@@ -72,6 +54,7 @@ def load_credits(path: Path) -> dict:
 
 
 def import_images(root: Path) -> tuple[int, int]:
+    recover_documents(root.parent)
     catalog = read_catalog(root, allow_existing_refs=True)
     by_id = {entry['recipe_id']: entry for entry in catalog['recipes']}
     found = scan(root, set(by_id))
@@ -123,13 +106,12 @@ def import_images(root: Path) -> tuple[int, int]:
         entry['images'] = updated
         if updated:
             entry['status'] = 'downloaded'
+    documents = locale_documents(root, catalog)
     if any(entry['images'] for entry in catalog['recipes']):
-        write_json(root / 'LOCAL_IMAGE_CREDITS.json', {'version': 1, 'images': updated_credits})
-        write_json(root / 'image_catalog.json', catalog)
-        synchronize_locales(root, catalog)
-        write_attributions(root, catalog['recipes'])
-    else:
-        synchronize_locales(root, catalog)
+        documents[root / 'LOCAL_IMAGE_CREDITS.json'] = json_bytes({'version': 1, 'images': updated_credits})
+        documents[root / 'image_catalog.json'] = json_bytes(catalog)
+    documents.update(attribution_documents(root, catalog['recipes']))
+    commit_documents(root.parent, documents)
     return len(found), local_count
 
 

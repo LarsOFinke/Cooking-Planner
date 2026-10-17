@@ -19,7 +19,9 @@ if ($env:DEV_PYTHON) {
     }
 }
 
-& $python scripts/development/check-python-deps.py *> $null
+$checkArgs = @()
+if ($managedVenv) { $checkArgs = @('--dev') }
+& $python scripts/development/check-python-deps.py @checkArgs *> $null
 if ($LASTEXITCODE -ne 0) {
     if (-not $managedVenv) { throw 'DEV_PYTHON must point to Python with a compatible Kivy version installed.' }
     & $python scripts/development/install-python-deps.py --dev

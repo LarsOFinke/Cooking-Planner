@@ -14,16 +14,20 @@ case "$(uname -m)" in
 esac
 
 tool="${APPIMAGETOOL:-$project_root/build/tools/appimagetool-$arch.AppImage}"
-if [[ ! -f "$tool" ]]; then
+if [[ -z "${APPIMAGETOOL:-}" && ! -f "$tool" ]]; then
     mkdir -p build/tools
     curl -fL "https://github.com/AppImage/appimagetool/releases/download/1.9.1/appimagetool-$arch.AppImage" \
         -o "$tool.tmp"
     printf '%s  %s\n' "$sha" "$tool.tmp" | sha256sum -c -
     mv "$tool.tmp" "$tool"
 fi
+if [[ -z "${APPIMAGETOOL:-}" ]]; then
+    printf '%s  %s\n' "$sha" "$tool" | sha256sum -c -
+fi
 chmod +x "$tool"
 
 appdir="$project_root/build/CookingPlanner.AppDir"
+rm -rf -- "$appdir"
 mkdir -p "$appdir/usr/bin"
 cp "$binary" "$appdir/usr/bin/CookingPlanner"
 cp scripts/build/linux/cooking-planner.svg "$appdir/cooking-planner.svg"

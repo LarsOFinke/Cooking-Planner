@@ -2,6 +2,11 @@
 
 from pathlib import Path
 from shutil import copy2, copytree, rmtree
+import re
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'common'))
+from project_version import project_version  # noqa: E402
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -24,6 +29,11 @@ def stage(root: Path = ROOT, destination: Path = STAGE) -> Path:
     if not list(catalogs.glob('recipes_??.json')):
         raise RuntimeError('No recipe catalogs were found for the Android package')
     copytree(root / 'data' / 'recipe_images', catalogs / 'recipe_images')
+    spec = (root / 'scripts' / 'build' / 'android' / 'buildozer.spec').read_text(encoding='utf-8')
+    spec, replacements = re.subn(r'(?m)^version = .*$', f'version = {project_version(root)}', spec)
+    if replacements != 1:
+        raise ValueError('Expected one Android package version in buildozer.spec')
+    (destination.parent / 'buildozer.spec').write_text(spec, encoding='utf-8')
     return destination
 
 
