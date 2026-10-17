@@ -67,7 +67,9 @@ class PythonBackendTest(unittest.TestCase):
 
     def test_catalogs_locales_and_plan_shopping_survive_reopen(self):
         self.assertEqual(['de', 'en'], self.client.get('/api/recipes/locales').json())
-        self.assertEqual(2, self.client.get('/api/recipes/info?locale=en').json()['recipeCount'])
+        info = self.client.get('/api/recipes/info?locale=en').json()
+        self.assertEqual(2, info['recipeCount'])
+        self.assertGreater(info['categoryCount'], 0)
         recipe_id = self.rows['en']['id']
         first = self.client.get(f'/api/recipes/{recipe_id}?locale=en').json()
         german = self.client.get(f'/api/recipes/{recipe_id}?locale=de').json()

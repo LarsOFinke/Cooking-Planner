@@ -105,8 +105,10 @@ class UiFlowTest(unittest.TestCase):
         self.assertTrue(browser.detail_tabs['recipe'].bold)
         self.assertEqual(self.recipe['id'], self.app.selected_id)
         self.app.show_tab('week')
+        self.assertIsNone(self.app.browser)
         self.app.show_tab('shopping')
         self.app.show_tab('overview')
+        self.assertIsNone(self.app.shopping_panel)
         self.assertEqual('overview', self.app.tab)
 
     def test_language_choice_persists_and_shopping_uses_it(self):
@@ -118,6 +120,17 @@ class UiFlowTest(unittest.TestCase):
         config = ConfigParser()
         config.read(self.app.config_path)
         self.assertEqual('de', config.get('ui', 'locale'))
+
+    def test_language_change_waits_for_its_catalog_before_showing_explore(self):
+        self.app.startup_error = None
+        self.app.locales = ('en', 'de')
+        self.app.show_tab('explore')
+        with patch.object(self.app, 'refresh') as refresh:
+            self.app.change_locale('de')
+        refresh.assert_called_once()
+        self.assertFalse(self.app._catalog_ready)
+        self.assertIsNone(self.app.browser)
+        self.assertEqual('Rezepte werden geladen…', self.app.content.children[0].children[-1].text)
 
     def test_hover_feedback_follows_pointer_and_active_state(self):
         holder = box()
@@ -621,6 +634,58 @@ class UiFlowTest(unittest.TestCase):
         self.app.refresh()
         self.assertEqual(['plans', 'prices', 'reference'], calls)
 
+    def test_overview_loads_before_catalog_and_only_active_locale_is_cached(self):
+        self.app.startup_error = None
+        self.app._overview_ready = False
+        self.app._catalog_ready = False
+        self.app._catalog_cache.clear()
+        self.app.recipes = []
+        self.app.info = {}
+        self.app.plans = []
+        self.app._render_tab()
+        calls = []
+        info = {'recipeCount': 1, 'categoryCount': 1, 'countryCount': 1}
+        self.app.client = SimpleNamespace(
+            locales=lambda: calls.append('locales') or ['en'],
+            catalog_info=lambda _: calls.append('info') or info,
+            plans=lambda *_: calls.append('plans') or [],
+            recipes=lambda _: calls.append('recipes') or [self.recipe],
+            ingredient_prices=lambda _: calls.append('prices') or {},
+            reference_prices=lambda: calls.append('reference') or {},
+        )
+        self.app._submit = lambda work, success, show_status=True, finished=None: (success(work()),
+                                                                                   finished() if finished else None)
+        with patch('cooking_planner.CookingPlannerApp.Clock.schedule_once') as schedule:
+            self.app._load_overview()
+            self.assertEqual(['locales', 'info', 'plans'], calls)
+            self.assertTrue(self.app._overview_ready)
+            self.assertFalse(self.app._catalog_ready)
+            overview = self.app._active_panel
+            values = [widget.text for widget in overview.metrics.walk() if hasattr(widget, 'text')]
+            self.assertIn('1', values)
+            self.app.show_tab('explore')
+            self.assertEqual('Loading recipes…', self.app.content.children[0].children[-1].text)
+            self.app.show_tab('overview')
+            overview = self.app._active_panel
+            self.app._catalog_cache['de'] = ([], [], {})
+            schedule.call_args.args[0](0)
+        self.assertEqual(['locales', 'info', 'plans', 'locales', 'recipes', 'info',
+                          'plans', 'prices', 'reference'], calls)
+        self.assertIs(overview, self.app._active_panel)
+        self.assertTrue(self.app._catalog_ready)
+        self.assertEqual(['en'], list(self.app._catalog_cache))
+
+    def test_startup_load_error_offers_retry(self):
+        self.app.startup_error = None
+        self.app._overview_ready = False
+        self.app._catalog_ready = False
+        with patch.object(self.app, 'refresh') as refresh:
+            self.app._report_error('Cannot reach the local backend.')
+            loading = self.app.content.children[0]
+            self.assertEqual('Cannot reach the local backend.', loading.children[-1].text)
+            release(loading.children[0])
+        refresh.assert_called_once()
+
     def test_rapid_week_changes_coalesce_refresh_requests(self):
         submitted = []
         starts = []
@@ -649,6 +714,7 @@ class UiFlowTest(unittest.TestCase):
         self.app.load_admin = Mock()
         self.app.show_tab('admin')
         self.app.show_tab('overview')
+        self.assertIsNone(self.app.admin_panel)
         self.app.show_tab('admin')
         self.app.load_admin.assert_not_called()
 

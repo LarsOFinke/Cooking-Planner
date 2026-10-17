@@ -35,6 +35,9 @@ class CookingPlannerApp(AppShell, AdminActions, App):
         self.week_start = date.today() - timedelta(days=date.today().weekday())
         self.recipes = []
         self._catalog_cache = {}
+        self._overview_ready = False
+        self._catalog_ready = False
+        self._loading_error = None
         self.plans = []
         self.info = {}
         self.admin_records = []
@@ -67,19 +70,23 @@ class CookingPlannerApp(AppShell, AdminActions, App):
             self._status(self.startup_error)
         else:
             self.shopping_draft.schedule_pending()
-            Clock.schedule_once(lambda *_: self.refresh(), 0)
+            Clock.schedule_once(lambda *_: self._load_overview(), 0)
         return self.root_view
 
     def _status(self, message):
         self.status_message = str(message)
         if hasattr(self, 'status_label'):
             self.status_label.text = self.status_message
-        if self.tab == 'admin' and hasattr(self, 'admin_panel'):
+        if self.tab == 'admin' and self.admin_panel is not None:
             self.admin_panel.set_status(self.status_message)
 
     def _report_error(self, message):
         self._status(message)
-        if self.tab == 'shopping' and hasattr(self, 'shopping_panel'):
+        if not self._catalog_ready:
+            self._loading_error = message
+            if (self.tab == 'overview' and not self._overview_ready) or self.tab in ('explore', 'week', 'shopping'):
+                self._render_tab()
+        if self.tab == 'shopping' and self.shopping_panel is not None:
             self.shopping_panel.set_status(message)
 
     def _submit(self, work, success, show_status=True, finished=None):
@@ -111,9 +118,37 @@ class CookingPlannerApp(AppShell, AdminActions, App):
     def _flush_shopping_pending(self, work):
         self._submit(work, lambda _: None, show_status=False)
 
+    def _load_overview(self):
+        if self._stopping or self.generation:
+            return
+        locale = self.locale
+        start = self.week_start.isoformat()
+        end = (self.week_start + timedelta(days=6)).isoformat()
+        def load():
+            return (self.client.locales(), self.client.catalog_info(locale),
+                    self.client.plans(start, end, locale))
+        def loaded(data):
+            if self.generation or locale != self.locale or start != self.week_start.isoformat():
+                return
+            locales, self.info, self.plans = data
+            self._overview_ready = True
+            new_locales = tuple(locales)
+            if self.locales != new_locales:
+                self.locales = new_locales
+                self._rebuild_shell()
+            else:
+                self._render_tab()
+            self._status(f"{self.info.get('recipeCount', 0)} {t(self.locale, 'results')} · "
+                         f"{len(self.plans)} {t(self.locale, 'planned')}")
+            Clock.schedule_once(lambda *_: self.refresh(), 0)
+        self._submit(load, loaded)
+
     def refresh(self):
         if self._stopping:
             return
+        if self._loading_error:
+            self._loading_error = None
+            self._render_tab()
         self.generation += 1
         if self._refresh_running:
             self._refresh_pending = True
@@ -143,8 +178,12 @@ class CookingPlannerApp(AppShell, AdminActions, App):
     def _loaded(self, data, generation):
         if generation != self.generation:
             return
+        same_overview = self._overview_ready and self.info == data[2] and self.plans == data[3]
+        first_catalog = not self._catalog_ready
         locales, self.recipes, self.info, self.plans = data[:4]
-        self._catalog_cache[self.locale] = data[:3]
+        self._catalog_cache = {self.locale: data[:3]}
+        self._overview_ready = True
+        self._catalog_ready = True
         if len(data) > 4:
             self.shopping_draft.use_prices(self.week_start.isoformat(), data[4])
         if len(data) > 5:
@@ -153,7 +192,7 @@ class CookingPlannerApp(AppShell, AdminActions, App):
         if self.locales != new_locales:
             self.locales = new_locales
             self._rebuild_shell()
-        else:
+        elif not (self.tab == 'overview' and first_catalog and same_overview):
             self._render_tab()
         self._status(self.shopping_draft.recovery_notice or
                      f"{len(self.recipes)} {t(self.locale, 'results')} · {len(self.plans)} {t(self.locale, 'planned')}")
@@ -161,7 +200,7 @@ class CookingPlannerApp(AppShell, AdminActions, App):
     def show_tab(self, tab):
         changed = tab != self.tab
         if not changed:
-            if tab == 'explore' and self.selected_id and hasattr(self, 'browser'):
+            if tab == 'explore' and self.selected_id and self.browser is not None:
                 self.browser.select_id(self.selected_id)
             elif tab == 'admin':
                 self.load_admin()
@@ -185,6 +224,8 @@ class CookingPlannerApp(AppShell, AdminActions, App):
             return
         self.locale = locale
         self.shopping_draft.locale = locale
+        self._overview_ready = False
+        self._catalog_ready = False
         self._save_preference('locale', locale)
         self._rebuild_shell()
         self.refresh()

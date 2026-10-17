@@ -89,7 +89,20 @@ class AppShell:
         previous = getattr(self, '_active_panel', None)
         if previous is not None and hasattr(previous, 'cancel_pending'):
             previous.cancel_pending()
+        self._active_panel = None
+        self.browser = None
+        self.shopping_panel = None
+        self.admin_panel = None
         self.content.clear_widgets()
+        if not self.startup_error and ((self.tab == 'overview' and not self._overview_ready) or
+                                       (self.tab in ('explore', 'week', 'shopping') and not self._catalog_ready)):
+            key = 'loading_overview' if self.tab == 'overview' else 'loading_recipes'
+            loading = box(padding=18, spacing=8)
+            loading.add_widget(label(self._loading_error or t(self.locale, key), 16, MUTED, 90))
+            if self._loading_error:
+                loading.add_widget(button(t(self.locale, 'retry'), self.refresh, height=42))
+            self.content.add_widget(loading)
+            return
         if self.tab == 'overview':
             panel = OverviewPanel(self.recipes, self.plans, self.info, self.locale,
                                   self.show_tab, self.show_notes)

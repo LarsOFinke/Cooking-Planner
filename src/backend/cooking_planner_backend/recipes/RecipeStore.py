@@ -142,6 +142,8 @@ class RecipeStore:
     def info(self, locale):
         metadata, rows = self._catalog(locale)
         return {'locale': locale, 'dataset': metadata.get('dataset', ''), 'recipeCount': len(rows),
+                'categoryCount': len({row.get('category_label') for row in rows.values()
+                                      if row.get('category_label')}),
                 'countryCount': len({row.get('country_code') for row in rows.values() if row.get('country_code')}),
                 'regionCount': len({row.get('region_code') for row in rows.values() if row.get('region_code')}),
                 'quantityNote': metadata.get('quantity_note', ''), 'dietNote': metadata.get('diet_note', ''),

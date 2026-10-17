@@ -30,7 +30,8 @@ class OverviewPanel:
             metrics.height = dp(90 * rows) + dp(10 * (rows - 1))
         metrics.bind(width=layout_metrics)
         categories = len({recipe.get('categoryLabel') for recipe in recipes if recipe.get('categoryLabel')})
-        for value, caption in ((len(recipes), 'recipes_count'), (categories, 'categories_count'),
+        for value, caption in ((len(recipes) or info.get('recipeCount', 0), 'recipes_count'),
+                               (categories or info.get('categoryCount', 0), 'categories_count'),
                                (info.get('countryCount', 0), 'countries'), (len(plans), 'planned')):
             tile = box(padding=14, spacing=0, color=PANEL_LIGHT)
             tile.add_widget(label(str(value), 27, WHITE, 42, True))
