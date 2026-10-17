@@ -20,7 +20,7 @@ class RecipePayloadTest(unittest.TestCase):
             shared_choices={key: document[key] for key, _ in CHOICES},
             times={key: str(document[key]) for key, _ in TIMES},
             diets=['omnivore'], images='',
-            ingredients=[{'original': document['ingredients'][0], 'ingredient_id': 'rice',
+            ingredients=[{'original': {'ingredient_id': 'rice'}, 'ingredient_id': 'rice',
                           'amount': '1.5', 'unit': 'g', 'names': {'en': 'Rice', 'de': 'Reis'}}],
             steps=[{'ingredient_ids': 'rice', 'texts': {'en': 'Cook the rice.', 'de': ''}}],
             names={'en': 'Rice dish', 'de': ''},
@@ -45,6 +45,12 @@ class RecipePayloadTest(unittest.TestCase):
         snapshot.ingredients[0]['amount'] = '1'
         snapshot.steps[0]['ingredient_ids'] = 'missing'
         with self.assertRaisesRegex(FormError, 'Ingredient'):
+            build_submission(snapshot)
+
+    def test_requires_catalog_translation_for_included_language(self):
+        snapshot = self.snapshot()
+        snapshot.ingredients[0]['names']['en'] = ''
+        with self.assertRaisesRegex(FormError, 'Translation missing in catalog'):
             build_submission(snapshot)
 
 

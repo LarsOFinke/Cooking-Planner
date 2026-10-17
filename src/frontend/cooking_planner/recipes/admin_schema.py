@@ -23,7 +23,7 @@ def new_recipe_template(recipe_id):
         'category': 'main', 'difficulty': 'medium', 'effort': 'medium', 'data_source': 'user_entry',
         'prep_minutes': 0, 'cook_minutes': 0, 'total_minutes': 0, 'diet_type': 'omnivore',
         'suitable_for': ['flexitarian', 'omnivore'],
-        'ingredients': [{'name': '', 'ingredient_id': 'ingredient-id', 'amount': 1, 'unit': 'g'}],
+        'ingredients': [],
         'region_code': '', 'continent_code': '', 'category_label': '', 'difficulty_label': '',
         'effort_label': '', 'diet_type_label': '', 'suitable_for_labels': [],
         'data_source_label': '', 'image_folder': f'recipe_images/{recipe_id}', 'images': [],

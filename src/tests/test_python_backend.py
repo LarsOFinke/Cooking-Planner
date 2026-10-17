@@ -148,6 +148,31 @@ class PythonBackendTest(unittest.TestCase):
         self._open()
         self.assertEqual(2, len(self.client.get('/api/recipes?locale=en').json()))
 
+    def test_recipe_save_requires_catalog_ingredients_and_keeps_catalog_names(self):
+        source = deepcopy(self.rows['en'])
+        source['id'] = 'catalog-only-dish'
+        source['name'] = 'Catalog only dish'
+        source['image_folder'] = 'recipe_images/catalog-only-dish'
+        source['images'] = []
+        original_id = source['ingredients'][0]['ingredient_id']
+        source['ingredients'][0]['ingredient_id'] = 'unknown-ingredient'
+        for step in source['instructions']['steps']:
+            step['ingredient_ids'] = ['unknown-ingredient' if item == original_id else item
+                                      for item in step['ingredient_ids']]
+        endpoint = '/api/admin/recipes/catalog-only-dish'
+        payload = {'sourceLocale': 'en', 'translations': {'en': source, 'de': None}}
+        self.assertEqual(400, self.client.post(endpoint, json=payload).status_code)
+        source['ingredients'][0]['ingredient_id'] = original_id
+        for step in source['instructions']['steps']:
+            step['ingredient_ids'] = [original_id if item == 'unknown-ingredient' else item
+                                      for item in step['ingredient_ids']]
+        source['ingredients'][0]['name'] = 'Forged ingredient name'
+        response = self.client.post(endpoint, json=payload)
+        self.assertEqual(201, response.status_code, response.text)
+        edits = json.loads((self.data / 'recipe-edits.json').read_text())
+        self.assertEqual(self.rows['en']['ingredients'][0]['name'],
+                         edits['upserts']['catalog-only-dish']['en']['ingredients'][0]['name'])
+
     def test_legacy_price_import_does_not_modify_shopping_file(self):
         key = self.rows['en']['ingredients'][0]['ingredient_id'] + ':g'
         shopping = {'version': 1, 'weeks': {'2026-10-12': {'prices': {key: '3.25'}}}}

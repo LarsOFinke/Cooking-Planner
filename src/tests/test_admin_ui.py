@@ -5,7 +5,6 @@ import os
 import sys
 import unittest
 from pathlib import Path
-from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'frontend'))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
@@ -118,21 +117,18 @@ class AdminEditorTest(unittest.TestCase):
         self.assertEqual('details', panel.editor_tab)
         self.assertTrue(panel.pricing_tab.disabled)
 
-    def test_ingredient_search_fills_shared_id_and_localized_names(self):
-        searches = []
+    def test_ingredient_picker_opens_with_catalog_choices_without_typing(self):
+        catalog = [{'id': 'karotte', 'translations': {'en': 'Carrot', 'de': 'Karotte'}}]
         panel = AdminPanel([], ('en', 'de'), 'en', lambda _: None, lambda *args: None,
                            lambda _: None, lambda: None, lambda _: None,
-                           on_ingredient_search=lambda locale, query, callback:
-                               searches.append((locale, query, callback)))
+                           ingredient_catalog=catalog)
         panel.new()
         panel._show_page('ingredients')
-        with patch('cooking_planner.recipes.AdminPanel.Clock.schedule_once',
-                   side_effect=lambda callback, delay: callback()):
-            panel.ingredient_search.text = 'carr'
-        self.assertEqual(('en', 'carr'), searches[-1][:2])
-        searches[-1][2]([{'id': 'karotte', 'name': 'Carrot',
-                          'translations': {'en': 'Carrot', 'de': 'Karotte'}}])
-        release(panel.ingredient_matches.children[0])
+        popup = panel.add_ingredient()
+        self.assertTrue(any(getattr(child, 'text', '') == 'Carrot'
+                            for child in popup.content.children[1].children[0].children))
+        panel._select_ingredient(catalog[0])
+        popup.dismiss()
         self.assertEqual('karotte', panel.ingredient_rows[0]['shared']['ingredient_id'].text)
         self.assertEqual('Carrot', panel.ingredient_rows[0]['names']['en'].text)
         self.assertEqual('Karotte', panel.ingredient_rows[0]['names']['de'].text)
@@ -156,8 +152,13 @@ class AdminEditorTest(unittest.TestCase):
                                 {'value': 'soup', 'label': 'Suppe'}]},
         }
         saved = []
+        catalog = [{'id': item['ingredient_id'], 'translations': {
+                    'en': item['name'], 'de': next((other['name'] for other in german['ingredients']
+                    if other['ingredient_id'] == item['ingredient_id']), item['name'])}}
+                   for item in english['ingredients']]
         panel = AdminPanel([], ('de', 'en'), 'en', lambda _: None, lambda *args: saved.append(args),
-                           lambda _: None, lambda: None, lambda _: None, options)
+                           lambda _: None, lambda: None, lambda _: None, options,
+                           ingredient_catalog=catalog)
         panel.show_recipe({'id': english['id'], 'translations': {'en': english, 'de': german}})
         self.assertIs(panel.details, panel.form.children[0])
         self.assertTrue(panel.page_tabs['details'].bold)
@@ -186,8 +187,14 @@ class AdminEditorTest(unittest.TestCase):
         english = json.loads((data / 'recipes_en.json').read_text())['recipes'][0]
         german = json.loads((data / 'recipes_de.json').read_text())['recipes'][0]
         saved = []
+        catalog = [{'id': item['ingredient_id'], 'translations': {
+                    'en': item['name'], 'de': next((other['name'] for other in german['ingredients']
+                    if other['ingredient_id'] == item['ingredient_id']), item['name'])}}
+                   for item in english['ingredients']]
+        catalog.append({'id': 'test-spice', 'translations': {'en': 'Spice', 'de': 'Gewürz'}})
         panel = AdminPanel([], ('de', 'en'), 'en', lambda _: None, lambda *args: saved.append(args),
-                           lambda _: None, lambda: None, lambda _: None)
+                           lambda _: None, lambda: None, lambda _: None,
+                           ingredient_catalog=catalog)
         Window.add_widget(panel.root)
         try:
             panel.show_recipe({'id': english['id'], 'translations': {'de': german, 'en': english}})
@@ -198,17 +205,14 @@ class AdminEditorTest(unittest.TestCase):
             panel.shared_inputs['prep_minutes'].text = '45'
             panel.locale_inputs['en']['name'].text = 'Changed English name'
             panel.locale_inputs['de']['name'].text = 'Geänderter deutscher Name'
-            panel.add_ingredient()
+            panel._select_ingredient(catalog[-1])
             added = panel.ingredient_rows[-1]
-            added['shared']['ingredient_id'].text = 'test-spice'
             added['shared']['amount'].text = '0.5'
-            added['names']['en'].text = 'Spice'
-            added['names']['de'].text = 'Gewürz'
             panel.step_rows[0]['texts']['en'].text = 'Prepare all ingredients.'
             panel.step_rows[0]['texts']['de'].text = 'Alle Zutaten vorbereiten.'
             panel.add_step()
             final_step = panel.step_rows[-1]
-            final_step['ids'].text = 'test-spice'
+            panel._toggle_step_ingredient(final_step, added)
             final_step['texts']['en'].text = 'Add the spice.'
             final_step['texts']['de'].text = 'Das Gewürz zugeben.'
             panel.save()
@@ -230,6 +234,28 @@ class AdminEditorTest(unittest.TestCase):
             self.assertEqual(len(english['instructions']['steps']), len(panel.step_rows))
         finally:
             Window.remove_widget(panel.root)
+
+    def test_new_recipe_steps_can_be_removed_and_choose_ingredients_by_name(self):
+        catalog = [{'id': 'carrot', 'translations': {'en': 'Carrot'}}]
+        panel = AdminPanel([], ('en',), 'en', lambda _: None, lambda *args: None,
+                           lambda _: None, lambda: None, lambda _: None,
+                           ingredient_catalog=catalog)
+        panel.new()
+        panel._select_ingredient(catalog[0])
+        ingredient = panel.ingredient_rows[0]
+        ingredient['shared']['amount'].text = '2'
+        panel.add_step()
+        first = panel.step_rows[0]
+        self.assertTrue(any('Carrot · 2 g' in choice.text for choice in first['choices'].children))
+        panel._toggle_step_ingredient(first, ingredient)
+        self.assertEqual([ingredient], first['selected'])
+        panel.add_step()
+        self.assertEqual(1, panel.active_step)
+        panel._remove_step(panel.step_rows[-1])
+        self.assertEqual([first], panel.step_rows)
+        self.assertIs(first['card'], panel.steps_container.children[0])
+        panel._remove_step(first)
+        self.assertEqual([], panel.step_rows)
 
 
 

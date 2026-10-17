@@ -130,8 +130,8 @@ class AppShell:
         else:
             panel = AdminPanel(self.admin_records, self.locales, self.locale, self.select_admin_recipe,
                                self.save_admin_recipe, self.delete_admin_recipe, self.load_admin, self._status,
-                               getattr(self, 'admin_options', {}), self.status_message, self.search_ingredients,
-                               self.show_ingredient_admin)
+                               getattr(self, 'admin_options', {}), self.status_message,
+                               getattr(self, 'admin_ingredient_catalog', []), self.show_ingredient_admin)
             self.admin_panel = panel
             if self.admin_entry:
                 panel.show_recipe(self.admin_entry)

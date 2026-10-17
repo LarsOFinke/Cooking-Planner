@@ -48,10 +48,6 @@ class AdminFormPages:
         return widget._codes.get(widget.text, '')
 
     def _render_form(self):
-        self.search_generation += 1
-        if self.search_event is not None:
-            self.search_event.cancel()
-            self.search_event = None
         self.form.clear_widgets()
         self.toolbar.clear_widgets()
         self.actions.clear_widgets()
@@ -97,6 +93,7 @@ class AdminFormPages:
         self._render_recipe_page(source_document)
         self._render_details_page(recipe_id, source, source_document)
         self._render_ingredients_page(source_document)
+        self._resolve_step_ingredients()
         self._change_language(source)
         self._show_page(self.page)
         self.actions.add_widget(button(t(self.locale, 'admin_create' if self.creating else 'admin_update'),
@@ -137,6 +134,13 @@ class AdminFormPages:
         self.steps_container = box(spacing=7, size_hint_y=None)
         self.steps_container.bind(minimum_height=self.steps_container.setter('height'))
         self.recipe_page.add_widget(self.steps_container)
+        self.step_navigation = self._row(self.recipe_page, 42)
+        self.step_previous = button(t(self.locale, 'previous'), self.previous_step)
+        self.step_position = label('', 14, GOLD, 42, True)
+        self.step_next = button(t(self.locale, 'next'), self.next_step)
+        for widget in (self.step_previous, self.step_position, self.step_next):
+            self.step_navigation.add_widget(widget)
+        self.active_step = 0
         source_steps = source_document.get('instructions', {}).get('steps', [])
         for index, step in enumerate(source_steps):
             texts = {code: (self.documents[code].get('instructions', {}).get('steps', [])[index].get('text', '')
@@ -149,8 +153,12 @@ class AdminFormPages:
     def _render_details_page(self, recipe_id, source, source_document):
         self._heading(self.details, 'admin_details')
         identity = self._row(self.details)
-        self.id_input = self._cell(identity, t(self.locale, 'admin_id'), field(text=recipe_id))
-        self.id_input.readonly = not self.creating
+        self.id_input = field(text=recipe_id)
+        self.id_input.readonly = True
+        if not self.creating:
+            self._cell(identity, t(self.locale, 'admin_id'), self.id_input)
+        else:
+            identity.add_widget(label(t(self.locale, 'admin_auto_id'), 13, MUTED, 72))
         self._cell(identity, t(self.locale, 'admin_source'), self.source)
         self._heading(self.details, 'admin_languages')
         language_row = self._row(self.details)
@@ -199,21 +207,16 @@ class AdminFormPages:
 
     def _render_ingredients_page(self, source_document):
         self._heading(self.ingredients_page, 'admin_ingredients')
-        self.ingredient_search = field(t(self.locale, 'admin_search_ingredient'), height=38)
-        self.ingredient_search.bind(text=lambda *_: self._schedule_ingredient_search())
-        self.ingredients_page.add_widget(self.ingredient_search)
-        self.ingredient_matches = box(spacing=3, size_hint_y=None)
-        self.ingredient_matches.bind(minimum_height=self.ingredient_matches.setter('height'))
-        self.ingredients_page.add_widget(self.ingredient_matches)
+        self.ingredients_page.add_widget(label(t(self.locale, 'admin_catalog_only'), 13, MUTED, 42))
         self.ingredients_container = box(spacing=7, size_hint_y=None)
         self.ingredients_container.bind(minimum_height=self.ingredients_container.setter('height'))
         self.ingredients_page.add_widget(self.ingredients_container)
         for ingredient in source_document.get('ingredients', []):
             ingredient_id = ingredient.get('ingredient_id', '')
-            names = {code: next((item.get('name', '') for item in self.documents[code].get('ingredients', [])
-                                 if item.get('ingredient_id') == ingredient_id), '') for code in self.locales}
+            catalog = self.ingredient_catalog_by_id.get(ingredient_id, {})
+            names = catalog.get('translations', {})
             self._add_ingredient(ingredient, names)
-        self.ingredients_page.add_widget(button(t(self.locale, 'admin_add_ingredient'), self.add_ingredient,
+        self.ingredients_page.add_widget(button(t(self.locale, 'admin_choose_ingredient'), self.add_ingredient,
                                                 size_hint_x=None, width=dp(200)))
 
     def _show_page(self, page):
@@ -230,6 +233,8 @@ class AdminFormPages:
         else:
             pages['details'] = self.select_page
         self.form.add_widget(pages[page])
+        if page == 'recipe':
+            self._refresh_step_ingredients()
         self.actions.height = dp(40) if page != 'status' and (self.creating or self.entry) else 0
         self.actions.opacity = 1 if self.actions.height else 0
 
@@ -258,5 +263,4 @@ class AdminFormPages:
                 section.height = dp(112) if language == code else 0
                 section.opacity = 1 if language == code else 0
                 section.disabled = language != code
-        if hasattr(self, 'ingredient_search') and self.ingredient_search.text.strip():
-            self._schedule_ingredient_search()
+        self._refresh_step_ingredients()

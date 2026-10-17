@@ -304,6 +304,7 @@ class UiFlowTest(unittest.TestCase):
 
     def test_admin_switches_between_recipe_and_ingredient_catalogs(self):
         self.app.tab = 'admin'
+        self.app._admin_loaded = True
         self.app._render_tab()
         with patch.object(self.app, 'list_admin_ingredients',
                           side_effect=lambda query, done: done([])):
@@ -361,9 +362,9 @@ class UiFlowTest(unittest.TestCase):
         key = item_key(panel.items[0])
         panel.toggle(key)
         self.assertIn(key, draft.week(start)['checked'])
-        self.assertTrue(panel.rows.children[0].children[-1].text.startswith('[x]'))
+        self.assertEqual('Bought', panel.rows.children[0].children[-1].text)
         panel.reset()
-        self.assertTrue(panel.rows.children[0].children[-1].text.startswith('[ ]'))
+        self.assertEqual('Buy', panel.rows.children[0].children[-1].text)
         with patch('cooking_planner.shopping.ShoppingPanel.Clipboard.copy') as copy:
             panel.copy()
         copy.assert_called_once_with('100 g Rice')
@@ -539,7 +540,7 @@ class UiFlowTest(unittest.TestCase):
         draft.add_custom(start, 'Olive oil', '2', 'l')
         panel = ShoppingPanel([], [], draft, 'en', self.app.week_start, lambda _: None)
         rice = panel.rows.children[0]
-        self.assertEqual(['[ ]', 'Rice', '100', 'g', '—', '×'],
+        self.assertEqual(['Buy', 'Rice', '100', 'g', '—', '×'],
                          [widget.text for widget in reversed(rice.children) if hasattr(widget, 'text')])
         self.assertEqual('left', rice.children[-2].halign)
         self.assertIsNotNone(rice.children[-2].text_size)
@@ -550,14 +551,14 @@ class UiFlowTest(unittest.TestCase):
         self.assertEqual('To buy', panel.rows.children[-1].children[-1].text)
         panel.toggle(item_key(next(item for item in panel.items if item['name'] == 'Rice')))
         completed = panel.rows.children[0]
-        self.assertEqual(['[x]', 'Rice', '100', 'g', '—', '×'],
+        self.assertEqual(['Bought', 'Rice', '100', 'g', '—', '×'],
                          [widget.text for widget in reversed(completed.children) if hasattr(widget, 'text')])
         self.assertEqual('Completed', panel.rows.children[1].children[-1].text)
         self.assertEqual('1 / 2 items to buy', panel.summary.text)
         panel.scroll.height = dp(120)
         self.assertTrue(panel.compact_list)
         self.assertEqual(2, len(panel.rows.children))
-        self.assertEqual('[x]', panel.rows.children[0].children[-1].text)
+        self.assertEqual('Bought', panel.rows.children[0].children[-1].text)
 
     def test_shopping_row_shows_admin_reference_price_as_read_only_estimate(self):
         draft = ShoppingDraft(Path(self.temp.name) / 'shopping.json')
@@ -567,7 +568,10 @@ class UiFlowTest(unittest.TestCase):
         rice = next(item for item in draft.items(start, [], []) if item['name'] == 'Rice')
         draft.use_reference_prices({item_key(rice): {'price': '2.75', 'basisQuantity': 100}})
         panel = ShoppingPanel([], [], draft, 'en', self.app.week_start, lambda _: None)
-        self.assertEqual('1/2 priced · €2.75', panel.price_summary.text)
+        self.assertEqual('Open est. €2.75 · 1/2 priced', panel.price_summary.text)
+        panel.toggle(item_key(rice))
+        self.assertEqual('Open est. €0.00 · 0/1 priced', panel.price_summary.text)
+        panel.toggle(item_key(rice))
         rice_row = next(row for row in panel.rows.children
                         if any(getattr(widget, 'text', '') == 'Rice' for widget in row.children))
         self.assertTrue(any(getattr(widget, 'text', '') == '€2.75' for widget in rice_row.children))
@@ -738,13 +742,13 @@ class UiFlowTest(unittest.TestCase):
     def test_admin_requires_a_choice_for_each_language(self):
         saved = []
         messages = []
+        catalog = [{'id': 'rice', 'translations': {'en': 'Rice', 'de': 'Reis'}}]
         panel = AdminPanel([], ('en', 'de'), 'en', lambda _: None,
                            lambda *args: saved.append(args), lambda _: None, lambda: None,
-                           messages.append)
+                           messages.append, ingredient_catalog=catalog)
         panel.new()
-        panel.id_input.text = 'new-test-dish'
         panel.locale_inputs['en']['name'].text = 'New test dish'
-        panel.ingredient_rows[0]['names']['en'].text = 'Rice'
+        panel._select_ingredient(catalog[0])
         panel.save()
         self.assertFalse(saved)
         self.assertIn('DE:', messages[-1])

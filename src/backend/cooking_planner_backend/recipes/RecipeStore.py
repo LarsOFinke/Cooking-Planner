@@ -264,8 +264,25 @@ class RecipeStore:
             if not isinstance(source, dict) or source.get('id') != recipe_id:
                 raise ValueError('Source recipe must use the selected recipe ID')
             self._validate_shared(recipe_id, source)
-            rows = {locale: None if translations[locale] is None else
-                    self._synchronize(source, translations[locale], locale) for locale in locales}
+            ingredient_ids = {item['ingredient_id'] for item in source['ingredients']}
+            with self.storage.session() as session:
+                known_ids = set(session.scalars(select(Ingredient.id).where(Ingredient.id.in_(ingredient_ids))))
+                names = {(row.ingredient_id, row.locale): row.name for row in session.scalars(
+                    select(Translation).where(Translation.ingredient_id.in_(ingredient_ids)))}
+            if known_ids != ingredient_ids:
+                raise ValueError('Choose existing ingredients from the ingredient catalog')
+            canonical = deepcopy(translations)
+            for locale, row in canonical.items():
+                if row is None:
+                    continue
+                for item in row['ingredients']:
+                    name = names.get((item['ingredient_id'], locale))
+                    if not name:
+                        raise ValueError(f'Add ingredient translations in the catalog for {locale}')
+                    item['name'] = name
+            source = canonical[source_locale]
+            rows = {locale: None if canonical[locale] is None else
+                    self._synchronize(source, canonical[locale], locale) for locale in locales}
             next_edits = deepcopy(old)
             next_edits['upserts'][recipe_id] = rows
             if recipe_id in next_edits['deleted']:
@@ -275,20 +292,6 @@ class RecipeStore:
             try:
                 write_json(self.edit_path, next_edits)
                 with self.storage.session() as session:
-                    for locale, row in rows.items():
-                        if row is None:
-                            continue
-                        for item in row['ingredients']:
-                            ingredient_id = item['ingredient_id']
-                            if session.get(Ingredient, ingredient_id) is None:
-                                session.add(Ingredient(id=ingredient_id))
-                            existing = session.scalar(select(Translation).where(
-                                Translation.ingredient_id == ingredient_id, Translation.locale == locale))
-                            if existing is None:
-                                session.add(Translation(ingredient_id=ingredient_id, locale=locale,
-                                                        name=item['name']))
-                            else:
-                                existing.name = item['name']
                     session.add(Marker(name=marker))
             except BaseException:
                 write_json(self.edit_path, old)

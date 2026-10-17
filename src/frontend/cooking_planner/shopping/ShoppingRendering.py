@@ -22,7 +22,7 @@ class ShoppingRendering:
 
     @staticmethod
     def _name_width(row_width):
-        return max(dp(80), min(dp(240), row_width * 0.28, row_width - dp(381)))
+        return max(dp(80), min(dp(240), row_width * 0.28, row_width - dp(433)))
 
     def _money(self, value):
         amount = format(value, '.2f')
@@ -31,13 +31,14 @@ class ShoppingRendering:
         return f'€{amount}'
 
     def _update_price_summary(self):
-        prices = [price for item in self.items
+        checked = set(self.draft.week(self.start)['checked'])
+        open_items = [item for item in self.items if item_key(item) not in checked]
+        prices = [price for item in open_items
                   if (price := self.draft.price_for(self.start, item_key(item), item['amount'])) is not None]
         total = sum(prices, Decimal('0'))
         self.price_summary.color = GOLD
-        key = 'shopping_prices_compact' if self.compact_summary else 'shopping_prices_summary'
-        self.price_summary.text = t(self.locale, key).format(
-            count=len(prices), total=len(self.items), amount=self._money(total))
+        self.price_summary.text = t(self.locale, 'shopping_open_estimate').format(
+            count=len(prices), total=len(open_items), amount=self._money(total))
 
     def _render_summary(self):
         state = self.draft.week(self.start)
@@ -71,7 +72,7 @@ class ShoppingRendering:
 
     def _column_header(self):
         heading = box(False, padding=5, spacing=5, size_hint_y=None, height=dp(25))
-        heading.add_widget(label('', 12, MUTED, 25, size_hint_x=None, width=dp(38)))
+        heading.add_widget(label('', 12, MUTED, 25, size_hint_x=None, width=dp(90)))
         name = label(t(self.locale, 'shopping_item_label'), 12, MUTED, 25,
                      size_hint_x=None, width=dp(240))
         name.text_size = (name.width, name.height)
@@ -95,8 +96,8 @@ class ShoppingRendering:
         row = box(False, padding=5, spacing=5, color=(0.09, 0.18, 0.16, 1) if checked else PANEL_LIGHT,
                   hover=True,
                   size_hint_y=None, height=dp(48))
-        check = button('[x]' if checked else '[ ]', lambda: self.toggle(key),
-                       height=38, size_hint_x=None, width=dp(38))
+        check = button(t(self.locale, 'shopping_bought' if checked else 'shopping_mark_bought'),
+                       lambda: self.toggle(key), height=38, size_hint_x=None, width=dp(90))
         if checked:
             check.set_base_color(GREEN)
             check.color = BG

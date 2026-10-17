@@ -1,9 +1,12 @@
 """Catalog-backed recipe editor; writes are handled by the backend API."""
 
 from copy import deepcopy
+import re
+import unicodedata
 from kivy.clock import Clock
 from kivy.metrics import dp
 from cooking_planner.recipes.AdminFormPages import AdminFormPages
+from cooking_planner.recipes.IngredientPicker import IngredientPicker
 from cooking_planner.recipes.admin_payload import (FormError, RecipeFormSnapshot,
                                                     build_submission)
 from cooking_planner.recipes.admin_schema import CHOICES, TIMES
@@ -12,23 +15,26 @@ from cooking_planner.ui.theme import (GOLD, MUTED, PANEL, PANEL_LIGHT, box, butt
                                       field, label, scroll_view, spinner)
 
 class AdminPanel(AdminFormPages):
+    @staticmethod
+    def _slug(name):
+        normalized = unicodedata.normalize('NFKD', name.casefold())
+        ascii_name = normalized.encode('ascii', 'ignore').decode('ascii')
+        return re.sub(r'[^a-z0-9]+', '-', ascii_name).strip('-')[:90]
+
     def cancel_pending(self):
         self._list_search.cancel()
-        for event in (self._list_event, self.search_event):
-            if event is not None:
-                event.cancel()
+        if self._list_event is not None:
+            self._list_event.cancel()
         self._list_event = None
-        self.search_event = None
 
     def __init__(self, records, locales, locale, on_select, on_save, on_delete, on_reload, on_status,
-                 options=None, status_message=None, on_ingredient_search=None, on_ingredient_admin=None):
+                 options=None, status_message=None, ingredient_catalog=None, on_ingredient_admin=None):
         self.records, self.locales, self.locale = records, tuple(locales), locale
         self.on_select, self.on_save = on_select, on_save
         self.on_delete, self.on_reload, self.on_status = on_delete, on_reload, on_status
         self.options = options or {}
-        self.on_ingredient_search = on_ingredient_search
-        self.search_generation = 0
-        self.search_event = None
+        self.ingredient_catalog = [row for row in (ingredient_catalog or []) if row.get('translations')]
+        self.ingredient_catalog_by_id = {row['id']: row for row in self.ingredient_catalog}
         self._list_event = None
         self._list_search = Clock.create_trigger(lambda *_: self._render_list(), 0.18)
         self.status_message = status_message or t(locale, 'ready')
@@ -130,40 +136,22 @@ class AdminPanel(AdminFormPages):
         if hasattr(self, 'status_text'):
             self.status_text.text = message
 
-    def _schedule_ingredient_search(self):
-        self.search_generation += 1
-        if self.search_event is not None:
-            self.search_event.cancel()
-        query = self.ingredient_search.text.strip()
-        self.ingredient_matches.clear_widgets()
-        if len(query) < 2 or self.on_ingredient_search is None:
-            return
-        generation = self.search_generation
-        locale = self.edit_locale
-        self.search_event = Clock.schedule_once(
-            lambda *_: self.on_ingredient_search(locale, query,
-                lambda matches: self._show_ingredient_matches(matches, generation)), 0.25)
-
-    def _show_ingredient_matches(self, matches, generation):
-        if generation != self.search_generation:
-            return
-        self.ingredient_matches.clear_widgets()
-        for match in matches[:8]:
-            self.ingredient_matches.add_widget(button(
-                f"{match['name']} · {match['id']}",
-                lambda selected=match: self._select_ingredient(selected), height=36))
+    def add_ingredient(self):
+        selected_ids = {row['shared']['ingredient_id'].text for row in self.ingredient_rows}
+        available = [row for row in self.ingredient_catalog if row['id'] not in selected_ids]
+        popup = IngredientPicker(available, self.locale, self.edit_locale,
+                                 self._select_ingredient)
+        popup.open()
+        return popup
 
     def _select_ingredient(self, match):
-        reusable = next((entry for entry in self.ingredient_rows if
-                         entry['shared']['ingredient_id'].text.strip() in ('', 'ingredient-id')), None)
-        if reusable is None:
-            self.add_ingredient()
-            reusable = self.ingredient_rows[-1]
-        reusable['shared']['ingredient_id'].text = match['id']
-        for code, widget in reusable['names'].items():
-            widget.text = match['translations'].get(code, '')
-        self.ingredient_search.text = ''
-        self.ingredient_matches.clear_widgets()
+        if match['id'] not in self.ingredient_catalog_by_id:
+            return
+        if any(row['shared']['ingredient_id'].text == match['id'] for row in self.ingredient_rows):
+            return
+        self._add_ingredient({'ingredient_id': match['id'], 'amount': 1, 'unit': 'g'},
+                             match['translations'])
+        self._refresh_step_ingredients()
 
     def _add_ingredient(self, ingredient, names):
         card = box(padding=8, spacing=5, color=PANEL_LIGHT, size_hint_y=None)
@@ -176,35 +164,38 @@ class AdminPanel(AdminFormPages):
                                   size_hint_x=None, width=dp(120), height=35))
         shared_row = self._row(card)
         shared = {
-            'ingredient_id': self._cell(shared_row, t(self.locale, 'admin_ingredient_id'),
-                                        field(text=ingredient.get('ingredient_id', ''))),
+            'ingredient_id': field(text=ingredient.get('ingredient_id', '')),
             'amount': self._cell(shared_row, t(self.locale, 'admin_amount'),
                                  field(text=str(ingredient.get('amount', 1)))),
             'unit': self._cell(shared_row, t(self.locale, 'admin_unit'),
                                spinner(ingredient.get('unit', 'g'), ('g', 'ml', 'pcs'))),
         }
+        shared['ingredient_id'].readonly = True
         name_sections, name_inputs = {}, {}
         for code in self.locales:
             section = box(size_hint_y=None, height=dp(72))
             name_inputs[code] = self._cell(section, t(self.locale, 'admin_ingredient_name') + ' · ' + code.upper(),
-                                           field(text=names.get(code, '')))
+                                           label(names.get(code, '') or t(self.locale, 'admin_missing_translation'),
+                                                 14, GOLD, 42))
             name_sections[code] = section
             card.add_widget(section)
         entry = {'card': card, 'title': title, 'original': deepcopy(ingredient),
-                 'shared': shared, 'names': name_inputs, 'name_sections': name_sections}
+                 'shared': shared, 'names': name_inputs, 'catalog_names': dict(names),
+                 'name_sections': name_sections}
+        for widget in (*name_inputs.values(), shared['amount'], shared['unit']):
+            widget.bind(text=lambda *_: self._refresh_step_ingredients())
         self.ingredient_rows.append(entry)
         self.ingredients_container.add_widget(card)
         self._number_ingredients()
         self._change_language(self.edit_locale)
 
-    def add_ingredient(self):
-        self._add_ingredient({'ingredient_id': '', 'amount': 1, 'unit': 'g'},
-                             {code: '' for code in self.locales})
-
     def _remove_ingredient(self, entry):
         self.ingredients_container.remove_widget(entry['card'])
         self.ingredient_rows.remove(entry)
         self._number_ingredients()
+        for step in self.step_rows:
+            step['selected'] = [row for row in step['selected'] if row is not entry]
+        self._refresh_step_ingredients()
 
     def _number_ingredients(self):
         for index, entry in enumerate(self.ingredient_rows, 1):
@@ -216,11 +207,13 @@ class AdminPanel(AdminFormPages):
         heading = self._row(card, 35)
         title = label('', 15, GOLD, 35, True)
         heading.add_widget(title)
-        heading.add_widget(button(t(self.locale, 'admin_remove_ingredient'),
+        heading.add_widget(button(t(self.locale, 'remove'),
                                   lambda: self._remove_step(entry), 'danger',
                                   size_hint_x=None, width=dp(120), height=35))
-        ids = self._cell(card, t(self.locale, 'admin_step_ingredients'),
-                         field(text=', '.join(step.get('ingredient_ids', []))))
+        card.add_widget(label(t(self.locale, 'admin_step_ingredients'), 13, MUTED, 25))
+        choices = box(spacing=4, size_hint_y=None)
+        choices.bind(minimum_height=choices.setter('height'))
+        card.add_widget(choices)
         text_sections, text_inputs = {}, {}
         for code in self.locales:
             section = box(size_hint_y=None, height=dp(112))
@@ -228,26 +221,91 @@ class AdminPanel(AdminFormPages):
                                             field(text=texts.get(code, ''), multiline=True, height=88), 112)
             text_sections[code] = section
             card.add_widget(section)
-        entry = {'card': card, 'title': title, 'ids': ids,
+        entry = {'card': card, 'title': title, 'choices': choices,
+                 'pending_ids': list(step.get('ingredient_ids', [])), 'selected': [],
                  'texts': text_inputs, 'text_sections': text_sections}
         self.step_rows.append(entry)
         self.steps_container.add_widget(card)
         self._number_steps()
+        self.active_step = len(self.step_rows) - 1
+        self._show_active_step()
 
     def add_step(self):
         self._add_step({'ingredient_ids': []}, {code: '' for code in self.locales})
         self._change_language(self.edit_locale)
 
     def _remove_step(self, entry):
-        self.steps_container.remove_widget(entry['card'])
+        if entry['card'].parent is self.steps_container:
+            self.steps_container.remove_widget(entry['card'])
         self.step_rows.remove(entry)
+        self.active_step = min(self.active_step, len(self.step_rows) - 1)
         self._number_steps()
+        self._show_active_step()
 
     def _number_steps(self):
         for index, entry in enumerate(self.step_rows, 1):
             entry['title'].text = f"{t(self.locale, 'instruction_step')} {index}"
 
+    def _show_active_step(self):
+        self.steps_container.clear_widgets()
+        if self.step_rows:
+            self.active_step = max(0, min(self.active_step, len(self.step_rows) - 1))
+            self.steps_container.add_widget(self.step_rows[self.active_step]['card'])
+        self.step_position.text = f"{self.active_step + 1} / {len(self.step_rows)}" if self.step_rows else '0 / 0'
+        self.step_previous.disabled = self.active_step <= 0
+        self.step_next.disabled = self.active_step >= len(self.step_rows) - 1
+        self._refresh_step_ingredients()
+
+    def previous_step(self):
+        self.active_step -= 1
+        self._show_active_step()
+
+    def next_step(self):
+        self.active_step += 1
+        self._show_active_step()
+
+    def _resolve_step_ingredients(self):
+        for step in self.step_rows:
+            step['selected'] = [row for row in self.ingredient_rows if
+                                row['shared']['ingredient_id'].text in step['pending_ids']]
+            step['pending_ids'] = []
+        self._refresh_step_ingredients()
+
+    def _toggle_step_ingredient(self, step, ingredient):
+        if ingredient in step['selected']:
+            step['selected'].remove(ingredient)
+        else:
+            step['selected'].append(ingredient)
+        self._refresh_step_ingredients()
+
+    def _refresh_step_ingredients(self):
+        if not hasattr(self, 'step_rows') or not hasattr(self, 'ingredient_rows'):
+            return
+        for step in self.step_rows[self.active_step:self.active_step + 1]:
+            step['choices'].clear_widgets()
+            for ingredient in self.ingredient_rows:
+                name = ingredient['names'][self.edit_locale].text.strip() or t(self.locale, 'admin_ingredient')
+                amount = ingredient['shared']['amount'].text.strip()
+                unit = ingredient['shared']['unit'].text
+                selected = ingredient in step['selected']
+                control = button(f"{'✓' if selected else '○'}  {name} · {amount} {unit}",
+                                 lambda row=ingredient, item=step: self._toggle_step_ingredient(item, row),
+                                 height=36)
+                if selected:
+                    control.set_base_color((0.09, 0.36, 0.25, 1))
+                step['choices'].add_widget(control)
+
     def save(self):
+        if self.creating:
+            name = self.locale_inputs[self.source.text.lower()]['name'].text.strip()
+            base = self._slug(name)
+            existing = {record['id'] for record in self.records}
+            candidate = base
+            suffix = 2
+            while candidate in existing:
+                candidate = f'{base}-{suffix}'
+                suffix += 1
+            self.id_input.text = candidate
         snapshot = RecipeFormSnapshot(
             recipe_id=self.id_input.text, source=self.source.text, locale=self.locale,
             locales=self.locales,
@@ -260,9 +318,10 @@ class AdminPanel(AdminFormPages):
                           'ingredient_id': entry['shared']['ingredient_id'].text,
                           'amount': entry['shared']['amount'].text,
                           'unit': entry['shared']['unit'].text,
-                          'names': {code: widget.text for code, widget in entry['names'].items()}}
+                          'names': {code: entry['catalog_names'].get(code, '') for code in self.locales}}
                          for entry in self.ingredient_rows],
-            steps=[{'ingredient_ids': entry['ids'].text,
+            steps=[{'ingredient_ids': ','.join(row['shared']['ingredient_id'].text
+                                               for row in entry['selected']),
                     'texts': {code: widget.text for code, widget in entry['texts'].items()}}
                    for entry in self.step_rows],
             names={code: widgets['name'].text for code, widgets in self.locale_inputs.items()},

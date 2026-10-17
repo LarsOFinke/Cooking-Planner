@@ -7,12 +7,14 @@ from cooking_planner.ui.strings import t
 class AdminActions:
     def load_admin(self):
         def load():
-            return self.client.locales(), self.client.admin_recipes(), self.client.admin_options()
+            return (self.client.locales(), self.client.admin_recipes(),
+                    self.client.admin_options(), self.client.admin_ingredients())
         def loaded(data):
-            locales, records, options = data
+            locales, records, options, ingredients = data
             self.locales = tuple(locales)
             self.admin_records = records
             self.admin_options = options
+            self.admin_ingredient_catalog = ingredients
             self._admin_loaded = True
             if self.tab == 'admin':
                 self._render_tab()
@@ -28,7 +30,10 @@ class AdminActions:
 
     def show_recipe_admin(self):
         self.admin_mode = 'recipes'
-        self._render_tab()
+        if self._admin_loaded:
+            self._render_tab()
+        else:
+            self.load_admin()
 
     def list_admin_ingredients(self, query, on_result):
         self._submit(lambda: self.client.admin_ingredients(query), on_result)
@@ -37,6 +42,7 @@ class AdminActions:
         def saved(entry):
             self.ingredient_admin_entry = entry
             self._catalog_cache.clear()
+            self._admin_loaded = False
             self.refresh()
         self._submit(lambda: self.client.save_admin_ingredient(ingredient_id, translations), saved)
 
@@ -55,6 +61,7 @@ class AdminActions:
         def deleted(_):
             self.ingredient_admin_entry = None
             self._catalog_cache.clear()
+            self._admin_loaded = False
             self.refresh()
         self._submit(lambda: self.client.delete_admin_ingredient(ingredient_id), deleted)
 
