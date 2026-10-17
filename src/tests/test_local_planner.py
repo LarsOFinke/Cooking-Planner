@@ -65,7 +65,7 @@ class LocalPlannerTest(unittest.TestCase):
             self.client.save_plan(START, 'LUNCH', self.rows['en']['id'], 2)
             self.assertEqual(1, len(self.client.plans(START, END, 'en')))
 
-    def test_catalogs_plan_and_shopping_survive_reopen(self):
+    def test_catalogs_and_plan_survive_reopen(self):
         info = self.client.catalog_info('en')
         self.assertEqual(2, info['recipeCount'])
         self.assertGreater(info['categoryCount'], 0)
@@ -75,11 +75,6 @@ class LocalPlannerTest(unittest.TestCase):
         self.assertNotEqual(first['name'], german['name'])
         plan = self.client.save_plan(START, 'LUNCH', recipe_id, 2)
         self.assertEqual(german['name'], self.client.plans(START, END, 'de')[0]['recipeTitle'])
-        shopping = self.client.shopping(START, END, 'en')
-        ingredient = first['ingredients'][0]
-        item = next(row for row in shopping if row['ingredientId'] == ingredient['ingredientId'])
-        self.assertEqual(ingredient['amount'] * 2, item['amount'])
-        self.assertEqual(1, item['recipeCount'])
         self._open()
         self.assertEqual(plan['id'], self.client.plans(START, END, 'en')[0]['id'])
         with self.assertRaisesRegex(ValueError, 'Date range'):

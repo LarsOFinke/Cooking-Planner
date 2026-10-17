@@ -1,6 +1,12 @@
 # Spring cleanup audit
 
-Use `loc-rank --top 20 src` to identify files worth inspecting. Line count alone does not justify splitting a cohesive feature. The current pass moved shell and tab construction from `CookingPlannerApp.py` to `AppShell.py`, and shopping draft validation and atomic file handling from `ShoppingDraft.py` to `shopping/persistence.py`. Those responsibilities now have one clear home while the public behavior and JSON format stay the same.
+## Local service follow-up — 2026-10-17
+
+After removing the loopback server, the app still called its local service `client` and checked whether fixed service methods existed before connecting Shopping writes. The UI now calls it `planner` and binds those methods directly when startup succeeds. The startup-error view keeps Shopping writers unset, and the UI tests use a missing planner to exercise that state. The backend also retained an unused method that derived Shopping ingredients from every Week meal; it was removed because Shopping imports only explicitly selected meals. The security review now describes the current local boundary instead of presenting retired HTTP controls as active.
+
+`loc-rank --top 30 src` showed the largest production files remain feature-focused: `RecipeBrowser.py` (379 lines), `AdminPanel.py` (344), `RecipeStore.py` (340), `ShoppingDraft.py` (337), and `CookingPlannerApp.py` (307 before this pass). This pass found no additional shared responsibility that justified another layer or file split. The direct service and UI smoke checks cover the current architecture.
+
+Use `loc-rank --top 20 src` to identify files worth inspecting. Line count alone does not justify splitting a cohesive feature. An earlier cleanup moved shell and tab construction from `CookingPlannerApp.py` to `AppShell.py`, and shopping draft validation and atomic file handling from `ShoppingDraft.py` to `shopping/persistence.py`. Those responsibilities now have one clear home while the public behavior and JSON format stay the same.
 
 The performance pass coalesces rapid refresh requests so only the current request and the latest pending state consume worker time. Repeated clicks on the active tab keep its existing widgets; returning to Admin reuses its loaded catalog until an explicit refresh or edit. Scheduled list, row, and search work is cancelled when its panel is replaced. Recipe search text is built once when the browser opens instead of being rebuilt for every filter change. Catalogs remain read only and user drafts still save synchronously for crash recovery.
 

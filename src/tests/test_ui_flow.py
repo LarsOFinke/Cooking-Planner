@@ -76,7 +76,7 @@ def sample_recipe():
 class UiFlowTest(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
-        self.app = CookingPlannerApp(object(), startup_error='test',
+        self.app = CookingPlannerApp(None, startup_error='test',
                                      config_path=Path(self.temp.name) / 'client.cfg')
         self.app.build()
         recipe = sample_recipe()
@@ -333,7 +333,7 @@ class UiFlowTest(unittest.TestCase):
         key = item_key(ingredient)
         saved = []
         prices = {key: {'price': '1.80', 'basisQuantity': 100}}
-        self.app.client = SimpleNamespace(
+        self.app.planner = SimpleNamespace(
             save_reference_price=lambda *args: saved.append(args),
             reference_prices=lambda: prices)
         self.app.tab = 'admin'
@@ -706,7 +706,7 @@ class UiFlowTest(unittest.TestCase):
 
     def test_week_refresh_reuses_catalog_without_refetching_all_recipes(self):
         calls = []
-        self.app.client = SimpleNamespace(
+        self.app.planner = SimpleNamespace(
             locales=lambda: calls.append('locales') or ['en'],
             recipes=lambda _: calls.append('recipes') or [self.recipe],
             catalog_info=lambda _: calls.append('info') or {},
@@ -730,7 +730,7 @@ class UiFlowTest(unittest.TestCase):
         self.app._render_tab()
         calls = []
         info = {'recipeCount': 1, 'categoryCount': 1, 'countryCount': 1}
-        self.app.client = SimpleNamespace(
+        self.app.planner = SimpleNamespace(
             locales=lambda: calls.append('locales') or ['en'],
             catalog_info=lambda _: calls.append('info') or info,
             plans=lambda *_: calls.append('plans') or [],
@@ -765,16 +765,16 @@ class UiFlowTest(unittest.TestCase):
         self.app._overview_ready = False
         self.app._catalog_ready = False
         with patch.object(self.app, 'refresh') as refresh:
-            self.app._report_error('Cannot reach the local backend.')
+            self.app._report_error('Cannot read local data.')
             loading = self.app.content.children[0]
-            self.assertEqual('Cannot reach the local backend.', loading.children[-1].text)
+            self.assertEqual('Cannot read local data.', loading.children[-1].text)
             release(loading.children[0])
         refresh.assert_called_once()
 
     def test_rapid_week_changes_coalesce_refresh_requests(self):
         submitted = []
         starts = []
-        self.app.client = SimpleNamespace(
+        self.app.planner = SimpleNamespace(
             plans=lambda start, *_: starts.append(start) or [],
             ingredient_prices=lambda _: {}, reference_prices=lambda: {},
         )

@@ -1,7 +1,6 @@
-"""Meal plans and derived shopping quantities."""
+"""Persist and localize meal plans."""
 
 from datetime import date
-from decimal import Decimal
 from secrets import randbelow
 
 from cooking_planner_backend.repositories.json_files import read_json, write_json
@@ -66,22 +65,3 @@ class PlanStore:
             if len(remaining) == len(plans):
                 raise LookupError('Plan not found')
             write_json(self.path, remaining)
-
-    def shopping(self, start, end, locale):
-        plans = self.list(start, end, locale)
-        recipes = {row['id']: row for row in self.recipes.list(locale)}
-        combined = {}
-        for plan in plans:
-            recipe = recipes.get(plan['recipeId'])
-            if recipe is None:
-                continue
-            for ingredient in recipe['ingredients']:
-                key = (ingredient['ingredientId'], ingredient['unit'])
-                amount = Decimal(str(ingredient['amount'])) * plan['servings']
-                if key not in combined:
-                    combined[key] = {'ingredientId': key[0], 'name': ingredient['name'],
-                                     'amount': Decimal(0), 'unit': key[1], 'recipeCount': 0}
-                combined[key]['amount'] += amount
-                combined[key]['recipeCount'] += 1
-        return [{**row, 'amount': float(row['amount'])} for row in
-                sorted(combined.values(), key=lambda item: item['name'].casefold())]

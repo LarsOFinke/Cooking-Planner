@@ -21,9 +21,9 @@ from cooking_planner.ui.strings import t
 class CookingPlannerApp(AppShell, AdminActions, App):
     title = 'Cooking Planner'
 
-    def __init__(self, client, startup_error=None, config_path=None, ui_scale=1.0, ui_locale='en', **kwargs):
+    def __init__(self, planner, startup_error=None, config_path=None, ui_scale=1.0, ui_locale='en', **kwargs):
         super().__init__(**kwargs)
-        self.client = client
+        self.planner = planner
         self.startup_error = startup_error
         self.config_path = Path(config_path) if config_path else None
         self.ui_scale = ui_scale
@@ -54,10 +54,10 @@ class CookingPlannerApp(AppShell, AdminActions, App):
         self.cooking_progress = {}
         self.shopping_draft = ShoppingDraft(self.config_path.parent / 'shopping.json' if self.config_path else None)
         self.shopping_draft.locale = self.locale
-        self.shopping_draft.price_writer = self.client.save_ingredient_price if hasattr(self.client, 'save_ingredient_price') else None
-        self.shopping_draft.price_clearer = self.client.clear_ingredient_prices if hasattr(self.client, 'clear_ingredient_prices') else None
-        self.shopping_draft.ingredient_writer = (lambda ingredient_id, name, locale:
-            self.client.register_ingredient(ingredient_id, locale, name)) if hasattr(self.client, 'register_ingredient') else None
+        if planner is not None:
+            self.shopping_draft.price_writer = planner.save_ingredient_price
+            self.shopping_draft.price_clearer = planner.clear_ingredient_prices
+            self.shopping_draft.ingredient_writer = planner.register_ingredient
         self.shopping_draft.pending_scheduler = self._flush_shopping_pending
         self.window_fullscreen = False
 
@@ -125,8 +125,8 @@ class CookingPlannerApp(AppShell, AdminActions, App):
         start = self.week_start.isoformat()
         end = (self.week_start + timedelta(days=6)).isoformat()
         def load():
-            return (self.client.locales(), self.client.catalog_info(locale),
-                    self.client.plans(start, end, locale))
+            return (self.planner.locales(), self.planner.catalog_info(locale),
+                    self.planner.plans(start, end, locale))
         def loaded(data):
             if self.generation or locale != self.locale or start != self.week_start.isoformat():
                 return
@@ -163,10 +163,10 @@ class CookingPlannerApp(AppShell, AdminActions, App):
         end = (self.week_start + timedelta(days=6)).isoformat()
         cached = self._catalog_cache.get(locale)
         def load():
-            catalog = cached or (self.client.locales(), self.client.recipes(locale), self.client.catalog_info(locale))
+            catalog = cached or (self.planner.locales(), self.planner.recipes(locale), self.planner.catalog_info(locale))
             return (*catalog,
-                    self.client.plans(start, end, locale), self.client.ingredient_prices(start),
-                    self.client.reference_prices())
+                    self.planner.plans(start, end, locale), self.planner.ingredient_prices(start),
+                    self.planner.reference_prices())
         self._submit(load, lambda data: self._loaded(data, generation), finished=self._finish_refresh)
 
     def _finish_refresh(self):
@@ -285,11 +285,11 @@ class CookingPlannerApp(AppShell, AdminActions, App):
             self.week_start = day - timedelta(days=day.weekday())
             self.show_tab('week')
             self.refresh()
-        self._submit(lambda: self.client.save_plan(day.isoformat(), meal, recipe_id, servings), saved)
+        self._submit(lambda: self.planner.save_plan(day.isoformat(), meal, recipe_id, servings), saved)
 
     def remove_plan(self, plan):
         confirm_popup(t(self.locale, 'remove_question'), self.locale,
-                      lambda: self._submit(lambda: self.client.delete_plan(plan['id']),
+                      lambda: self._submit(lambda: self.planner.delete_plan(plan['id']),
                                            lambda *_: self.refresh()))
 
     def show_notes(self):
