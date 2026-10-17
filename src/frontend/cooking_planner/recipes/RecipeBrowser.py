@@ -186,67 +186,34 @@ class RecipeBrowser(RecipeFilters):
         if self.detail_tab == 'recipe':
             self.detail_body.add_widget(label(recipe['name'], 17, GOLD, 32, True))
             steps = recipe.get('instructions') or []
-            progress = self.cooking_progress.setdefault(recipe['id'], {'steps': set(), 'ingredients': set()})
+            progress = self.cooking_progress.setdefault(
+                recipe['id'], {'steps': set(), 'ingredients': set(), 'current_step': 0})
             progress_label = label('', 13, MUTED, 25)
             self.detail_body.add_widget(progress_label)
             self._update_step_progress(progress_label, progress, len(steps))
-            self.detail_body.add_widget(self._cost_summary(recipe))
             if not steps:
                 self.detail_body.add_widget(label(t(self.locale, 'no_instructions'), 15, MUTED, 85))
-            ingredients = {item['ingredientId']: item for item in recipe['ingredients']}
-            for step in steps:
-                number = step['step']
-                card = box(padding=8, spacing=5, color=PANEL_LIGHT, hover=True, size_hint_y=None)
-                card.bind(minimum_height=card.setter('height'))
-                heading = button('', height=40)
-                heading.halign = 'left'
-                heading.bind(width=lambda widget, width: setattr(widget, 'text_size', (width - dp(20), None)))
-                def update_step(card=card, heading=heading, number=number):
-                    done = number in progress['steps']
-                    card.set_base_color((0.11, 0.27, 0.21, 1) if done else PANEL_LIGHT)
-                    heading.set_base_color(GREEN if done else PANEL)
-                    heading.color = BG if done else WHITE
-                    heading.text = (f"✓  {t(self.locale, 'instruction_step')} {number}  ·  {t(self.locale, 'step_done')}"
-                                    if done else f"○  {t(self.locale, 'instruction_step')} {number}")
-                def toggle_step(number=number, update=update_step):
-                    completed = progress['steps']
-                    completed.remove(number) if number in completed else completed.add(number)
-                    update()
-                    self._update_step_progress(progress_label, progress, len(steps))
-                heading.bind(on_release=lambda *_, toggle=toggle_step: toggle())
-                card.add_widget(heading)
-                update_step()
-                text = Label(text=step['text'], color=WHITE, font_size=dp(14),
-                             size_hint_y=None, halign='left', valign='top')
-                text.bind(width=lambda widget, width: setattr(widget, 'text_size', (width, None)))
-                text.bind(texture_size=lambda widget, size: setattr(widget, 'height', max(dp(28), size[1] + dp(6))))
-                card.add_widget(text)
-                used = [ingredients[item_id] for item_id in step.get('ingredientIds', []) if item_id in ingredients]
-                if used:
-                    card.add_widget(label(t(self.locale, 'step_ingredients'), 12, GOLD, 25, True))
-                for ingredient in used:
-                    item_id = ingredient['ingredientId']
-                    amount = f"{ingredient['amount']:g}" if isinstance(ingredient['amount'], float) else str(ingredient['amount'])
-                    entry = button('', height=40)
-                    entry.halign = 'left'
-                    entry.bind(width=lambda widget, width: setattr(widget, 'text_size', (width - dp(20), None)))
-                    entry.bind(texture_size=lambda widget, size: setattr(widget, 'height', max(dp(40), size[1] + dp(14))))
-                    def update_ingredient(entry=entry, item_id=item_id, ingredient=ingredient, amount=amount,
-                                          number=number):
-                        checked = (number, item_id) in progress['ingredients']
-                        entry.set_base_color(GREEN if checked else PANEL)
-                        entry.color = BG if checked else WHITE
-                        entry.text = (f"{'✓' if checked else '□'}  {amount} {ingredient['unit']}  ·  "
-                                      f"{ingredient['name']}")
-                    def toggle_ingredient(item_id=item_id, number=number, update=update_ingredient):
-                        key = (number, item_id)
-                        checked = progress['ingredients']
-                        checked.remove(key) if key in checked else checked.add(key)
-                        update()
-                    entry.bind(on_release=lambda *_, toggle=toggle_ingredient: toggle())
-                    card.add_widget(entry)
-                    update_ingredient()
-                self.detail_body.add_widget(card)
+            else:
+                index = min(progress['current_step'], len(steps) - 1)
+                progress['current_step'] = index
+                controls = box(False, spacing=6, size_hint_y=None, height=dp(42))
+                previous = button(f"‹  {t(self.locale, 'previous')}",
+                                  lambda: self._change_step(-1), height=42,
+                                  size_hint_x=None, width=dp(110))
+                previous.disabled = index == 0
+                controls.add_widget(previous)
+                controls.add_widget(label(
+                    f"{t(self.locale, 'instruction_step')} {index + 1} {t(self.locale, 'of')} {len(steps)}",
+                    14, WHITE, 42, True))
+                following = button(f"{t(self.locale, 'next')}  ›",
+                                   lambda: self._change_step(1), height=42,
+                                   size_hint_x=None, width=dp(110))
+                following.disabled = index == len(steps) - 1
+                controls.add_widget(following)
+                self.detail_body.add_widget(controls)
+                self.detail_body.add_widget(self._cooking_step_card(
+                    recipe, steps[index], progress, progress_label, len(steps)))
+            self.detail_body.add_widget(self._cost_summary(recipe))
             return
         photos = [(reference, photo) for reference in recipe.get("images", [])
                   if (photo := image_file(recipe["id"], reference)) is not None]
@@ -296,6 +263,71 @@ class RecipeBrowser(RecipeFilters):
 
     def _update_step_progress(self, widget, progress, total):
         widget.text = t(self.locale, 'steps_progress').format(done=len(progress['steps']), total=total)
+
+    def _change_step(self, offset):
+        recipe = next((item for item in self.recipes if item['id'] == self.selected_id), None)
+        if recipe is None:
+            return
+        steps = recipe.get('instructions') or []
+        if not steps:
+            return
+        progress = self.cooking_progress[recipe['id']]
+        progress['current_step'] = max(0, min(len(steps) - 1, progress['current_step'] + offset))
+        self._render_detail()
+
+    def _cooking_step_card(self, recipe, step, progress, progress_label, total):
+        number = step['step']
+        card = box(padding=8, spacing=5, color=PANEL_LIGHT, hover=True, size_hint_y=None)
+        card.bind(minimum_height=card.setter('height'))
+        heading = button('', height=40)
+        heading.halign = 'left'
+        heading.bind(width=lambda widget, width: setattr(widget, 'text_size', (width - dp(20), None)))
+        def update_step():
+            done = number in progress['steps']
+            card.set_base_color((0.11, 0.27, 0.21, 1) if done else PANEL_LIGHT)
+            heading.set_base_color(GREEN if done else PANEL)
+            heading.color = BG if done else WHITE
+            heading.text = (f"✓  {t(self.locale, 'instruction_step')} {number}  ·  {t(self.locale, 'step_done')}"
+                            if done else f"○  {t(self.locale, 'instruction_step')} {number}")
+        def toggle_step():
+            completed = progress['steps']
+            completed.remove(number) if number in completed else completed.add(number)
+            update_step()
+            self._update_step_progress(progress_label, progress, total)
+        heading.bind(on_release=lambda *_: toggle_step())
+        card.add_widget(heading)
+        update_step()
+        text = Label(text=step['text'], color=WHITE, font_size=dp(14),
+                     size_hint_y=None, halign='left', valign='top')
+        text.bind(width=lambda widget, width: setattr(widget, 'text_size', (width, None)))
+        text.bind(texture_size=lambda widget, size: setattr(widget, 'height', max(dp(28), size[1] + dp(6))))
+        card.add_widget(text)
+        ingredients = {item['ingredientId']: item for item in recipe['ingredients']}
+        used = [ingredients[item_id] for item_id in step.get('ingredientIds', []) if item_id in ingredients]
+        if used:
+            card.add_widget(label(t(self.locale, 'step_ingredients'), 12, GOLD, 25, True))
+        for ingredient in used:
+            item_id = ingredient['ingredientId']
+            amount = f"{ingredient['amount']:g}" if isinstance(ingredient['amount'], float) else str(ingredient['amount'])
+            entry = button('', height=40)
+            entry.halign = 'left'
+            entry.bind(width=lambda widget, width: setattr(widget, 'text_size', (width - dp(20), None)))
+            entry.bind(texture_size=lambda widget, size: setattr(widget, 'height', max(dp(40), size[1] + dp(14))))
+            def update_ingredient(entry=entry, item_id=item_id, ingredient=ingredient, amount=amount):
+                checked = (number, item_id) in progress['ingredients']
+                entry.set_base_color(GREEN if checked else PANEL)
+                entry.color = BG if checked else WHITE
+                entry.text = (f"{'✓' if checked else '□'}  {amount} {ingredient['unit']}  ·  "
+                              f"{ingredient['name']}")
+            def toggle_ingredient(item_id=item_id, update=update_ingredient):
+                key = (number, item_id)
+                checked = progress['ingredients']
+                checked.remove(key) if key in checked else checked.add(key)
+                update()
+            entry.bind(on_release=lambda *_, toggle=toggle_ingredient: toggle())
+            card.add_widget(entry)
+            update_ingredient()
+        return card
 
     def _ingredient_price(self, ingredient):
         key = f"{ingredient['ingredientId']}:{ingredient['unit']}"

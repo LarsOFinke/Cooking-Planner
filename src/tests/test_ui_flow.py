@@ -213,7 +213,7 @@ class UiFlowTest(unittest.TestCase):
         self.assertTrue(browser.next_button.disabled)
         self.assertEqual(1, len(browser.rows.children))
 
-    def test_recipe_steps_and_measured_ingredients_can_be_checked(self):
+    def test_recipe_steps_advance_one_at_a_time_and_keep_checks(self):
         self.recipe['instructions'] = [
             {'step': 1, 'text': 'Prepare the carrots.', 'ingredientIds': ['karotte']},
             {'step': 2, 'text': 'Cook until tender.', 'ingredientIds': []},
@@ -221,12 +221,16 @@ class UiFlowTest(unittest.TestCase):
         self.app.show_tab('explore')
         browser = self.app.browser
         browser._show_detail_tab('recipe')
-        cards = list(reversed(browser.detail_body.children[:2]))
-        first, second = cards
+        self.assertEqual(5, len(browser.detail_body.children))
+        first = browser.detail_body.children[-4]
+        controls = browser.detail_body.children[-3]
+        previous, following = controls.children[-1], controls.children[0]
         heading = first.children[-1]
         ingredient = first.children[0]
         self.assertEqual('○  Step 1', heading.text)
-        self.assertEqual('○  Step 2', second.children[-1].text)
+        self.assertEqual('Step 1 of 2', controls.children[1].text)
+        self.assertTrue(previous.disabled)
+        self.assertFalse(following.disabled)
         self.assertIn('90 g  ·  Carrot', ingredient.text)
         self.assertEqual('0/2 steps done', browser.detail_body.children[-2].text)
         release(ingredient)
@@ -236,10 +240,20 @@ class UiFlowTest(unittest.TestCase):
         self.assertIn('Step 1  ·  Done', heading.text)
         self.assertEqual('1/2 steps done', browser.detail_body.children[-2].text)
         self.assertEqual((0.11, 0.27, 0.21, 1), first._base_background)
+        release(following)
+        second = browser.detail_body.children[-4]
+        controls = browser.detail_body.children[-3]
+        self.assertEqual('○  Step 2', second.children[-1].text)
+        self.assertEqual('Step 2 of 2', controls.children[1].text)
+        self.assertEqual(2, len(second.children))
+        self.assertFalse(controls.children[-1].disabled)
+        self.assertTrue(controls.children[0].disabled)
         self.app.show_tab('week')
         self.app.show_tab('explore')
         browser = self.app.browser
         browser._show_detail_tab('recipe')
+        self.assertEqual('Step 2 of 2', browser.detail_body.children[-3].children[1].text)
+        release(browser.detail_body.children[-3].children[-1])
         first = browser.detail_body.children[-4]
         self.assertTrue(first.children[0].text.startswith('✓'))
         self.assertIn('Done', first.children[-1].text)
