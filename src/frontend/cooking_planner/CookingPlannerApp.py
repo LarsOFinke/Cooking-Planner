@@ -9,6 +9,7 @@ from kivy.core.window import Window
 from kivy.metrics import Metrics
 
 from cooking_planner.AppShell import AppShell
+from cooking_planner.paths import on_android
 from cooking_planner.plans.dialog import plan_popup
 from cooking_planner.recipes.AdminActions import AdminActions
 from cooking_planner.recipes.dialogs import notes_popup, picker_popup
@@ -16,7 +17,7 @@ from cooking_planner.shopping.ShoppingDraft import ShoppingDraft
 from cooking_planner.ui.dialogs import confirm_popup
 from cooking_planner.ui.strings import t
 from cooking_planner.ui.theme import BG, set_tab_active
-from cooking_planner.ui.window import fullscreen_mode
+from cooking_planner.ui.window import fullscreen_mode, minimum_window_size
 
 
 class CookingPlannerApp(AppShell, AdminActions, App):
@@ -66,6 +67,8 @@ class CookingPlannerApp(AppShell, AdminActions, App):
 
     def build(self):
         Metrics.density = self.base_density * self.ui_scale
+        if not on_android():
+            Window.minimum_width, Window.minimum_height = minimum_window_size(self.ui_scale)
         self.window_fullscreen = bool(Window.fullscreen)
         Window.clearcolor = BG
         self.root_view = self._build_shell()
@@ -248,6 +251,12 @@ class CookingPlannerApp(AppShell, AdminActions, App):
             return
         self.ui_scale = scale
         Metrics.density = self.base_density * scale
+        if not on_android():
+            minimum_width, minimum_height = minimum_window_size(scale)
+            Window.minimum_width, Window.minimum_height = minimum_width, minimum_height
+            if not Window.fullscreen:
+                Window.size = (max(Window.width, minimum_width),
+                               max(Window.height, minimum_height))
         self._save_scale()
         self._rebuild_shell()
         self._status(f'{round(scale * 100)}%')

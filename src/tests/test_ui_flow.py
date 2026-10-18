@@ -419,7 +419,7 @@ class UiFlowTest(unittest.TestCase):
         self.assertFalse(draft.week(start)['checked'])
         self.assertEqual(6, len(panel.actions.children))
         panel.actions.width = dp(700)
-        self.assertEqual((3, dp(85)), (panel.actions.cols, panel.actions.height))
+        self.assertEqual((6, dp(40)), (panel.actions.cols, panel.actions.height))
         panel.actions.width = dp(400)
         self.assertEqual((2, dp(130)), (panel.actions.cols, panel.actions.height))
         self.app.change_scale(2.0)

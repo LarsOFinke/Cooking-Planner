@@ -6,7 +6,7 @@ from configparser import Error as ConfigError
 from pathlib import Path
 
 from cooking_planner.paths import catalog_directory, on_android
-from cooking_planner.ui.window import fullscreen_mode
+from cooking_planner.ui.window import fullscreen_mode, minimum_window_size
 
 if not on_android():
     os.environ.setdefault("KIVY_DESKTOP_PATH_ID", "CookingPlanner")
@@ -54,13 +54,19 @@ def main() -> None:
     data_dir = Path(configured_data_dir) if configured_data_dir else default_data_dir()
     prepare_data_directory(data_dir, not configured_data_dir)
     config.read(data_dir / "client.cfg")
+    scale = bounded_number(config, 'ui', 'scale', 1.0, 1.0, 2.0)
+    if scale not in (1.0, 1.25, 1.5, 1.75, 2.0):
+        scale = 1.0
     if not on_android():
         from kivy.config import Config
 
-        Config.set('graphics', 'minimum_width', '900')
-        Config.set('graphics', 'minimum_height', '650')
-        Config.set('graphics', 'width', str(bounded_number(config, 'ui', 'window_width', 1280, 900, 3840)))
-        Config.set('graphics', 'height', str(bounded_number(config, 'ui', 'window_height', 820, 650, 2160)))
+        minimum_width, minimum_height = minimum_window_size(scale)
+        Config.set('graphics', 'minimum_width', str(minimum_width))
+        Config.set('graphics', 'minimum_height', str(minimum_height))
+        Config.set('graphics', 'width', str(max(minimum_width, bounded_number(
+            config, 'ui', 'window_width', 1280, 900, 3840))))
+        Config.set('graphics', 'height', str(max(minimum_height, bounded_number(
+            config, 'ui', 'window_height', 820, 650, 2160))))
         mode = fullscreen_mode(fullscreen_enabled(config))
         Config.set('graphics', 'fullscreen', mode if isinstance(mode, str) else ('1' if mode else '0'))
 
@@ -76,9 +82,6 @@ def main() -> None:
         except (OSError, RuntimeError, ValueError) as error:
             startup_error = str(error)
             print(f'Local planner startup failed: {startup_error}', file=sys.stderr)
-        scale = bounded_number(config, 'ui', 'scale', 1.0, 1.0, 2.0)
-        if scale not in (1.0, 1.25, 1.5, 1.75, 2.0):
-            scale = 1.0
         CookingPlannerApp(planner,
                           startup_error=startup_error, config_path=data_dir / "client.cfg", ui_scale=scale,
                           ui_locale=preferred_locale(config)).run()

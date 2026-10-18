@@ -147,7 +147,14 @@ class ShoppingRendering:
         self.rows.clear_widgets()
         self._render_summary()
         if not self.items:
-            self.rows.add_widget(label(t(self.locale, 'empty_shopping_draft'), 17, MUTED, 80))
+            empty = box(padding=16, spacing=8, color=PANEL_LIGHT,
+                        size_hint_y=None, height=dp(48 if self.compact_list else 108))
+            empty.add_widget(label(t(self.locale, 'empty_shopping_draft'), 16, MUTED,
+                                   32 if self.compact_list else 40))
+            if not self.compact_list:
+                empty.add_widget(button(t(self.locale, 'add_item'), self.add_item,
+                                        'primary', size_hint_x=None, width=dp(150), height=40))
+            self.rows.add_widget(empty)
             return
         pending = [item for item in self.items if item_key(item) not in checked]
         completed = [item for item in self.items if item_key(item) in checked]

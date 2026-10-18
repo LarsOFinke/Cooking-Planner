@@ -47,8 +47,8 @@ class ShoppingPanel(ShoppingRendering):
         actions.add_widget(button(t(locale, 'reset_checks'), self.reset, height=40))
         actions.add_widget(button(t(locale, 'clear_all'), self.confirm_clear, 'danger', height=40))
         def layout_actions(_, width):
-            actions.cols = 3 if width >= dp(600) else 2
-            actions.height = dp(85 if actions.cols == 3 else 130)
+            actions.cols = 6 if width >= dp(700) else 3 if width >= dp(420) else 2
+            actions.height = dp({6: 40, 3: 85, 2: 130}[actions.cols])
         actions.bind(width=layout_actions)
         layout_actions(actions, actions.width)
         self.root.add_widget(actions)
@@ -60,6 +60,9 @@ class ShoppingPanel(ShoppingRendering):
         self.summary = label('', 15, WHITE, 30, True)
         self.meal_summary = label('', 13, MUTED, 30)
         self.price_summary = label('', 13, GOLD, 30)
+        for summary_label in (self.summary, self.meal_summary, self.price_summary):
+            summary_label.shorten = True
+        self.price_summary.halign = 'right'
         summary.add_widget(self.summary)
         summary.add_widget(self.meal_summary)
         summary.add_widget(self.price_summary)

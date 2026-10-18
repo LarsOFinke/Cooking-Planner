@@ -46,7 +46,7 @@ class RecipeBrowser(RecipeFilters):
         self.cooking_progress = cooking_progress if cooking_progress is not None else {}
         self.user_data_dir = user_data_dir
         self.page = 0
-        self.selected_id = recipes[0]["id"] if recipes else None
+        self.selected_id = None
         self.image_index = 0
         self.detail_tab = 'overview'
         self.filters_open = False
@@ -136,6 +136,8 @@ class RecipeBrowser(RecipeFilters):
         self.page_label.text = f"{t(self.locale, 'page')} {self.page + 1} {t(self.locale, 'of')} {total_pages}"
         self.previous_button.disabled = self.page == 0
         self.next_button.disabled = self.page == total_pages - 1
+        if self.selected_id not in {recipe["id"] for recipe in filtered}:
+            self.selected_id = filtered[0]["id"] if filtered else None
         self.rows.clear_widgets()
         if not filtered:
             self.rows.add_widget(label(t(self.locale, "no_results"), 14, MUTED, 90))
@@ -148,8 +150,6 @@ class RecipeBrowser(RecipeFilters):
             row.valign = "middle"
             row.bind(size=lambda widget, _: setattr(widget, "text_size", (widget.width - dp(20), widget.height)))
             self.rows.add_widget(row)
-        if self.selected_id not in {recipe["id"] for recipe in filtered}:
-            self.selected_id = filtered[0]["id"] if filtered else None
         self._render_detail()
 
     def select(self, recipe: dict) -> None:

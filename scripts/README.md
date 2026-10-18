@@ -8,7 +8,7 @@ Run commands from the repository root. `make help` lists the supported shortcuts
 | Quality | `make test`, `make quality` | Python tests, Ruff, coverage, and source checks |
 | Linux | `make compile-linux` | Wheel, PyInstaller executable, AppImage |
 | Windows | `make compile-windows` on Windows | Wheel, PyInstaller directory, Inno installer |
-| Android | `make compile-android` on Linux | Staged source, debug APK, APK manifest check |
+| Android (manual, paused) | `make compile-android` on Linux | Staged source, debug APK, APK manifest check |
 | Images | `python3 scripts/images/import_local_recipe_images.py` | Bundled image references and credits |
 
 `pyproject.toml` owns the application version. Both desktop builders clear their previous
@@ -27,3 +27,6 @@ a separate maintenance action; CI verifies the bundled references before packagi
 ShellCheck and parses PowerShell scripts on Windows. A passing quality check does not
 verify native packages or Android device behavior; use each target platform's build
 and runtime checks for that.
+
+The current CI package jobs build only Linux and Windows artifacts. Android build
+scripts and the manual command remain in the repository for later device testing.

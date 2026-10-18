@@ -11,17 +11,18 @@ from cooking_planner.recipes.IngredientAdminPanel import IngredientAdminPanel
 from cooking_planner.recipes.RecipeBrowser import RecipeBrowser
 from cooking_planner.shopping.ShoppingPanel import ShoppingPanel
 from cooking_planner.ui.strings import t
-from cooking_planner.ui.theme import MUTED, WHITE, box, button, label, scroll_view, spinner, tab_button
+from cooking_planner.ui.theme import MUTED, PANEL, WHITE, box, button, label, scroll_view, spinner, tab_button
 
 
 class AppShell:
     def _build_shell(self):
-        root = box(padding=16, spacing=10)
-        header = box(False, spacing=12, size_hint_y=None, height=dp(56))
+        root = box(padding=16, spacing=11)
+        header = box(False, padding=10, spacing=12, color=PANEL,
+                     size_hint_y=None, height=dp(64))
         self.header = header
         heading = box(spacing=0)
         title = label('Cooking Planner', 23, WHITE, 34, True)
-        tagline = label(t(self.locale, 'tagline'), 12, MUTED, 19)
+        tagline = label(t(self.locale, 'tagline'), 12, MUTED, 18)
         title.shorten = tagline.shorten = True
         heading.add_widget(title)
         heading.add_widget(tagline)
@@ -45,14 +46,15 @@ class AppShell:
         def layout_header(_, width):
             compact = width < dp(530)
             header.orientation = 'vertical' if compact else 'horizontal'
-            header.height = dp(108 if compact else 56)
+            header.height = dp(112 if compact else 64)
             controls.size_hint_x = 1 if compact else None
             controls.width = width if compact else dp(261)
         header.bind(width=layout_header)
         layout_header(header, header.width)
         root.add_widget(header)
-        nav_scroll = scroll_view(size_hint_y=None, height=dp(44), do_scroll_y=False)
-        nav = box(False, spacing=7, size_hint=(None, None), height=dp(44))
+        nav_scroll = scroll_view(size_hint_y=None, height=dp(48), do_scroll_y=False)
+        nav = box(False, padding=3, spacing=5, color=PANEL,
+                  size_hint=(None, None), height=dp(48))
         nav_scroll.bind(width=lambda _, width: setattr(nav, 'width', max(width, dp(650))))
         self.nav_buttons = {}
         for tab in ('overview', 'explore', 'week', 'shopping', 'admin'):
@@ -67,12 +69,12 @@ class AppShell:
         root.add_widget(nav_scroll)
         self.content = box()
         root.add_widget(self.content)
-        footer = box(False, spacing=10, size_hint_y=None, height=dp(36))
-        self.status_label = label(self.status_message, 12, MUTED, 36)
+        footer = box(False, spacing=10, size_hint_y=None, height=dp(32))
+        self.status_label = label(self.status_message, 12, MUTED, 32)
         self.status_label.shorten = True
         footer.add_widget(self.status_label)
         self.exit_button = button(t(self.locale, 'exit'), self.stop,
-                                  size_hint_x=None, width=dp(90), height=36)
+                                  size_hint_x=None, width=dp(90), height=32)
         footer.add_widget(self.exit_button)
         root.add_widget(footer)
         self._render_tab()

@@ -1,5 +1,7 @@
 # Android APK build
 
+Android work is paused while the alpha is tested on Windows and Linux. CI does not build or upload an APK. Keep this manual build path for when Android testing resumes; no Android package is currently release-validated.
+
 `make compile-android` builds an arm64 debug APK at `dist/android/CookingPlanner-arm64-v8a-debug.apk` and verifies its manifest permissions and backup setting before reporting success. It stages the Python frontend, backend, read-only recipe catalogs, and local images under `build/android/source`; Buildozer downloads and compiles the Android dependencies. The staged tree and Buildozer cache are generated files.
 
 Build on Linux with Python 3.14, JDK 17, Rust (`rustup`, `rustc`, `cargo`), `git`, `zip`, `unzip`, `autoconf`, `automake`, `pkg-config`, and `cmake`. The full system-package list is in the [Buildozer installation guide](https://buildozer.readthedocs.io/en/latest/installation/). Install `libltdl-dev` as well if libffi's `autoreconf` reports `LT_SYS_SYMBOL_USCORE`. On Ubuntu 26.04, that guide's Android instructions provide the required packages and Rust setup. Set `ANDROID_PYTHON` if Python 3.14 is not named `python3.14` on your machine. Buildozer runs from `.build-venv-android`; the script installs its host prerequisites there. The first build requires network access and several gigabytes of free disk space.

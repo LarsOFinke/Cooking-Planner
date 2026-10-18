@@ -12,7 +12,19 @@ from cooking_planner.recipes.admin_schema import CHOICES, TIMES
 from cooking_planner.recipes.AdminFormPages import AdminFormPages
 from cooking_planner.recipes.IngredientPicker import IngredientPicker
 from cooking_planner.ui.strings import t
-from cooking_planner.ui.theme import GOLD, MUTED, PANEL, PANEL_LIGHT, box, button, field, label, scroll_view, spinner
+from cooking_planner.ui.theme import (
+    GOLD,
+    MUTED,
+    PANEL,
+    PANEL_LIGHT,
+    WHITE,
+    box,
+    button,
+    field,
+    label,
+    scroll_view,
+    spinner,
+)
 
 
 class AdminPanel(AdminFormPages):
@@ -107,15 +119,21 @@ class AdminPanel(AdminFormPages):
         def append_batch(_):
             for record in remaining[:20]:
                 name = record['names'].get(self.locale) or next(iter(record['names'].values()), '')
-                item = button(f"{name}\n{record['id']}",
-                              lambda recipe_id=record['id']: self.on_select(recipe_id),
-                              'primary' if self.entry and record['id'] == self.entry['id'] else 'secondary',
-                              height=52)
-                item.halign = 'left'
-                item.valign = 'middle'
-                item.shorten = True
-                item.bind(size=lambda widget, _: setattr(widget, 'text_size',
-                                                         (widget.width - dp(12), widget.height)))
+                selected = bool(self.entry and record['id'] == self.entry['id'])
+                item = box(padding=5, spacing=0, color=GOLD if selected else PANEL_LIGHT,
+                           size_hint_y=None, height=dp(56))
+                title = button(name, lambda recipe_id=record['id']: self.on_select(recipe_id),
+                               height=32)
+                title.set_base_color((0, 0, 0, 0))
+                title.color = PANEL if selected else WHITE
+                title.halign = 'left'
+                title.shorten = True
+                title.bind(size=lambda widget, _: setattr(widget, 'text_size',
+                                                          (widget.width - dp(8), widget.height)))
+                item.add_widget(title)
+                identifier = label(record['id'], 11, PANEL if selected else MUTED, 16)
+                identifier.shorten = True
+                item.add_widget(identifier)
                 self.list_rows.add_widget(item)
             del remaining[:20]
             self._list_event = Clock.schedule_once(append_batch, 0) if remaining else None
