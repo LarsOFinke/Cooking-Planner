@@ -33,3 +33,7 @@ Für lokal hinzugefügte Dateien legt der Import `data/recipe_images/LOCAL_IMAGE
 `IMAGE_ATTRIBUTIONS.csv` und `.md` werden aus diesen Angaben erzeugt. Die App zeigt den Status oder den Urhebernachweis beim Bild an. `python3 scripts/images/verify_recipe_images.py` zählt offene Rechte; für eine Veröffentlichung müssen sie geklärt sein.
 
 Alle 586 Rezepte haben bereits ein lokales Bild. Weitere Bilder können mit dem Importskript eingebunden werden; der frühere automatische Wikimedia-Downloader wird dafür nicht benötigt. Alle vorhandenen Bildnachweise stehen derzeit auf `pending` und müssen vor einer Veröffentlichung geprüft werden.
+
+## Kompakte Desktop-Pakete
+
+Der Windows- und Linux-Build ruft `scripts/build/common/stage_catalogs.py` auf. Das Skript erstellt in `build/catalogs` JPEG-Kopien mit maximal 960 Pixeln Kantenlänge und Qualitätswert 74. Es passt die Bildpfade in Kopien beider Sprachkataloge sowie in den Bildnachweisen an. Die 586 PNG-Quelldateien (255 MiB) ergeben dabei etwa 26 MiB JPEG-Dateien; Benutzerbilder werden nicht verändert. Für den Build wird Pillow aus `src/requirements-build.txt` benötigt. Der Pakettest lädt ein Bild mit Kivy, und der Windows-CI-Job prüft zusätzlich die installierte Anwendung. Die Originaldateien und ihre Prüfsummen bleiben Grundlage für Import und Rechteprüfung.

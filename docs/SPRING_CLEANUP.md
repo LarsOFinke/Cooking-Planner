@@ -1,5 +1,13 @@
 # Spring cleanup audit
 
+## Packaging, plan projection, and schema review — 2026-10-18
+
+The desktop build now stages compressed copies of the catalog images. Original 255 MiB PNG assets remain available for image maintenance, while packaged JPEGs use about 26 MiB. The source catalogs and attribution hashes are not rewritten. The Windows and Linux build scripts bundle only the staged catalog tree. Android packaging remains unchanged in this pass.
+
+Shopping fetches upcoming plans only while its tab is open, so ordinary Week navigation does not repeat an unbounded plan read. `PlanStore` labels plans from cached raw localized recipe rows; it avoids constructing every full recipe DTO and querying ingredient translations just to display plan titles. Shopping uses one persistent upcoming draft and derives planned recipe bought status from checked ingredient keys and a saved recipe/servings signature.
+
+The SQLite schema was reviewed for third normal form. Ingredient IDs, localized translations, and prices already have separate tables with foreign keys and unique natural keys. The existing `ingredient_price` row represents one ingredient, period, and unit; its amount and optional reference basis depend on that full key. There is no duplicated recipe or plan data in SQLite. A table rewrite would add migration risk without removing a 3NF violation, so this pass leaves existing SQLite files intact. The new bought status lives with shopping choices in `shopping.json`.
+
 ## Package and lint follow-up — 2026-10-18
 
 The retired `routes` and frontend `api` directories contained only ignored bytecode caches. They and the old feature package directories were removed. Backend behavior now sits in a `stores` package, while the app-facing planner and shared validation sit in `core`; entities and repositories keep their existing storage roles. The shared ID pattern no longer makes the ingredient store import the recipe store. Development and quality commands write Python bytecode under ignored `build/python-cache` so routine runs do not recreate source-tree cache directories. Ruff now checks import order, common bug patterns and simplifications, and stale lint suppressions; the frontend import blocks and three small control-flow cases were cleaned up.

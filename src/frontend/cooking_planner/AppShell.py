@@ -1,5 +1,7 @@
 """Build the application shell and its feature-owned tab views."""
 
+from datetime import date
+
 from kivy.metrics import dp
 
 from cooking_planner.overview.OverviewPanel import OverviewPanel
@@ -95,7 +97,8 @@ class AppShell:
         self.admin_panel = None
         self.content.clear_widgets()
         if not self.startup_error and ((self.tab == 'overview' and not self._overview_ready) or
-                                       (self.tab in ('explore', 'week', 'shopping') and not self._catalog_ready)):
+                                       (self.tab in ('explore', 'week', 'shopping') and not self._catalog_ready) or
+                                       (self.tab == 'shopping' and not self._shopping_ready)):
             key = 'loading_overview' if self.tab == 'overview' else 'loading_recipes'
             loading = box(padding=18, spacing=8)
             loading.add_widget(label(self._loading_error or t(self.locale, key), 16, MUTED, 90))
@@ -118,8 +121,8 @@ class AppShell:
                                 self.shift_week, self.current_week, self.pick_recipe, self.remove_plan,
                                 self.recipes, self.shopping_draft)
         elif self.tab == 'shopping':
-            panel = ShoppingPanel(self.plans, self.recipes, self.shopping_draft, self.locale,
-                                  self.week_start, self._status, self.search_ingredients)
+            panel = ShoppingPanel(self.shopping_plans, self.recipes, self.shopping_draft, self.locale,
+                                  date.today(), self._status, self.search_ingredients, upcoming=True)
             self.shopping_panel = panel
         elif self.admin_mode == 'ingredients':
             panel = IngredientAdminPanel(self.locales, self.locale, self.show_recipe_admin,

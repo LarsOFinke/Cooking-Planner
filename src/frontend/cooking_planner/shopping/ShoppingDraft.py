@@ -1,12 +1,17 @@
-"""A user-controlled, week-specific shopping draft built from planned meals."""
+"""Persist shopping choices and project upcoming planned meals into a list."""
 
+import json
+from copy import deepcopy
 from decimal import Decimal
+from hashlib import sha256
 from pathlib import Path
 from threading import RLock
 from uuid import uuid4
 
 from cooking_planner.pricing import normalize_price
 from cooking_planner.shopping.persistence import load_draft, save_draft
+
+UPCOMING = 'upcoming'
 
 
 def item_key(item: dict) -> str:
@@ -33,8 +38,23 @@ class ShoppingDraft:
             self.weeks, self.pending, self.recovery_notice = load_draft(path)
 
     def week(self, start: str) -> dict:
-        return self.weeks.setdefault(start, {'plans': [], 'selectionMode': 'explicit', 'excluded': [],
-                                             'custom': [], 'checked': [], 'prices': {}})
+        return self.weeks.setdefault(start, {'plans': [], 'selectionMode': 'auto' if start == UPCOMING else 'explicit',
+                                             'excludedPlans': [], 'excluded': [], 'custom': [],
+                                             'checked': [], 'boughtPlans': {}, 'prices': {}})
+
+    def use_upcoming(self, current_week: str) -> bool:
+        """Carry the current shopping list into the persistent upcoming list once."""
+        if UPCOMING in self.weeks:
+            return False
+        previous = self.weeks.get(current_week)
+        state = deepcopy(previous) if previous else self.week(UPCOMING)
+        state['plans'] = []
+        state['selectionMode'] = 'auto'
+        state['excludedPlans'] = []
+        state['boughtPlans'] = {}
+        self.weeks[UPCOMING] = state
+        self.save()
+        return True
 
     def use_prices(self, start: str, prices: dict[str, str]) -> None:
         """Use database prices for a loaded week; legacy JSON remains a migration source."""
@@ -52,6 +72,8 @@ class ShoppingDraft:
     def selected_plan_ids(self, start: str, plans: list[dict]) -> set[str]:
         state = self.week(start)
         available = {str(plan['id']) for plan in plans}
+        if start == UPCOMING:
+            return available - set(state.get('excludedPlans', []))
         if state.get('selectionMode') != 'explicit':
             # Older drafts could implicitly include every plan except excludedPlans.
             # Only persisted positive selections can be migrated without making
@@ -118,6 +140,12 @@ class ShoppingDraft:
 
     def add_all(self, start: str, plans: list[dict]) -> None:
         state = self.week(start)
+        if start == UPCOMING:
+            state['excludedPlans'] = []
+            state['excluded'] = []
+            state['checked'] = []
+            self.save()
+            return
         state['plans'] = [str(plan['id']) for plan in plans]
         state['selectionMode'] = 'explicit'
         state.pop('excludedPlans', None)
@@ -144,6 +172,11 @@ class ShoppingDraft:
         self.selected_plan_ids(start, plans)
         chosen = [str(plan['id']) for plan in plans if plan['date'] == day]
         state = self.week(start)
+        if start == UPCOMING:
+            state['excludedPlans'] = [key for key in state['excludedPlans'] if key not in chosen]
+            self._restore_plan_ingredients(state, plans, recipes or [], set(chosen))
+            self.save()
+            return len(chosen)
         state['plans'] = sorted(set(state['plans']) | set(chosen))
         self._restore_plan_ingredients(state, plans, recipes or [], set(chosen))
         self.save()
@@ -152,6 +185,16 @@ class ShoppingDraft:
     def toggle_plan(self, start: str, plan_id: int, plans: list[dict] | None = None,
                     recipes: list[dict] | None = None) -> None:
         state = self.week(start)
+        if start == UPCOMING:
+            excluded = state['excludedPlans']
+            key = str(plan_id)
+            if key in excluded:
+                excluded.remove(key)
+                self._restore_plan_ingredients(state, plans or [], recipes or [], {key})
+            else:
+                excluded.append(key)
+            self.save()
+            return
         selected = state['plans']
         key = str(plan_id)
         if key in selected:
@@ -168,6 +211,12 @@ class ShoppingDraft:
         if not any(str(plan['id']) == key for plan in plans):
             return
         state = self.week(start)
+        if start == UPCOMING:
+            if key in state['excludedPlans']:
+                state['excludedPlans'].remove(key)
+            self._restore_plan_ingredients(state, plans, recipes, {key})
+            self.save()
+            return
         if key not in state['plans']:
             state['plans'].append(key)
         self._restore_plan_ingredients(state, plans, recipes, {key})
@@ -176,6 +225,13 @@ class ShoppingDraft:
     def select_all_plans(self, start: str, plans: list[dict], selected: bool,
                          recipes: list[dict] | None = None) -> None:
         state = self.week(start)
+        if start == UPCOMING:
+            state['excludedPlans'] = [] if selected else [str(plan['id']) for plan in plans]
+            if selected:
+                self._restore_plan_ingredients(state, plans, recipes or [],
+                                               {str(plan['id']) for plan in plans})
+            self.save()
+            return
         state['plans'] = [str(plan['id']) for plan in plans] if selected else []
         if selected:
             self._restore_plan_ingredients(state, plans, recipes or [], set(state['plans']))
@@ -211,7 +267,7 @@ class ShoppingDraft:
         state = self.week(start)
         state['custom'].append(item)
         if normalized is not None:
-            if self.price_writer is None:
+            if self.price_writer is None or start == UPCOMING:
                 state.setdefault('prices', {})[item_key(item)] = normalized
             else:
                 self.database_prices.setdefault(start, {})[item_key(item)] = normalized
@@ -221,7 +277,7 @@ class ShoppingDraft:
         if ingredient_id is None and self.ingredient_writer is not None:
             operations.append({'kind': 'ingredient', 'id': item['ingredientId'],
                                'name': item['name'], 'locale': self.locale})
-        if normalized is not None and self.price_writer is not None:
+        if normalized is not None and self.price_writer is not None and start != UPCOMING:
             operations.append({'kind': 'price', 'week': start, 'key': item_key(item), 'price': normalized})
         self._queue(*operations)
 
@@ -250,7 +306,7 @@ class ShoppingDraft:
 
     def set_price(self, start: str, key: str, price: str) -> None:
         normalized = normalize_price(price)
-        if self.price_writer is None:
+        if self.price_writer is None or start == UPCOMING:
             prices = self.week(start).setdefault('prices', {})
             if normalized is None:
                 prices.pop(key, None)
@@ -267,7 +323,7 @@ class ShoppingDraft:
 
     def remove_item(self, start: str, key: str) -> None:
         state = self.week(start)
-        clear_price = self.price_writer is not None and self.weekly_price_for(start, key) is not None
+        clear_price = start != UPCOMING and self.price_writer is not None and self.weekly_price_for(start, key) is not None
         state.setdefault('prices', {}).pop(key, None)
         if start in self.database_prices:
             self.database_prices[start].pop(key, None)
@@ -286,6 +342,42 @@ class ShoppingDraft:
             checked.append(key)
         self.save()
 
+    @staticmethod
+    def _plan_signature(plan: dict, recipe: dict) -> str:
+        ingredients = sorted((item_key(item), str(item['amount'])) for item in recipe['ingredients'])
+        contents = json.dumps([plan['recipeId'], plan['servings'], ingredients], separators=(',', ':'))
+        return sha256(contents.encode('utf-8')).hexdigest()
+
+    def bought_plan_ids(self, start: str, plans: list[dict], recipes: list[dict]) -> set[str]:
+        state = self.week(start)
+        checked = set(state['checked']) - set(state['excluded'])
+        by_recipe = {recipe['id']: recipe for recipe in recipes}
+        selected = self.selected_plan_ids(start, plans)
+        bought = state.get('boughtPlans', {})
+        return {str(plan['id']) for plan in plans if str(plan['id']) in selected
+                and (recipe := by_recipe.get(plan['recipeId'])) is not None
+                and recipe['ingredients']
+                and all(item_key(item) in checked for item in recipe['ingredients'])
+                and bought.get(str(plan['id'])) == self._plan_signature(plan, recipe)}
+
+    def update_bought_plans(self, start: str, plans: list[dict], recipes: list[dict]) -> None:
+        state = self.week(start)
+        checked = set(state['checked']) - set(state['excluded'])
+        by_recipe = {recipe['id']: recipe for recipe in recipes}
+        selected = self.selected_plan_ids(start, plans)
+        bought = state.setdefault('boughtPlans', {})
+        for key in set(bought) - {str(plan['id']) for plan in plans}:
+            bought.pop(key, None)
+        for plan in plans:
+            key = str(plan['id'])
+            recipe = by_recipe.get(plan['recipeId'])
+            if key in selected and recipe and recipe['ingredients'] and all(
+                    item_key(item) in checked for item in recipe['ingredients']):
+                bought[key] = self._plan_signature(plan, recipe)
+            else:
+                bought.pop(key, None)
+        self.save()
+
     def reset_checks(self, start: str) -> None:
         self.week(start)['checked'] = []
         self.save()
@@ -293,9 +385,12 @@ class ShoppingDraft:
     def clear(self, start: str, plans: list[dict] | None = None) -> None:
         old_prices = list(self.database_prices.get(start, self.week(start).get('prices', {})))
         self.database_prices.pop(start, None)
-        self.weeks[start] = {'plans': [], 'selectionMode': 'explicit', 'excluded': [],
-                             'custom': [], 'checked': [], 'prices': {}}
-        if self.price_clearer is not None:
+        self.weeks[start] = {'plans': [], 'selectionMode': 'auto' if start == UPCOMING else 'explicit',
+                             'excludedPlans': [str(plan['id']) for plan in plans or []] if start == UPCOMING else [],
+                             'excluded': [], 'custom': [], 'checked': [], 'boughtPlans': {}, 'prices': {}}
+        if start == UPCOMING:
+            self.save()
+        elif self.price_clearer is not None:
             self._queue({'kind': 'clear_prices', 'week': start})
         elif self.price_writer is not None:
             self._queue(*({'kind': 'price', 'week': start, 'key': key, 'price': ''} for key in old_prices))

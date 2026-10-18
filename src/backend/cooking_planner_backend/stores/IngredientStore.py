@@ -61,6 +61,8 @@ class IngredientStore:
                 if document.get('version') != 1 or not isinstance(document.get('weeks'), dict):
                     raise ValueError('Unsupported shopping draft')
                 for week, state in document['weeks'].items():
+                    if week == 'upcoming':
+                        continue  # Upcoming manual prices belong to the shopping draft, not a dated DB price.
                     _week(week)
                     for key, value in state.get('prices', {}).items():
                         ingredient_id, unit = key.rsplit(':', 1)

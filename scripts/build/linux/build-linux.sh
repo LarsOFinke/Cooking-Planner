@@ -16,11 +16,12 @@ wheel="$("$build_python" scripts/build/common/wheel_path.py)"
 "${progress[@]}" --step 2 --total 4 --name 'Install app wheel' \
     --log build/logs/linux-wheel-install.log -- \
     "$build_python" -m pip install --no-deps --force-reinstall "$wheel"
+"$build_python" scripts/build/common/stage_catalogs.py
 "${progress[@]}" --step 3 --total 4 --name 'Build bundled Linux executable' \
     --log build/logs/linux-executable.log -- \
     "$build_python" -m PyInstaller --noconfirm --onefile --windowed \
     --name CookingPlanner --distpath dist/linux --workpath build/pyinstaller-linux --specpath build \
     --collect-submodules sqlalchemy.dialects.sqlite \
-    --add-data "$project_root/data:catalogs" scripts/build/common/frozen_entry.py
+    --add-data "$project_root/build/catalogs:catalogs" scripts/build/common/frozen_entry.py
 "${progress[@]}" --step 4 --total 4 --name 'Build Linux AppImage' \
     --log build/logs/linux-appimage.log -- bash scripts/build/linux/package-linux.sh

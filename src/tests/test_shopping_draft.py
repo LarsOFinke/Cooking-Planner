@@ -10,10 +10,58 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
 
 from cooking_planner.pricing import normalize_price
 from cooking_planner.shopping.persistence import save_draft
-from cooking_planner.shopping.ShoppingDraft import ShoppingDraft, item_key
+from cooking_planner.shopping.ShoppingDraft import UPCOMING, ShoppingDraft, item_key
 
 
 class ShoppingDraftTest(unittest.TestCase):
+    def test_upcoming_list_includes_future_meals_and_preserves_current_custom_items(self):
+        recipes = [{'id': 'dish', 'ingredients': [
+            {'ingredientId': 'rice', 'name': 'Rice', 'amount': 100, 'unit': 'g'}]}]
+        plans = [{'id': 1, 'date': '2026-10-18', 'recipeId': 'dish', 'servings': 2},
+                 {'id': 2, 'date': '2026-11-02', 'recipeId': 'dish', 'servings': 1}]
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'shopping.json'
+            draft = ShoppingDraft(path)
+            draft.add_custom('2026-10-12', 'Milk', '1', 'l')
+            draft.use_upcoming('2026-10-12')
+            self.assertEqual({'1', '2'}, draft.selected_plan_ids(UPCOMING, plans))
+            self.assertEqual({'Rice', 'Milk'}, {item['name'] for item in draft.items(UPCOMING, plans, recipes)})
+            draft.toggle_plan(UPCOMING, 2)
+            self.assertEqual({'1'}, ShoppingDraft(path).selected_plan_ids(UPCOMING, plans))
+
+    def test_bought_recipe_status_uses_shared_ingredients_and_recipe_signature(self):
+        recipes = [{'id': 'one', 'ingredients': [
+            {'ingredientId': 'rice', 'name': 'Rice', 'amount': 100, 'unit': 'g'}]},
+                   {'id': 'two', 'ingredients': [
+                       {'ingredientId': 'rice', 'name': 'Rice', 'amount': 50, 'unit': 'g'},
+                       {'ingredientId': 'salt', 'name': 'Salt', 'amount': 1, 'unit': 'g'}]}]
+        plans = [{'id': 1, 'recipeId': 'one', 'servings': 2},
+                 {'id': 2, 'recipeId': 'two', 'servings': 1}]
+        draft = ShoppingDraft()
+        draft.toggle_checked(UPCOMING, 'rice:g')
+        draft.update_bought_plans(UPCOMING, plans, recipes)
+        self.assertEqual({'1'}, draft.bought_plan_ids(UPCOMING, plans, recipes))
+        draft.toggle_checked(UPCOMING, 'salt:g')
+        draft.update_bought_plans(UPCOMING, plans, recipes)
+        self.assertEqual({'1', '2'}, draft.bought_plan_ids(UPCOMING, plans, recipes))
+        plans[0]['servings'] = 3
+        self.assertEqual({'2'}, draft.bought_plan_ids(UPCOMING, plans, recipes))
+        recipes[1]['ingredients'].append(
+            {'ingredientId': 'pepper', 'name': 'Pepper', 'amount': 1, 'unit': 'g'})
+        self.assertEqual(set(), draft.bought_plan_ids(UPCOMING, plans, recipes))
+
+    def test_upcoming_manual_price_does_not_queue_invalid_week_in_sqlite(self):
+        draft = ShoppingDraft()
+        writes = []
+        draft.price_writer = lambda *values: writes.append(values)
+        draft.price_clearer = lambda value: writes.append(value)
+        draft.add_custom(UPCOMING, 'Milk', '1', 'l', '2.50')
+        item = draft.week(UPCOMING)['custom'][0]
+        self.assertEqual('2.50', str(draft.price_for(UPCOMING, item_key(item))))
+        self.assertEqual([], writes)
+        draft.clear(UPCOMING, [])
+        self.assertEqual([], writes)
+
     def test_interrupted_shopping_save_keeps_previous_file(self):
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / 'shopping.json'

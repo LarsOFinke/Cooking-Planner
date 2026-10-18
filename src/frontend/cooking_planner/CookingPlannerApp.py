@@ -40,6 +40,8 @@ class CookingPlannerApp(AppShell, AdminActions, App):
         self._catalog_ready = False
         self._loading_error = None
         self.plans = []
+        self.shopping_plans = []
+        self._shopping_ready = False
         self.info = {}
         self.admin_records = []
         self._admin_loaded = False
@@ -163,11 +165,13 @@ class CookingPlannerApp(AppShell, AdminActions, App):
         start = self.week_start.isoformat()
         end = (self.week_start + timedelta(days=6)).isoformat()
         cached = self._catalog_cache.get(locale)
+        include_shopping = self.tab == 'shopping'
         def load():
             catalog = cached or (self.planner.locales(), self.planner.recipes(locale), self.planner.catalog_info(locale))
             return (*catalog,
                     self.planner.plans(start, end, locale), self.planner.ingredient_prices(start),
-                    self.planner.reference_prices())
+                    self.planner.reference_prices(),
+                    self.planner.upcoming_plans(date.today().isoformat(), locale) if include_shopping else None)
         self._submit(load, lambda data: self._loaded(data, generation), finished=self._finish_refresh)
 
     def _finish_refresh(self):
@@ -189,6 +193,9 @@ class CookingPlannerApp(AppShell, AdminActions, App):
             self.shopping_draft.use_prices(self.week_start.isoformat(), data[4])
         if len(data) > 5:
             self.shopping_draft.use_reference_prices(data[5])
+        if len(data) > 6 and data[6] is not None:
+            self.shopping_plans = data[6]
+            self._shopping_ready = True
         new_locales = tuple(locales)
         if self.locales != new_locales:
             self.locales = new_locales
@@ -207,9 +214,13 @@ class CookingPlannerApp(AppShell, AdminActions, App):
                 self.load_admin()
             return
         self.tab = tab
+        if tab == 'shopping':
+            self._shopping_ready = False
         for name, control in self.nav_buttons.items():
             set_tab_active(control, t(self.locale, 'admin' if name == 'admin' else 'nav_' + name), name == tab)
         self._render_tab()
+        if tab == 'shopping' and self.planner is not None and not self.startup_error:
+            self.refresh()
         if tab == 'admin' and not self._admin_loaded:
             self.load_admin()
 
@@ -227,6 +238,7 @@ class CookingPlannerApp(AppShell, AdminActions, App):
         self.shopping_draft.locale = locale
         self._overview_ready = False
         self._catalog_ready = False
+        self._shopping_ready = False
         self._save_preference('locale', locale)
         self._rebuild_shell()
         self.refresh()

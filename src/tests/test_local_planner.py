@@ -83,6 +83,17 @@ class LocalPlannerTest(unittest.TestCase):
         self.client.delete_plan(plan['id'])
         self.assertEqual([], self.client.plans(START, END, 'en'))
 
+    def test_upcoming_plans_include_today_and_later_weeks_only(self):
+        recipe_id = self.rows['en']['id']
+        self.client.save_plan('2026-10-17', 'LUNCH', recipe_id, 1)
+        today = self.client.save_plan('2026-10-18', 'DINNER', recipe_id, 2)
+        later = self.client.save_plan('2026-12-25', 'LUNCH', recipe_id, 3)
+        upcoming = self.client.upcoming_plans('2026-10-18', 'de')
+        self.assertEqual([today['id'], later['id']], [plan['id'] for plan in upcoming])
+        self.assertEqual([2, 3], [plan['servings'] for plan in upcoming])
+        self.assertEqual([self.client.recipe_store.get('de', recipe_id)['name']] * 2,
+                         [plan['recipeTitle'] for plan in upcoming])
+
     def test_ui_recipe_rows_do_not_share_mutable_catalog_lists(self):
         row = deepcopy(self.rows['en'])
         for key in ('country', 'region', 'continent', 'category_label', 'difficulty_label',

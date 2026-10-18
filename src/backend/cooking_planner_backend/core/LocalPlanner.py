@@ -36,6 +36,9 @@ class LocalPlanner:
     def plans(self, start, end, locale):
         return self.plan_store.list(start, end, locale)
 
+    def upcoming_plans(self, start, locale):
+        return self.plan_store.list_from(start, locale)
+
     def ingredients(self, locale, query):
         return self.ingredient_store.search(locale, query)
 

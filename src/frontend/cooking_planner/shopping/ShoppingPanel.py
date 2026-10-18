@@ -1,12 +1,12 @@
 
-from datetime import timedelta
+from datetime import date, timedelta
 
 from kivy.clock import Clock
 from kivy.metrics import dp
 from kivy.uix.gridlayout import GridLayout
 
 from cooking_planner.shopping.dialogs import open_add_item_dialog
-from cooking_planner.shopping.ShoppingDraft import item_key
+from cooking_planner.shopping.ShoppingDraft import UPCOMING, item_key
 from cooking_planner.shopping.ShoppingRendering import ShoppingRendering
 from cooking_planner.ui.clipboard import get_clipboard
 from cooking_planner.ui.dialogs import confirm_popup, styled_popup
@@ -17,14 +17,19 @@ Clipboard = get_clipboard()
 
 
 class ShoppingPanel(ShoppingRendering):
-    def __init__(self, plans, recipes, draft, locale, week_start, on_status, on_ingredient_search=None):
+    def __init__(self, plans, recipes, draft, locale, week_start, on_status, on_ingredient_search=None,
+                 upcoming=False):
         self.root = box(spacing=7)
-        self.plans = plans
+        self.plans = [plan for plan in plans if plan['date'] >= week_start.isoformat()] if upcoming else plans
         self.recipes = recipes
         self.draft = draft
         self.locale = locale
-        self.start = week_start.isoformat()
+        self.start = UPCOMING if upcoming else week_start.isoformat()
         self.week_start = week_start
+        if upcoming:
+            monday = week_start - timedelta(days=week_start.weekday())
+            if draft.use_upcoming(monday.isoformat()):
+                draft.update_bought_plans(UPCOMING, self.plans, recipes)
         self.on_status = on_status
         self.on_ingredient_search = on_ingredient_search
         self.items = []
@@ -118,14 +123,23 @@ class ShoppingPanel(ShoppingRendering):
     def choose_day(self):
         body = box(padding=12, spacing=7)
         body.add_widget(label(t(self.locale, 'shopping_add_day_help'), 14, MUTED, 38))
-        for offset in range(7):
-            day = self.week_start + timedelta(days=offset)
+        days = (sorted({date.fromisoformat(plan['date']) for plan in self.plans}) if self.start == UPCOMING else
+                [self.week_start + timedelta(days=offset) for offset in range(7)])
+        if self.start == UPCOMING:
+            rows = box(spacing=5, size_hint_y=None)
+            rows.bind(minimum_height=rows.setter('height'))
+            scroll = scroll_view(do_scroll_x=False)
+            scroll.add_widget(rows)
+            body.add_widget(scroll)
+        else:
+            rows = body
+        for day in days:
             count = sum(plan['date'] == day.isoformat() for plan in self.plans)
             control = button(f"{day_label(day, self.locale)} · {count} "
                              f"{t(self.locale, 'selected_meal' if count == 1 else 'selected_meals')}",
                              lambda chosen=day: select(chosen), height=42)
             control.disabled = count == 0
-            body.add_widget(control)
+            rows.add_widget(control)
         dialog = styled_popup(t(self.locale, 'shopping_add_day'), body, 0.62, 0.78)
 
         def select(day):
@@ -157,6 +171,7 @@ class ShoppingPanel(ShoppingRendering):
         def render_choices():
             rows.clear_widgets()
             selected = self.draft.selected_plan_ids(self.start, self.plans)
+            bought = self.draft.bought_plan_ids(self.start, self.plans, self.recipes)
             by_id = {recipe['id']: recipe for recipe in self.recipes}
             for plan in self.plans:
                 recipe = by_id.get(plan['recipeId'])
@@ -164,9 +179,10 @@ class ShoppingPanel(ShoppingRendering):
                 meal = MEALS.get(self.locale, MEALS['en']).get(plan.get('mealType'), '')
                 is_selected = str(plan['id']) in selected
                 action = t(self.locale, 'shopping_refresh_meal' if is_selected else 'shopping_add_meal')
+                status = f" · {t(self.locale, 'shopping_recipe_bought')}" if str(plan['id']) in bought else ''
                 title = (f"{action} · {plan['date']} · {meal} · "
                          f"{plan['recipeTitle']} · {plan['servings']} {t(self.locale, 'servings').lower()} "
-                         f"· {count} {t(self.locale, 'ingredients_count').lower()}")
+                         f"· {count} {t(self.locale, 'ingredients_count').lower()}{status}")
                 row = box(False, spacing=5, size_hint_y=None, height=dp(46))
                 row.add_widget(self._choice_button(title, lambda plan_id=plan['id']: choose(plan_id)))
                 if is_selected:
@@ -261,6 +277,7 @@ class ShoppingPanel(ShoppingRendering):
 
     def toggle(self, key):
         self.draft.toggle_checked(self.start, key)
+        self.draft.update_bought_plans(self.start, self.plans, self.recipes)
         self._changed()
 
     def reset(self):

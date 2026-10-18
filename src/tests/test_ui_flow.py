@@ -648,7 +648,7 @@ class UiFlowTest(unittest.TestCase):
             draft.set_item_included(start, item_key(ingredient), False)
         panel = ShoppingPanel([plan], [self.recipe], draft, 'en', self.app.week_start,
                               lambda _: None)
-        self.assertEqual('0 meals selected', panel.meal_summary.text)
+        self.assertEqual('0 meals selected · 0 bought', panel.meal_summary.text)
         dismissed = []
         dialog = SimpleNamespace(open=lambda: None, dismiss=lambda: dismissed.append(True))
         with patch('cooking_planner.shopping.ShoppingPanel.styled_popup', return_value=dialog) as popup:
@@ -659,7 +659,7 @@ class UiFlowTest(unittest.TestCase):
         release(meal)
         self.assertEqual([], dismissed)
         self.assertEqual({'9'}, draft.selected_plan_ids(start, [plan]))
-        self.assertEqual('1 meal selected', panel.meal_summary.text)
+        self.assertEqual('1 meal selected · 0 bought', panel.meal_summary.text)
         self.assertEqual(len(self.recipe['ingredients']), len(panel.items))
         self.assertEqual([], draft.week(start)['excluded'])
         draft.set_item_included(start, ingredient_key, False)
@@ -695,7 +695,7 @@ class UiFlowTest(unittest.TestCase):
         self.assertEqual({'9'}, draft.selected_plan_ids(start, [plan]))
         self.assertEqual(len(self.recipe['ingredients']), len(panel.items))
         self.assertEqual([], draft.week(start)['excluded'])
-        self.assertEqual('1 meal selected', panel.meal_summary.text)
+        self.assertEqual('1 meal selected · 0 bought', panel.meal_summary.text)
 
     def test_shopping_clear_button_keeps_later_week_plans_out(self):
         start = self.app.week_start.isoformat()
@@ -723,6 +723,7 @@ class UiFlowTest(unittest.TestCase):
             plans=lambda *args: calls.append('plans') or [],
             ingredient_prices=lambda _: calls.append('prices') or {},
             reference_prices=lambda: calls.append('reference') or {},
+            upcoming_plans=lambda *_: calls.append('upcoming') or [],
         )
         self.app._submit = lambda work, success, show_status=True, finished=None: (success(work()), finished())
         self.app.week_start += timedelta(days=7)
@@ -747,6 +748,7 @@ class UiFlowTest(unittest.TestCase):
             recipes=lambda _: calls.append('recipes') or [self.recipe],
             ingredient_prices=lambda _: calls.append('prices') or {},
             reference_prices=lambda: calls.append('reference') or {},
+            upcoming_plans=lambda *_: calls.append('upcoming') or [],
         )
         self.app._submit = lambda work, success, show_status=True, finished=None: (success(work()),
                                                                                    finished() if finished else None)
@@ -787,6 +789,7 @@ class UiFlowTest(unittest.TestCase):
         self.app.planner = SimpleNamespace(
             plans=lambda start, *_: starts.append(start) or [],
             ingredient_prices=lambda _: {}, reference_prices=lambda: {},
+            upcoming_plans=lambda *_: [],
         )
         self.app._submit = lambda work, success, show_status=True, finished=None: submitted.append((work, success, finished))
         self.app.refresh()

@@ -45,12 +45,14 @@ class ShoppingRendering:
         checked = set(state['checked'])
         remaining = sum(item_key(item) not in checked for item in self.items)
         selected = len(self.draft.selected_plan_ids(self.start, self.plans))
+        bought = len(self.draft.bought_plan_ids(self.start, self.plans, self.recipes))
         if self.compact_summary:
             self.summary.text = t(self.locale, 'shopping_items_compact').format(
                 remaining=remaining, total=len(self.items))
         else:
             self.summary.text = f"{remaining} / {len(self.items)} {t(self.locale, 'shopping_items')}"
-        self.meal_summary.text = f"{selected} {t(self.locale, 'selected_meal' if selected == 1 else 'selected_meals')}"
+        self.meal_summary.text = (f"{selected} {t(self.locale, 'selected_meal' if selected == 1 else 'selected_meals')}"
+                                  f" · {bought} {t(self.locale, 'shopping_recipe_bought')}")
         self._update_price_summary()
 
     def _section(self, title, count):

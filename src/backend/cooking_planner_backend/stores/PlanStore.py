@@ -31,7 +31,16 @@ class PlanStore:
             raise ValueError('Date range must be at most 62 days')
         with self.storage.lock:
             plans = [dict(plan) for plan in self._read() if first <= _date(plan['date']) <= last]
-        names = {recipe['id']: recipe['name'] for recipe in self.recipes.list(locale)}
+        return self._localized(plans, locale)
+
+    def list_from(self, start, locale):
+        first = _date(start)
+        with self.storage.lock:
+            plans = [dict(plan) for plan in self._read() if _date(plan['date']) >= first]
+        return self._localized(plans, locale)
+
+    def _localized(self, plans, locale):
+        names = {recipe['id']: recipe['name'] for recipe in self.recipes.raw_all(locale)}
         for plan in plans:
             plan['servings'] = max(1, int(plan.get('servings', 1)))
             plan['recipeTitle'] = names.get(plan['recipeId'], 'Missing recipe')

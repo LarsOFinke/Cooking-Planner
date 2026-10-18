@@ -20,7 +20,11 @@ def valid_week(state: object) -> bool:
     if 'excludedPlans' in state and (not isinstance(state['excludedPlans'], list) or
                                      any(not isinstance(value, str) for value in state['excludedPlans'])):
         return False
-    if 'selectionMode' in state and state['selectionMode'] != 'explicit':
+    if 'selectionMode' in state and state['selectionMode'] not in ('explicit', 'auto'):
+        return False
+    if not isinstance(state.get('boughtPlans', {}), dict) or any(
+            not isinstance(key, str) or not isinstance(value, str)
+            for key, value in state.get('boughtPlans', {}).items()):
         return False
     prices = state.get('prices', {})
     if not isinstance(prices, dict):

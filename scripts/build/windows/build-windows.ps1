@@ -31,7 +31,9 @@ if ($LASTEXITCODE -ne 0) { throw 'Current Cooking Planner wheel not found' }
 Invoke-BuildStep -Step 5 -Name 'Install app wheel' -Log 'build/logs/windows-wheel-install.log' `
     -Command @($python, '-m', 'pip', 'install', '--no-deps', '--force-reinstall', $wheel)
 New-Item -ItemType Directory -Path dist/windows -Force | Out-Null
-$catalogData = Join-Path $projectRoot 'data'
+& $python scripts/build/common/stage_catalogs.py
+if ($LASTEXITCODE -ne 0) { throw 'Compact catalog staging failed' }
+$catalogData = Join-Path $projectRoot 'build/catalogs'
 Invoke-BuildStep -Step 6 -Name 'Build bundled Windows executable' -Log 'build/logs/windows-executable.log' `
     -Command @($python, '-m', 'PyInstaller', '--noconfirm', '--onedir', '--windowed', `
                '--name', 'CookingPlanner', '--distpath', 'dist/windows', `
