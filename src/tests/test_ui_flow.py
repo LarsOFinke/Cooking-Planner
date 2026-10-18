@@ -462,7 +462,22 @@ class UiFlowTest(unittest.TestCase):
                 finally:
                     popup.dismiss()
 
-    def test_admin_recipe_name_accepts_click_and_text_at_both_scales(self):
+    def test_admin_recipe_name_and_step_accept_click_and_text_at_both_scales(self):
+        def enter_text(panel, field, value):
+            panel.editor_scroll.scroll_to(field, animate=False)
+            for _ in range(3):
+                Clock.tick()
+            x, y = field.to_window(field.center_x, field.center_y)
+            self.assertTrue(0 < x < Window.width and 0 < y < Window.height)
+            touch = PointerTouch(x, y)
+            EventLoop.post_dispatch_input('begin', touch)
+            EventLoop.post_dispatch_input('end', touch)
+            Clock.tick()
+            self.assertTrue(field.focus)
+            Window.dispatch('on_textinput', value)
+            self.assertEqual(value, field.text)
+            field.focus = False
+
         Window.add_widget(self.app.root_view)
         try:
             for scale in (1.0, 2.0):
@@ -473,23 +488,14 @@ class UiFlowTest(unittest.TestCase):
                 panel.new()
                 for _ in range(6):
                     Clock.tick()
-                name = panel.locale_inputs['en']['name']
-                panel.editor_scroll.scroll_to(name, animate=False)
-                for _ in range(3):
-                    Clock.tick()
                 self.assertEqual(['bars'], panel.horizontal.scroll_type)
                 self.assertEqual(['bars'], panel.editor_scroll.scroll_type)
-                x, y = name.to_window(name.center_x, name.center_y)
-                self.assertLess(x, Window.width)
-                self.assertLess(y, Window.height)
-                touch = PointerTouch(x, y)
-                EventLoop.post_dispatch_input('begin', touch)
-                EventLoop.post_dispatch_input('end', touch)
-                Clock.tick()
-                self.assertTrue(name.focus)
-                Window.dispatch('on_textinput', 'X')
-                self.assertEqual('X', name.text)
-                name.focus = False
+                enter_text(panel, panel.locale_inputs['en']['name'], 'Name')
+                panel._show_page('recipe')
+                panel.add_step()
+                for _ in range(6):
+                    Clock.tick()
+                enter_text(panel, panel.step_rows[0]['texts']['en'], 'Step instruction')
         finally:
             Window.remove_widget(self.app.root_view)
 
