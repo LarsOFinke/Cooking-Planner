@@ -8,7 +8,7 @@ from kivy.metrics import dp
 from kivy.uix.filechooser import FileChooserListView
 from kivy.uix.image import Image
 
-from cooking_planner.recipes.images import image_file
+from cooking_planner.recipes.images import PHOTO_NAME, image_file
 from cooking_planner.ui.dialogs import styled_popup
 from cooking_planner.ui.strings import t
 from cooking_planner.ui.theme import GOLD, MUTED, PANEL, PANEL_LIGHT, RED, box, button, label
@@ -25,8 +25,8 @@ class RecipeImageEditor:
         self.slots = {number: None for number in range(1, 4)}
         for reference in references:
             name = reference.rsplit('/', 1)[-1]
-            if name.startswith('image_0') and len(name) > 8 and name[8] in '123':
-                self.slots[int(name[8])] = {'reference': reference}
+            if match := PHOTO_NAME.fullmatch(name):
+                self.slots[int(match.group(1))] = {'reference': reference}
         self.root = box(spacing=7, size_hint_y=None)
         self.root.bind(minimum_height=self.root.setter('height'))
         self.root.add_widget(label(t(locale, 'admin_images'), 16, GOLD, 28, True))

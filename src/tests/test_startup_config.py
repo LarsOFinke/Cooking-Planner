@@ -8,6 +8,7 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'frontend'))
 
 from cooking_planner.launcher import bounded_number, fullscreen_enabled, preferred_locale
+from cooking_planner.ui.window import fullscreen_mode
 
 
 class StartupConfigTest(unittest.TestCase):
@@ -33,6 +34,13 @@ class StartupConfigTest(unittest.TestCase):
             self.assertTrue(fullscreen_enabled(config))
             config['ui']['fullscreen'] = 'invalid'
             self.assertFalse(fullscreen_enabled(config))
+
+    def test_fullscreen_uses_display_resolution_with_kivy_2(self):
+        with patch('kivy.__version__', '2.3.1'):
+            self.assertEqual('auto', fullscreen_mode(True))
+            self.assertIs(False, fullscreen_mode(False))
+        with patch('kivy.__version__', '3.0.0.dev0'):
+            self.assertIs(True, fullscreen_mode(True))
 
 
 if __name__ == '__main__':

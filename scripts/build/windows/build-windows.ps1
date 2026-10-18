@@ -37,6 +37,7 @@ Invoke-BuildStep -Step 6 -Name 'Build bundled Windows executable' -Log 'build/lo
                '--name', 'CookingPlanner', '--distpath', 'dist/windows', `
                '--workpath', 'build/pyinstaller-windows', '--specpath', 'build', `
                '--collect-submodules', 'sqlalchemy.dialects.sqlite', `
+               '--hidden-import', 'win32timezone', `
                '--add-data', "$catalogData;catalogs", `
                'scripts/build/common/frozen_entry.py')
 

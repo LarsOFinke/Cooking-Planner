@@ -7,7 +7,7 @@ from pathlib import Path
 
 from cooking_planner.paths import catalog_directory
 
-PHOTO_NAME = re.compile(r'image_0[1-3](?:-[0-9a-f]{12})?\.(?:jpg|jpeg|png|webp)', re.IGNORECASE)
+PHOTO_NAME = re.compile(r'image_0([1-3])(?:-[0-9a-f]{12})?\.(?:jpg|jpeg|png|webp)', re.IGNORECASE)
 
 
 def image_file(recipe_id: str, reference: str, user_data_dir: Path | None = None) -> Path | None:

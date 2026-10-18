@@ -6,6 +6,7 @@ from configparser import Error as ConfigError
 from pathlib import Path
 
 from cooking_planner.paths import catalog_directory, on_android
+from cooking_planner.ui.window import fullscreen_mode
 
 if not on_android():
     os.environ.setdefault("KIVY_DESKTOP_PATH_ID", "CookingPlanner")
@@ -60,7 +61,8 @@ def main() -> None:
         Config.set('graphics', 'minimum_height', '650')
         Config.set('graphics', 'width', str(bounded_number(config, 'ui', 'window_width', 1280, 900, 3840)))
         Config.set('graphics', 'height', str(bounded_number(config, 'ui', 'window_height', 820, 650, 2160)))
-        Config.set('graphics', 'fullscreen', '1' if fullscreen_enabled(config) else '0')
+        mode = fullscreen_mode(fullscreen_enabled(config))
+        Config.set('graphics', 'fullscreen', mode if isinstance(mode, str) else ('1' if mode else '0'))
 
     from cooking_planner_backend.core.LocalPlanner import LocalPlanner
 

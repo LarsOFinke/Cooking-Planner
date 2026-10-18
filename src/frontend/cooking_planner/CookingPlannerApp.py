@@ -16,6 +16,7 @@ from cooking_planner.shopping.ShoppingDraft import ShoppingDraft
 from cooking_planner.ui.dialogs import confirm_popup
 from cooking_planner.ui.strings import t
 from cooking_planner.ui.theme import BG, set_tab_active
+from cooking_planner.ui.window import fullscreen_mode
 
 
 class CookingPlannerApp(AppShell, AdminActions, App):
@@ -240,9 +241,7 @@ class CookingPlannerApp(AppShell, AdminActions, App):
         self._status(f'{round(scale * 100)}%')
 
     def toggle_window(self):
-        # SDL3 only enables fullscreen for the boolean True value. Its runtime
-        # setter treats Kivy's older 'auto' option as False.
-        Window.fullscreen = not bool(Window.fullscreen)
+        Window.fullscreen = fullscreen_mode(not bool(Window.fullscreen))
         self.window_fullscreen = bool(Window.fullscreen)
         self._save_preference('fullscreen', 'true' if self.window_fullscreen else 'false')
         self.window_button.text = t(self.locale, 'leave_fullscreen' if self.window_fullscreen else 'enter_fullscreen')

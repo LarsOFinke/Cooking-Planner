@@ -7,6 +7,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'frontend'))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
@@ -18,6 +19,7 @@ try:
         raise ImportError('No display')
     from cooking_planner.recipes.AdminPanel import AdminPanel
     from cooking_planner.recipes.IngredientAdminPanel import IngredientAdminPanel
+    from cooking_planner.recipes.RecipeImageEditor import RecipeImageEditor
     from kivy.clock import Clock
     from kivy.core.window import Window
     from kivy.metrics import dp
@@ -287,6 +289,27 @@ class AdminEditorTest(unittest.TestCase):
         self.assertEqual(1, len(saved[0][4]))
         self.assertTrue(saved[0][4][0]['reference'].startswith(
             'recipe_images/at-apple-pie/image_01-'))
+
+    def test_existing_recipe_images_fill_their_editor_slots(self):
+        photo = base64.b64decode(
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScL/nwAAAABJRU5ErkJggg==')
+        with tempfile.TemporaryDirectory() as temporary:
+            catalog = Path(temporary)
+            folder = catalog / 'recipe_images' / 'some-dish'
+            folder.mkdir(parents=True)
+            user = catalog / 'user'
+            user_folder = user / 'recipe_images' / 'some-dish'
+            user_folder.mkdir(parents=True)
+            references = ['recipe_images/some-dish/image_01.png',
+                          'recipe_images/some-dish/image_02-aaaaaaaaaaaa.png',
+                          'recipe_images/some-dish/image_03.png']
+            for number in (1, 3):
+                (folder / f'image_0{number}.png').write_bytes(photo)
+            (user_folder / 'image_02-aaaaaaaaaaaa.png').write_bytes(photo)
+            with patch.dict(os.environ, {'COOKING_PLANNER_CATALOG_DIR': temporary}):
+                editor = RecipeImageEditor('en', 'some-dish', references, user)
+                self.assertEqual(references, editor.values('some-dish')[0])
+                self.assertTrue(all(editor._file(editor.slots[number]).is_file() for number in (1, 2, 3)))
 
 
 

@@ -7,6 +7,7 @@ def verify_package():
     """Exercise bundled Python modules and data without opening a window."""
     import os
     import tempfile
+    from importlib import import_module
     from pathlib import Path
 
     os.environ['KIVY_NO_ARGS'] = '1'
@@ -20,7 +21,13 @@ def verify_package():
 
     if not kivy.__version__ or not sqlalchemy.__version__ or LabelBase is None:
         raise RuntimeError('Kivy or SQLAlchemy is unavailable')
+    if sys.platform == 'win32':
+        import_module('win32timezone')
     catalogs = catalog_directory()
+    if sys.platform == 'win32':
+        from kivy.uix.filechooser import FileSystemLocal
+
+        FileSystemLocal().is_hidden(str(catalogs / 'recipes_en.json'))
     if not (catalogs / 'recipe_images' / 'IMAGE_ATTRIBUTIONS.csv').is_file():
         raise RuntimeError('Bundled image attributions are missing')
     with tempfile.TemporaryDirectory(prefix='cooking-planner-package-') as directory:
