@@ -1,5 +1,9 @@
 # Spring cleanup audit
 
+## Package and lint follow-up — 2026-10-18
+
+The retired `routes` and frontend `api` directories contained only ignored bytecode caches. They and the old feature package directories were removed. Backend behavior now sits in a `stores` package, while the app-facing planner and shared validation sit in `core`; entities and repositories keep their existing storage roles. The shared ID pattern no longer makes the ingredient store import the recipe store. Development and quality commands write Python bytecode under ignored `build/python-cache` so routine runs do not recreate source-tree cache directories. Ruff now checks import order, common bug patterns and simplifications, and stale lint suppressions; the frontend import blocks and three small control-flow cases were cleaned up.
+
 ## Local service follow-up — 2026-10-17
 
 After removing the loopback server, the app still called its local service `client` and checked whether fixed service methods existed before connecting Shopping writes. The UI now calls it `planner` and binds those methods directly when startup succeeds. The startup-error view keeps Shopping writers unset, and the UI tests use a missing planner to exercise that state. The backend also retained an unused method that derived Shopping ingredients from every Week meal; it was removed because Shopping imports only explicitly selected meals. The security review now describes the current local boundary instead of presenting retired HTTP controls as active.

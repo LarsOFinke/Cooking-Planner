@@ -3,6 +3,7 @@ set -euo pipefail
 
 project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$project_root"
+export PYTHONPYCACHEPREFIX="$project_root/build/python-cache"
 
 if [[ -n "${DEV_PYTHON:-}" ]]; then
     dev_python="$DEV_PYTHON"

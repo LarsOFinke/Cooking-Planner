@@ -5,14 +5,13 @@ from kivy.clock import Clock
 from kivy.metrics import dp
 from kivy.uix.gridlayout import GridLayout
 
-from cooking_planner.ui.dialogs import confirm_popup, styled_popup
 from cooking_planner.shopping.dialogs import open_add_item_dialog
-from cooking_planner.shopping.ShoppingRendering import ShoppingRendering
 from cooking_planner.shopping.ShoppingDraft import item_key
-from cooking_planner.ui.theme import GOLD, MUTED, PANEL, WHITE, box, button, label, scroll_view
-from cooking_planner.ui.strings import MEALS, day_label, t
+from cooking_planner.shopping.ShoppingRendering import ShoppingRendering
 from cooking_planner.ui.clipboard import get_clipboard
-
+from cooking_planner.ui.dialogs import confirm_popup, styled_popup
+from cooking_planner.ui.strings import MEALS, day_label, t
+from cooking_planner.ui.theme import GOLD, MUTED, PANEL, WHITE, box, button, label, scroll_view
 
 Clipboard = get_clipboard()
 

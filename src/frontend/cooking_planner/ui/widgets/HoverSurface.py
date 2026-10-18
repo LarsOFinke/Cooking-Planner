@@ -4,6 +4,7 @@ from kivy.graphics import Color, RoundedRectangle
 from kivy.metrics import dp
 from kivy.properties import ListProperty
 from kivy.uix.boxlayout import BoxLayout
+
 from cooking_planner.ui.palette import PANEL
 from cooking_planner.ui.widgets.HoverColorBehavior import HoverColorBehavior
 

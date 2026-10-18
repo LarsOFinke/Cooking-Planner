@@ -1,7 +1,7 @@
 """Recipe and ingredient administration UI behavior."""
 
-import json
 import base64
+import json
 import os
 import sys
 import tempfile
@@ -16,12 +16,12 @@ HAS_DISPLAY = sys.platform != 'linux' or bool(os.environ.get('DISPLAY') or os.en
 try:
     if not HAS_DISPLAY:
         raise ImportError('No display')
+    from cooking_planner.recipes.AdminPanel import AdminPanel
+    from cooking_planner.recipes.IngredientAdminPanel import IngredientAdminPanel
     from kivy.clock import Clock
     from kivy.core.window import Window
     from kivy.metrics import dp
     from kivy_events import release
-    from cooking_planner.recipes.AdminPanel import AdminPanel
-    from cooking_planner.recipes.IngredientAdminPanel import IngredientAdminPanel
 except ImportError:
     HAS_KIVY = False
 else:

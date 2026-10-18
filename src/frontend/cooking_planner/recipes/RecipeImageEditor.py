@@ -13,7 +13,6 @@ from cooking_planner.ui.dialogs import styled_popup
 from cooking_planner.ui.strings import t
 from cooking_planner.ui.theme import GOLD, MUTED, PANEL, PANEL_LIGHT, RED, box, button, label
 
-
 EXTENSIONS = {'.png', '.jpg', '.jpeg', '.webp'}
 MAX_IMAGE_BYTES = 8_000_000
 

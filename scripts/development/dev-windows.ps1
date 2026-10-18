@@ -1,6 +1,7 @@
 $ErrorActionPreference = 'Stop'
 $projectRoot = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 Set-Location $projectRoot
+$env:PYTHONPYCACHEPREFIX = Join-Path $projectRoot 'build/python-cache'
 
 function Assert-Success([string]$Step) {
     if ($LASTEXITCODE -ne 0) { throw "$Step failed with exit code $LASTEXITCODE" }

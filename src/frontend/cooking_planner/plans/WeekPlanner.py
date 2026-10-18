@@ -1,11 +1,11 @@
 from datetime import date, timedelta
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import ROUND_HALF_UP, Decimal
 
 from kivy.metrics import dp
 
 from cooking_planner.plans.costs import planned_costs
-from cooking_planner.ui.theme import GOLD, MUTED, PANEL, PANEL_LIGHT, WHITE, box, button, label, scroll_view
 from cooking_planner.ui.strings import MEALS, WEEKDAYS, t
+from cooking_planner.ui.theme import GOLD, MUTED, PANEL, PANEL_LIGHT, WHITE, box, button, label, scroll_view
 
 
 class WeekPlanner:

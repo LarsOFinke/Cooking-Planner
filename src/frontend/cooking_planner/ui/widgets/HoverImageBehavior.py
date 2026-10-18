@@ -1,6 +1,7 @@
 """HoverImageBehavior widget behavior or control."""
 
 from kivy.animation import Animation
+
 from cooking_planner.ui.hover_state import register
 
 

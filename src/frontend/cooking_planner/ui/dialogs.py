@@ -1,9 +1,9 @@
-from kivy.metrics import dp
 from kivy.core.window import Window
+from kivy.metrics import dp
 from kivy.uix.popup import Popup
 
-from cooking_planner.ui.theme import GOLD, PANEL, WHITE, box, button, label
 from cooking_planner.ui.strings import t
+from cooking_planner.ui.theme import GOLD, PANEL, WHITE, box, button, label
 
 
 def styled_popup(title: str, content, width=0.64, height=0.72) -> Popup:

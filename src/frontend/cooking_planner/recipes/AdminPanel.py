@@ -1,18 +1,19 @@
 """Catalog-backed recipe editor; writes use local backend services."""
 
-from copy import deepcopy
 import re
 import unicodedata
+from copy import deepcopy
+
 from kivy.clock import Clock
 from kivy.metrics import dp
+
+from cooking_planner.recipes.admin_payload import FormError, RecipeFormSnapshot, build_submission
+from cooking_planner.recipes.admin_schema import CHOICES, TIMES
 from cooking_planner.recipes.AdminFormPages import AdminFormPages
 from cooking_planner.recipes.IngredientPicker import IngredientPicker
-from cooking_planner.recipes.admin_payload import (FormError, RecipeFormSnapshot,
-                                                    build_submission)
-from cooking_planner.recipes.admin_schema import CHOICES, TIMES
 from cooking_planner.ui.strings import t
-from cooking_planner.ui.theme import (GOLD, MUTED, PANEL, PANEL_LIGHT, box, button,
-                                      field, label, scroll_view, spinner)
+from cooking_planner.ui.theme import GOLD, MUTED, PANEL, PANEL_LIGHT, box, button, field, label, scroll_view, spinner
+
 
 class AdminPanel(AdminFormPages):
     @staticmethod

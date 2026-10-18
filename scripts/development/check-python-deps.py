@@ -1,10 +1,9 @@
 """Check pinned runtime requirements and optionally the development tools."""
 
-from importlib.metadata import PackageNotFoundError, version
-from pathlib import Path
 import re
 import sys
-
+from importlib.metadata import PackageNotFoundError, version
+from pathlib import Path
 
 MARKER = re.compile(r'''python_version\s*(<|>=)\s*['"](\d+\.\d+)['"]''')
 

@@ -3,8 +3,8 @@ from datetime import date, timedelta
 from kivy.metrics import dp
 
 from cooking_planner.ui.dialogs import styled_popup
-from cooking_planner.ui.theme import GOLD, MUTED, box, button, field, label, scroll_view, spinner
 from cooking_planner.ui.strings import MEALS, t
+from cooking_planner.ui.theme import GOLD, MUTED, box, button, field, label, scroll_view, spinner
 
 
 def plan_popup(recipe: dict, locale: str, initial_day: date, initial_meal: str,

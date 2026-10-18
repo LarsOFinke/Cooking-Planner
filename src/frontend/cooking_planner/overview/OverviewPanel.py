@@ -3,8 +3,8 @@
 from kivy.metrics import dp
 from kivy.uix.gridlayout import GridLayout
 
-from cooking_planner.ui.theme import MUTED, PANEL, PANEL_LIGHT, WHITE, box, button, label, scroll_view
 from cooking_planner.ui.strings import t
+from cooking_planner.ui.theme import MUTED, PANEL, PANEL_LIGHT, WHITE, box, button, label, scroll_view
 
 
 class OverviewPanel:

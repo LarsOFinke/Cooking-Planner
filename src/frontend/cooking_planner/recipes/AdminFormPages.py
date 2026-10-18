@@ -1,15 +1,28 @@
 """Recipe admin form layout, tabs, and language rendering."""
 
 from copy import deepcopy
+
 from kivy.metrics import dp
 from kivy.uix.widget import Widget
+
 from cooking_planner.recipes.admin_payload import option_labels
-from cooking_planner.recipes.RecipeImageEditor import RecipeImageEditor
 from cooking_planner.recipes.admin_schema import CHOICES, LABELS, TIMES, new_recipe_template, translation_template
+from cooking_planner.recipes.RecipeImageEditor import RecipeImageEditor
 from cooking_planner.ui.strings import t
-from cooking_planner.ui.theme import (GOLD, MUTED, PANEL_LIGHT, WHITE, box, button,
-                                      field, label, set_tab_active, spinner, tab_button,
-                                      HoverToggleButton)
+from cooking_planner.ui.theme import (
+    GOLD,
+    MUTED,
+    PANEL_LIGHT,
+    WHITE,
+    HoverToggleButton,
+    box,
+    button,
+    field,
+    label,
+    set_tab_active,
+    spinner,
+    tab_button,
+)
 
 
 class AdminFormPages:
@@ -206,7 +219,7 @@ class AdminFormPages:
         self.image_editor = RecipeImageEditor(self.locale, recipe_id,
                                                source_document.get('images', []), self.user_data_dir)
         self.details.add_widget(self.image_editor.root)
-        for code, widgets in self.locale_inputs.items():
+        for widgets in self.locale_inputs.values():
             widgets['name'].bind(text=lambda *_: self._update_image_context())
         for key in ('country_code', 'region_code', 'continent_code'):
             self.shared_inputs[key].bind(text=lambda *_: self._update_image_context())

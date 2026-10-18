@@ -1,6 +1,6 @@
 from cooking_planner.ui.dialogs import styled_popup
-from cooking_planner.ui.theme import GOLD, MUTED, WHITE, box, button, field, label, scroll_view
 from cooking_planner.ui.strings import t
+from cooking_planner.ui.theme import GOLD, MUTED, WHITE, box, button, field, label, scroll_view
 
 
 def picker_popup(recipes: list[dict], locale: str, on_select) -> None:

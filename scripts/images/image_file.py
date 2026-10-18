@@ -1,10 +1,9 @@
 """Validate the supported local photo formats and return their content digest."""
 
 import hashlib
-from pathlib import Path
 import re
 import struct
-
+from pathlib import Path
 
 PHOTO_NAME = re.compile(r'image_([0-9]{2})\.(jpg|jpeg|png|webp)')
 

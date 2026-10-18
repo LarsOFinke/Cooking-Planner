@@ -64,9 +64,9 @@ class AndroidPackagingTest(unittest.TestCase):
             module.verify(Path('/tmp/example.apk'))
         with patch.object(module, 'find_aapt', return_value='aapt'), \
              patch.object(module.subprocess, 'check_output', side_effect=[
-                 "uses-permission: name='android.permission.INTERNET'\n", manifest]):
-            with self.assertRaisesRegex(RuntimeError, 'Unexpected Android permissions'):
-                module.verify(Path('/tmp/example.apk'))
+                 "uses-permission: name='android.permission.INTERNET'\n", manifest]), \
+             self.assertRaisesRegex(RuntimeError, 'Unexpected Android permissions'):
+            module.verify(Path('/tmp/example.apk'))
 
 
 if __name__ == '__main__':

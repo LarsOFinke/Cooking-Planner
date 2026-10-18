@@ -16,10 +16,10 @@ The frontend and backend are separate Python packages under `src/frontend` and `
 | `cooking_planner.recipes`, `.plans`, `.shopping` | Kivy feature views and shopping draft |
 | `cooking_planner.AppShell` | Main shell and feature tab construction |
 | `cooking_planner.shopping.persistence` | Shopping draft validation, recovery copies, and atomic JSON writes |
-| `cooking_planner_backend.LocalPlanner` | Local operations and storage lifecycle used by the UI |
-| `cooking_planner_backend.recipes.RecipeStore` and `.mapper` | Catalog behavior, admin overlays, and recipe DTO mapping |
-| `cooking_planner_backend.ingredients.IngredientStore` | Ingredient translations, search, prices |
-| `cooking_planner_backend.plans.PlanStore` | Meal-plan persistence and localized titles |
+| `cooking_planner_backend.core` | Local planner lifecycle, shared conflict and ID validation |
+| `cooking_planner_backend.stores.RecipeStore` and `recipe_mapper` | Catalog behavior, admin overlays, and recipe DTO mapping |
+| `cooking_planner_backend.stores.IngredientStore` | Ingredient translations, search, prices |
+| `cooking_planner_backend.stores.PlanStore` | Meal-plan persistence and localized titles |
 | `cooking_planner_backend.entities` | One SQLAlchemy model per file |
 | `cooking_planner_backend.repositories` | SQLite sessions and atomic JSON file operations |
 

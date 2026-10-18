@@ -1,8 +1,9 @@
 """HoverColorBehavior widget behavior or control."""
 
 from kivy.animation import Animation
-from cooking_planner.ui.palette import PANEL_LIGHT
+
 from cooking_planner.ui.hover_state import hover_color, register
+from cooking_planner.ui.palette import PANEL_LIGHT
 
 
 class HoverColorBehavior:

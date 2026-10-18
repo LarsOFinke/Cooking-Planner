@@ -13,8 +13,8 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts' / 'images'))
 
-from import_local_recipe_images import import_images  # noqa: E402
 import verify_recipe_images  # noqa: E402
+from import_local_recipe_images import import_images  # noqa: E402
 
 
 def png(seed):
@@ -77,9 +77,9 @@ class ImageImportTest(unittest.TestCase):
                     raise OSError('simulated write failure')
                 return replace(source, target)
 
-            with patch('recipe_image_catalog.os.replace', side_effect=fail_once):
-                with self.assertRaisesRegex(OSError, 'simulated write failure'):
-                    import_images(data / 'recipe_images')
+            with patch('recipe_image_catalog.os.replace', side_effect=fail_once), \
+                 self.assertRaisesRegex(OSError, 'simulated write failure'):
+                import_images(data / 'recipe_images')
             self.assertTrue(failed)
             self.assertEqual(before, {path: path.read_bytes() for path in data.glob('recipes_*.json')})
             self.assertFalse((data / 'recipe_images/image_catalog.json').exists())
@@ -101,14 +101,14 @@ class ImageImportTest(unittest.TestCase):
                     raise KeyboardInterrupt('simulated process interruption')
                 return replace(source, target)
 
-            with patch('recipe_image_catalog.os.replace', side_effect=interrupt):
-                with self.assertRaises(KeyboardInterrupt):
-                    import_images(data / 'recipe_images')
+            with patch('recipe_image_catalog.os.replace', side_effect=interrupt), \
+                 self.assertRaises(KeyboardInterrupt):
+                import_images(data / 'recipe_images')
             self.assertTrue((data / '.image-import-recovery/manifest.json').exists())
             with patch.object(verify_recipe_images, 'DATA', data), \
-                 patch.object(verify_recipe_images, 'IMAGES', data / 'recipe_images'):
-                with self.assertRaisesRegex(ValueError, 'Interrupted image import'):
-                    verify_recipe_images.main()
+                 patch.object(verify_recipe_images, 'IMAGES', data / 'recipe_images'), \
+                 self.assertRaisesRegex(ValueError, 'Interrupted image import'):
+                verify_recipe_images.main()
             self.assertEqual((1, 1), import_images(data / 'recipe_images'))
             self.assertFalse((data / '.image-import-recovery').exists())
 

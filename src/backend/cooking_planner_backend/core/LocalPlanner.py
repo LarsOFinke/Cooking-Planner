@@ -2,10 +2,10 @@
 
 from pathlib import Path
 
-from cooking_planner_backend.ingredients.IngredientStore import IngredientStore
-from cooking_planner_backend.plans.PlanStore import PlanStore
-from cooking_planner_backend.recipes.RecipeStore import RecipeStore
 from cooking_planner_backend.repositories.Storage import Storage
+from cooking_planner_backend.stores.IngredientStore import IngredientStore
+from cooking_planner_backend.stores.PlanStore import PlanStore
+from cooking_planner_backend.stores.RecipeStore import RecipeStore
 
 
 class LocalPlanner:

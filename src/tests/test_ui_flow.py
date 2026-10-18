@@ -19,17 +19,6 @@ HAS_DISPLAY = sys.platform != 'linux' or bool(os.environ.get('DISPLAY') or os.en
 try:
     if not HAS_DISPLAY:
         raise ImportError('No display')
-    from kivy.core.window import Window
-    from kivy.base import EventLoop
-    from kivy.clock import Clock
-    from kivy.input.motionevent import MotionEvent
-    from kivy.metrics import dp
-    from kivy.uix.button import Button
-    from kivy.uix.textinput import TextInput
-    from kivy.uix.spinner import Spinner
-    from kivy.uix.popup import Popup
-    from kivy.uix.scrollview import ScrollView
-    from kivy_events import release
     from cooking_planner.CookingPlannerApp import CookingPlannerApp
     from cooking_planner.overview.OverviewPanel import OverviewPanel
     from cooking_planner.plans.WeekPlanner import WeekPlanner
@@ -37,8 +26,29 @@ try:
     from cooking_planner.recipes.IngredientAdminPanel import IngredientAdminPanel
     from cooking_planner.shopping.ShoppingDraft import ShoppingDraft, item_key
     from cooking_planner.shopping.ShoppingPanel import ShoppingPanel
-    from cooking_planner.ui.theme import (BG, GOLD, GREEN, PANEL_LIGHT, HoverSurface, _mouse_moved,
-                                          box, button, tab_button, set_tab_active)
+    from cooking_planner.ui.theme import (
+        BG,
+        GOLD,
+        GREEN,
+        PANEL_LIGHT,
+        HoverSurface,
+        _mouse_moved,
+        box,
+        button,
+        set_tab_active,
+        tab_button,
+    )
+    from kivy.base import EventLoop
+    from kivy.clock import Clock
+    from kivy.core.window import Window
+    from kivy.input.motionevent import MotionEvent
+    from kivy.metrics import dp
+    from kivy.uix.button import Button
+    from kivy.uix.popup import Popup
+    from kivy.uix.scrollview import ScrollView
+    from kivy.uix.spinner import Spinner
+    from kivy.uix.textinput import TextInput
+    from kivy_events import release
 except ImportError:
     HAS_KIVY = False
 else:
@@ -383,7 +393,7 @@ class UiFlowTest(unittest.TestCase):
                 panel.root.size = Window.size
                 panel.root.do_layout()
                 panel.actions.do_layout()
-                for control, callback in zip(reversed(panel.actions.children), callbacks.values()):
+                for control, callback in zip(reversed(panel.actions.children), callbacks.values(), strict=True):
                     x, y = control.to_window(*control.center)
                     touch = PointerTouch(x, y)
                     EventLoop.post_dispatch_input('begin', touch)

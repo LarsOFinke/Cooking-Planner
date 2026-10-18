@@ -1,10 +1,9 @@
 """Keep production classes in one matching PascalCase Python file each."""
 
 import ast
-from pathlib import Path
 import re
 import sys
-
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 PASCAL_CASE = re.compile(r'[A-Z][A-Za-z0-9]*\Z')

@@ -1,6 +1,7 @@
 """HoverSpinnerOption widget behavior or control."""
 
 from kivy.uix.spinner import SpinnerOption
+
 from cooking_planner.ui.palette import PANEL_LIGHT, WHITE
 from cooking_planner.ui.widgets.HoverColorBehavior import HoverColorBehavior
 from cooking_planner.ui.widgets.RoundedControlBehavior import RoundedControlBehavior

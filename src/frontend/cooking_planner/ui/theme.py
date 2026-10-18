@@ -1,25 +1,26 @@
 """Shared colors and widget construction helpers."""
 
-from kivy.graphics import Color, RoundedRectangle
 from kivy.effects.scroll import ScrollEffect
+from kivy.graphics import Color, RoundedRectangle
 from kivy.metrics import dp
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
-from kivy.uix.spinner import Spinner
 from kivy.uix.scrollview import ScrollView
+from kivy.uix.spinner import Spinner
 from kivy.uix.textinput import TextInput
 
 from cooking_planner.ui.clipboard import get_clipboard
 from cooking_planner.ui.hover_state import _mouse_moved as _mouse_moved
-from cooking_planner.ui.palette import BG, PANEL, PANEL_LIGHT, GOLD, WHITE, MUTED, GREEN as GREEN, RED
+from cooking_planner.ui.palette import BG, GOLD, MUTED, PANEL, PANEL_LIGHT, RED, WHITE
+from cooking_planner.ui.palette import GREEN as GREEN
 from cooking_planner.ui.widgets.HoverButton import HoverButton
+from cooking_planner.ui.widgets.HoverImageBehavior import HoverImageBehavior as HoverImageBehavior
 from cooking_planner.ui.widgets.HoverSpinner import HoverSpinner
 from cooking_planner.ui.widgets.HoverSpinnerOption import HoverSpinnerOption
+from cooking_planner.ui.widgets.HoverSurface import HoverSurface
 from cooking_planner.ui.widgets.HoverTextInput import HoverTextInput
 from cooking_planner.ui.widgets.HoverToggleButton import HoverToggleButton as HoverToggleButton
-from cooking_planner.ui.widgets.HoverSurface import HoverSurface
-from cooking_planner.ui.widgets.HoverImageBehavior import HoverImageBehavior as HoverImageBehavior
 
 
 def surface(widget, color=PANEL, radius=12) -> None:

@@ -1,7 +1,8 @@
 import os
 import re
 import sys
-from configparser import ConfigParser, Error as ConfigError
+from configparser import ConfigParser
+from configparser import Error as ConfigError
 from pathlib import Path
 
 from cooking_planner.paths import catalog_directory, on_android
@@ -61,7 +62,8 @@ def main() -> None:
         Config.set('graphics', 'height', str(bounded_number(config, 'ui', 'window_height', 820, 650, 2160)))
         Config.set('graphics', 'fullscreen', '1' if fullscreen_enabled(config) else '0')
 
-    from cooking_planner_backend.LocalPlanner import LocalPlanner
+    from cooking_planner_backend.core.LocalPlanner import LocalPlanner
+
     from cooking_planner.CookingPlannerApp import CookingPlannerApp
 
     planner = None

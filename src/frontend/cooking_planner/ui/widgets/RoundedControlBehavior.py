@@ -4,8 +4,9 @@ from kivy.animation import Animation
 from kivy.graphics import Color, Line, RoundedRectangle
 from kivy.metrics import dp
 from kivy.properties import ListProperty
-from cooking_planner.ui.palette import PANEL_LIGHT
+
 from cooking_planner.ui.hover_state import hover_color
+from cooking_planner.ui.palette import PANEL_LIGHT
 
 
 class RoundedControlBehavior:

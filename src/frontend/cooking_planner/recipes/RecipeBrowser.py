@@ -6,12 +6,25 @@ from decimal import Decimal
 from kivy.metrics import dp
 from kivy.uix.label import Label
 
-from cooking_planner.recipes.RecipeFilters import RecipeFilters
 from cooking_planner.recipes.gallery import RecipePhoto, open_gallery
 from cooking_planner.recipes.images import attributions, image_file
-from cooking_planner.ui.theme import (BG, GOLD, GREEN, MUTED, PANEL, PANEL_LIGHT, WHITE,
-                                      box, button, label, scroll_view, set_tab_active, tab_button)
+from cooking_planner.recipes.RecipeFilters import RecipeFilters
 from cooking_planner.ui.strings import t
+from cooking_planner.ui.theme import (
+    BG,
+    GOLD,
+    GREEN,
+    MUTED,
+    PANEL,
+    PANEL_LIGHT,
+    WHITE,
+    box,
+    button,
+    label,
+    scroll_view,
+    set_tab_active,
+    tab_button,
+)
 
 
 class RecipeBrowser(RecipeFilters):

@@ -56,9 +56,9 @@ def build_submission(snapshot):
     if not snapshot.ingredients:
         raise FormError(t(locale, 'admin_need_ingredient'))
     for code, choice in snapshot.choices.items():
-        if choice == t(locale, 'admin_translate'):
-            if any(not ingredient['names'].get(code, '').strip() for ingredient in snapshot.ingredients):
-                raise FormError(f"{code.upper()}: {t(locale, 'admin_missing_translation')}")
+        if (choice == t(locale, 'admin_translate') and
+                any(not ingredient['names'].get(code, '').strip() for ingredient in snapshot.ingredients)):
+            raise FormError(f"{code.upper()}: {t(locale, 'admin_missing_translation')}")
     ingredients = []
     for ingredient in snapshot.ingredients:
         try:

@@ -9,8 +9,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'frontend'))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
 
 from cooking_planner.pricing import normalize_price
-from cooking_planner.shopping.ShoppingDraft import ShoppingDraft, item_key
 from cooking_planner.shopping.persistence import save_draft
+from cooking_planner.shopping.ShoppingDraft import ShoppingDraft, item_key
 
 
 class ShoppingDraftTest(unittest.TestCase):
@@ -18,9 +18,9 @@ class ShoppingDraftTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / 'shopping.json'
             path.write_text('previous contents', encoding='utf-8')
-            with patch('cooking_planner.shopping.persistence.os.replace', side_effect=OSError('interrupted')):
-                with self.assertRaises(OSError):
-                    save_draft(path, {}, [])
+            with patch('cooking_planner.shopping.persistence.os.replace', side_effect=OSError('interrupted')), \
+                 self.assertRaises(OSError):
+                save_draft(path, {}, [])
             self.assertEqual('previous contents', path.read_text(encoding='utf-8'))
             self.assertEqual([], list(path.parent.glob('shopping.json.*.tmp')))
 

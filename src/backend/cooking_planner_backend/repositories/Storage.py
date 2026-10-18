@@ -8,10 +8,10 @@ from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker
 
 from cooking_planner_backend.entities.Base import Base
-from cooking_planner_backend.entities.Ingredient import Ingredient  # noqa: F401
+from cooking_planner_backend.entities.Ingredient import Ingredient  # noqa: F401 - register model
 from cooking_planner_backend.entities.Marker import Marker
-from cooking_planner_backend.entities.Price import Price  # noqa: F401
-from cooking_planner_backend.entities.Translation import Translation  # noqa: F401
+from cooking_planner_backend.entities.Price import Price  # noqa: F401 - register model
+from cooking_planner_backend.entities.Translation import Translation  # noqa: F401 - register model
 
 
 class Storage:

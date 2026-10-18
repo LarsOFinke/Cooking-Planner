@@ -7,18 +7,17 @@ import sqlite3
 import sys
 import tempfile
 import unittest
-from copy import deepcopy
 from contextlib import closing
+from copy import deepcopy
 from pathlib import Path
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
 
-from cooking_planner_backend.ConflictError import ConflictError  # noqa: E402
-from cooking_planner_backend.LocalPlanner import LocalPlanner  # noqa: E402
-from cooking_planner_backend.entities.Marker import Marker  # noqa: E402
-from cooking_planner_backend.recipes.mapper import map_recipe  # noqa: E402
-
+from cooking_planner_backend.core.ConflictError import ConflictError
+from cooking_planner_backend.core.LocalPlanner import LocalPlanner
+from cooking_planner_backend.entities.Marker import Marker
+from cooking_planner_backend.stores.recipe_mapper import map_recipe
 
 ROOT = Path(__file__).resolve().parents[2]
 START = '2026-10-12'

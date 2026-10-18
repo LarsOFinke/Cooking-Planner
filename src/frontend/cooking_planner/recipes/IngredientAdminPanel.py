@@ -8,8 +8,20 @@ from kivy.metrics import dp
 from cooking_planner.pricing import normalize_price
 from cooking_planner.ui.dialogs import confirm_popup
 from cooking_planner.ui.strings import t
-from cooking_planner.ui.theme import (GOLD, MUTED, PANEL, WHITE, box, button, field, label,
-                                      scroll_view, set_tab_active, spinner, tab_button)
+from cooking_planner.ui.theme import (
+    GOLD,
+    MUTED,
+    PANEL,
+    WHITE,
+    box,
+    button,
+    field,
+    label,
+    scroll_view,
+    set_tab_active,
+    spinner,
+    tab_button,
+)
 
 
 class IngredientAdminPanel:

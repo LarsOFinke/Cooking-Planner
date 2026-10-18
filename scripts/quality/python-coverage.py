@@ -30,7 +30,7 @@ def main() -> int:
         print('Desktop coverage requires a display.', file=sys.stderr)
         return 2
     try:
-        import kivy  # noqa: F401
+        import kivy  # noqa: F401 - check that the desktop dependency imports
     except ImportError:
         print('Desktop coverage requires Kivy. Run make dev first.', file=sys.stderr)
         return 2

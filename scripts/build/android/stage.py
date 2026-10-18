@@ -1,13 +1,12 @@
 """Create the self-contained source directory consumed by Buildozer."""
 
-from pathlib import Path
-from shutil import copy2, copytree, rmtree
 import re
 import sys
+from pathlib import Path
+from shutil import copy2, copytree, rmtree
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'common'))
-from project_version import project_version  # noqa: E402
-
+from project_version import project_version
 
 ROOT = Path(__file__).resolve().parents[3]
 STAGE = ROOT / 'build' / 'android' / 'source'

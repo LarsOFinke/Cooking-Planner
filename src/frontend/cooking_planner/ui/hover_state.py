@@ -41,9 +41,8 @@ def _mouse_moved(_window, position):
         inside = (top is not None and not widget.disabled and widget.get_root_window() is Window
                   and _within_visible_area(widget, position, top))
         widget._set_hovered(inside)
-        if inside:
-            if widget.hover_cursor == 'ibeam' or cursor == 'arrow':
-                cursor = widget.hover_cursor
+        if inside and (widget.hover_cursor == 'ibeam' or cursor == 'arrow'):
+            cursor = widget.hover_cursor
     if cursor != _cursor:
         Window.set_system_cursor(cursor)
         _cursor = cursor

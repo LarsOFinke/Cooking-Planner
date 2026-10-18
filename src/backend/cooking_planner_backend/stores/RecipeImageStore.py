@@ -2,8 +2,8 @@
 
 import hashlib
 import re
+from contextlib import suppress
 from pathlib import Path
-
 
 IMAGE_NAME = re.compile(r'image_0[1-3](?:-[0-9a-f]{12})?\.(?:png|jpg|jpeg|webp)\Z')
 UPLOADED_NAME = re.compile(r'image_0[1-3]-[0-9a-f]{12}\.(?:png|jpg|jpeg|webp)\Z')
@@ -97,7 +97,5 @@ class RecipeImageStore:
         for reference in set(before) - set(after):
             target = self._user_file(recipe_id, reference)
             if UPLOADED_NAME.fullmatch(target.name):
-                try:
+                with suppress(OSError):
                     target.unlink(missing_ok=True)
-                except OSError:
-                    pass

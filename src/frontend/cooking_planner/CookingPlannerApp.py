@@ -9,13 +9,13 @@ from kivy.core.window import Window
 from kivy.metrics import Metrics
 
 from cooking_planner.AppShell import AppShell
-from cooking_planner.ui.dialogs import confirm_popup
 from cooking_planner.plans.dialog import plan_popup
-from cooking_planner.recipes.dialogs import notes_popup, picker_popup
 from cooking_planner.recipes.AdminActions import AdminActions
+from cooking_planner.recipes.dialogs import notes_popup, picker_popup
 from cooking_planner.shopping.ShoppingDraft import ShoppingDraft
-from cooking_planner.ui.theme import BG, set_tab_active
+from cooking_planner.ui.dialogs import confirm_popup
 from cooking_planner.ui.strings import t
+from cooking_planner.ui.theme import BG, set_tab_active
 
 
 class CookingPlannerApp(AppShell, AdminActions, App):

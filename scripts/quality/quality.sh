@@ -3,6 +3,7 @@ set -euo pipefail
 
 project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$project_root"
+export PYTHONPYCACHEPREFIX="$project_root/build/python-cache"
 
 quality_python="${QUALITY_PYTHON:-}"
 if [[ -z "$quality_python" ]]; then

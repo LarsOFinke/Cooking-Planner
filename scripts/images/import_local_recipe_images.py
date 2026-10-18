@@ -8,8 +8,14 @@ import json
 from pathlib import Path
 
 from image_file import PHOTO_NAME, check_photo
-from recipe_image_catalog import (attribution_documents, commit_documents, json_bytes, locale_documents,
-                                  read_catalog, recover_documents)
+from recipe_image_catalog import (
+    attribution_documents,
+    commit_documents,
+    json_bytes,
+    locale_documents,
+    read_catalog,
+    recover_documents,
+)
 
 ROOT = Path(__file__).resolve().parents[2] / 'data' / 'recipe_images'
 CREDIT_FIELDS = ('author', 'license', 'source_url', 'license_url', 'credit')

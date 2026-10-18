@@ -1,23 +1,22 @@
 """Read-only catalogs, user recipe edits, and localized recipe output."""
 
+import re
 from copy import deepcopy
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
-import re
 from uuid import uuid4
 
 from sqlalchemy import select
 
+from cooking_planner_backend.core.ConflictError import ConflictError
+from cooking_planner_backend.core.identifiers import ID
 from cooking_planner_backend.entities.Ingredient import Ingredient
 from cooking_planner_backend.entities.Marker import Marker
 from cooking_planner_backend.entities.Translation import Translation
-from cooking_planner_backend.ConflictError import ConflictError
-from cooking_planner_backend.recipes.mapper import map_recipe
-from cooking_planner_backend.recipes.RecipeImageStore import RecipeImageStore, IMAGE_NAME
 from cooking_planner_backend.repositories.json_files import read_json, write_json
+from cooking_planner_backend.stores.recipe_mapper import map_recipe
+from cooking_planner_backend.stores.RecipeImageStore import IMAGE_NAME, RecipeImageStore
 
-
-ID = re.compile(r'[a-z0-9]+(?:-[a-z0-9]+)*\Z')
 SHARED = ('id', 'country_code', 'region_code', 'continent_code', 'category', 'difficulty',
           'effort', 'data_source', 'prep_minutes', 'cook_minutes', 'total_minutes',
           'diet_type', 'suitable_for', 'image_folder', 'images')
