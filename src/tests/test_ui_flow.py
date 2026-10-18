@@ -427,7 +427,7 @@ class UiFlowTest(unittest.TestCase):
         fake_window = SimpleNamespace(fullscreen=False)
         with patch('cooking_planner.CookingPlannerApp.Window', fake_window):
             self.app.toggle_window()
-            self.assertIs(True, fake_window.fullscreen)
+            self.assertTrue(fake_window.fullscreen)
             self.assertEqual('Windowed', self.app.window_button.text)
             self.assertIn('fullscreen = true', (Path(self.temp.name) / 'client.cfg').read_text())
             self.app.toggle_window()
