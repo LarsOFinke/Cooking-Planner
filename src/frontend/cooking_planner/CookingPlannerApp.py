@@ -130,13 +130,17 @@ class CookingPlannerApp(AppShell, AdminActions, App):
         locale = self.locale
         start = self.week_start.isoformat()
         end = (self.week_start + timedelta(days=6)).isoformat()
+        migrate_shopping = self.shopping_draft.needs_upcoming_migration()
         def load():
             return (self.planner.locales(), self.planner.catalog_info(locale),
-                    self.planner.plans(start, end, locale))
+                    self.planner.plans(start, end, locale),
+                    self.planner.upcoming_plans(date.today().isoformat(), locale) if migrate_shopping else None)
         def loaded(data):
             if self.generation or locale != self.locale or start != self.week_start.isoformat():
                 return
-            locales, self.info, self.plans = data
+            locales, self.info, self.plans = data[:3]
+            if data[3] is not None:
+                self.shopping_draft.migrate_upcoming(data[3])
             self._overview_ready = True
             new_locales = tuple(locales)
             if self.locales != new_locales:
@@ -168,7 +172,7 @@ class CookingPlannerApp(AppShell, AdminActions, App):
         start = self.week_start.isoformat()
         end = (self.week_start + timedelta(days=6)).isoformat()
         cached = self._catalog_cache.get(locale)
-        include_shopping = self.tab == 'shopping'
+        include_shopping = self.tab == 'shopping' or self.shopping_draft.needs_upcoming_migration()
         def load():
             catalog = cached or (self.planner.locales(), self.planner.recipes(locale), self.planner.catalog_info(locale))
             return (*catalog,
@@ -197,8 +201,9 @@ class CookingPlannerApp(AppShell, AdminActions, App):
         if len(data) > 5:
             self.shopping_draft.use_reference_prices(data[5])
         if len(data) > 6 and data[6] is not None:
+            self.shopping_draft.migrate_upcoming(data[6])
             self.shopping_plans = data[6]
-            self._shopping_ready = True
+            self._shopping_ready = self.tab == 'shopping'
         new_locales = tuple(locales)
         if self.locales != new_locales:
             self.locales = new_locales

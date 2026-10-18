@@ -38,7 +38,7 @@ class ShoppingDraft:
             self.weeks, self.pending, self.recovery_notice = load_draft(path)
 
     def week(self, start: str) -> dict:
-        return self.weeks.setdefault(start, {'plans': [], 'selectionMode': 'auto' if start == UPCOMING else 'explicit',
+        return self.weeks.setdefault(start, {'plans': [], 'selectionMode': 'explicit',
                                              'excludedPlans': [], 'excluded': [], 'custom': [],
                                              'checked': [], 'boughtPlans': {}, 'prices': {}})
 
@@ -48,13 +48,28 @@ class ShoppingDraft:
             return False
         previous = self.weeks.get(current_week)
         state = deepcopy(previous) if previous else self.week(UPCOMING)
-        state['plans'] = []
-        state['selectionMode'] = 'auto'
-        state['excludedPlans'] = []
+        state['plans'] = list(previous.get('plans', [])) if previous else []
+        state['selectionMode'] = 'explicit'
+        state.pop('excludedPlans', None)
         state['boughtPlans'] = {}
         self.weeks[UPCOMING] = state
         self.save()
         return True
+
+    def needs_upcoming_migration(self) -> bool:
+        state = self.weeks.get(UPCOMING)
+        return state is not None and state.get('selectionMode') == 'auto'
+
+    def migrate_upcoming(self, plans: list[dict]) -> None:
+        """Keep meals visible in an old automatic list, then require explicit imports."""
+        if not self.needs_upcoming_migration():
+            return
+        state = self.weeks[UPCOMING]
+        excluded = set(state.get('excludedPlans', []))
+        state['plans'] = sorted(str(plan['id']) for plan in plans if str(plan['id']) not in excluded)
+        state['selectionMode'] = 'explicit'
+        state.pop('excludedPlans', None)
+        self.save()
 
     def use_prices(self, start: str, prices: dict[str, str]) -> None:
         """Use database prices for a loaded week; legacy JSON remains a migration source."""
@@ -72,8 +87,8 @@ class ShoppingDraft:
     def selected_plan_ids(self, start: str, plans: list[dict]) -> set[str]:
         state = self.week(start)
         available = {str(plan['id']) for plan in plans}
-        if start == UPCOMING:
-            return available - set(state.get('excludedPlans', []))
+        if start == UPCOMING and self.needs_upcoming_migration():
+            self.migrate_upcoming(plans)
         if state.get('selectionMode') != 'explicit':
             # Older drafts could implicitly include every plan except excludedPlans.
             # Only persisted positive selections can be migrated without making
@@ -140,12 +155,6 @@ class ShoppingDraft:
 
     def add_all(self, start: str, plans: list[dict]) -> None:
         state = self.week(start)
-        if start == UPCOMING:
-            state['excludedPlans'] = []
-            state['excluded'] = []
-            state['checked'] = []
-            self.save()
-            return
         state['plans'] = [str(plan['id']) for plan in plans]
         state['selectionMode'] = 'explicit'
         state.pop('excludedPlans', None)
@@ -172,11 +181,6 @@ class ShoppingDraft:
         self.selected_plan_ids(start, plans)
         chosen = [str(plan['id']) for plan in plans if plan['date'] == day]
         state = self.week(start)
-        if start == UPCOMING:
-            state['excludedPlans'] = [key for key in state['excludedPlans'] if key not in chosen]
-            self._restore_plan_ingredients(state, plans, recipes or [], set(chosen))
-            self.save()
-            return len(chosen)
         state['plans'] = sorted(set(state['plans']) | set(chosen))
         self._restore_plan_ingredients(state, plans, recipes or [], set(chosen))
         self.save()
@@ -184,17 +188,11 @@ class ShoppingDraft:
 
     def toggle_plan(self, start: str, plan_id: int, plans: list[dict] | None = None,
                     recipes: list[dict] | None = None) -> None:
+        if start == UPCOMING and self.needs_upcoming_migration():
+            if plans is None:
+                raise ValueError('Upcoming plans are required to migrate saved shopping choices')
+            self.migrate_upcoming(plans)
         state = self.week(start)
-        if start == UPCOMING:
-            excluded = state['excludedPlans']
-            key = str(plan_id)
-            if key in excluded:
-                excluded.remove(key)
-                self._restore_plan_ingredients(state, plans or [], recipes or [], {key})
-            else:
-                excluded.append(key)
-            self.save()
-            return
         selected = state['plans']
         key = str(plan_id)
         if key in selected:
@@ -211,12 +209,6 @@ class ShoppingDraft:
         if not any(str(plan['id']) == key for plan in plans):
             return
         state = self.week(start)
-        if start == UPCOMING:
-            if key in state['excludedPlans']:
-                state['excludedPlans'].remove(key)
-            self._restore_plan_ingredients(state, plans, recipes, {key})
-            self.save()
-            return
         if key not in state['plans']:
             state['plans'].append(key)
         self._restore_plan_ingredients(state, plans, recipes, {key})
@@ -225,13 +217,6 @@ class ShoppingDraft:
     def select_all_plans(self, start: str, plans: list[dict], selected: bool,
                          recipes: list[dict] | None = None) -> None:
         state = self.week(start)
-        if start == UPCOMING:
-            state['excludedPlans'] = [] if selected else [str(plan['id']) for plan in plans]
-            if selected:
-                self._restore_plan_ingredients(state, plans, recipes or [],
-                                               {str(plan['id']) for plan in plans})
-            self.save()
-            return
         state['plans'] = [str(plan['id']) for plan in plans] if selected else []
         if selected:
             self._restore_plan_ingredients(state, plans, recipes or [], set(state['plans']))
@@ -386,8 +371,8 @@ class ShoppingDraft:
     def clear(self, start: str, plans: list[dict] | None = None) -> None:
         old_prices = list(self.database_prices.get(start, self.week(start).get('prices', {})))
         self.database_prices.pop(start, None)
-        self.weeks[start] = {'plans': [], 'selectionMode': 'auto' if start == UPCOMING else 'explicit',
-                             'excludedPlans': [str(plan['id']) for plan in plans or []] if start == UPCOMING else [],
+        self.weeks[start] = {'plans': [], 'selectionMode': 'explicit',
+                             'excludedPlans': [],
                              'excluded': [], 'custom': [], 'checked': [], 'boughtPlans': {}, 'prices': {}}
         if start == UPCOMING:
             self.save()

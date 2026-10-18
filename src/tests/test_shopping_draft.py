@@ -14,7 +14,7 @@ from cooking_planner.shopping.ShoppingDraft import UPCOMING, ShoppingDraft, item
 
 
 class ShoppingDraftTest(unittest.TestCase):
-    def test_upcoming_list_includes_future_meals_and_preserves_current_custom_items(self):
+    def test_upcoming_meals_require_import_and_preserve_current_custom_items(self):
         recipes = [{'id': 'dish', 'ingredients': [
             {'ingredientId': 'rice', 'name': 'Rice', 'amount': 100, 'unit': 'g'}]}]
         plans = [{'id': 1, 'date': '2026-10-18', 'recipeId': 'dish', 'servings': 2},
@@ -24,10 +24,29 @@ class ShoppingDraftTest(unittest.TestCase):
             draft = ShoppingDraft(path)
             draft.add_custom('2026-10-12', 'Milk', '1', 'l')
             draft.use_upcoming('2026-10-12')
-            self.assertEqual({'1', '2'}, draft.selected_plan_ids(UPCOMING, plans))
+            self.assertEqual(set(), draft.selected_plan_ids(UPCOMING, plans))
+            self.assertEqual(['Milk'], [item['name'] for item in draft.items(UPCOMING, plans, recipes)])
+            draft.add_plan(UPCOMING, 1, plans, recipes)
+            self.assertEqual({'1'}, draft.selected_plan_ids(UPCOMING, plans))
             self.assertEqual({'Rice', 'Milk'}, {item['name'] for item in draft.items(UPCOMING, plans, recipes)})
-            draft.toggle_plan(UPCOMING, 2)
+            plans.append({'id': 3, 'date': '2026-11-03', 'recipeId': 'dish', 'servings': 1})
             self.assertEqual({'1'}, ShoppingDraft(path).selected_plan_ids(UPCOMING, plans))
+            self.assertEqual(1, draft.add_day(UPCOMING, plans, '2026-11-03', recipes))
+            self.assertEqual({'1', '3'}, ShoppingDraft(path).selected_plan_ids(UPCOMING, plans))
+
+    def test_legacy_upcoming_selections_are_snapshotted_before_new_plans(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'shopping.json'
+            save_draft(path, {UPCOMING: {'plans': [], 'selectionMode': 'auto',
+                                         'excludedPlans': ['2'], 'excluded': [], 'custom': [],
+                                         'checked': [], 'boughtPlans': {}, 'prices': {}}}, [])
+            draft = ShoppingDraft(path)
+            self.assertTrue(draft.needs_upcoming_migration())
+            draft.migrate_upcoming([{'id': 1}, {'id': 2}])
+            self.assertEqual({'1'}, draft.selected_plan_ids(UPCOMING, [{'id': 1}, {'id': 2}, {'id': 3}]))
+            restored = ShoppingDraft(path)
+            self.assertFalse(restored.needs_upcoming_migration())
+            self.assertEqual({'1'}, restored.selected_plan_ids(UPCOMING, [{'id': 1}, {'id': 3}]))
 
     def test_bought_recipe_status_uses_shared_ingredients_and_recipe_signature(self):
         recipes = [{'id': 'one', 'ingredients': [
@@ -38,6 +57,7 @@ class ShoppingDraftTest(unittest.TestCase):
         plans = [{'id': 1, 'recipeId': 'one', 'servings': 2},
                  {'id': 2, 'recipeId': 'two', 'servings': 1}]
         draft = ShoppingDraft()
+        draft.add_all(UPCOMING, plans)
         draft.toggle_checked(UPCOMING, 'rice:g')
         draft.update_bought_plans(UPCOMING, plans, recipes)
         self.assertEqual({'1'}, draft.bought_plan_ids(UPCOMING, plans, recipes))

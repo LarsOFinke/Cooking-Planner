@@ -24,7 +24,7 @@ try:
     from cooking_planner.plans.WeekPlanner import WeekPlanner
     from cooking_planner.recipes.AdminPanel import AdminPanel
     from cooking_planner.recipes.IngredientAdminPanel import IngredientAdminPanel
-    from cooking_planner.shopping.ShoppingDraft import ShoppingDraft, item_key
+    from cooking_planner.shopping.ShoppingDraft import UPCOMING, ShoppingDraft, item_key
     from cooking_planner.shopping.ShoppingPanel import ShoppingPanel
     from cooking_planner.ui.theme import (
         BG,
@@ -771,6 +771,23 @@ class UiFlowTest(unittest.TestCase):
         self.assertIs(overview, self.app._active_panel)
         self.assertTrue(self.app._catalog_ready)
         self.assertEqual(['en'], list(self.app._catalog_cache))
+
+    def test_startup_freezes_legacy_upcoming_choices_before_new_week_meals(self):
+        self.app.startup_error = None
+        self.app.shopping_draft.weeks[UPCOMING] = {
+            'plans': [], 'selectionMode': 'auto', 'excludedPlans': [],
+            'excluded': [], 'custom': [], 'checked': [], 'boughtPlans': {}, 'prices': {},
+        }
+        existing = {'id': 1, 'date': date.today().isoformat(), 'recipeId': self.recipe['id'], 'servings': 1}
+        self.app.planner = SimpleNamespace(
+            locales=lambda: ['en'], catalog_info=lambda _: {}, plans=lambda *_: [existing],
+            upcoming_plans=lambda *_: [existing],
+        )
+        self.app._submit = lambda work, success, show_status=True, finished=None: success(work())
+        with patch('cooking_planner.CookingPlannerApp.Clock.schedule_once'):
+            self.app._load_overview()
+        added = {**existing, 'id': 2}
+        self.assertEqual({'1'}, self.app.shopping_draft.selected_plan_ids(UPCOMING, [existing, added]))
 
     def test_startup_load_error_offers_retry(self):
         self.app.startup_error = None
