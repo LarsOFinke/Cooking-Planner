@@ -462,6 +462,37 @@ class UiFlowTest(unittest.TestCase):
                 finally:
                     popup.dismiss()
 
+    def test_admin_recipe_name_accepts_click_and_text_at_both_scales(self):
+        Window.add_widget(self.app.root_view)
+        try:
+            for scale in (1.0, 2.0):
+                self.app.change_scale(scale)
+                self.app.tab = 'admin'
+                self.app._render_tab()
+                panel = self.app.admin_panel
+                panel.new()
+                for _ in range(6):
+                    Clock.tick()
+                name = panel.locale_inputs['en']['name']
+                panel.editor_scroll.scroll_to(name, animate=False)
+                for _ in range(3):
+                    Clock.tick()
+                self.assertEqual(['bars'], panel.horizontal.scroll_type)
+                self.assertEqual(['bars'], panel.editor_scroll.scroll_type)
+                x, y = name.to_window(name.center_x, name.center_y)
+                self.assertLess(x, Window.width)
+                self.assertLess(y, Window.height)
+                touch = PointerTouch(x, y)
+                EventLoop.post_dispatch_input('begin', touch)
+                EventLoop.post_dispatch_input('end', touch)
+                Clock.tick()
+                self.assertTrue(name.focus)
+                Window.dispatch('on_textinput', 'X')
+                self.assertEqual('X', name.text)
+                name.focus = False
+        finally:
+            Window.remove_widget(self.app.root_view)
+
     def test_overview_reflows_and_week_days_span_the_row(self):
         overview = OverviewPanel([self.recipe], [], {}, 'en', lambda _: None, lambda: None)
         week = WeekPlanner(self.app.week_start, [], 'en', lambda _: None,

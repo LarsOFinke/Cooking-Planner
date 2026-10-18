@@ -10,6 +10,7 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.spinner import Spinner
 from kivy.uix.textinput import TextInput
 
+from cooking_planner.paths import on_android
 from cooking_planner.ui.clipboard import get_clipboard
 from cooking_planner.ui.hover_state import _mouse_moved as _mouse_moved
 from cooking_planner.ui.palette import BG, GOLD, MUTED, PANEL, PANEL_LIGHT, RED, WHITE
@@ -40,7 +41,12 @@ def box(vertical=True, padding=0, spacing=0, color=None, hover=False, **kwargs) 
     return widget
 
 
-def scroll_view(**kwargs) -> ScrollView:
+def scroll_view(desktop_bars=False, **kwargs) -> ScrollView:
+    if desktop_bars and not on_android():
+        # Nested desktop scroll views can consume a click before a form field
+        # receives focus. Wheels and visible bars still scroll the content.
+        kwargs.setdefault('scroll_type', ['bars'])
+        kwargs.setdefault('bar_width', dp(10))
     view = ScrollView(effect_cls=ScrollEffect, scroll_wheel_distance=dp(88), **kwargs)
     for effect in (view.effect_x, view.effect_y):
         if effect is not None:

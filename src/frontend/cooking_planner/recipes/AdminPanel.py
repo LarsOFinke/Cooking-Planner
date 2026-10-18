@@ -68,7 +68,7 @@ class AdminPanel(AdminFormPages):
                                  size_hint_x=None, width=dp(95), height=40))
         header_scroll.add_widget(header)
         self.root.add_widget(header_scroll)
-        horizontal = scroll_view(do_scroll_y=False)
+        horizontal = scroll_view(do_scroll_y=False, desktop_bars=True)
         self.horizontal = horizontal
         columns = box(False, spacing=6, size_hint_x=None)
         self.columns = columns
@@ -79,7 +79,7 @@ class AdminPanel(AdminFormPages):
         self.search = field(t(locale, 'admin_search'), height=38)
         self.search.bind(text=lambda *_: self._list_search())
         left.add_widget(self.search)
-        list_scroll = scroll_view(do_scroll_x=False)
+        list_scroll = scroll_view(do_scroll_x=False, desktop_bars=True)
         self.list_rows = box(spacing=4, size_hint_y=None)
         self.list_rows.bind(minimum_height=self.list_rows.setter('height'))
         list_scroll.add_widget(self.list_rows)
@@ -88,7 +88,7 @@ class AdminPanel(AdminFormPages):
         right = box(spacing=5, size_hint_x=0.72)
         self.toolbar = box(False, spacing=5, size_hint_y=None, height=dp(38))
         right.add_widget(self.toolbar)
-        editor_scroll = scroll_view(do_scroll_x=False)
+        editor_scroll = scroll_view(do_scroll_x=False, desktop_bars=True)
         self.editor_scroll = editor_scroll
         self.form = box(padding=8, color=PANEL, size_hint_y=None)
         self.form.bind(minimum_height=lambda *_: self._size_form())

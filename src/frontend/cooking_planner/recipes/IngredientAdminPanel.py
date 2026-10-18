@@ -56,7 +56,7 @@ class IngredientAdminPanel:
                                  size_hint_x=None, width=dp(160), height=40))
         header_scroll.add_widget(header)
         self.root.add_widget(header_scroll)
-        horizontal = scroll_view(do_scroll_y=False)
+        horizontal = scroll_view(do_scroll_y=False, desktop_bars=True)
         self.horizontal = horizontal
         columns = box(False, spacing=7, size_hint_x=None)
         horizontal.bind(width=lambda _, width: setattr(columns, 'width', max(width, dp(790))))
@@ -74,7 +74,7 @@ class IngredientAdminPanel:
         pager.add_widget(self.page_label)
         pager.add_widget(self.next_button)
         left.add_widget(pager)
-        results_scroll = scroll_view(do_scroll_x=False)
+        results_scroll = scroll_view(do_scroll_x=False, desktop_bars=True)
         self.results_scroll = results_scroll
         self.results = box(spacing=5, size_hint_y=None)
         self.results.bind(minimum_height=self.results.setter('height'))
@@ -97,7 +97,7 @@ class IngredientAdminPanel:
                                           lambda: self.show_editor_tab('pricing'), height=38)
             tabs.add_widget(self.pricing_tab)
         right.add_widget(tabs)
-        right_scroll = scroll_view(do_scroll_x=False)
+        right_scroll = scroll_view(do_scroll_x=False, desktop_bars=True)
         self.editor = box(padding=12, spacing=9, color=PANEL, size_hint_y=None)
         self.editor.bind(minimum_height=self.editor.setter('height'))
         right_scroll.add_widget(self.editor)
