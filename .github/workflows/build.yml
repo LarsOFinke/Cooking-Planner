@@ -106,6 +106,21 @@ jobs:
           COOKING_PLANNER_BUILD_VERBOSE: '1'
           # PyInstaller scans Kivy imports on a runner without usable OpenGL.
           KIVY_WINDOW: mock
+      - name: Check installed Windows package
+        shell: pwsh
+        run: |
+          $target = Join-Path $env:RUNNER_TEMP 'CookingPlannerInstall'
+          $installer = (Resolve-Path 'dist/windows/CookingPlanner-Setup.exe').Path
+          $install = Start-Process -FilePath $installer -ArgumentList @(
+            '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/NOICONS', "/DIR=$target"
+          ) -Wait -PassThru
+          if ($install.ExitCode -ne 0) { throw "Installer failed with exit code $($install.ExitCode)" }
+          $executable = Join-Path $target 'CookingPlanner.exe'
+          if (-not (Test-Path $executable -PathType Leaf)) { throw 'Installed executable is missing' }
+          $env:KIVY_NO_ARGS = '1'
+          $check = Start-Process -FilePath $executable -ArgumentList '--verify-package' `
+            -WorkingDirectory $env:RUNNER_TEMP -Wait -PassThru
+          if ($check.ExitCode -ne 0) { throw "Installed package check failed with exit code $($check.ExitCode)" }
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: cooking-planner-windows-x86_64

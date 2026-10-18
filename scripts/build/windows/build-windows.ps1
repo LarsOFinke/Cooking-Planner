@@ -40,6 +40,14 @@ Invoke-BuildStep -Step 6 -Name 'Build bundled Windows executable' -Log 'build/lo
                '--add-data', "$catalogData;catalogs", `
                'scripts/build/common/frozen_entry.py')
 
+$executable = Join-Path $projectRoot 'dist/windows/CookingPlanner/CookingPlanner.exe'
+$env:KIVY_NO_ARGS = '1'
+$packageCheck = Start-Process -FilePath $executable -ArgumentList '--verify-package' `
+    -WorkingDirectory $env:TEMP -Wait -PassThru
+if ($packageCheck.ExitCode -ne 0) {
+    throw "Bundled Windows executable failed its package check (exit $($packageCheck.ExitCode))"
+}
+
 function Find-InnoCompiler {
     foreach ($path in @("${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
                         "$env:ProgramFiles\Inno Setup 6\ISCC.exe")) {
