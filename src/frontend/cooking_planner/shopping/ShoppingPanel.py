@@ -277,7 +277,7 @@ class ShoppingPanel(ShoppingRendering):
 
     def toggle(self, key):
         self.draft.toggle_checked(self.start, key)
-        self.draft.update_bought_plans(self.start, self.plans, self.recipes)
+        self.draft.update_bought_plans(self.start, self.plans, self.recipes, key)
         self._changed()
 
     def reset(self):

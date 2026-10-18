@@ -46,6 +46,9 @@ class ShoppingDraftTest(unittest.TestCase):
         self.assertEqual({'1', '2'}, draft.bought_plan_ids(UPCOMING, plans, recipes))
         plans[0]['servings'] = 3
         self.assertEqual({'2'}, draft.bought_plan_ids(UPCOMING, plans, recipes))
+        draft.toggle_checked(UPCOMING, 'unrelated:g')
+        draft.update_bought_plans(UPCOMING, plans, recipes, 'unrelated:g')
+        self.assertEqual({'2'}, draft.bought_plan_ids(UPCOMING, plans, recipes))
         recipes[1]['ingredients'].append(
             {'ingredientId': 'pepper', 'name': 'Pepper', 'amount': 1, 'unit': 'g'})
         self.assertEqual(set(), draft.bought_plan_ids(UPCOMING, plans, recipes))

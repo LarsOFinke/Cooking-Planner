@@ -360,7 +360,8 @@ class ShoppingDraft:
                 and all(item_key(item) in checked for item in recipe['ingredients'])
                 and bought.get(str(plan['id'])) == self._plan_signature(plan, recipe)}
 
-    def update_bought_plans(self, start: str, plans: list[dict], recipes: list[dict]) -> None:
+    def update_bought_plans(self, start: str, plans: list[dict], recipes: list[dict],
+                            changed_key: str | None = None) -> None:
         state = self.week(start)
         checked = set(state['checked']) - set(state['excluded'])
         by_recipe = {recipe['id']: recipe for recipe in recipes}
@@ -371,11 +372,11 @@ class ShoppingDraft:
         for plan in plans:
             key = str(plan['id'])
             recipe = by_recipe.get(plan['recipeId'])
-            if key in selected and recipe and recipe['ingredients'] and all(
+            if key not in selected or not recipe or not recipe['ingredients'] or not all(
                     item_key(item) in checked for item in recipe['ingredients']):
-                bought[key] = self._plan_signature(plan, recipe)
-            else:
                 bought.pop(key, None)
+            elif changed_key is None or any(item_key(item) == changed_key for item in recipe['ingredients']):
+                bought[key] = self._plan_signature(plan, recipe)
         self.save()
 
     def reset_checks(self, start: str) -> None:
